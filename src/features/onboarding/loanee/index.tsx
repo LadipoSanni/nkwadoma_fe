@@ -174,7 +174,7 @@ const LoaneeOnboarding = () => {
                             loanReferralId={loanReferralId}
                         />
                     )}
-                    { data?.data?.identityVerified ? (
+                    { data?.data?.identityVerified  && (currentStep === 0 || currentStep === 1) ? (
                          <Button
                          id="acceptButton"
                          onClick={acceptAndRouteToOverview}

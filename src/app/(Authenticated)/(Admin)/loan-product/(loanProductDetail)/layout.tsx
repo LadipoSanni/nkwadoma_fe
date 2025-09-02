@@ -9,7 +9,7 @@ type props = {
 const FundTabs: React.FC<props> = ({ children }) => {
 
     return (
-        <CustomAuthorization authorizedRoles={['PORTFOLIO_MANAGER']}>
+        <CustomAuthorization authorizedRoles={['PORTFOLIO_MANAGER',"MEEDL_SUPER_ADMIN","PORTFOLIO_MANAGER_ASSOCIATE"]}>
             <LoanProductDetailsLayout>
                 {children}
             </LoanProductDetailsLayout>

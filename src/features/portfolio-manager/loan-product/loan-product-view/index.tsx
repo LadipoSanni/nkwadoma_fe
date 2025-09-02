@@ -66,8 +66,8 @@ const LoanProductPage = () => {
 
 
     const handleCreateButton = () => {
-        setCreateProduct(true)
-        // router.push('/loan-product/stepOne');
+        // setCreateProduct(true)
+        router.push('/loan-product/step-one');
     };
 
     const handleRowClick = (row: TableRowData) => {
@@ -174,7 +174,7 @@ const LoanProductPage = () => {
                         tableData={getTableData()}
                         handleRowClick={handleRowClick}
                         tableHeader={loanProductHeader}
-                        tableHeight={59}
+                        tableHeight={56}
                         sx='cursor-pointer'
                         staticColunm="name"
                         staticHeader="loan product"

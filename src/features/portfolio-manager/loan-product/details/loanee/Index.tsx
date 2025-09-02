@@ -102,7 +102,7 @@ export function Loanees() {
     ];
     return (
         <div 
-        className={` max-h-[63vh] ${styles.container}`}
+        className={` max-h-[63vh] mb-4 ${styles.container}`}
         style={{
             scrollbarWidth: 'none',
             msOverflowStyle: 'none',  
@@ -117,7 +117,7 @@ export function Loanees() {
                             tableHeader={LoanProductLoaneeHeader}
                             staticHeader={'loanee'}
                             staticColunm={'name'}
-                            tableHeight={44}
+                            // tableHeight={44}
                             icon={MdOutlinePerson}
                             sideBarTabName={"loanee"}
                             handleRowClick={() => {

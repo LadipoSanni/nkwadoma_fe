@@ -8,6 +8,8 @@ export interface LoaneeCurentInformation {
     alternateEmail: string,
     alternatePhoneNumber: string,
     alternateContactAddress: string,
+    stateOfResidence: string,
+    levelOfEducation: string
 }
 export interface AdminViewLoanType {
     "id": "",

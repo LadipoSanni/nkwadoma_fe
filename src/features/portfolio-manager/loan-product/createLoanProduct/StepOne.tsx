@@ -1,74 +1,66 @@
+'use client'
 import {ErrorMessage, Field, Form, Formik} from "formik";
 import * as Yup from "yup";
 import {inter} from "@/app/fonts"
 import {Label} from '@/components/ui/label';
 import {Button} from '@/components/ui/button';
 import React, {useEffect, useState} from "react";
-// import CustomSelect from "@/reuseable/Input/Custom-select";
 import CurrencySelectInput from "@/reuseable/Input/CurrencySelectInput";
-import {useCreateLoanProductMutation} from "@/service/admin/loan_product";
-import Isloading from "@/reuseable/display/Isloading";
-import ToastPopUp from "@/reuseable/notification/ToastPopUp";
-import {
-    useGetInvestmentVehiclesByTypeAndStatusAndFundRaisingQuery,
-} from "@/service/admin/fund_query";
+import { useGetInvestmentVehiclesByTypeAndStatusAndFundRaisingQuery,} from "@/service/admin/fund_query";
 import CustomInputField from "@/reuseable/Input/CustomNumberFormat"
 import 'react-quill-new/dist/quill.snow.css'
 import { setFundProductAvailableAmount } from "@/redux/slice/loan/selected-loan";
 import {store, useAppSelector} from "@/redux/store";
 import {formatAmount} from "@/utils/Format";
 import PdfAndDocFileUpload from "@/reuseable/Input/Pdf&docx-fileupload";
-import styles from "@/features/market-place/Index.module.css";
-import Select from "@/reuseable/select/ProgramSelect";
+import SelectWithAmount from "@/reuseable/select/SelectWithAmount";
+import { MultiSelect } from "@/reuseable/mult-select/customMultiselectWithId/Multiselect-object";
+import { useViewFinanciersByInvestmentmentVehicleQuery } from '@/service/admin/financier';
+import {useRouter } from 'next/navigation';
+import { setLoanProductField } from "@/redux/slice/loan-product/Loan-product";
 
-
-interface CreateLoanProductProps {
-    setIsOpen?: (b: boolean) => void;
-}
-
-interface ApiError {
-    status: number;
-    data: {
-        message: string;
-    };
-}
 
 interface viewAllProps {
-    id?: string;
+    id: string;
     name: string;
-    size?: number
+    size?: number;
+    totalAvailableAmount?: number;
   }
 
+  interface SponsorsObj{
+     id: string,
+     name: string
+  }
 
-const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
+function StepOne() {
     const fundProductAvailableAmount = useAppSelector(state => (state.selectedLoan.fundProductAvailableAmount))
+    const loanProductField = useAppSelector(state => (state?.loanProduct?.createLoanProductField))
     const [selectCurrency, setSelectCurrency] = useState('NGN');
-    // const [investmentVehicleObj, setInvestmentVehicleObj] = useState<{ [key: string]: string }>({});
-    const [error, setError] = useState('');
     const [fundPageNumber, setFundPageNumber] = useState(0);
     const [hasNextfundPage, setHasNextfundPage] = useState(true);
+    const [hasNextfinancierPage, setHasNextfinancierPage] = useState(true);
     const [investmentVehicleFund, setInvestmentVehicleFund] = useState<viewAllProps[]>([]);
-    const [selectedFund, setSelectedFund] = useState<string | null>(null);
+    const [selectedFund, setSelectedFund] = useState<string | null>(loanProductField?.fundProduct || null);
     const [isSelectOpen, setIsSelectOpen] = useState(false);
-    const [isFund, setIsFund] = useState(false)
-
-    const [createLoanProduct, {isLoading}] = useCreateLoanProductMutation();
+    const [fundProductId,setFundProductId] = useState(loanProductField?.investmentVehicleId || "")
+    const [financierPageNumber, setFinancierPageNumber] = useState(0);
+    const [financiers,setFinanciers] = useState<viewAllProps[]>([]);
+    const [showSponsorError, setShowSponsorError] = useState(false);
+     const router = useRouter();
     const { data: investmentVehicleData, isFetching, isLoading: isFundLoading } =
         useGetInvestmentVehiclesByTypeAndStatusAndFundRaisingQuery({
             pageSize: 10,
             pageNumber: fundPageNumber,
             investmentVehicleStatus: "PUBLISHED",
-        },{ skip: !isFund});
-
-    // useEffect(() => {
-    //     if (investmentVehicleData?.data?.body) {
-    //         const obj: { [key: string]: string } = {};
-    //         investmentVehicleData.data.body.forEach((vehicle: { id: string; name: string; totalAvailableAmount: number }) => {
-    //             obj[vehicle.name] = vehicle.id;
-    //         });
-    //         setInvestmentVehicleObj(obj);
-    //     }
-    // }, [investmentVehicleData]);
+        });
+    
+    const param = {
+            pageNumber: financierPageNumber,
+            pageSize: 10,
+            investmentVehicleId: fundProductId
+            }
+    
+   const {data,isLoading:isFinancierLoading,isFetching:isfetching} = useViewFinanciersByInvestmentmentVehicleQuery(param,{skip: !fundProductId})
 
     useEffect(() => {
         if (investmentVehicleData?.data) {
@@ -85,6 +77,22 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
         }
     },[investmentVehicleData,fundPageNumber])
 
+
+    useEffect(() => {
+        if(data?.data){
+            setFinanciers((prev) => {
+                if(financierPageNumber === 0){
+                    return [...data?.data?.body].sort((a, b) => (a.name || '').localeCompare(b.name || ''));
+                }
+                const newFinanciers = data?.data?.body.filter(
+                    ( newFinancier: viewAllProps) => !prev.some((prevItem) => prevItem.id === newFinancier.id)
+                );
+                return [...prev, ...newFinanciers].sort((a,b) => (a.name || '').localeCompare(b.name || ''));
+            });
+            setHasNextfinancierPage(data.data.body)
+        }
+    },[data,financierPageNumber])
+
       
   const loadMoreFunds = () => {
     if (!isFetching && hasNextfundPage) {
@@ -92,20 +100,44 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
     }
   };
 
-
+  const loadMoreFinancier = () => {
+     if(!isfetching && hasNextfinancierPage){
+        setFinancierPageNumber((prev) => prev + 1);
+     }
+  }
 
     const initialFormValue = {
-        productName: "",
-        investmentVehicleId: "",
-        costOfFunds: "",
-        tenor: "",
-        loanProductSize: "",
-        minimumRepaymentAmount: "",
-        moratorium: "",
-        interest: "",
-        obligorLimit: "",
-        loanProductMandate: "",
-        loanProductTermsAndCondition: "",
+        productName: loanProductField?.productName || "",
+        investmentVehicleId: loanProductField?.investmentVehicleId || "",
+        costOfFunds:loanProductField?.costOfFunds ||  "",
+        tenor: loanProductField?.tenor || "",
+        loanProductSize: loanProductField?.loanProductSize || "",
+        minimumRepaymentAmount: loanProductField?.minimumRepaymentAmount || "",
+        moratorium: loanProductField?.moratorium || "",
+        interest: loanProductField?.interest || "",
+        obligorLimit:loanProductField?.obligorLimit || "",
+        loanProductMandate: loanProductField?.loanProductMandate || "",
+        loanProductTermsAndCondition: loanProductField?.loanProductTermsAndCondition || "",
+        sponsors: loanProductField?.sponsors || [] as SponsorsObj[]
+    }
+
+    const saveToRedux = (values: typeof initialFormValue) => {
+        const createLoanProductData = {
+        productName: values?.productName,
+        investmentVehicleId: values?.investmentVehicleId ,
+        costOfFunds:values?.costOfFunds ,
+        tenor: values?.tenor,
+        loanProductSize: values?.loanProductSize ,
+        minimumRepaymentAmount: values?.minimumRepaymentAmount ,
+        moratorium: values?.moratorium ,
+        interest: values?.interest ,
+        obligorLimit:values?.obligorLimit,
+        loanProductMandate: values?.loanProductMandate,
+        loanProductTermsAndCondition: values?.loanProductTermsAndCondition,
+        sponsors: values?.sponsors,
+        fundProduct: selectedFund
+        }
+        store.dispatch(setLoanProductField(createLoanProductData))
     }
 
 
@@ -126,6 +158,18 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
         investmentVehicleId: Yup.string()
             .trim()
             .required("Fund product is required"),
+        sponsors: Yup.array()
+            // .of(Yup.string())
+            // .min(1, "At least one sponsor is required")
+            // .required("Fund product sponsor is required"),
+            .of(
+                Yup.object().shape({
+                id: Yup.string().required(),
+                name: Yup.string().required()
+                })
+            )
+            .min(1, "At least one sponsor is required")
+            .required("Fund product sponsor is required"),
         costOfFunds: Yup.string()
             .trim()
             .transform((original) => original?.replace(/,/g, ""))
@@ -203,65 +247,14 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
             }),
     });
 
-    // const investmentVehicleNames = investmentVehicleData?.data?.body
-    //     ?.map((vehicle: { name: string }) => vehicle.name)
-    //     ?.sort((a, b) => a.localeCompare(b)) || [];
-
-    const toastPopUp = ToastPopUp({
-        description: "Loan product Created successfully.",
-        status: "success"
-    });
-
-    const networkPopUp = ToastPopUp({
-        description: "No internet connection",
-        status: "error",
-    });
+    const handleBackRoute =() => {
+        router.push("/loan-product")
+    }
 
     const handleSubmit = async (values: typeof initialFormValue) => {
-        console.log(values)
-        if (!navigator.onLine) {
-            networkPopUp.showToast();
-            if (setIsOpen) {
-                setIsOpen(false);
-            }
-            return;
-        }
-
-        const formData = {
-            name: values.productName,
-            // sponsors: [values.productSponsor],
-            investmentVehicleId: values.investmentVehicleId,
-            costOfFund: Number(values.costOfFunds),
-            tenor: Number(values.tenor),
-            loanProductSize: Number(values.loanProductSize),
-            minRepaymentAmount: Number(values.minimumRepaymentAmount),
-            moratorium: Number(values.moratorium),
-            interestRate: Number(values.interest),
-            obligorLoanLimit: Number(values.obligorLimit),
-            mandate: values.loanProductMandate,
-            termsAndCondition: values.loanProductTermsAndCondition,
-        };
-
-
-        try {
-            const create = await createLoanProduct(formData).unwrap();
-            if (create) {
-                toastPopUp.showToast();
-                if (setIsOpen) {
-                    setIsOpen(false);
-                }
-            }
-        } catch (err) {
-            const error = err as ApiError;
-            setError(error ? error?.data?.message : "Error occurred");
-        }
+        saveToRedux(values);
+        router.push("/loan-product/step-two")
     };
-
-    const handleModalClose = () => {
-        if (setIsOpen) {
-            setIsOpen(false);
-        }
-    }
 
 
     const handleDrop = (event: React.DragEvent<HTMLDivElement>) => {
@@ -272,10 +265,15 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
         event.preventDefault();
     };
 
-
-    return (
-        <main>
-            <Formik
+  return (
+    <div className={`${inter.className} `}>
+        <div  className='xl:px-36 grid grid-cols-1 gap-y-6 '>
+        <div className='grid grid-cols-1 gap-y-1'>
+        <h1 className='text-[18px] font-normal'>Create loan product</h1>
+        <p className='text-[14px] font-normal'>Provide details of your loan product</p>
+       </div>
+       <div>
+       <Formik
                 initialValues={initialFormValue}
                 onSubmit={handleSubmit}
                 validationSchema={validationSchema}
@@ -284,54 +282,36 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
                 {
                     ({errors, isValid, touched, setFieldValue, values}) => (
                         <Form className={`${inter.className}`}>
-                            <div className='grid grid-cols-1'
-                                 style={{
-                                     scrollbarWidth: 'thin',
-                                     msOverflowStyle: 'none',
-                                 }}
+                            <div>
+                            <div className="grid grid-cols-1 gap-y-4 md:max-h-[45vh] md:relative overflow-y-auto lg:px-16 relative  lg:right-16  "
+                                  style={{
+                                    overflowY: "auto",
+                                    marginRight: "-10px",  
+                                    paddingRight: "10px",  
+                                  }}
                             >
-                                <div className={`${styles.container} space-y-3  lg:max-h-[56.5vh] md:max-h-[50vh] overflow-y-auto`}>
-                                <div>
-                                    <Label htmlFor="productName">Product name</Label>
-                                    <Field
-                                        id="productName"
-                                        data-testid="productName"
+                            <div>
+                            <Label htmlFor="productName">Product name</Label>
+                            <Field
+                                id="productName"
+                                data-testid="productName"
+                                name="productName"
+                                className="w-full p-3 border rounded focus:outline-none mt-2 text-sm"
+                                placeholder="Enter Product name"
+                            />
+                            {
+                                errors.productName && touched.productName && (
+                                    <ErrorMessage
                                         name="productName"
-                                        className="w-full p-3 border rounded focus:outline-none mt-2 text-sm"
-                                        placeholder="Enter Product name"
-                                    />
-                                    {
-                                        errors.productName && touched.productName && (
-                                            <ErrorMessage
-                                                name="productName"
-                                                id='productNameError'
-                                                component="div"
-                                                className="text-red-500 text-sm"
-                                            />)
-                                    }
-                                </div>
-
-                                <div className={`pt-4`}>
-                                    <Label htmlFor="FundProduct">Fund product</Label>
-                                    {/* <CustomSelect
-                                        triggerId='FundProductId'
-                                        id="FundProduct"
-                                        selectContent={investmentVehicleNames}
-                                        value={values.investmentVehicleId}
-                                        onChange={(value) => {
-                                            setFieldValue("investmentVehicleId", value);
-                                            // Find the selected vehicle in the data
-                                            const selectedVehicle = investmentVehicleData?.data?.body?.find(
-                                                (vehicle: { name: string }) => vehicle.name === value
-                                            );
-                                            if (selectedVehicle) {
-                                                store.dispatch(setFundProductAvailableAmount(selectedVehicle.totalAvailableAmount))
-                                            }
-                                        }}
-                                        name="FundProduct"
-                                        placeHolder='Select fund'
-                                    /> */}
-                                    <Select
+                                        id='productNameError'
+                                        component="div"
+                                        className="text-red-500 text-sm"
+                                    />)
+                            }
+                        </div>
+                        <div>
+                         <Label htmlFor="FundProduct">Fund product</Label>
+                         <SelectWithAmount
                                       selectedProgram={selectedFund}
                                       setSelectedProgram={setSelectedFund}
                                       isSelectOpen={isSelectOpen}
@@ -339,115 +319,56 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
                                       selectOptions={investmentVehicleFund}
                                       setId={(value) => {
                                         setFieldValue("investmentVehicleId", value);
+                                        setFundProductId(value)
                                         const selectedVehicle = investmentVehicleData?.data?.body?.find(
-                                            (vehicle: { name: string }) => vehicle.name === value
-                                        );
-                                        if (selectedVehicle) {
+                                            (vehicle: { id: string }) => vehicle.id === value 
+                                          );
+                                          if (selectedVehicle) {
                                             store.dispatch(setFundProductAvailableAmount(selectedVehicle.totalAvailableAmount))
-                                        }
+                                          }
+                                          
                                     }}
                                     placeholder='Select fund'
                                     isLoading={isFundLoading}
-                                     onOpenChange={(open) => setIsFund(open)}
+                                    //  onOpenChange={(open) => setIsFund(open)}
                                      infinityScroll={{
                                         hasMore:hasNextfundPage,
                                         loadMore: loadMoreFunds,
                                         loader: isFetching
                                      }}
                                      label=""
-                                    />
-                                      
-                                    {errors.investmentVehicleId && touched.investmentVehicleId && (
-                                        <ErrorMessage
-                                            name="FundProduct"
-                                            id='FundProductError'
-                                            component="div"
-                                            className="text-red-500 text-sm"
-                                        />
-                                    )}
-                                   
-                                </div>
-
-                                <div className={`grid md:grid-cols-2 grid-col gap-y-0 gap-x-5`}>
-                                    <div className={`flex flex-col w-full`}>
-                                        <div>
-                                            <Label htmlFor="costOfFunds">Cost of funds (%)</Label>
-                                        </div>
-                                        <Field
-                                            id="costOfFunds"
-                                            data-testid="costOfFunds"
-                                            name="costOfFunds"
-                                            type="number"
-                                            className="w-full p-3 border rounded focus:outline-none mt-3 text-sm"
-                                            placeholder="0.0"
-                                            step="0.01"
-                                            onWheel={(e: {
-                                                currentTarget: { blur: () => string; };
-                                            }) => e.currentTarget.blur()}
-                                            onChange={(e: { target: { value: string; }; }) => {
-                                                const value = e.target.value;
-                                                if (/^\d*\.?\d*$/.test(value) && Number(value) <= 100) {
-                                                    setFieldValue("costOfFunds", value);
-                                                }
-                                            }}
-                                        />
-
-                                        {
-                                            errors.costOfFunds && touched.costOfFunds && (
-                                                <ErrorMessage
-                                                    name="costOfFunds"
-                                                    id='costOfFundsError'
-                                                    component="div"
-                                                    className="text-red-500 text-sm"
-                                                />
-                                            )
-                                        }
-                                    </div>
-
-                                    <div className={`w-full md:pt-0 pt-4`}>
-                                        <div>
-                                            <Label htmlFor="tenor">Tenor (month)</Label>
-                                        </div>
-                                        <div>
-                                            <Field
-                                                id="tenor"
-                                                data-testid="tenor"
-                                                name="tenor"
-                                                type={"number"}
-                                                className="w-full p-3 border rounded focus:outline-none mt-3 text-sm [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-                                                placeholder="0"
-                                                onWheel={(e: {
-                                                    currentTarget: { blur: () => string; };
-                                                }) => e.currentTarget.blur()}
-                                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                                                    let rawValue = e.target.value.replace(/,/g, "");
-                                                    if (/^(?!0$)\d*$/.test(rawValue)) {
-                                                        rawValue = parseInt(rawValue).toString();
-                                                        let formattedValue = Number(rawValue).toLocaleString();
-                                                        formattedValue += ".00";
-                                                        setFieldValue("tenor", rawValue);
-                                                        e.target.value = formattedValue;
-                                                    }
-                                                }}
-                                            />
-                                        </div>
-
-                                        <div className={`mb-[2%]`}>
-                                            {
-                                                errors.tenor && touched.tenor && (
-                                                    <ErrorMessage
-                                                        name="tenor"
-                                                        id='tenorId'
-                                                        component="div"
-                                                        className="text-red-500 text-sm"
-                                                    />
-                                                )
-                                            }
-                                        </div>
-                                    </div>
-
-
-                                    <div className={`pt-5`}>
+                                    /> 
+                        </div>
+                        <div className=" grid grid-cols-1 gap-y-3">
+                        <Label htmlFor="FundProductSponsor">Fund product sponsor</Label>   
+                         <MultiSelect
+                            options={financiers}
+                            onValueChange={(values) => {
+                                setFieldValue("sponsors",values)
+                                setShowSponsorError(false);
+                            }}
+                            placeholder="Select sponsor"
+                            defaultValue={values.sponsors}
+                            infinityScroll={{
+                                hasMore:hasNextfinancierPage,
+                                loadMore: loadMoreFinancier,
+                                loader: isfetching
+                             }}
+                             canOpen={!!values.investmentVehicleId} 
+                        onClick={() => {
+                            if (!values.investmentVehicleId) {
+                            setShowSponsorError(true);
+                            }
+                        }}
+                        isLoading={isFinancierLoading}
+                         />
+                         {showSponsorError && !values.investmentVehicleId && (
+                            <div className="text-red-500 text-sm mt-1">
+                                Please select a fund product first before choosing sponsors
+                            </div>
+                            )}
+                        </div>
+                        <div className={``}>
                                         <Label htmlFor="loanProductSize"
                                                style={{display: 'inline-block', WebkitOverflowScrolling: 'touch'}}>Loan
                                             product size</Label>
@@ -483,7 +404,7 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
                                                         }
                                                     }}
                                                 />
-                                                <div className={`pb-5`}>
+                                              
                                                     {
                                                         errors.loanProductSize && touched.loanProductSize && (
                                                             <ErrorMessage
@@ -493,12 +414,13 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
                                                                 className="text-red-500 text-sm"
                                                             />)
                                                     }
-                                                </div>
+                                                
                                             </div>
                                         </div>
                                     </div>
-
-                                    <div className={`md:pt-4`}>
+                        
+                            
+                             <div className={`relative bottom-4`}>
                                         <Label htmlFor="minimumRepaymentAmount"
                                                style={{display: 'inline-block', WebkitOverflowScrolling: 'touch'}}>Minimum
                                             repayment amount</Label>
@@ -534,9 +456,7 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
                                                         }
                                                     }}
                                                 />
-                                            </div>
-                                        </div>
-                                        {
+                                                  {
                                             errors.minimumRepaymentAmount && touched.minimumRepaymentAmount && (
                                                 <ErrorMessage
                                                     name="minimumRepaymentAmount"
@@ -545,15 +465,165 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
                                                     className="text-red-500 text-sm"
                                                 />)
                                         }
+                                            </div>
+                                        </div>
                                     </div>
 
-                                    <div className={`p`}>
-                                        <Label htmlFor="moratorium"
-                                               style={{
-                                                   display: 'inline-block',
-                                                   WebkitOverflowScrolling: 'touch'
-                                               }}>Moratorium (month)</Label>
-                                        <div className={`pt-2`}>
+                                    <div className={`relative bottom-9`}>
+                                        <Label htmlFor="obligorLimit">Obligor limit</Label>
+
+                                        <div className={`flex flex-row gap-2 w-full`}>
+                                            <div className={`pt-1`}>
+                                                <CurrencySelectInput readOnly={false}
+                                                                     selectedcurrency={selectCurrency}
+                                                                     setSelectedCurrency={setSelectCurrency}
+                                                                     className={`h-12`}/>
+                                            </div>
+
+                                            <div className={`pt-4 w-full`}>
+                                            <Field
+                                                        id="obligorLimit"
+                                                        data-testid="obligorLimit"
+                                                        name="obligorLimit"
+                                                        type={"number"}
+                                                        className="w-full p-3 border mt-2 rounded focus:outline-none text-sm"
+                                                        component={CustomInputField}
+                                                        onWheel={(e: {
+                                                            currentTarget: { blur: () => string; };
+                                                        }) => e.currentTarget.blur()}
+                                                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                                                            let rawValue = e.target.value.replace(/,/g, "");
+                                                            if (/^(?!0$)\d*$/.test(rawValue)) {
+                                                                rawValue = parseInt(rawValue).toString();
+                                                                let formattedValue = Number(rawValue).toLocaleString();
+                                                                formattedValue += ".00";
+                                                                setFieldValue("obligorLimit", rawValue);
+                                                                e.target.value = formattedValue;
+                                                            }
+                                                        }}
+                                                    />
+                                                 {
+                                                        errors.obligorLimit && touched.obligorLimit && (
+                                                            <ErrorMessage
+                                                                name="obligorLimit"
+                                                                id='obligorLimitId'
+                                                                component="div"
+                                                                className="text-red-500 text-sm"
+                                                            />)
+                                                    }
+                                            </div>
+                                        </div>
+                                    </div>
+                                 
+                                    <div className="grid  gap-6 relative bottom-12">
+                                        {/* Interest and Cost of Funds */}
+                                        <div className="grid grid-cols-2 gap-4">
+                                            {/* Interest */}
+                                            <div>
+                                                <Label htmlFor="interest">Interest</Label>
+                                                <div className="flex items-center border rounded-md h-12 mt-2">
+                                                    <div className="bg-[#F9F9F9] flex items-center justify-center w-10 h-full rounded-l">
+                                                        <span>%</span>
+                                                    </div>
+                                                    <Field
+                                                        id="interest"
+                                                        data-testid="interest"
+                                                        name="interest"
+                                                        type="number"
+                                                        className="w-full p-3 border-none rounded-r focus:outline-none text-sm"
+                                                        placeholder="0"
+                                                        step="0.01"
+                                                        onWheel={(e: React.WheelEvent<HTMLInputElement>) => e.currentTarget.blur()}
+                                                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                                                            const value = e.target.value;
+                                                            if (/^\d*\.?\d*$/.test(value) && Number(value) <= 100) {
+                                                                setFieldValue("interest", value);
+                                                            }
+                                                        }}
+                                                    />
+                                                </div>
+                                                {errors.interest && touched.interest && (
+                                                    <ErrorMessage
+                                                        name="interest"
+                                                        id='interestId'
+                                                        component="div"
+                                                        className="text-red-500 text-sm mt-1"
+                                                    />
+                                                )}
+                                            </div>
+
+                                            {/* Cost of Funds */}
+                                            <div>
+                                                <Label htmlFor="costOfFunds">Cost of fund</Label>
+                                                <div className="flex items-center border rounded-md h-12 mt-2">
+                                                    <div className="bg-[#F9F9F9] flex items-center justify-center w-10 h-full rounded-l">
+                                                        <span>%</span>
+                                                    </div>
+                                                    <Field
+                                                        id="costOfFunds"
+                                                        data-testid="costOfFunds"
+                                                        name="costOfFunds"
+                                                        type="number"
+                                                        className="w-full p-3 border-none rounded-r focus:outline-none text-sm"
+                                                        placeholder="0"
+                                                        step="0.01"
+                                                        onWheel={(e: React.WheelEvent<HTMLInputElement>) => e.currentTarget.blur()}
+                                                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                                                            const value = e.target.value;
+                                                            if (/^\d*\.?\d*$/.test(value) && Number(value) <= 100) {
+                                                                setFieldValue("costOfFunds", value);
+                                                            }
+                                                        }}
+                                                    />
+                                                </div>
+                                                {errors.costOfFunds && touched.costOfFunds && (
+                                                    <ErrorMessage
+                                                        name="costOfFunds"
+                                                        id='costOfFundsId'
+                                                        component="div"
+                                                        className="text-red-500 text-sm mt-1"
+                                                    />
+                                                )}
+                                            </div>
+                                        </div>
+                                    
+                                    </div>
+                                    <div className="relative bottom-12 grid  gap-3 ">
+                                        <div className="grid grid-cols-2 gap-4">
+                                            <div>
+                                            <Label htmlFor="tenor">Tenor (month)</Label>
+                                            <Field
+                                                id="tenor"
+                                                data-testid="tenor"
+                                                name="tenor"
+                                                type="number"
+                                                className="w-full p-3 border rounded focus:outline-none mt-2 h-12 text-sm [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                                                placeholder="0"
+                                                onWheel={(e: React.WheelEvent<HTMLInputElement>) => e.currentTarget.blur()}
+                                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                                                    let rawValue = e.target.value.replace(/,/g, "");
+                                                    if (/^(?!0$)\d*$/.test(rawValue)) {
+                                                        rawValue = parseInt(rawValue).toString();
+                                                        setFieldValue("tenor", rawValue);
+                                                    }
+                                                }}
+                                            />
+                                            {errors.tenor && touched.tenor && (
+                                                <ErrorMessage
+                                                    name="tenor"
+                                                    id='tenorId'
+                                                    component="div"
+                                                    className="text-red-500 text-sm mt-1"
+                                                />
+                                            )}
+                                            </div>
+
+                                            <div className={``}>
+                                                 <Label htmlFor="moratorium"
+                                                    style={{
+                                                        display: 'inline-block',
+                                                        WebkitOverflowScrolling: 'touch'
+                                                    }}>Moratorium (month)</Label>
                                             <Field
                                                 id="moratorium"
                                                 data-testid="moratorium"
@@ -585,83 +655,9 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
                                                     />)
                                             }
                                         </div>
-                                    </div>
-
-                                    <div>
-                                        <div className={`flex flex-row gap-2 `}>
-                                            <div>
-                                                <Label htmlFor="interest">Interest (%)</Label>
-                                                <div className={`pt-2`}>
-                                                    <Field
-                                                        id="interest"
-                                                        data-testid="interest"
-                                                        name="interest"
-                                                        type="number"
-                                                        className="w-20 p-3 border rounded focus:outline-none mt-2 text-sm"
-                                                        placeholder="0.0"
-                                                        step="0.01"
-                                                        onWheel={(e: {
-                                                            currentTarget: { blur: () => string; };
-                                                        }) => e.currentTarget.blur()}
-                                                        onChange={(e: { target: { value: string; }; }) => {
-                                                            const value = e.target.value;
-                                                            if (/^\d*\.?\d*$/.test(value) && Number(value) <= 100) {
-                                                                setFieldValue("interest", value);
-                                                            }
-                                                        }}
-                                                    />
-                                                    {
-                                                        errors.interest && touched.interest && (
-                                                            <ErrorMessage
-                                                                name="interest"
-                                                                id='interestId'
-                                                                component="div"
-                                                                className="text-red-500 text-sm"
-                                                            />)
-                                                    }
-                                                </div>
-                                            </div>
-
-                                            <div className={`w-full`}>
-                                                <Label htmlFor="obligorLimit">Obligor limit</Label>
-                                                <div className={`w-full pt-3`}>
-                                                    <Field
-                                                        id="obligorLimit"
-                                                        data-testid="obligorLimit"
-                                                        name="obligorLimit"
-                                                        type={"number"}
-                                                        className="w-full p-3 border mt-2 rounded focus:outline-none text-sm"
-                                                        component={CustomInputField}
-                                                        onWheel={(e: {
-                                                            currentTarget: { blur: () => string; };
-                                                        }) => e.currentTarget.blur()}
-                                                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                                                            let rawValue = e.target.value.replace(/,/g, "");
-                                                            if (/^(?!0$)\d*$/.test(rawValue)) {
-                                                                rawValue = parseInt(rawValue).toString();
-                                                                let formattedValue = Number(rawValue).toLocaleString();
-                                                                formattedValue += ".00";
-                                                                setFieldValue("obligorLimit", rawValue);
-                                                                e.target.value = formattedValue;
-                                                            }
-                                                        }}
-                                                    />
-                                                    {
-                                                        errors.obligorLimit && touched.obligorLimit && (
-                                                            <ErrorMessage
-                                                                name="obligorLimit"
-                                                                id='obligorLimitId'
-                                                                component="div"
-                                                                className="text-red-500 text-sm"
-                                                            />)
-                                                    }
-                                                </div>
-                                            </div>
+                                        </div> 
                                         </div>
-                                    </div>
-                                </div>
-
-                                <div className={`pt-4`}>
+                                    <div className={`relative bottom-12`}>
                                     <Label htmlFor="loanProductMandate">Loan product mandate</Label>
                                    <div className={`pt-3`}>
                                        <PdfAndDocFileUpload
@@ -683,7 +679,8 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
                                         />
                                     )}
                                 </div>
-                                <div className="pt-4">
+
+                                <div className="relative bottom-11">
                                     <Label htmlFor="loanProductTermsAndConditionId" className={`pb-5`}>Loan product
                                         terms and
                                         conditions</Label>
@@ -707,41 +704,50 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
                                         />
                                     )}
                                 </div>
+                                {/* <div className="mt-6 p-4 bg-gray-100 rounded-md">
+  <h3 className="text-sm font-medium mb-2">Form Values (Debug):</h3>
+  <pre className="text-xs bg-white p-3 rounded border overflow-auto max-h-40">
+    {JSON.stringify(values, null, 2)}
+  </pre>
+  <p>{JSON.stringify(values.sponsors, null, 2)}</p>
+</div> */}
+       
                                 </div>
-
-                                <div className={`flex justify-end pt-5 gap-3 pb-5`}>
-                                    <Button
-                                        className={`text-meedlBlue border border-meedlBlue h-12 w-32`}
+                                
+                            <div className={`md:flex justify-between pt-5 gap-3 pb-5 lg:pr-12 `}>
+                                  <div>
+                                  <Button
+                                        className={`text-meedlBlue border border-meedlBlue h-12 md:w-32 w-full`}
                                         variant={"outline"}
-                                        type={"reset"}
-                                        onClick={handleModalClose}
+                                        type={"button"}
+                                        onClick={handleBackRoute}
                                     >
-                                        Cancel
+                                        Back
                                     </Button>
+                                  </div >
+                                  <div className="mt-3 md:mt-0">
                                     <Button
-                                        className={`h-12 w-32 ${!isValid ? 'bg-[#D7D7D7] hover:bg-[#D7D7D7] text-meedlWhite cursor-not-allowed ' : 'bg-meedlBlue text-meedlWhite cursor-pointer'}`}
+                                        className={`h-12 md:w-40 w-full ${!isValid ? 'bg-[#D7D7D7] hover:bg-[#D7D7D7] text-meedlWhite cursor-not-allowed ' : 'bg-meedlBlue text-meedlWhite cursor-pointer'}`}
                                         variant={"secondary"}
                                         type={"submit"}
                                         disabled={!isValid}
                                     >
-                                        {isLoading ? (<Isloading/>) : (
-                                            "Create"
-                                        )}
+                                           continue
                                     </Button>
-                                </div>
-                                {error && (
-                                    <div className="text-red-500 text-sm mt-2 text-center">
-                                        {error}
                                     </div>
-                                )}
+                                </div>
+                               
                             </div>
+                            
                         </Form>
                     )
                 }
             </Formik>
-
-        </main>
-    );
+       </div>
+        </div>
+        
+    </div>
+  )
 }
 
-export default CreateLoanProduct;
+export default StepOne

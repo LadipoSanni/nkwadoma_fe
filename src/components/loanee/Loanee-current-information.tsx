@@ -7,6 +7,8 @@ import PhoneNumberSelect from '@/reuseable/select/phoneNumberSelect/Index';
 import GoogleLocationsearch from '@/reuseable/google-location/Google-location-search';
 import Select from "@/reuseable/select/ProgramSelect";
 import { Button } from "@/components/ui/button";
+import NigeriaStatesSelect from '@/reuseable/select/NigeriaStatesSelect';
+import CustomSelectObj from '@/reuseable/Input/Custom-select-obj';
 
 
 export interface initialFormValue {
@@ -19,6 +21,8 @@ export interface initialFormValue {
   alternateEmail: string;
   alternatePhoneNumber: string;
   alternateContactAddress: string;
+  stateOfResidence: string;
+  levelOfEducation: string
 }
 
 interface Props {
@@ -35,6 +39,17 @@ function LoaneeCurrentInformation({initialFormValue,handleSubmit,nextOfCountryCo
   const [isRelationshipSelectOpen, setIsRelationshipSelectOpen] = useState(false);
   const [isPhoneNumberError,setPhoneNumberError] = useState(false)
   const [isAltPhoneNumberError,setAltPhoneNumberError] = useState(false)
+
+  const educationalQualifications = [
+    { value: "O_LEVEL", label: "O'level" },
+    { value: "OND", label: "OND" },
+    { value: "HND", label: "HND" },
+    { value: "BSC", label: "BSC" },
+    { value: "MSC", label: "MSC" },
+    { value: "PHD", label: "PHD" },
+    { value: "DIPLOMA", label: "Diploma" },
+    { value: "OTHERS", label: "Others" }
+  ] 
 
   return (
     <div>
@@ -57,7 +72,34 @@ function LoaneeCurrentInformation({initialFormValue,handleSubmit,nextOfCountryCo
           className={`${inter.className}`}
           >
             <div className='grid gap-3 z-50 relative'>
-              <div className={'grid gap-2'}>
+              <div className={'grid lg:grid-cols-2 gap-4'}>
+                <div className={'relative top-2 lg:top-0'}>
+                <Label htmlFor="stateOfResidence" className="block text-sm font-medium text-labelBlue">State of residence</Label>
+                 <NigeriaStatesSelect
+                   triggerId='selectStateTriggerId'
+                   id='stateId'
+                   value={values.stateOfResidence}
+                   onChange={(value)=> {setFieldValue("stateOfResidence", value)}}
+                   name='stateOfResidence'
+                  placeHolder='Select state of residence'
+                  className='h-[3.5rem]'
+                 />
+                </div>
+                <div className={''}>
+                <Label htmlFor="levelOfEducation" className="block text-sm font-medium text-labelBlue">Level of education</Label>
+                 <CustomSelectObj
+                   triggerId='selectlevelOfEducationTriggerId'
+                   id='levelOfEducationId'
+                   value={values.levelOfEducation}
+                   onChange={(value)=> {setFieldValue("levelOfEducation", value)}}
+                   name='levelOfEducation'
+                  placeHolder='Select state of residence'
+                  selectContent={educationalQualifications}
+                  className='h-[3.5rem]'
+                 />
+                </div>
+              </div>
+              <div className={'grid gap-2 relative bottom-2'}>
               <Label htmlFor="alternateEmail" className="block text-sm font-medium text-labelBlue">Alternate
                email address</Label>
                <Field
