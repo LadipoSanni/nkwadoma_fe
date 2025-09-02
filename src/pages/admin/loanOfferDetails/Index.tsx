@@ -3,7 +3,7 @@ import React, {useState} from 'react';
 import BackButton from "@/components/back-button";
 import {useRouter, useSearchParams} from "next/navigation";
 import {Avatar, AvatarFallback, AvatarImage} from "@/components/ui/avatar";
-import {cabinetGroteskMediumBold, inter} from "@/app/fonts";
+import {cabinetGroteskMediumBold, inter, inter600} from "@/app/fonts";
 import {Button} from "@/components/ui/button";
 import TabConnector from "@/reuseable/details/tab-connector";
 import {FaCircle} from "react-icons/fa6";
@@ -22,6 +22,7 @@ import SkeletonForDetailPage from "@/reuseable/Skeleton-loading-state/Skeleton-f
 import CreditScore from "@/features/display/CreditScore";
 import { useAppSelector } from '@/redux/store';
 import { setCurrentNavbarItem } from "@/redux/slice/layout/adminLayout";
+import DeclineLoanModal from "@/reuseable/modals/declineLoan/Index";
 
 const LoanOfferDetailsContent = dynamic(
     () => Promise.resolve(LoanOfferDetails),
@@ -35,6 +36,7 @@ const LoanOfferDetails = () => {
     const [disburseLoan, {isLoading}] = useDisburseLoanOfferMutation()
      const notificationId = useAppSelector(state => (state?.notification?.setNotificationId))
       const notification = useAppSelector(state => (state?.notification?.setNotification))
+    const [openDeclineLoanRequestModal, setOpenDeclineLoanRequestModal] = useState(false)
 
     const getId = () => {
         if (searchParams) {
@@ -52,6 +54,9 @@ const LoanOfferDetails = () => {
     const id: string = getId()
     const {data, isLoading: loading} = useViewLoanOfferDetailsQuery(id)
 
+    const setOpenDeclineOffer = (value: boolean) => {
+        setOpenDeclineLoanRequestModal(value)
+    }
     const getLoaneeLoanBreakdown = () => {
         const loaneeLoanBreakDown = data?.data?.loaneeBreakdown
         const items: { itemAmount: string, itemName: string }[] = []
@@ -202,6 +207,9 @@ const LoanOfferDetails = () => {
             setCurrentsTab(currentTab - 1);
         }
     };
+    const openWithdraw = () => {
+        setOpenDeclineLoanRequestModal(true)
+    }
 
     const getCurrentDataList = () => {
         switch (currentTab) {
@@ -321,6 +329,11 @@ const LoanOfferDetails = () => {
                             </div>
                             <div
                                 className=" md:sticky md:bottom-0 py-3 px-3 md:py-3 md:bg-white md:flex grid md:justify-end gap-5 md:mt-0">
+                                {currentTab === 0 && (
+                                    <Button
+                                        className={`w-full ${inter600.className} md:w-fit md:px-6 md:py-3 h-fit py-4 text-meedlBlue border border-meedlBlue bg-meedlWhite hover:bg-meedlWhite`}
+                                        onClick={openWithdraw} >Withdraw loan</Button>
+                                )}
                                 {currentTab !== 0 && (
                                     <Button
                                         className={'w-full md:w-fit md:px-6 md:py-3 h-fit py-4 text-meedlBlue border border-meedlBlue bg-meedlWhite hover:bg-meedlWhite'}
@@ -339,6 +352,9 @@ const LoanOfferDetails = () => {
                             </div>
                         </div>
                     </div>
+                    <DeclineLoanModal isOpen={openDeclineLoanRequestModal} loanOfferId={getId()}
+                                      setIsOpen={setOpenDeclineOffer}
+                                      title={"Withdraw loan"}/>
                 </div>
             )
         }
