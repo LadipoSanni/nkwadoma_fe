@@ -86,7 +86,6 @@ const Index = () => {
         };
 
         const response=  await respondToLoanRequest(data);
-        console.log('response: ', response)
         if (response?.error){
             toast({
                 description:'Loan offer has been created',
@@ -105,11 +104,8 @@ const Index = () => {
     const handleAmountInputChange = (value: string) => {
         if (selectedLoanProductId ) {
             const selectedLoanProduct = getLoanProductById(selectedLoanProductId)
-            console.log(selectedLoanProduct)
             const totalAvailableInLoanProduct = Number(selectedLoanProduct?.totalAmountAvailable);
-            console.log('value, ', value)
             const amountApproved = Number(unformatAmount(value));
-            console.log('amountApproved: ', amountApproved, 'totalAvailable: ', totalAvailableInLoanProduct);
             if (amountApproved > totalAvailableInLoanProduct) {
                  setDiableButton(true)
                  setAmountApprovedError('Amount approved cannot be greater than selected loan product size')
@@ -154,6 +150,7 @@ const Index = () => {
                                 className="p-4 focus-visible:outline-0  w-full shadow-none focus-visible:ring-transparent rounded-md h-[3.20rem] font-normal leading-[21px] text-[14px] placeholder:text-grey150 text-black500 border border-solid border-neutral650"
                                 thousandSeparator=","
                                 decimalScale={2}
+                                value={amount}
                                 fixedDecimalScale={true}
                                 onChange={(e)=> {
                                     const {value} = e.target
@@ -162,7 +159,7 @@ const Index = () => {
 
                             />
                         </div>
-                        <p className={`text-[12px] text-red-400 `}>{amountApprovedError}</p>
+                        <p id={'amountApprovedError'} data-testid={'amountApprovedError'} className={`text-[12px] text-red-400 `}>{amountApprovedError}</p>
                     </div>
                     <div>
                         <CustomSelectId
