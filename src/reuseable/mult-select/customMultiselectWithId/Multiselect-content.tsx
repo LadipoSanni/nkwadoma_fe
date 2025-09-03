@@ -75,7 +75,7 @@ export const MultiSelectContent = ({
       <CommandList className="w-full" id="listId">
         <CommandEmpty>No results found.</CommandEmpty>
         <CommandGroup>
-          {!selectAllcondition ? null : (
+          {!selectAllcondition  ? null : options.length === 0 ? <div></div> : (
             <CommandItem
               key="all"
               value="all"
@@ -86,7 +86,7 @@ export const MultiSelectContent = ({
                 className={cn(
                   "mr-2 flex h-4 w-4 items-center justify-center rounded-sm border border-primary",
                   selectedValues.length === options.length
-                    ? "bg-primary text-primary-foreground"
+                    ? "bg-blue-950 text-primary-foreground"
                     : "opacity-50 [&_svg]:invisible"
                 )}
               >
@@ -124,7 +124,7 @@ export const MultiSelectContent = ({
                   next={infinityScroll.loadMore}
                   hasMore={infinityScroll.hasMore}
                   loader={infinityScroll.loader ? <SkeletonForLoanOrg /> : null}
-                  height="30.5vh"
+                  height="26.5vh"
                   className="w-full"
                 >
                   {options.map((option) => {

@@ -14,15 +14,39 @@ const Details = () => {
 
     const {data: loanProduct, isLoading: loading} = useGetLoanProductDetailsByIdQuery({loanProductId: loanProductId})
 
+    const getVendorByProductType = (vendors: string, productType: string) => {
+        if (!vendors || !Array.isArray(vendors)) return 'Not provided';
+        
+        const vendor = vendors.find(v => v.product === productType);
+        return vendor ? vendor.vendorName : 'Not provided';
+      };
+
 
     const dataList = [
         {label: "Fund product", value: loanProduct?.data.investmentVehicleName || ''},
-        {label: "Product sponsor", value: loanProduct?.data.sponsor || ''},
+        {
+            label: "Product sponsors", 
+            value: loanProduct?.data.sponsors && loanProduct.data.sponsors.length > 0 
+              ? loanProduct.data.sponsors.map((sponsor: { name: string; }) => sponsor.name).join(', ')
+              : 'Not provided'
+          },
         {label: "Bank partner", value: loanProduct?.data.bankPartner || ''},
-        {label: 'Credit life insurance provider', value: loanProduct?.data?.CreditLifeInsuranceProvider},
-        {label: "Health insurance provider", value: loanProduct?.data?.healthInsuranceProvider},
-        {label: "Accomodation provider", value: loanProduct?.data.accomodaationProvider},
-        {label: "Device provider", value: loanProduct?.data.deviceProvider},
+        {
+            label: 'Credit life insurance provider', 
+            value: getVendorByProductType(loanProduct?.data.vendors, 'CREDIT_LIFE_INSURANCE_PROVIDER')
+          },
+          {
+            label: "Health insurance provider", 
+            value: getVendorByProductType(loanProduct?.data.vendors, 'HEALTH_INSURANCE_PROVIDER')
+          },
+          {
+            label: "Accomodation provider", 
+            value: getVendorByProductType(loanProduct?.data.vendors, 'ACCOMMODATION')
+          },
+          {
+            label: "Device provider", 
+            value: getVendorByProductType(loanProduct?.data.vendors, 'DEVICE')
+          },
     ];
 
     const documentData = [

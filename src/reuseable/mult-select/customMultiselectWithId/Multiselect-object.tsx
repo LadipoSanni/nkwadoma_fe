@@ -36,6 +36,7 @@ interface MultiSelectProps
   emptyState? : string;
   isLoading?: boolean;
   resetKey?: string;
+  selectAllcondition?: boolean;
 }
 
 export const MultiSelect = React.forwardRef<HTMLButtonElement, MultiSelectProps>(
@@ -58,6 +59,7 @@ export const MultiSelect = React.forwardRef<HTMLButtonElement, MultiSelectProps>
       emptyState,
       isLoading,
       resetKey,
+      selectAllcondition,
       ...props
     },
     ref
@@ -153,6 +155,7 @@ export const MultiSelect = React.forwardRef<HTMLButtonElement, MultiSelectProps>
             infinityScroll={infinityScroll}
             emptyState={emptyState}
             isLoading={isLoading}
+            selectAllcondition={selectAllcondition}
           />
         </PopoverContent>
       </Popover>
