@@ -19,7 +19,6 @@ import { useViewFinanciersByInvestmentmentVehicleQuery } from '@/service/admin/f
 import {useRouter } from 'next/navigation';
 import { setLoanProductField } from "@/redux/slice/loan-product/Loan-product";
 
-
 interface viewAllProps {
     id: string;
     name: string;
@@ -53,6 +52,7 @@ function StepOne() {
             pageNumber: fundPageNumber,
             investmentVehicleStatus: "PUBLISHED",
         });
+
     
     const param = {
             pageNumber: financierPageNumber,
@@ -159,9 +159,6 @@ function StepOne() {
             .trim()
             .required("Fund product is required"),
         sponsors: Yup.array()
-            // .of(Yup.string())
-            // .min(1, "At least one sponsor is required")
-            // .required("Fund product sponsor is required"),
             .of(
                 Yup.object().shape({
                 id: Yup.string().required(),
@@ -179,19 +176,27 @@ function StepOne() {
             .matches(/^(?!0$)([1-9]\d*|0\.\d*[1-9]\d*)$/, "Tenor must be greater than 0")
             .required("Tenor is required")
             .test("max-number", "Invalid tenor limit", value => !value || Number(value) <= 999),
-        loanProductSize: Yup.string()
+            loanProductSize: Yup.string()
             .trim()
             .matches(/^(?!0$)([1-9]\d*|0\.\d*[1-9]\d*)$/, "Product size must be greater than 0")
             .required("Loan product is required")
             .test("max-number", "Product size must be less than or equal to a quadrillion",
                 value => !value || Number(value) <= 1e15)
             .test(
-                `is-greater-than-fund`,
-                `Amount can't be greater than fund product ${formatAmount(fundProductAvailableAmount)}`,
-                function(value) {
-                    if (!value || !fundProductAvailableAmount) return true;
-                    return Number(value) <= Number(fundProductAvailableAmount);
+              `is-greater-than-fund`,
+              `Amount can't be greater than fund product ${formatAmount(fundProductAvailableAmount)}`,
+              function(value) {
+                if (!value || fundProductAvailableAmount === null || fundProductAvailableAmount === undefined) return true;
+                
+                const loanSize = Number(value);
+                const availableAmount = Number(fundProductAvailableAmount);
+                
+                if (availableAmount === 0 && loanSize > 0) {
+                  return false;
                 }
+                
+                return loanSize <= availableAmount;
+              }
             ),
         obligorLimit: Yup.string()
             .trim()
@@ -278,9 +283,11 @@ function StepOne() {
                 onSubmit={handleSubmit}
                 validationSchema={validationSchema}
                 validateOnMount={true}
+                validateOnChange={true}
+                validateOnBlur={true} 
             >
                 {
-                    ({errors, isValid, touched, setFieldValue, values}) => (
+                    ({errors, isValid, touched, setFieldValue, values, setFieldTouched}) => (
                         <Form className={`${inter.className}`}>
                             <div>
                             <div className="grid grid-cols-1 gap-y-4 md:max-h-[45vh] md:relative overflow-y-auto lg:px-16 relative  lg:right-16  "
@@ -320,6 +327,11 @@ function StepOne() {
                                       setId={(value) => {
                                         setFieldValue("investmentVehicleId", value);
                                         setFundProductId(value)
+
+                                        if (values.sponsors.length > 0) {
+                                            setFieldValue("sponsors", []);
+                                          }
+
                                         const selectedVehicle = investmentVehicleData?.data?.body?.find(
                                             (vehicle: { id: string }) => vehicle.id === value 
                                           );
@@ -361,6 +373,7 @@ function StepOne() {
                             }
                         }}
                         isLoading={isFinancierLoading}
+                        resetKey={values.investmentVehicleId} 
                          />
                          {showSponsorError && !values.investmentVehicleId && (
                             <div className="text-red-500 text-sm mt-1">
@@ -401,7 +414,16 @@ function StepOne() {
                                                             formattedValue += ".00";
                                                             setFieldValue("loanProductSize", rawValue);
                                                             e.target.value = formattedValue;
+                                                            
                                                         }
+                                                    }}
+                                                     onFocus={(e: React.FocusEvent<HTMLInputElement>) => {
+                                                        setFieldTouched("adminLastName", true, false);
+                                                        setFieldValue("adminLastName", e.target.value, true); 
+                                                        }}
+                                                    onBlur={(e: React.FocusEvent<HTMLInputElement>) => {
+                                                        setFieldTouched("loanProductSize", true, true);
+                                                        setFieldValue("adminLastName", e.target.value, true);
                                                     }}
                                                 />
                                               
