@@ -8,7 +8,7 @@ on:
 env:
   CONTAINER_NAME: meedl-frontend-staging
   IMAGE_NAME: meedl-frontend-staging
-  HOST_PORT: 3023         # external port (host)
+  HOST_PORT: 3025         # external port (host)
   CONTAINER_PORT: 3000     # internal port (container)
   S3_BUCKET_NAME: ${{ secrets.S3_BUCKET_NAME }}
   S3_ENV_FILE_PATH: nkwadoma/frontend/staging/nkwadomafrontend.env
