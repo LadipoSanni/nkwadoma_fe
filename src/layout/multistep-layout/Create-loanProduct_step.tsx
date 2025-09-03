@@ -32,9 +32,7 @@ function CreateLoanProductStep({children}:props) {
            textColor='' 
          />
         </div>
-         <div className={`md:px-10 px-8 text-[28px] font-medium ${cabinetGrotesk.className}`}>
-                    {/* {organizationName} */}
-                </div>
+    
         <div className="md:flex  md:gap-10">
      <div><MultiStep steps={createLoanProductSteps} currentStep={currentStep} completedSteps={completedSteps}/></div> 
       

@@ -35,6 +35,7 @@ interface MultiSelectProps
   canOpen: boolean;
   emptyState? : string;
   isLoading?: boolean;
+  resetKey?: string;
 }
 
 export const MultiSelect = React.forwardRef<HTMLButtonElement, MultiSelectProps>(
@@ -56,6 +57,7 @@ export const MultiSelect = React.forwardRef<HTMLButtonElement, MultiSelectProps>
       canOpen = true,
       emptyState,
       isLoading,
+      resetKey,
       ...props
     },
     ref
@@ -66,6 +68,10 @@ export const MultiSelect = React.forwardRef<HTMLButtonElement, MultiSelectProps>
     const contentRef = React.useRef<HTMLDivElement>(null);
 
     React.useImperativeHandle(ref, () => triggerRef.current!);
+
+    React.useEffect(() => {
+      setSelectedValues(defaultValue);
+    }, [resetKey, defaultValue]);
 
     const handleOpenChange = (open: boolean) => {
       if (open && !canOpen) {
