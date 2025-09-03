@@ -18,7 +18,6 @@ import { MultiSelect } from "@/reuseable/mult-select/customMultiselectWithId/Mul
 import { useViewFinanciersByInvestmentmentVehicleQuery } from '@/service/admin/financier';
 import {useRouter } from 'next/navigation';
 import { setLoanProductField } from "@/redux/slice/loan-product/Loan-product";
-import styles from "./index.module.css"
 
 interface viewAllProps {
     id: string;
@@ -424,6 +423,7 @@ function StepOne() {
                                                         }}
                                                     onBlur={(e: React.FocusEvent<HTMLInputElement>) => {
                                                         setFieldTouched("loanProductSize", true, true);
+                                                        setFieldValue("adminLastName", e.target.value, true);
                                                     }}
                                                 />
                                               
