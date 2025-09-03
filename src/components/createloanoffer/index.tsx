@@ -22,7 +22,7 @@ const Index = () => {
     const [amount , setAmount] = useState('');
     const [pageNumber,setPageNumber] = useState(0);
     const [selectedLoanProductId, setSelectedProductId] = useState('')
-    const [selectedLoanProduct, setSelectedProduct] = useState<LoanProduct>()
+    const [loanProducts, setLoanProduct] = useState<LoanProduct[]>()
 
     const [hasNextPage] = useState(false)
     const parameter = {
@@ -34,17 +34,35 @@ const Index = () => {
     const loanRequestId = useAppSelector(state => state.createLoanOffer.selectedLoanRequestId);
     const [disableButton, setDiableButton] = useState(true)
     const unformatedAmount =  unformatAmount(amount);
-    const remainingAmount = !amount ? Number(selectedLoanProduct?.loanProductSize) : Number(selectedLoanProduct?.loanProductSize) - Number(unformatedAmount) ;
+
+    const [remainingAmount, setRemainingAmount] = useState(0)
     const [amountApprovedError, setAmountApprovedError] = useState('')
-    // !selectedLoanProductId || !amount;?
 
     useEffect(() => {
-        // if (ammount)
-    },[amount, ])
+        setLoanProduct(data?.data?.body)
+    },[data?.data?.body, ])
+
+    useEffect(() => {
+        // setRemainingAmount(Number(selectedLoanProduct?.loanProductSize))
+        // if (selectedLoanProduct){
+        //     const amount = Number(selectedLoanProduct?.loanProductSize) - Number(unformatedAmount);
+        //     setRemainingAmount(amount)
+        // }
+        if(selectedLoanProductId ){
+            const selectedLoanProduct = getLoanProductById(selectedLoanProductId)
+            const totalAvailableInLoanProduct = Number(selectedLoanProduct?.totalAmountAvailable);
+            setRemainingAmount(totalAvailableInLoanProduct)
+        }
+
+    }, [selectedLoanProductId]);
 
     const backToLoanRequest = () => {
         router.push("/loan/loan-request")
     }
+    const getLoanProductById = (id: string) => {
+        return loanProducts?.find((loanProduct: LoanProduct) => loanProduct.id === id);
+    };
+
 
     const handleOnSelectLoanProductModal = (value: string)=> {
         setSelectedProductId(value)
@@ -83,11 +101,28 @@ const Index = () => {
 
     }
 
-    const setLoanPROD = (item: object) => {
-        //eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-expect-error
-        const it : LoanProduct = item;
-        setSelectedProduct(it)
+
+    const handleAmountInputChange = (value: string) => {
+        if (selectedLoanProductId ) {
+            const selectedLoanProduct = getLoanProductById(selectedLoanProductId)
+            console.log(selectedLoanProduct)
+            const totalAvailableInLoanProduct = Number(selectedLoanProduct?.totalAmountAvailable);
+            console.log('value, ', value)
+            const amountApproved = Number(unformatAmount(value));
+            console.log('amountApproved: ', amountApproved, 'totalAvailable: ', totalAvailableInLoanProduct);
+            if (amountApproved > totalAvailableInLoanProduct) {
+                 setDiableButton(true)
+                 setAmountApprovedError('Amount approved cannot be greater than selected loan product size')
+            }else{
+                setAmountApprovedError('')
+                setAmount(value)
+                const remain = totalAvailableInLoanProduct - amountApproved;
+                setRemainingAmount(remain)
+
+            }
+        }else{
+            setAmount(value)
+        }
     }
 
     return (
@@ -105,40 +140,35 @@ const Index = () => {
                 <p className={` ${cabinetGroteskMediumBold.className} text-[#101828] text-[28px]  `}>Create loan offer</p>
                 <div className="grid gap-2 mt-4">
                     <Label htmlFor="amountApproved">Amount approved</Label>
-                    <div className={'flex gap-2'}>
-                        <CurrencySelectInput
-                            selectedcurrency={"NGN"}
-                            setSelectedCurrency={(currency) => console.log(currency)}
-                            className="mt-0 mb-0 min-w-[78px] h-[3.10rem]"
-                        />
-                        <NumericFormat
-                            id={`amountApproved`}
-                            name={`amountApproved`}
-                            placeholder="0.00"
-                            className="p-4 focus-visible:outline-0  w-full shadow-none focus-visible:ring-transparent rounded-md h-[3.20rem] font-normal leading-[21px] text-[14px] placeholder:text-grey150 text-black500 border border-solid border-neutral650"
-                            thousandSeparator=","
-                            decimalScale={2}
-                            fixedDecimalScale={true}
-                            onChange={(e)=> {
-                                const {value} = e.target
-                                if (selectedLoanProductId) {
-                                    if (Number(value) >Number(selectedLoanProduct?.loanProductSize)) {
-                                        setAmountApprovedError('Amount approved cannot be greater than selected loan product size')
-                                    }
-                                    setAmount(value)
-                                }else{
-                                    setAmount(value)
-                                }
-                            }}
+                    <div>
+                        <div className={'flex gap-2'}>
+                            <CurrencySelectInput
+                                selectedcurrency={"NGN"}
+                                setSelectedCurrency={(currency) => console.log(currency)}
+                                className="mt-0 mb-0 min-w-[78px] h-[3.10rem]"
+                            />
+                            <NumericFormat
+                                id={`amountApproved`}
+                                name={`amountApproved`}
+                                placeholder="0.00"
+                                className="p-4 focus-visible:outline-0  w-full shadow-none focus-visible:ring-transparent rounded-md h-[3.20rem] font-normal leading-[21px] text-[14px] placeholder:text-grey150 text-black500 border border-solid border-neutral650"
+                                thousandSeparator=","
+                                decimalScale={2}
+                                fixedDecimalScale={true}
+                                onChange={(e)=> {
+                                    const {value} = e.target
+                                   handleAmountInputChange(value)
+                                }}
 
-                        />
+                            />
+                        </div>
+                        <p className={`text-[12px] text-red-400 `}>{amountApprovedError}</p>
                     </div>
                     <div>
                         <CustomSelectId
                             placeholder={'Select loan product'}
                             selectContent={data?.data?.body}
                             value={selectedLoanProductId}
-                            setObject={setLoanPROD}
                             onChange={(value) => handleOnSelectLoanProductModal(value)}
                             isLoading={isLoading || isFetching}
                             displayName={true}
