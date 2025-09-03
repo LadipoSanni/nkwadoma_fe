@@ -4,7 +4,6 @@ import { usePathname, useRouter } from 'next/navigation';
 import { createLoanProductSteps } from '@/types/tabDataTypes'
 import BackButton from '@/components/back-button';
 import MultiStep from '@/reuseable/multiStep-component';
-import {cabinetGrotesk} from "@/app/fonts";
 
 interface props {
     children: React.ReactNode;
