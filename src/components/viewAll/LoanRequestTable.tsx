@@ -9,9 +9,8 @@ import {formatAmount} from "@/utils/Format";
 import dayjs from "dayjs";
 import {capitalizeFirstLetters} from "@/utils/GlobalMethods";
 import SkeletonForTable from "@/reuseable/Skeleton-loading-state/Skeleton-for-table";
-import {store, useAppSelector} from "@/redux/store";
+import { useAppSelector} from "@/redux/store";
 import TableEmptyState from "@/reuseable/emptyStates/TableEmptyState";
-import { setSelectedLoanRequestId } from "@/redux/slice/create/createLoanOfferSlice";
 
 interface userIdentity {
     firstName?: string;
