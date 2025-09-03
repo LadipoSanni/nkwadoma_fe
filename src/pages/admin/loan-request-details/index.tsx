@@ -37,6 +37,7 @@ import CreditScore from "@/features/display/CreditScore";
 import { getInitial } from '@/utils/GlobalMethods';
 import Modal from '@/reuseable/modals/TableModal';
 import { Cross2Icon } from "@radix-ui/react-icons";
+import {setSelectedLoanRequestId} from "@/redux/slice/create/createLoanOfferSlice";
 
 const LoanDetailsContent = dynamic(
     () => Promise.resolve(LoanDetails),
@@ -223,6 +224,7 @@ function LoanDetails() {
     }
 
     const handleCreateLoanOfferFlow = () => {
+        store.dispatch(setSelectedLoanRequestId(id))
         router.push('/create-loan-offer')
 
     }

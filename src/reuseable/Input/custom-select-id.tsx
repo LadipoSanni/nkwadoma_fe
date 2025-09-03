@@ -21,7 +21,7 @@ type InfiniteScrollProps = {
 };
 
 
-type SelectItemType = {
+export type SelectItemType = {
   id: string ;
   organizationName?: string;
   userIdentity?: {
@@ -49,6 +49,7 @@ type Props = {
   isFinancier?:(value: boolean) => void;
   button?: ReactNode | ((props: { closeDropdown: () => void }) => ReactNode);
   displayName?: boolean;
+  setObject?: (item:object) => void
 };
 
 function CustomSelectId({
@@ -68,6 +69,7 @@ function CustomSelectId({
   isFinancier,
   button,
    displayName,
+                          setObject,
                           emptyStateText,
 }: Props) {
 
@@ -158,7 +160,9 @@ function CustomSelectId({
         {selectContent.map((item) => {
             const disabled =  isItemDisabled ?  isItemDisabled(item) :false ;
             const selected = value === item.id;
-
+            if(setObject){
+              setObject(item)
+            }
           return (
               <SelectItem
                 id={item.id}
@@ -188,6 +192,9 @@ function CustomSelectId({
         {selectContent.map((item) => {
             const disabled =  isItemDisabled ? isItemDisabled(item) : false ;
             const selected = value === item.id;
+          if(setObject){
+            setObject(item)
+          }
             return (
               <SelectItem
                 key={item.id}
