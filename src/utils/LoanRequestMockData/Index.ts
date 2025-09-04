@@ -1,221 +1,208 @@
-export const LoanRequestTable = [
+export const repaymentSchedule = [
     {
         id: 1,
-        firstName: 'Anoluwapo',
-        lastName: 'Ogungbemi',
-        programName: 'Software Engineering',
-        cohort: 'Gems',
-        cohortStartDate: '2024-12-16T16:17:42.934384',
+        date: '2024-12-16T16:17:42.934384',
         requestDate: '2024-12-16T16:17:42.934384',
-        initialDeposit: '#3,000,0000',
-        amountRequested: '#3,000,0000'
+        principalAmount: '30000000',
+        amountPaid: '30000000',
+        totalPayment: '30000000',
+        outStanding: '499999999'
     },
     {
         id: 2,
-        firstName: 'Anoluwapo',
-        lastName: 'Ogungbemi',
-        programName: 'Software Engineering',
-        cohort: 'Gems',
-        cohortStartDate: '2024-12-16T16:17:42.934384',
+        date: '2022-12-16T16:17:42.934384',
         requestDate: '2024-12-16T16:17:42.934384',
-        initialDeposit: '#3,000,0000',
-        amountRequested: '#3,000,0000'
+        principalAmount: '32000000',
+        amountPaid: '32000000',
+        totalPayment: '20000000',
+        outStanding: '429999999'
+
     }, {
         id: 3,
-        firstName: 'Anoluwapo',
-        lastName: 'Ogungbemi',
-        programName: 'Software Engineering',
-        cohort: 'Gems',
-        cohortStartDate: '2024-12-16T16:17:42.934384',
-        requestDate: '2024-10-18',
-        initialDeposit: '#3,000,0000',
-        amountRequested: '#3,000,0000'
+        date: '2024-12-16T16:17:42.934384',
+        requestDate: '2024-12-16T16:17:42.934384',
+        principalAmount: '30000000',
+        amountPaid: '30000000',
+        totalPayment: '30000000',
+        outStanding: '499999999'
+
     }, {
         id: 4,
-        firstName: 'Anoluwapo',
-        lastName: 'Ogungbemi',
-        programName: 'Software Engineering',
-        cohort: 'Gems',
-        cohortStartDate: '2024-12-16T16:17:42.934384',
-        requestDate: '2024-10-18',
-        initialDeposit: '#3,000,0000',
-        amountRequested: '#3,000,0000'
+        date: '2024-12-16T16:17:42.934384',
+        requestDate: '2024-12-16T16:17:42.934384',
+        principalAmount: '30000000',
+        outStanding: '499999999',
+        amountPaid: '30000000',
+        totalPayment: '30000000',
     }, {
         id: 5,
-        firstName: 'Anoluwapo',
-        lastName: 'Ogungbemi',
-        programName: 'Software Engineering',
-        cohort: 'Gems',
-        cohortStartDate: '2024-12-16T16:17:42.934384',
-        requestDate: '2024-10-18',
-        initialDeposit: '#3,000,0000',
-        amountRequested: '#3,000,0000'
+        date: '2024-12-16T16:17:42.934384',
+        requestDate: '2024-12-16T16:17:42.934384',
+        principalAmount: '30000000',
+        amountPaid: '30000000',
+        totalPayment: '30000000',
+        outStanding: '499999999',
+
     }, {
         id: 6,
-        firstName: 'Anoluwapo',
-        lastName: 'Ogungbemi',
-        program: 'Software Engineering',
-        cohort: 'Gems',
-        startDate: '12 Dec, 2021',
-        requestDate: '12 Jan, 2022',
-        initialDeposit: '#3,000,0000',
-        amountRequested: '#3,000,0000'
+        date: '2024-12-16T16:17:42.934384',
+        requestDate: '2024-12-16T16:17:42.934384',
+        principalAmount: '30000000',
+        outStanding: '499999999',
+
+        amountPaid: '30000000',
+        totalPayment: '30000000',
     }, {
         id: 6,
-        firstName: 'Anoluwapo',
-        lastName: 'Ogungbemi',
-        program: 'Software Engineering',
-        cohort: 'Gems',
-        startDate: '12 Dec, 2021',
-        requestDate: '12 Jan, 2022',
-        initialDeposit: '#3,000,0000',
-        amountRequested: '#3,000,0000'
+        date: '2024-12-16T16:17:42.934384',
+        requestDate: '2024-12-16T16:17:42.934384',
+        principalAmount: '30000000',
+        amountPaid: '30000000',
+        totalPayment: '30000000',
+        outStanding: '499999999',
+
     }, {
         id: 7,
-        firstName: 'Anoluwapo',
-        lastName: 'Ogungbemi',
-        program: 'Software Engineering',
-        cohort: 'Gems',
-        startDate: '12 Dec, 2021',
-        requestDate: '12 Jan, 2022',
-        initialDeposit: '#3,000,0000',
-        amountRequested: '#3,000,0000'
+        date: '2024-12-16T16:17:42.934384',
+        requestDate: '2024-12-16T16:17:42.934384',
+        principalAmount: '30000000',
+        outStanding: '499999999',
+
+        amountPaid: '30000000',
+        totalPayment: '30000000',
     }, {
         id: 8,
-        firstName: 'Anoluwapo',
-        lastName: 'Ogungbemi',
-        program: 'Software Engineering',
-        cohort: 'Gems',
-        startDate: '12 Dec, 2021',
-        requestDate: '12 Jan, 2022',
-        initialDeposit: '#3,000,0000',
-        amountRequested: '#3,000,0000'
+        date: '2024-12-16T16:17:42.934384',
+        requestDate: '2024-12-16T16:17:42.934384',
+        principalAmount: '30000000',
+        amountPaid: '30000000',
+        outStanding: '499999999',
+
+        totalPayment: '30000000',
     }, {
         id: 9,
-        traineeName: 'Anoluwapo Ogungbemi',
-        program: 'Software Engineering',
-        cohort: 'Gems',
-        startDate: '12 Dec, 2021',
-        requestDate: '12 Jan, 2022',
-        initialDeposit: '#3,000,0000',
-        amountRequested: '#3,000,0000'
+        date: '2024-12-16T16:17:42.934384',
+        requestDate: '2024-12-16T16:17:42.934384',
+        principalAmount: '30000000',
+        amountPaid: '30000000',
+        outStanding: '499999999',
+
+        totalPayment: '30000000',
     }, {
         id: 10,
-        traineeName: 'Anoluwapo Ogungbemi',
-        program: 'Software Engineering',
-        cohort: 'Gems',
-        startDate: '12 Dec, 2021',
-        requestDate: '12 Jan, 2022',
-        initialDeposit: '#3,000,0000',
-        amountRequested: '#3,000,0000'
+        date: '2024-12-16T16:17:42.934384',
+        requestDate: '2024-12-16T16:17:42.934384',
+        principalAmount: '30000000',
+        amountPaid: '30000000',
+        totalPayment: '30000000',
+        outStanding: '499999999',
+
     }, {
         id: 11,
-        traineeName: 'Anoluwapo Ogungbemi',
-        program: 'Software Engineering',
-        cohort: 'Gems',
-        startDate: '12 Dec, 2021',
-        requestDate: '12 Jan, 2022',
-        initialDeposit: '#3,000,0000',
-        amountRequested: '#3,000,0000'
+        date: '2024-12-16T16:17:42.934384',
+        requestDate: '2024-12-16T16:17:42.934384',
+        principalAmount: '30000000',
+        amountPaid: '30000000',
+        outStanding: '499999999',
+
+        totalPayment: '30000000',
     }, {
         id: 12,
-        traineeName: 'Anoluwapo Ogungbemi',
-        program: 'Software Engineering',
-        cohort: 'Gems',
-        startDate: '12 Dec, 2021',
-        requestDate: '12 Jan, 2022',
-        initialDeposit: '#3,000,0000',
-        amountRequested: '#3,000,0000'
+        date: '2024-12-16T16:17:42.934384',
+        requestDate: '2024-12-16T16:17:42.934384',
+        principalAmount: '30000000',
+        amountPaid: '30000000',
+        outStanding: '499999999',
+
+        totalPayment: '30000000',
     }, {
         id: 13,
-        traineeName: 'Anoluwapo Ogungbemi',
-        program: 'Software Engineering',
-        cohort: 'Gems',
-        startDate: '12 Dec, 2021',
-        requestDate: '12 Jan, 2022',
-        initialDeposit: '#3,000,0000',
-        amountRequested: '#3,000,0000'
+        date: '2024-12-16T16:17:42.934384',
+        requestDate: '2024-12-16T16:17:42.934384',
+        principalAmount: '30000000',
+        outStanding: '499999999',
+
+        amountPaid: '30000000',
+        totalPayment: '30000000',
     }, {
         id: 14,
-        traineeName: 'Anoluwapo Ogungbemi',
-        program: 'Software Engineering',
-        cohort: 'Gems',
-        startDate: '12 Dec, 2021',
-        requestDate: '12 Jan, 2022',
-        initialDeposit: '#3,000,0000',
-        amountRequested: '#3,000,0000'
+        date: '2024-12-16T16:17:42.934384',
+        requestDate: '2024-12-16T16:17:42.934384',
+        principalAmount: '30000000',
+        amountPaid: '30000000',
+        totalPayment: '30000000',
     }, {
         id: 15,
-        traineeName: 'Anoluwapo Ogungbemi',
-        program: 'Software Engineering',
-        cohort: 'Gems',
-        startDate: '12 Dec, 2021',
-        requestDate: '12 Jan, 2022',
-        initialDeposit: '#3,000,0000',
-        amountRequested: '#3,000,0000'
+        date: '2024-12-16T16:17:42.934384',
+        requestDate: '2024-12-16T16:17:42.934384',
+        principalAmount: '30000000',
+        outStanding: '499999999',
+
+        amountPaid: '30000000',
+        totalPayment: '30000000',
     }, {
         id: 16,
-        traineeName: 'Anoluwapo Ogungbemi',
-        program: 'Software Engineering',
-        cohort: 'Gems',
-        startDate: '12 Dec, 2021',
-        requestDate: '12 Jan, 2022',
-        initialDeposit: '#3,000,0000',
-        amountRequested: '#3,000,0000'
+        date: '2024-12-16T16:17:42.934384',
+        requestDate: '2024-12-16T16:17:42.934384',
+        principalAmount: '30000000',
+        outStanding: '499999999',
+
+        amountPaid: '30000000',
+        totalPayment: '30000000',
     }, {
         id: 17,
-        traineeName: 'Anoluwapo Ogungbemi',
-        program: 'Software Engineering',
-        cohort: 'Gems',
-        startDate: '12 Dec, 2021',
-        requestDate: '12 Jan, 2022',
-        initialDeposit: '#3,000,0000',
-        amountRequested: '#3,000,0000'
+        date: '2024-12-16T16:17:42.934384',
+        requestDate: '2024-12-16T16:17:42.934384',
+        principalAmount: '30000000',
+        outStanding: '499999999',
+
+        amountPaid: '30000000',
+        totalPayment: '30000000',
     }, {
         id: 18,
-        traineeName: 'Anoluwapo Ogungbemi',
-        program: 'Software Engineering',
-        cohort: 'Gems',
-        startDate: '12 Dec, 2021',
-        requestDate: '12 Jan, 2022',
-        initialDeposit: '#3,000,0000',
-        amountRequested: '#3,000,0000'
+        date: '2024-12-16T16:17:42.934384',
+        requestDate: '2024-12-16T16:17:42.934384',
+        principalAmount: '30000000',
+        outStanding: '499999999',
+
+        amountPaid: '30000000',
+        totalPayment: '30000000',
     }, {
         id: 19,
-        traineeName: 'Anoluwapo Ogungbemi',
-        program: 'Software Engineering',
-        cohort: 'Gems',
-        startDate: '12 Dec, 2021',
-        requestDate: '12 Jan, 2022',
-        initialDeposit: '#3,000,0000',
-        amountRequested: '#3,000,0000'
+        date: '2024-12-16T16:17:42.934384',
+        requestDate: '2024-12-16T16:17:42.934384',
+        principalAmount: '30000000',
+        outStanding: '499999999',
+
+        amountPaid: '30000000',
+        totalPayment: '30000000',
     }, {
         id: 20,
-        traineeName: 'Anoluwapo Ogungbemi',
-        program: 'Software Engineering',
-        cohort: 'Gems',
-        startDate: '12 Dec, 2021',
-        requestDate: '12 Jan, 2022',
-        initialDeposit: '#3,000,0000',
-        amountRequested: '#3,000,0000'
+        date: '2024-12-16T16:17:42.934384',
+        requestDate: '2024-12-16T16:17:42.934384',
+        principalAmount: '30000000',
+        outStanding: '499999999',
+
+        amountPaid: '30000000',
+        totalPayment: '30000000',
     }, {
         id: 21,
-        traineeName: 'Anoluwapo Ogungbemi',
-        program: 'Software Engineering',
-        cohort: 'Gems',
-        startDate: '12 Dec, 2021',
-        requestDate: '12 Jan, 2022',
-        initialDeposit: '#3,000,0000',
-        amountRequested: '#3,000,0000'
+        date: '2024-12-16T16:17:42.934384',
+        requestDate: '2024-12-16T16:17:42.934384',
+        principalAmount: '30000000',
+        outStanding: '499999999',
+
+        amountPaid: '30000000',
+        totalPayment: '30000000',
     }, {
         id: 22,
-        traineeName: 'Anoluwapo Ogungbemi',
-        program: 'Software Engineering',
-        cohort: 'Gems',
-        startDate: '12 Dec, 2021',
-        requestDate: '12 Jan, 2022',
-        initialDeposit: '#3,000,0000',
-        amountRequested: '#3,000,0000'
+        date: '2024-12-16T16:17:42.934384',
+        requestDate: '2024-12-16T16:17:42.934384',
+        principalAmount: '30000000',
+        outStanding: '499999999',
+
+        amountPaid: '30000000',
+        totalPayment: '30000000',
     },
 
 ]
@@ -233,6 +220,8 @@ export const loanReferralTable = [
 
 
 ]
+
+
 
 // export const loanDisbursalTable = [
 //     {loanee: 'Farok Adegbayi', program: 'Software Engineering', cohort: 'Gems', offerDate: '2024-12-16T16:17:42.934384', loanStartDate: '2024-12-16T16:17:42.934384', deposit: '₦40,000,000.00', AmountRequested: '₦40,000,000.00'}
