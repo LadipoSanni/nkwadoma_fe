@@ -13,7 +13,7 @@ import SkeletonForSidebar from '@/reuseable/Skeleton-loading-state/Skeleton-for-
 
 function OrganizationDetails() {
       const organizationId = useAppSelector(store => store.organization?.setOrganizationId)
-       const { data: organizationDetails, isLoading } = useGetOrganizationDetailsQuery(
+       const { data: organizationDetails, isLoading,refetch } = useGetOrganizationDetailsQuery(
           {
             organizationId: organizationId
           },
@@ -24,8 +24,9 @@ function OrganizationDetails() {
          useEffect(() => {
         store.dispatch(setOrganizationStatus(organizationDetails?.data?.activationStatus))
          store.dispatch(setOrganizationName(organizationDetails?.data?.name))
+          refetch()
          },[organizationDetails?.data?.activationStatus,organizationDetails?.data?.name])
-
+         
           const organizationLink = ensureHttpsUrl(organizationDetails?.data.websiteAddress);
 
        const dataList = [
