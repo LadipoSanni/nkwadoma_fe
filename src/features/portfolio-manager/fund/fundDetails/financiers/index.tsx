@@ -156,6 +156,7 @@ function Financiers() {
             setPageNumber={setPageNumber}
             totalPages={totalPage}
             isLoading={isLoading}
+            tableCellStyle={"h-12"}
           />
           )}
         </div>

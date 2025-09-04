@@ -523,12 +523,12 @@ function Setup({investmentVehicleType}: Props) {
                 )} 
                 </div>
             </div>  
-            <div className= "lg:flex lg:gap-24 gap-6 justify-between mt-6  md:mb-0 lg:px-8 relative lg:right-10">
+            <div className= "md:flex md:gap-24 gap-6 justify-between mt-6  md:mb-0 lg:px-8 relative lg:right-10">
                         <Button
                             id='saveInvestment'
                             variant={"outline"}
                              type="button"
-                           className='w-full lg:w-36 h-[48px] mb-4 border-solid border-[#142854] text-[#142854] cursor-pointer'
+                           className='w-full md:w-36 h-[48px] mb-4 border-solid border-[#142854] text-[#142854] cursor-pointer'
                             onClick={()=> handleSaveDraft(values,setFieldError)}
                         >
                           {
@@ -540,7 +540,7 @@ function Setup({investmentVehicleType}: Props) {
                         <Button
                             id='submitInvestment'
                             variant={"secondary"}
-                            className={` w-full lg:w-36 h-[48px] ${
+                            className={` w-full md:w-36 h-[48px] ${
                                 !isValid
                                     ? "bg-neutral650 cursor-auto hover:bg-neutral650 "
                                     : " bg-meedlBlue cursor-pointer"
