@@ -374,6 +374,7 @@ function StepOne() {
                         }}
                         isLoading={isFinancierLoading}
                         resetKey={values.investmentVehicleId} 
+                        selectAllcondition={true}
                          />
                          {showSponsorError && !values.investmentVehicleId && (
                             <div className="text-red-500 text-sm mt-1">
