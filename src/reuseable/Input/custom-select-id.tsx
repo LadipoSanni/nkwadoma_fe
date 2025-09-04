@@ -21,7 +21,7 @@ type InfiniteScrollProps = {
 };
 
 
-type SelectItemType = {
+export type SelectItemType = {
   id: string ;
   organizationName?: string;
   userIdentity?: {
@@ -68,6 +68,7 @@ function CustomSelectId({
   isFinancier,
   button,
    displayName,
+
                           emptyStateText,
 }: Props) {
 
@@ -158,7 +159,6 @@ function CustomSelectId({
         {selectContent.map((item) => {
             const disabled =  isItemDisabled ?  isItemDisabled(item) :false ;
             const selected = value === item.id;
-
           return (
               <SelectItem
                 id={item.id}

@@ -353,7 +353,7 @@ const LoanOfferDetails = () => {
                         </div>
                     </div>
                     <DeclineLoanModal isOpen={openDeclineLoanRequestModal} loanOfferId={getId()}
-                                      setIsOpen={setOpenDeclineOffer}
+                                      setIsOpen={setOpenDeclineOffer} loanOfferStatus={data?.data?.loanOfferStatus}
                                       title={"Withdraw loan"}/>
                 </div>
             )

@@ -37,6 +37,7 @@ import CreditScore from "@/features/display/CreditScore";
 import { getInitial } from '@/utils/GlobalMethods';
 import Modal from '@/reuseable/modals/TableModal';
 import { Cross2Icon } from "@radix-ui/react-icons";
+import {setSelectedLoanRequestId} from "@/redux/slice/create/createLoanOfferSlice";
 
 const LoanDetailsContent = dynamic(
     () => Promise.resolve(LoanDetails),
@@ -222,6 +223,12 @@ function LoanDetails() {
         setOpenDeclineLoanRequestModal(value)
     }
 
+    const handleCreateLoanOfferFlow = () => {
+        store.dispatch(setSelectedLoanRequestId(id))
+        router.push('/create-loan-offer')
+
+    }
+
 
     // const userFirstLetter: string | undefined = data?.data?.userIdentity?.firstName ? getFirstLetterOfWord(data?.data?.userIdentity?.firstName) + "" + getFirstLetterOfWord(data?.data?.userIdentity?.lastName) : ''
     const userFirstLetter = data?.data?.userIdentity?.firstName ?  getInitial(data?.data?.userIdentity?.firstName,data?.data?.userIdentity?.lastName) : ""
@@ -341,7 +348,7 @@ function LoanDetails() {
                                            <MenubarItem 
                                              id={'loanRequestDetailsApproveLoanRequestButton'}
                                              data-testid={'loanRequestDetailsApproveLoanRequestButton'}
-                                             onClick={() => setOpenCreateLoanOffer(true)}
+                                             onClick={handleCreateLoanOfferFlow}
                                              className="text-meedlBlue hover:!cursor-pointer  hover:!bg-[#EEF5FF] rounded-md"
                                            >
                                              Approve loan request

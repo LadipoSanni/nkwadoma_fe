@@ -11,6 +11,33 @@ export interface LoaneeCurentInformation {
     stateOfResidence: string,
     levelOfEducation: string
 }
+export interface LoanProduct {
+    "id": "c7a268c7-136d-4963-984a-46ff70ad869f",
+    "name": "Growth Product",
+    "moratorium": 4,
+    "tenor": 12,
+    "interestRate": 3,
+    "termsAndCondition": "https://res.cloudinary.com/dfkxvsiiu/image/upload/v1756893540/loan-product-terms-and-conditions/API_delivery___documentation_jy56px.pdf",
+    "createdAt": "2025-09-03",
+    "totalAmountAvailable": 30000,
+    "totalAmountDisbursed": 0,
+    "obligorLoanLimit": 34,
+    "totalOutstandingLoan": 0,
+    "totalAmountRepaid": 0,
+    "totalAmountEarned": 0,
+    "loanProductSize": 30000,
+    "costOfFund": "2.0",
+    "mandate": "https://res.cloudinary.com/dfkxvsiiu/image/upload/v1756893528/loan-product-mandate/Student_Grade_sqxqj2.pdf",
+    "sponsor": null,
+    "bankPartner": "",
+    "disbursementTerms": "",
+    "investmentVehicleId": "8c2c1783-aaf4-4d4b-b53c-ce073f2fce8d",
+    "investmentVehicleName": "A cure for wellness",
+    "totalNumberOfLoanee": 0,
+    "minRepaymentAmount": 3000,
+    "vendors": null,
+    "sponsors": null
+}
 export interface AdminViewLoanType {
     "id": "",
     "firstName": "",

@@ -9,7 +9,7 @@ import {formatAmount} from "@/utils/Format";
 import dayjs from "dayjs";
 import {capitalizeFirstLetters} from "@/utils/GlobalMethods";
 import SkeletonForTable from "@/reuseable/Skeleton-loading-state/Skeleton-for-table";
-import {useAppSelector} from "@/redux/store";
+import { useAppSelector} from "@/redux/store";
 import TableEmptyState from "@/reuseable/emptyStates/TableEmptyState";
 
 interface userIdentity {
