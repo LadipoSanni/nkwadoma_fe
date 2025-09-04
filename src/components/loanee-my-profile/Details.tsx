@@ -9,7 +9,7 @@ interface Props {
     name: string;
     value?: string| number;
     maxWidth?: string;
-    valueType:'percentage'| 'digit'| 'currency' | 'tenor',
+    valueType:'percentage'| 'digit'| 'currency' | 'tenor' | 'years',
     showAsWholeNumber?: boolean,
     isLoading?: boolean,
     sx?:string,
@@ -26,7 +26,7 @@ const Details = ({id, name, value,sx, valueType,showAsWholeNumber,showIcon, isLo
                    {showIcon ? <MdHelpOutline className={` text-[#939CB0] mt-auto mb-auto   `}/>: ''}
                </div>
                <span id={'detailsValue:' + value} className={` ${cabinetGroteskBold.className} ${isLoading ? 'hidden ' : ''}  text-[32px] ${styles.details} max-w-[100%]  text-meedlBlue  `}>
-                   {valueType === 'percentage' ? (`${value}%`) : valueType === 'digit' ? (`${formateDigits(Number(value))}`) : valueType === 'tenor' ? (`${Number(value) > 1 ? `${value} months` : `${value} month` } `) : (`${formatAmount(Number(value),showAsWholeNumber)}`)  }
+                   {valueType === 'percentage' ? (`${value}%`) : valueType === 'years' ? (`${value}` + `${Number(value) <= 1 ? ' year' : " years"}`) : valueType === 'digit' ? (`${formateDigits(Number(value))}`) : valueType === 'tenor' ? (`${Number(value) > 1 ? `${value} months` : `${value} month` } `) : (`${formatAmount(Number(value),showAsWholeNumber)}`)  }
                </span>
            </div>
         </div>

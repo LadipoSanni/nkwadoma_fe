@@ -13,15 +13,16 @@ const GenerateRepaymentSchedule = () => {
                 <h4 className={` ${cabinetGroteskMediumBold600.className} text-[#101828] text-[28px] text-  `}>Generate repayment schedule</h4>
                 <button id={'confirmRepaymentButton'} data-tesid={'confirmRepaymentButton'} className={` rounded-md text-[14px] ${inter700.className}  w-fit h-fit py-1 px-2 bg-meedlBlue text-white  `}>Confirm repayment schedule</button>
             </div>
-            <div className={` flex `}>
+            <div className={` flex gap-3  `}>
                 <div className={` w-[50%] `}>
-                    <Details showIcon={true} isLoading={false} sx={` w-full md:w-[100%] `} id={'total'} showAsWholeNumber={false}    name={'Sum total'} value={'200000'} valueType={'currency'}  />
+                    <Details showIcon={false} isLoading={false} sx={` w-full md:w-[100%] `} id={'total'} showAsWholeNumber={false}    name={'Sum total'} value={'200000'} valueType={'currency'}  />
                 </div>
-                <div className={`w-[50%] `}>
-                    <Details showIcon={true} isLoading={false} sx={` w-full md:w-[100%] `} id={'totalamountEarned'} showAsWholeNumber={false}    name={'Tenor'} value={'200000'} valueType={'tenor'}  />
-                    <Details showIcon={true} isLoading={false} sx={` w-full md:w-[100%] `} id={'totalamountEarned'} showAsWholeNumber={false}    name={'Tenor'} value={'200000'} valueType={'tenor'}  />
+                <div className={`w-[50%] flex gap-3  `}>
+                    <Details showIcon={false} isLoading={false} sx={` w-full md:w-[100%] `} id={'totalamountEarned'} showAsWholeNumber={false}    name={'Tenor'} value={'9'} valueType={'years'}  />
+                    <Details showIcon={false} isLoading={false} sx={` w-full md:w-[100%] `} id={'totalamountEarned'} showAsWholeNumber={false}    name={'Tenor'} value={'0'} valueType={'years'}  />
                 </div>
             </div>
+
         </div>
     );
 };
