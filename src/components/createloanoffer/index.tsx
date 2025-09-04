@@ -43,16 +43,19 @@ const Index = () => {
     },[data?.data?.body, ])
 
     useEffect(() => {
-        // setRemainingAmount(Number(selectedLoanProduct?.loanProductSize))
-        // if (selectedLoanProduct){
-        //     const amount = Number(selectedLoanProduct?.loanProductSize) - Number(unformatedAmount);
-        //     setRemainingAmount(amount)
-        // }
         if(selectedLoanProductId ){
             const selectedLoanProduct = getLoanProductById(selectedLoanProductId)
             const totalAvailableInLoanProduct = Number(selectedLoanProduct?.totalAmountAvailable);
             setRemainingAmount(totalAvailableInLoanProduct)
+            console.log('amount')
+            const unformatedAmount = Number(unformatAmount(amount));
+            if (unformatedAmount >  totalAvailableInLoanProduct){
+                setAmountApprovedError('Amount approved cannot be greater than selected loan product size')
+            }else{
+                setDiableButton(false)
+            }
         }
+
 
     }, [selectedLoanProductId]);
 
@@ -88,14 +91,13 @@ const Index = () => {
         const response=  await respondToLoanRequest(data);
         if (response?.error){
             toast({
-                description:'Loan offer has been created',
+                //eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-expect-error
+                description: response?.error?.data?.messgae,
                 status: "error",
             })
         }else{
-            toast({
-                description:'Loan offer has been created',
-                status: "success",
-            })
+            router.push('/create-loan-offer-generate-repayment-schedule')
         }
 
     }
@@ -111,10 +113,10 @@ const Index = () => {
                  setAmountApprovedError('Amount approved cannot be greater than selected loan product size')
             }else{
                 setAmountApprovedError('')
+                setDiableButton(false)
                 setAmount(value)
                 const remain = totalAvailableInLoanProduct - amountApproved;
                 setRemainingAmount(remain)
-
             }
         }else{
             setAmount(value)
