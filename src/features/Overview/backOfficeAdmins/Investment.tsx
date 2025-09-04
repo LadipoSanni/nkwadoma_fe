@@ -3,8 +3,15 @@ import React, {useState} from 'react';
 import {PieCharts} from "@/reuseable/pieChart";
 import BarChartWithDate from "@/reuseable/cards/BarChartWithDate";
 import Details from "@/components/loanee-my-profile/Details";
+import {OverviewDetails} from "@/types/loan/loan-request.type";
 
-const Investment = () => {
+interface LoanProps {
+    data:OverviewDetails;
+    isLoading: boolean;
+
+}
+
+const Investment = ({data, isLoading}:LoanProps) => {
 
 
     const initialDates = [
@@ -62,13 +69,13 @@ const Investment = () => {
     }
 
     const loanChartData = [
-        { browser: "Commercial", visitors: 70, fill: "#FBE2B7" },
-        { browser: "Endowment", visitors: 30, fill: "#D9EAFF" },
+        { browser: "Commercial", visitors: data?.totalNumberOfCommercialFundsInvestmentVehicle, fill: "#FBE2B7" },
+        { browser: "Endowment", visitors: data?.totalNumberOfEndowmentFundsInvestmentVehicle, fill: "#D9EAFF" },
 
     ]
     const financierChartData = [
-        { browser: "Invididual", visitors: 40, fill: "#B5DFC3" },
-        { browser: "Cooperate", visitors: 60, fill: "#F2BCBA" },
+        { browser: "Individual", visitors: data?.totalNumberOfIndividualFinancier, fill: "#B5DFC3" },
+        { browser: "Cooperate", visitors: data?.totalNumberOfInstitutionalFinancier, fill: "#F2BCBA" },
 
     ]
     return (
@@ -84,11 +91,13 @@ const Investment = () => {
                    chartData={loanChartData}
                    title={'Investment vehicle breakdown'}
                    dataKey={'investmentBreakdown'}
+                   isLoading={isLoading}
                />
                <PieCharts
                    chartData={financierChartData}
                    title={'Financiers breakdown'}
                    dataKey={'financiersBreakdown'}
+                   isLoading={isLoading}
                />
            </div>
 
@@ -107,9 +116,9 @@ const Investment = () => {
 
                />
                <div className={` grid gap-3 `}>
-                   <Details  isLoading={false} sx={` w-full md:w-[100%] `} id={'netAumReturn'} showAsWholeNumber={false}    name={'Net AUM return'} value={'92500000'} valueType={'currency'}  />
-                   <Details  isLoading={false} sx={` w-full md:w-[100%] `} id={'totalCustodian'} showAsWholeNumber={false}    name={'Total custodian/trustee fee'} value={'92500000'} valueType={'currency'}  />
-                   <Details  isLoading={false} sx={` w-full md:w-[100%] `} id={'totalFundManager'} showAsWholeNumber={false}    name={'Total fund manager fee'} value={'92500000'} valueType={'currency'}  />
+                   <Details  isLoading={isLoading} sx={` w-full md:w-[100%] `} id={'netAumReturn'} showAsWholeNumber={false}    name={'Net AUM return'} value={data?.assetUnderManagement ? data?.assetUnderManagement : 0 } valueType={'currency'}  />
+                   <Details  isLoading={isLoading} sx={` w-full md:w-[100%] `} id={'totalCustodian'} showAsWholeNumber={false}    name={'Total custodian/trustee fee'} value={data?.trusteeFee ? data?.trusteeFee : 0 } valueType={'currency'}  />
+                   <Details  isLoading={isLoading} sx={` w-full md:w-[100%] `} id={'totalFundManager'} showAsWholeNumber={false}    name={'Total fund manager fee'} value={data?.fundManagerFee ? data?.fundManagerFee : 0} valueType={'currency'}  />
 
                </div>
 
