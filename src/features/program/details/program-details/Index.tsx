@@ -25,6 +25,7 @@ import { capitalizeFirstLetters } from "@/utils/GlobalMethods";
 import SkeletonForDetailPage from "@/reuseable/Skeleton-loading-state/Skeleton-for-detailPage";
 import { useToast } from "@/hooks/use-toast";
 import {useAppSelector} from "@/redux/store";
+import styles from "../../index.module.css"
 
 
 
@@ -165,7 +166,13 @@ const ProgramDetails = () => {
 
 
     return (
-        <>
+        <div 
+        className={`max-h-[70vh]  ${styles.container}`}
+        style={{
+            scrollbarWidth: 'none',
+            msOverflowStyle: 'none',  
+              }}
+        >
           {loading ? ( <SkeletonForDetailPage /> ) : (
         <main className={`${inter.className} w-full max-h-full`} id={"mainDiv"}>
                     <section className={`p- flex md:flex-row flex-col md:gap-0 md:justify-between`} id={`section`}>
@@ -251,7 +258,7 @@ const ProgramDetails = () => {
             }
         </main>
           )}
-        </>
+        </div>
     );
 }
 export default ProgramDetails;
