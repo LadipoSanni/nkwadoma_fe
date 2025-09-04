@@ -47,7 +47,6 @@ const Index = () => {
             const selectedLoanProduct = getLoanProductById(selectedLoanProductId)
             const totalAvailableInLoanProduct = Number(selectedLoanProduct?.totalAmountAvailable);
             setRemainingAmount(totalAvailableInLoanProduct)
-            console.log('amount')
             const unformatedAmount = Number(unformatAmount(amount));
             if (unformatedAmount >  totalAvailableInLoanProduct){
                 setAmountApprovedError('Amount approved cannot be greater than selected loan product size')
@@ -93,7 +92,7 @@ const Index = () => {
             toast({
                 //eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-expect-error
-                description: response?.error?.data?.messgae,
+                description: response?.error?.data?.message,
                 status: "error",
             })
         }else{
