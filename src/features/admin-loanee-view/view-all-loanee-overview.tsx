@@ -107,7 +107,7 @@ const ViewAllLoaneeOverview = () => {
             <div
                 id={'tableAndSearchContainer'}
                 data-testid={'tableAndSearchContainer'}
-                className={`grid  max-h-[50vh] overflow-y-auto `}
+                className={`grid  `}
 
             >
 
@@ -120,7 +120,7 @@ const ViewAllLoaneeOverview = () => {
                     tableCellStyle={'h-12'}
                     condition={true}
                     searchEmptyState={false}
-                    sx={'cursor-pointer'}
+                    sx={'cursor-pointer overflow-y-hidden '}
                     // searchEmptyState={!isTyping && debouncedSearchTerm?.length > 0 && searchData?.data?.body?.length < 1 }
                     sideBarTabName={'loanees'}
                     icon={MdOutlinePersonOutline}

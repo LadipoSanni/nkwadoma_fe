@@ -55,63 +55,38 @@ const FinancierDetails = () => {
         {label: 'Financier type', value: <div className={` w-fit h-fit rounded-full px-2 bg-[#EEF5FF] text-[#142854] `}>{capitalizeFirstLetters(data?.data?.financierType)}</div>},
         {label: 'phone number', value:  data?.data?.phoneNumber ?? "Not provided"},
         {label: 'Address', value: data?.data?.address ?? "Not provided"},
+       
         {
             label: 'Company email address',
             value:  data?.data?.email
         },
-        {label: 'Organization admin name', value: data?.data?.firstName  + " " +  data?.data?.lastName },
-        {label: 'Organization admin email address', value: ''},
+        {label: 'Organization admin name', value: data?.data?.cooperateAdminName || "Not provided" },
+        {label: 'Organization admin email address', value: data?.data?.cooperateAdminEmail},
 
+    ]
+
+    const individualBasicDetails = [
+        {label: 'Financier type', value: <div className={` w-fit h-fit rounded-full px-2 text-[#66440A] bg-[#FEF6E8]`}>{capitalizeFirstLetters(data?.data?.financierType)}</div>},
+        {label: 'phone number', value:  data?.data?.phoneNumber ?? "Not provided"},
+        {label: 'Address', value: data?.data?.address ?? "Not provided"},
+        {
+            label: 'Email address',
+            value:  data?.data?.email
+        },
     ]
 
     const investmentDetails  = [
         {label: 'No. of investments', value: data?.data?.totalNumberOfInvestment},
-        {label: 'Total amount invested', value:  formatAmount(data?.data?.totalNumberOfInvestment)
-        // <NumericFormat
-        //         id={'totalAmountInvested'}
-        //         name={'totalAmountInvested'}
-        //         type="text"
-        //         disabled={true}
-        //         thousandSeparator=","
-        //         decimalScale={2}
-        //         fixedDecimalScale={true}
-        //         prefix={'₦'}
-        //         value={data?.data?.totalNumberOfInvestment}
-        //         className='bg-grey105 flex md:place-items-end'
-
-        //     />
+        {label: 'Total amount invested', value:  formatAmount(data?.data?.totalAmountInvested)
+       
         },
         {label: 'Total income earned', value: formatAmount(data?.data?.totalIncomeEarned)
-            //  <NumericFormat
-            //     id={'totalAmountInvested'}
-            //     name={'totalAmountInvested'}
-            //     type="text"
-            //     disabled={true}
-            //     thousandSeparator=","
-            //     decimalScale={2}
-            //     fixedDecimalScale={true}
-            //     prefix={'₦'}
-            //     value={'0'}
-            //     className='bg-grey105 flex md:place-items-end'
-
-            // />
+            
         },
         {
             label: 'Portfolio value',
             value: formatAmount(data?.data?.portfolioValue)
-            // <NumericFormat
-            //     id={'totalAmountInvested'}
-            //     name={'totalAmountInvested'}
-            //     type="text"
-            //     disabled={true}
-            //     thousandSeparator=","
-            //     decimalScale={2}
-            //     fixedDecimalScale={true}
-            //     prefix={'₦'}
-            //     value={'0'}
-            //     className='bg-grey105 flex md:place-items-end'
-
-            // />
+            
         },
 
     ]
@@ -119,7 +94,7 @@ const FinancierDetails = () => {
     const getCurrentDataList = () => {
         switch (currentTab) {
             case 0:
-                return basicDetails;
+                return data?.data?.financierType === "COOPERATE"? basicDetails : individualBasicDetails;
             case 1:
                 return investmentDetails;
             default:

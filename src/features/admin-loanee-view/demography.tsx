@@ -36,7 +36,7 @@ export function ChartPieLegend() {
 
 
     return (
-        <div className={` grid grid-cols-2 gap-5  w-full h-full  `}>
+        <div className={` grid md:grid-cols-2 gap-5  pb-4  w-full h-full  `}>
             <PieCharts
                 chartData={genderChartData}
                 title={'Gender breakdown'}

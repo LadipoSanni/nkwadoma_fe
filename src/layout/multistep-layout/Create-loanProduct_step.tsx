@@ -4,7 +4,6 @@ import { usePathname, useRouter } from 'next/navigation';
 import { createLoanProductSteps } from '@/types/tabDataTypes'
 import BackButton from '@/components/back-button';
 import MultiStep from '@/reuseable/multiStep-component';
-import {cabinetGrotesk} from "@/app/fonts";
 
 interface props {
     children: React.ReactNode;
@@ -13,7 +12,7 @@ interface props {
 function CreateLoanProductStep({children}:props) {
    const pathname = usePathname();
    const router = useRouter();
-   const currentStep = pathname?.split('/').pop() || 'stepOne';
+   const currentStep = pathname?.split('/').pop() || 'step-one';
    const currentIndex =createLoanProductSteps.findIndex(step => step.id === currentStep);
    const completedSteps = createLoanProductSteps.slice(0, currentIndex).map(step => step.id);
 
@@ -32,9 +31,7 @@ function CreateLoanProductStep({children}:props) {
            textColor='' 
          />
         </div>
-         <div className={`md:px-10 px-8 text-[28px] font-medium ${cabinetGrotesk.className}`}>
-                    {/* {organizationName} */}
-                </div>
+    
         <div className="md:flex  md:gap-10">
      <div><MultiStep steps={createLoanProductSteps} currentStep={currentStep} completedSteps={completedSteps}/></div> 
       

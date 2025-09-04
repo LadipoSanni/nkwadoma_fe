@@ -115,11 +115,14 @@ function NotificationDetailPage({notificationId}: notificationIdProp) {
   }
    
   const user = ["COOPERATE_FINANCIER_SUPER_ADMIN", "MEEDL_ADMIN","MEEDL_SUPER_ADMIN"].includes(user_role || "")
+  const coperateFinancierUser = ["COOPERATE_FINANCIER_SUPER_ADMIN", "COOPERATE_FINANCIER_ADMIN"].includes(user_role || "")
+  const meedlBackofficeUser = ["PORTFOLIO_MANAGER_ASSOCIATE", "MEEDL_ADMIN","MEEDL_SUPER_ADMIN","PORTFOLIO_MANAGER"].includes(user_role || "")
+  
 
    const buttonName = () => {
     if(notification?.data?.notificationFlag === "INVITE_FINANCIER"){
       return "financier"
-   } else if (notification?.data?.notificationFlag === "INVESTMENT_VEHICLE"){
+   } else if (coperateFinancierUser && notification?.data?.notificationFlag === "INVESTMENT_VEHICLE"){
       return "investment vehicle"
    } else if (["INVITE_ORGANIZATION","ORGANIZATION_DEACTIVATED","ORGANIZATION_REACTIVATED","ORGANIZATION_INVITATION_DECLINED","ORGANIZATION_INVITATION_APPROVED"].includes(notification?.data?.notificationFlag)){
     return "organization"
@@ -196,7 +199,7 @@ function NotificationDetailPage({notificationId}: notificationIdProp) {
                          </p>
                         </div>
                         <div className='mt-4 mb-4'>
-                        {!(notification?.data?.notificationFlag === "REPAYMENT_UPLOAD_FAILURE" || 
+                        {!(notification?.data?.notificationFlag === "REPAYMENT_UPLOAD_FAILURE" || (notification?.data?.notificationFlag === "INVESTMENT_VEHICLE" &&  meedlBackofficeUser) ||
    notification?.data?.notificationFlag === "LOANEE_DATA_UPLOAD_FAILURE") ? 
   <p className='mb-4'>Click on the button to view the full details of the <span className='lowercase'>{notification?.data?.title}</span></p>
   : ""
@@ -204,7 +207,10 @@ function NotificationDetailPage({notificationId}: notificationIdProp) {
                          <p>If you have any questions or need further assistance, our customer service team is here to help</p>
                         </div>
                          <div>
-                         {notification?.data?.notificationFlag !== "REPAYMENT_UPLOAD_FAILURE"? 
+                         {!(
+    notification?.data?.notificationFlag === "REPAYMENT_UPLOAD_FAILURE" ||
+    (notification?.data?.notificationFlag === "INVESTMENT_VEHICLE" && meedlBackofficeUser)
+  ) ?
                           <Button 
                            type='button'
                            variant={'secondary'}
