@@ -147,9 +147,11 @@ function StepOne() {
             .required("Product name is required")
             .test(
                 "valid-name",
-                "Name must start with a letter and end with a letter/number",
+                "Name must not end with hyphen or underscore",
                 (value = "") => {
-                    const regex = /^[a-zA-Z][a-zA-Z0-9\s-_]*[a-zA-Z0-9]$/;
+                    // const regex = /^[a-zA-Z][a-zA-Z0-9\s-_]*[a-zA-Z0-9]$/;
+                    // return regex.test(value);
+                    const regex = /^[a-zA-Z](?:[a-zA-Z0-9_-]*[a-zA-Z0-9])?$/;
                     return regex.test(value);
                 }
             )
@@ -305,6 +307,15 @@ function StepOne() {
                                 name="productName"
                                 className="w-full p-3 border rounded focus:outline-none mt-2 text-sm"
                                 placeholder="Enter Product name"
+                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                                    const value = e.target.value;
+                                    const cleanedValue = value.replace(/[^a-zA-Z0-9_-]/g, '');
+                                    if (cleanedValue.length > 0 && !/^[a-zA-Z]/.test(cleanedValue)) {
+                                      setFieldValue("productName", cleanedValue.substring(1));
+                                    } else {
+                                      setFieldValue("productName", cleanedValue);
+                                    }
+                                  }}
                             />
                             {
                                 errors.productName && touched.productName && (

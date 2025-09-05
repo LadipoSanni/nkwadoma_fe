@@ -22,6 +22,7 @@ import { useAppSelector } from "@/redux/store";
 import {setcohortStatusTab} from '@/redux/slice/create/cohortSlice'
 import { store } from "@/redux/store";
 import { setCurrentNavbarItem } from "@/redux/slice/layout/adminLayout";
+import styles from "../../index.module.css"
 
 interface breakDown {
     itemName: string;
@@ -198,10 +199,17 @@ const CohortDetails = () => {
                                      id={`tabsTrigger2`}>Loanees</TabsTrigger>
                     </TabsList>
 
-                    <div id={`tabsContentDiv`}>
+                    <div 
+                    id={`tabsContentDiv`} 
+                    className={`max-h-[71vh]  ${styles.container}`}
+                    style={{
+                        scrollbarWidth: 'none',
+                        msOverflowStyle: 'none',  
+                          }}
+                    >
                         <TabsContent value="details" className={'mt-4'} id={`tabsContent`}>
-                            <div className={`py-1 flex md:flex-row flex-col  h-full md:justify-between`} id={`sections`}>
-                                <div className={`w-full md:w-1/3 md:h-[70vh] md:max-h-none`} id={`firstSection`}>
+                            <div className={`py-1 flex md:flex-row flex-col  h-full md:justify-between mb-8 `} id={`sections`}>
+                                <div className={`w-full md:w-1/3 md:h-[70vh] md:max-h-none` } id={`firstSection`}>
                                     <DetailsImageSection imageSrc={details.imageUrl} cohortTitle={details.name}
                                                          cohortDescription={details.cohortDescription}
                                                          handleDropdownClicked={handleDropdownClick}
@@ -220,7 +228,9 @@ const CohortDetails = () => {
                         </TabsContent>
 
                         <TabsContent value={"loanees"} id={`traineeId`}>
+                            <div className="mb-6">
                             <LoaneeInCohortView cohortFee={cohortDetails?.data?.tuitionAmount}/>
+                            </div> 
                         </TabsContent>
 
                     </div>
