@@ -11,9 +11,7 @@ import {
 } from "@/components/ui/table";
 import TableContainer from "./TableContainer";
 import Styles from "@/reuseable/table/styles.module.css";
-import {Menubar, MenubarContent, MenubarItem, MenubarMenu, MenubarTrigger} from "@/components/ui/menubar";
-import {Button} from "@/components/ui/button";
-import {ChevronDownIcon, ChevronUpIcon, DotsVerticalIcon} from "@radix-ui/react-icons";
+import {ChevronDownIcon, ChevronUpIcon} from "@radix-ui/react-icons";
 import {Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue} from "@/components/ui/select";
 
 interface TableRowData {
@@ -48,31 +46,9 @@ function InfiniteScrollTable <T extends TableRowData>  ({
     const handleDropdownOpen = () => setDropdownOpen(!dropdownOpen);
 
 
-    // const renderCellContent = (
-    //     value:
-    //         | string
-    //         | number
-    //         | boolean
-    //         | React.ReactNode
-    //         | object
-    //         | null
-    //         | undefined
-    // ) => {
-    //     if (React.isValidElement(value)) {
-    //         return value;
-    //     }
-    //     if (typeof value === "object" && value !== null) {
-    //         return JSON.stringify(value);
-    //     }
-    //     return value;
-    // };
+
     const renderCellContent = (column: ColumnProps<T>, row: T) => {
         const value = column?.selector ? column?.selector(row) : row[column.id];
-        // if (column.id === "status" && typeof value === "string") {
-        //     return (
-        //         <span className={`px-3 py-1 rounded-full text-sm font-medium ${getStatusClass(value)}`}>{value}</span>
-        //     );
-        // }
         if (React.isValidElement(value)) return value;
         if (typeof value === "object" && value !== null) return JSON.stringify(value);
         return value;
@@ -166,20 +142,22 @@ function InfiniteScrollTable <T extends TableRowData>  ({
                     <Table id="dynamicTableMobile" className="w-full">
                         <TableHeader
                             id="dynamicTableHeadMobile"
-                            className={`sticky top-0  hover:bg-[#e7e7e7]`}
+                            className={`sticky top-0 bg-[#F0F2F4]   hover:bg-[#F0F2F4]`}
                         >
                             <TableRow className={` h-fit py-6`}>
                                 <TableHead
                                     id={staticHeader?.toString()} data-testid={staticHeader?.toString()}
                                     className={` f mt-auto mb-auto py-4  text-[#545F7D] text-[16px]`}
-                                >{staticHeader}</TableHead>
+                                >
+                                    {staticHeader}
+                                </TableHead>
                                 <TableHead>
                                     <Select
                                         value={selectedColumn}
                                         onValueChange={(val: string) => setSelectedColumn(val)}
                                         onOpenChange={handleDropdownOpen}
                                     >
-                                        <SelectTrigger className={`h-4 border-none focus:border-none focus:ring-0 f mt-auto mb-auto text-[#545F7D] text-[16px]`}>
+                                        <SelectTrigger className={`h-4 border-none shadow-none focus:border-none focus:ring-0  mt-auto mb-auto text-[#545F7D] text-[16px]`}>
                                             <div className="truncate max-w-[120px]">
                                                 <SelectValue
                                                     className={` f mt-auto mb-auto text-[#545F7D] text-[16px]`} placeholder="Select" />
