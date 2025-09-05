@@ -36,14 +36,14 @@ export function PieCharts({title, chartData, dataKey, isLoading}: PieChartProps)
     }
 
     const getTotalPercentage = () => {
-        const tt : number[] = []
+        const visitorsArray : number[] = []
         chartData?.forEach(item => {
-            tt.push(item.visitors);
+            visitorsArray.push(item.visitors);
         })
-        return tt?.reduce((accumulator, currentValue) => accumulator + currentValue, 0)
+        return visitorsArray?.reduce((accumulator, currentValue) => accumulator + currentValue, 0)
     }
 
-    const tooalll = getTotalPercentage()
+    const totalPercentage = getTotalPercentage()
     const chartConfig = generateChartConfig(chartData) satisfies  ChartConfig;
 
 
@@ -52,8 +52,8 @@ export function PieCharts({title, chartData, dataKey, isLoading}: PieChartProps)
        <div className={`grid border max-h-fit h-full overflow-y-hidden py-3 px-2 rounded-md  border-[#D7D7D7] bg-white w-full `}>
                <div className={` w-full rounded-md overflow-y-hidden py-2 px-2  bg-[#F9F9F9] `}>
                    <div id={'chartDescription'} data-testid={'chartDescription'} className={`  py-3  md:text-[24px] text-black ${cabinetGroteskMediumBold.className} `}>{title}</div>
-                   <div className={` flex justify-between py-6  ${tooalll === 0 || !tooalll ? ' h-[15rem] md:h-full  ' : 'h-full'}  w-full    `}>
-                       {tooalll === 0 || !tooalll  || isLoading ?
+                   <div className={` flex flex-wrap bg-red-500 py-  ${totalPercentage === 0 || !totalPercentage ? ' h-[15rem] md:h-full  ' : 'h-fit '}  w-full    `}>
+                       {totalPercentage === 0 || !totalPercentage  || isLoading ?
                             <div className={` bg-red-200    aspect-square `}>
                                 <div
                                     className={` bg-blue550 ${isLoading ? 'animate-pulse' : ''}  aspect-square rounded-full   max-h-[300px] md:max-h-[300px]  `}
@@ -83,9 +83,9 @@ export function PieCharts({title, chartData, dataKey, isLoading}: PieChartProps)
                                                <div
                                                    style={{backgroundColor: item?.fill}}
                                                    className={` aspect-square rounded-full  mt-auto mb-auto w-2 h-2  md:w-2.5 md:h-2.5  `}></div>
-                                               <p className={` text-[12px]  text-[#6A6B6A]  ${inter.className} `}>{item?.browser}</p>
+                                               <p id={'chartItem' + item?.browser} data-testid={'chartItem' + item?.browser} className={` text-[12px]  text-[#6A6B6A]  ${inter.className} `}>{item?.browser}</p>
                                            </div>
-                                           <span className={` text-black w-fit text-[12px] ${inter500.className}`}>{item?.visitors} %</span>
+                                           <span id={'chartPercentage' + item?.browser} data-testid={'chartPercentage' + item?.browser} className={` text-black w-fit text-[12px] ${inter500.className}`}>{item?.visitors} %</span>
                                        </div>
                                     }
                                </div>
