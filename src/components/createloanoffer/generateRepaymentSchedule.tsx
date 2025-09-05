@@ -2,11 +2,10 @@
 import React from 'react';
 import {cabinetGroteskMediumBold600, inter700} from "@/app/fonts";
 import Details from "@/components/loanee-my-profile/Details";
-import {capitalizeFirstLetters} from "@/utils/GlobalMethods";
 import {formatAmount} from "@/utils/Format";
 import dayjs from "dayjs";
 import InfiniteScrollTable from "@/reuseable/table/InfiniteScrollTable";
-import {repaymentSchedule} from "@/utils/LoanRequestMockData/index";
+import {repaymentSchedule} from "@/utils/LoanRequestMockData/Index";
 
 interface viewAllType {
     principalAmount: string
