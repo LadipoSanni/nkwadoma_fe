@@ -47,13 +47,12 @@ export function PieCharts({title, chartData, dataKey, isLoading}: PieChartProps)
     const chartConfig = generateChartConfig(chartData) satisfies  ChartConfig;
 
 
-    console.log('total percentage', totalPercentage);
 
     return (
        <div className={`grid border max-h-fit h-full overflow-y-hidden py-3 px-2 rounded-md  border-[#D7D7D7] bg-white w-full `}>
                <div className={` w-full rounded-md overflow-y-hidden py-2 px-2  bg-[#F9F9F9] `}>
                    <div id={'chartDescription'} data-testid={'chartDescription'} className={`  py-3  md:text-[24px] text-black ${cabinetGroteskMediumBold.className} `}>{title}</div>
-                   <div className={` ${styles.pieChartContainer}  flex  justify-between py-6  ${totalPercentage === 0 || !totalPercentage ? ' h-fit  md:h-fit   ' : 'h-fit '}  w-full    `}>
+                   <div className={` ${styles.pieChartContainer}  flex  justify-between py-6     `}>
                        {totalPercentage === 0 || !totalPercentage  || isLoading ?
                             <div className={` ${styles.pieChartChart}  mr-2    aspect-square `}>
                                 <div

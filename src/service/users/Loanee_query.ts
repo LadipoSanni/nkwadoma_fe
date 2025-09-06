@@ -120,7 +120,13 @@ export const loaneeApi = createApi({
                 url: `/loan/search/loanee?organizationName=${data?.organizationName}&loaneeId=${data?.loaneeId}&pageSize=${data.pageSize}&pageNumber=${data.pageNumber}`,
                 method: 'GET'
             })
-        })
+        }),
+        viewLoaneeDemography: builder.query({
+            query: () => ({
+                url: `/loanee-demography/view`,
+                method: 'GET'
+            }),
+        }),
     })
 })
 
@@ -143,6 +149,7 @@ export const {
     // useLazyIsIdentityVerifiedQuery,
     useGetLoaneeDetailsQuery,
     useViewLoanDetailsQuery,
+    useViewLoaneeDemographyQuery,
     useGetLoaneeIdentityVerificationDetailsQuery,
     useViewAllLoanRefferalsQuery
 } = loaneeApi;
