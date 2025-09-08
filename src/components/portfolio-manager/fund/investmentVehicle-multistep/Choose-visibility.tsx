@@ -183,7 +183,7 @@ function ChooseVisibility() {
              else if(vehicleType === "commercial"){
                 router.push("/vehicle/commercial-vehicle")
             }else if(vehicleType === "endowment"){
-                router.push("/vehicle/endownment-vehicle")
+                router.push("/vehicle/endowment-vehicle")
             }
              }
          } catch (err) {
