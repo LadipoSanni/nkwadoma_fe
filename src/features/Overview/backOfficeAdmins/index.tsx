@@ -5,8 +5,11 @@ import {inter, inter500} from "@/app/fonts";
 import Loan from './Loan';
 import Investment from './Investment';
 import styles from '@/features/Overview/index.module.css';
+import {useViewMeedlPortfolioQuery} from "@/service/admin/overview";
 
 const Overview = () => {
+    const {data, isFetching, isLoading } = useViewMeedlPortfolioQuery({})
+    console.log('data: ', data)
     return (
         <div className={` px-4 pt-2  `}>
             <Tabs defaultValue={'loan'}>
@@ -18,10 +21,10 @@ const Overview = () => {
                </div>
                 <div className={` w-full pb-4  h-[76vh] ${styles.container} `}>
                     <TabsContent value={'loan'}>
-                        <Loan/>
+                        <Loan data={data?.data} isLoading={isLoading || isFetching}/>
                     </TabsContent>
                     <TabsContent value={'investment'}>
-                        <Investment/>
+                        <Investment data={data?.data} isLoading={isLoading || isFetching} />
                     </TabsContent>
                 </div>
             </Tabs>

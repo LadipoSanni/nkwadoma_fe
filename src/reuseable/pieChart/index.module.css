@@ -2,10 +2,21 @@
 
 .pieChartContainer {
     display: flex;
+
+}
+.pieChartChart {
+    width: 66.666667%;
+
 }
 
-@media (max-width: 791px){
+
+@media (max-width: 465px){
     .pieChartContainer {
         display: grid;
+        gap:  1rem;
+    }
+    .pieChartChart{
+        width: 100%;
+
     }
 }

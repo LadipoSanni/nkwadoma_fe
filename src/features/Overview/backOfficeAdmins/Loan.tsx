@@ -3,8 +3,15 @@ import React, {useState} from 'react';
 import {PieCharts} from "@/reuseable/pieChart";
 import BarChartWithDate from "@/reuseable/cards/BarChartWithDate";
 import Details from "@/components/loanee-my-profile/Details";
+import {OverviewDetails} from "@/types/loan/loan-request.type";
 
-const Loan = () => {
+interface LoanProps {
+    data:OverviewDetails;
+    isLoading: boolean;
+
+}
+
+const Loan = ({data, isLoading}:LoanProps) => {
     const initialDates = [
         {month: "Jan", value: 0},
         {month: "Feb", value: 0},
@@ -14,11 +21,11 @@ const Loan = () => {
     const [aumPortfolioGrowth, setaumPortfolioGrowth] = useState<{month: string, value: number}[]>(initialDates);
 
     const loanChartData = [
-        { browser: "Uploaded", visitors: 35, fill: "#FBE2B7" },
-        { browser: "Referred", visitors: 20, fill: "#D9EAFF" },
-        { browser: "Offered", visitors: 18.4, fill: "#FFB0B0" },
-        { browser: "Requested", visitors: 10, fill: "#B5DFC3" },
-        { browser: "Disbursed", visitors: 20.8, fill: "#FCD5BC" },
+        { browser: "Uploaded", visitors: data?.uploadLoanPercentage ? data?.uploadLoanPercentage : 0, fill: "#FBE2B7" },
+        { browser: "Referred", visitors: data?.loanReferralPercentage ? data?.loanReferralPercentage : 0, fill: "#D9EAFF" },
+        { browser: "Offered", visitors: data?.loanOfferPercentage ? data?.loanOfferPercentage : 0, fill: "#FFB0B0" },
+        { browser: "Requested", visitors: data?.loanRequestPercentage ? data?.loanRequestPercentage : 0, fill: "#B5DFC3" },
+        { browser: "Disbursed", visitors: data?.loanDisbursalPercentage ? data?.loanDisbursalPercentage : 0, fill: "#FCD5BC" },
 
     ]
     const timeStamp = Date.now()
@@ -77,8 +84,9 @@ const Loan = () => {
 
             <PieCharts
                 chartData={loanChartData}
-                title={'Geography breakdown'}
-                dataKey={'geographyBreakdown'}
+                title={'Loan breakdown'}
+                dataKey={'loanBreakdown'}
+                isLoading={isLoading}
             />
             <BarChartWithDate id={'LoanBookPortfolioGrowthRate'}
                               years={AumLifeSpan}
@@ -93,16 +101,16 @@ const Loan = () => {
                               mediumHeightOnWebview={true}
             />
 
-            <Details showIcon={true} isLoading={false} sx={` w-full md:w-[100%] `} id={'historicalDebt'} showAsWholeNumber={false}    name={'Historical debt'} value={'92500000'} valueType={'currency'}  />
-            <Details showIcon={true} isLoading={false } sx={` w-full md:w-[100%] `} id={'disbursedLoan'} showAsWholeNumber={false}    name={'Disbursed loan'} value={'59500000'} valueType={'currency'}  />
+            <Details showIcon={true} isLoading={isLoading} sx={` w-full md:w-[100%] `} id={'historicalDebt'} showAsWholeNumber={false}    name={'Historical debt'} value={data?.historicalDebt ? data?.historicalDebt : ''} valueType={'currency'}  />
+            <Details showIcon={true} isLoading={isLoading } sx={` w-full md:w-[100%] `} id={'disbursedLoan'} showAsWholeNumber={false}    name={'Disbursed loan'} value={data?.disbursedLoanAmount ? data?.disbursedLoanAmount : ''} valueType={'currency'}  />
             <div className={` flex gap-3  `}>
-                <Details showIcon={false} isLoading={false } sx={` w-[20em] md:w-[100%] `} id={'totalLoanee'} showAsWholeNumber={true}    name={'Total loanee'} value={'5900'} valueType={'digit'}  />
-                <Details showIcon={false} isLoading={false } sx={` w-[20em] md:w-[100%] `} id={'totalOrganizations'} showAsWholeNumber={true}    name={'Total organizations'} value={'46'} valueType={'digit'}  />
+                <Details showIcon={false} isLoading={isLoading } sx={` w-full md:w-[100%] `} id={'totalLoanee'} showAsWholeNumber={true}    name={'Total loanee'} value={data?.numberOfLoanees ? data?.numberOfLoanees : 0} valueType={'digit'}  />
+                <Details showIcon={false} isLoading={isLoading } sx={` w-full md:w-[100%] `} id={'totalOrganizations'} showAsWholeNumber={true}    name={'Total organizations'} value={data?.numberOfOrganizations ? data?.numberOfOrganizations : 0} valueType={'digit'}  />
             </div>
-            <Details showIcon={true} isLoading={false } sx={` w-full md:w-[100%] `} id={'totalamountEarned'} showAsWholeNumber={false}    name={'Total amount earned'} value={'329087787'} valueType={'currency'}  />
-            <Details showIcon={true} isLoading={false } sx={` w-full md:w-[100%] `} id={'netLaonPortfolioReturn'} showAsWholeNumber={false}    name={'Net loan portfolio return'} value={'59500000'} valueType={'currency'}  />
+            <Details showIcon={true} isLoading={isLoading } sx={` w-full md:w-[100%] `} id={'totalamountEarned'} showAsWholeNumber={false}    name={'Total amount earned'} value={data?.totalAmountEarned ? data?.totalAmountEarned : 0} valueType={'currency'}  />
+            <Details showIcon={true} isLoading={isLoading } sx={` w-full md:w-[100%] `} id={'netLaonPortfolioReturn'} showAsWholeNumber={false}    name={'Net loan portfolio return'} value={data?.netLoanPortfolio ? data?.netLoanPortfolio : 0} valueType={'currency'}  />
             <div className={` w-full md:w-[50%] sm:w-[50%]  `}>
-                <Details showIcon={true} isLoading={false } sx={` w-[20em] md:w-[100%] `} id={'totalLoanProduct'} showAsWholeNumber={false}    name={'Total loan products'} value={'32'} valueType={'digit'}  />
+                <Details showIcon={true} isLoading={isLoading } sx={` w-full md:w-[100%] `} id={'totalLoanProduct'} showAsWholeNumber={false}    name={'Total loan products'} value={data?.numberOfLoanProducts ? data?.numberOfLoanProducts : 0} valueType={'digit'}  />
             </div>
         </div>
     );
