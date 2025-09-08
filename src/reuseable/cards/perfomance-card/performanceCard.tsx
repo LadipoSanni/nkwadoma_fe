@@ -18,7 +18,7 @@ interface PerformanceCardProps {
     didValueIncrease: boolean; // did performance amount increase or decrease
     percentage: string | number;
     showContainerBorder: boolean;
-    isSmall?: boolean;
+    isSmall?: boolean;t
     isFigure?: boolean; // means performance is in amount e.g   $20,000
     currentDate?: string;
     onChangeDate?: (value: string) => void;

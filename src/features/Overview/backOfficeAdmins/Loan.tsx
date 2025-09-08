@@ -21,11 +21,11 @@ const Loan = ({data, isLoading}:LoanProps) => {
     const [aumPortfolioGrowth, setaumPortfolioGrowth] = useState<{month: string, value: number}[]>(initialDates);
 
     const loanChartData = [
-        { browser: "Uploaded", visitors: data?.uploadLoanPercentage ? data?.uploadLoanPercentage : 0, fill: "#FBE2B7" },
-        { browser: "Referred", visitors: data?.loanReferralPercentage ? data?.loanReferralPercentage : 0, fill: "#D9EAFF" },
-        { browser: "Offered", visitors: data?.loanOfferPercentage ? data?.loanOfferPercentage : 0, fill: "#FFB0B0" },
-        { browser: "Requested", visitors: data?.loanRequestPercentage ? data?.loanRequestPercentage : 0, fill: "#B5DFC3" },
-        { browser: "Disbursed", visitors: data?.loanDisbursalPercentage ? data?.loanDisbursalPercentage : 0, fill: "#FCD5BC" },
+        { browser: "Uploaded", visitors: data?.uploadLoanPercentage ? Number(data?.uploadLoanPercentage) : 0, fill: "#FBE2B7" },
+        { browser: "Referred", visitors: data?.loanReferralPercentage ? Number(data?.loanReferralPercentage ): 0, fill: "#D9EAFF" },
+        { browser: "Offered", visitors: data?.loanOfferPercentage ? Number(data?.loanOfferPercentage) : 0, fill: "#FFB0B0" },
+        { browser: "Requested", visitors: data?.loanRequestPercentage ? Number(data?.loanRequestPercentage) : 0, fill: "#B5DFC3" },
+        { browser: "Disbursed", visitors: data?.loanDisbursalPercentage ? Number(data?.loanDisbursalPercentage) : 0, fill: "#FCD5BC" },
 
     ]
     const timeStamp = Date.now()

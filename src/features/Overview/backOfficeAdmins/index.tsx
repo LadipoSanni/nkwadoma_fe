@@ -9,7 +9,6 @@ import {useViewMeedlPortfolioQuery} from "@/service/admin/overview";
 
 const Overview = () => {
     const {data, isFetching, isLoading } = useViewMeedlPortfolioQuery({})
-    console.log('data: ', data)
     return (
         <div className={` px-4 pt-2  `}>
             <Tabs defaultValue={'loan'}>

@@ -96,7 +96,7 @@ const Index = () => {
                 status: "error",
             })
         }else{
-            router.push('/create-loan-offer-generate-repayment-schedule')
+            router.push('/create-loan-offer/generate-repayment-schedule')
         }
 
     }
