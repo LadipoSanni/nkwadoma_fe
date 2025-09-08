@@ -69,13 +69,13 @@ const Investment = ({data, isLoading}:LoanProps) => {
     }
 
     const loanChartData = [
-        { browser: "Commercial", visitors: data?.totalNumberOfCommercialFundsInvestmentVehicle ? data?.totalNumberOfCommercialFundsInvestmentVehicle : 0 , fill: "#FBE2B7" },
-        { browser: "Endowment", visitors: data?.totalNumberOfEndowmentFundsInvestmentVehicle ? data?.totalNumberOfEndowmentFundsInvestmentVehicle : 0, fill: "#D9EAFF" },
+        { browser: "Commercial", visitors: data?.totalNumberOfCommercialFundsInvestmentVehicle ? Number(data?.totalNumberOfCommercialFundsInvestmentVehicle) : 0 , fill: "#FBE2B7" },
+        { browser: "Endowment", visitors: data?.totalNumberOfEndowmentFundsInvestmentVehicle ? Number(data?.totalNumberOfEndowmentFundsInvestmentVehicle) : 0, fill: "#D9EAFF" },
 
     ]
     const financierChartData = [
-        { browser: "Individual", visitors: data?.totalNumberOfIndividualFinancier ? data?.totalNumberOfIndividualFinancier : 0 , fill: "#B5DFC3" },
-        { browser: "Cooperate", visitors: data?.totalNumberOfInstitutionalFinancier ? data?.totalNumberOfInstitutionalFinancier : 0 , fill: "#F2BCBA" },
+        { browser: "Individual", visitors: data?.totalNumberOfIndividualFinancier ? Number(data?.totalNumberOfIndividualFinancier) : 0 , fill: "#B5DFC3" },
+        { browser: "Cooperate", visitors: data?.totalNumberOfInstitutionalFinancier ? Number(data?.totalNumberOfInstitutionalFinancier) : 0 , fill: "#F2BCBA" },
 
     ]
     return (
