@@ -5,7 +5,7 @@ import Details from "@/components/loanee-my-profile/Details";
 import SearchInput from "@/reuseable/Input/SearchInput";
 import {MdOutlinePersonOutline} from "react-icons/md";
 import Table from '@/reuseable/table/Table';
-// import {capitalizeFirstLetters} from "@/utils/GlobalMethods";
+import { useDebounce } from '@/hooks/useDebounce';
 import {formatAmount, formateDigits} from "@/utils/Format";
 import {useRouter} from "next/navigation";
 import {
@@ -33,14 +33,14 @@ const ViewAllLoaneeOverview = () => {
     const [totalPage,setTotalPage] = useState<number>(0)
     const [pageSize] = useState<number>(10)
     const [pageNumber,setPageNumber] = useState<number>(0)
-
-    const name = searchTerm ? searchTerm : undefined
+    const [debouncedSearchTerm, isTyping] = useDebounce(searchTerm, 1000);
+    const name = debouncedSearchTerm ? debouncedSearchTerm: undefined
     const {data, isLoading, isFetching } = useViewAllLoaneeByAdminsQuery({pageSize, pageNumber})
-    const {data: searchData, isLoading:searchDataLoading, isFetching: searchDataIsFetching} = useSearchLoaneeByAdminsQuery({pageSize, name, pageNumber}, {skip: !searchTerm})
+    const {data: searchData, isLoading:searchDataLoading, isFetching: searchDataIsFetching} = useSearchLoaneeByAdminsQuery({pageSize, name, pageNumber}, {skip: !debouncedSearchTerm})
     const {data: loanCounts, isLoading: isLoadingLoanCounts, isFetching: isFetchingCounts} = useViewAllLoansTotalCountsByAdminsQuery(undefined)
 
     useEffect(() => {
-        if(searchTerm) {
+        if(debouncedSearchTerm) {
             setNextPage(searchData?.data?.hasNextPage)
             setTotalPage(searchData?.data?.totalPages)
             setPageNumber(searchData?.data?.pageNumber)
@@ -50,10 +50,11 @@ const ViewAllLoaneeOverview = () => {
             setPageNumber(data?.data?.pageNumber ? data?.data?.pageNumber : 0)
         }
 
-    },[data, data?.data, searchData])
+    },[data, data?.data, debouncedSearchTerm,searchData])
 
     const router = useRouter()
     const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setPageNumber(0)
         setSearchTerm(event.target.value);
     };
 
@@ -113,15 +114,15 @@ const ViewAllLoaneeOverview = () => {
 
 
                 <Table
-                    tableData={searchTerm ? searchData?.data?.body : data?.data?.body }
+                    tableData={debouncedSearchTerm ? searchData?.data?.body : data?.data?.body }
                     tableHeader={tableHeader}
                     handleRowClick={handleRowClick}
                     tableHeight={40}
                     tableCellStyle={'h-12'}
                     condition={true}
-                    searchEmptyState={false}
+                    // searchEmptyState={false}
                     sx={'cursor-pointer overflow-y-hidden '}
-                    // searchEmptyState={!isTyping && debouncedSearchTerm?.length > 0 && searchData?.data?.body?.length < 1 }
+                    searchEmptyState={!isTyping && debouncedSearchTerm?.length > 0 && searchData?.data?.body?.length < 1 }
                     sideBarTabName={'loanees'}
                     icon={MdOutlinePersonOutline}
                     staticHeader={"Name"}

@@ -86,7 +86,7 @@ export const requestTab = [
 
 export const organizationDetailTab =  [
     {name: "Detail", value:"/organizations/organizations-details/details"},
-    {name: "Admin", value:"/organizations/organizations-details/admins"}]
+    {name: "Staff", value:"/organizations/organizations-details/admins"}]
 
 export const createLoanProductSteps = [
         { id: 'step-one', title: 'Step 1' },

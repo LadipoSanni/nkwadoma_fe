@@ -34,7 +34,7 @@ function Admins() {
     const dataElement = {
         name:debouncedSearchTerm,
         activationStatuses: ['INVITED',"APPROVED","PENDING_APPROVAL","DEACTIVATED","ACTIVE"],
-        identityRoles:  ["ORGANIZATION_ADMIN","ORGANIZATION_ASSOCIATE"] ,
+        identityRoles:  user_role === "ORGANIZATION_SUPER_ADMIN"? ["ORGANIZATION_ADMIN","ORGANIZATION_ASSOCIATE"] : ["ORGANIZATION_ADMIN","ORGANIZATION_ASSOCIATE","ORGANIZATION_SUPER_ADMIN"] ,
         pageNumber:pageNumber,
         pageSize: 10
     }
@@ -139,8 +139,9 @@ function Admins() {
               staticColunm={"firstName"}
               tableHeight={42}
               handleRowClick={() => {}}
+              condition={true}
               icon={<Book/>}
-              sideBarTabName="Admin"
+              sideBarTabName="staff"
               tableCellStyle="h-12"
               isLoading={isLoading || isFetching}
                hasNextPage={searchTerm !== ""? searchHasNextPage : hasNextPage}

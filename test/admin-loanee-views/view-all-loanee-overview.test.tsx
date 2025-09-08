@@ -1,5 +1,5 @@
 import '@testing-library/react';
-import { render, screen} from '@testing-library/react';
+import { render, screen,cleanup} from '@testing-library/react';
 import ViewAllLoaneeOverview from "@/features/admin-loanee-view/view-all-loanee-overview";
 import {Providers} from '@/app/provider';
 // import { useRouter } from 'next/router';
@@ -12,6 +12,14 @@ jest.mock('next/navigation', () => ({
 
 }));
 describe('test view all loanee overview component', () => {
+     beforeEach(() => {
+                       jest.clearAllMocks();
+                         cleanup();
+                 
+                         jest.spyOn(console, 'log').mockReturnValue();
+                         jest.spyOn(console, 'warn').mockReturnValue();
+                         jest.spyOn(console, 'error').mockReturnValue();
+                     })
     beforeEach(() => {
         render(
             <Providers>
