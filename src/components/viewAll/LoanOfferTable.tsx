@@ -1,7 +1,7 @@
 "use client"
 import React, {ReactNode, useEffect} from "react";
 import {MdOutlinePeople} from "react-icons/md";
-import Tables from "@/reuseable/table/index";
+import Table from '@/reuseable/table/Table';
 import {useRouter} from "next/navigation";
 import {formatAmount} from "@/utils/Format";
 import dayjs from "dayjs";
@@ -21,14 +21,15 @@ interface TableRowData {
 
 
 const Index = () => {
+    const [pageNumber, setPageNumber] = React.useState(0);
     const router = useRouter();
     const clickedOrganization = useAppSelector(state => state.selectedLoan.clickedOrganization);
     const request ={
-        pageSize: 100,
-        pageNumber: 0,
+        pageSize: 10,
+        pageNumber:pageNumber,
         organizationId: clickedOrganization?.id || "",
     }
-    const { data, isLoading} = useViewAllLoanOfferQuery(request,{refetchOnMountOrArgChange: true})
+    const { data, isLoading, isFetching} = useViewAllLoanOfferQuery(request,{refetchOnMountOrArgChange: true})
 
     useEffect(()=> {
        store.dispatch(resetNotification()) 
@@ -53,12 +54,12 @@ const Index = () => {
 
 
     const loanOfferHeader = [
-        { title: 'Loanee', sortable: true, id: 'firstName', selector: (row: TableRowData) =><div className='flex gap-2 '>{capitalizeFirstLetters(row.firstName?.toString())} <div className={``}></div>{row.lastName}</div>  },
-        { title: 'Status', sortable: true, id: 'status', selector: (row: TableRowData) =><div>{getLoanOfferStatus(row.status)}</div> },
+        { title: 'Loanee', sortable: true, id: 'firstName', selector: (row: TableRowData) =>capitalizeFirstLetters(row.firstName?.toString()) + " " + capitalizeFirstLetters(row.lastName?.toString()) },
+        { title: 'Status', sortable: true, id: 'status', selector: (row: TableRowData) => getLoanOfferStatus(row.status)},
         { title: 'Loan product', sortable: true, id: 'loanProduct', selector: (row: TableRowData) =>row.loanProductName },
-        { title: 'Offer date', sortable: true, id: 'offerDate', selector: (row: TableRowData) => <div>{dayjs(row.dateOffered?.toString()).format('MMM D, YYYY')}</div> },
-        { title: 'Amount requested', sortable: true, id: 'amountRequested', selector: (row: TableRowData) => <div className=''>{formatAmount(row.amountRequested)}</div>},
-        { title: 'Amount approved', sortable: true, id: 'amountApproved', selector: (row: TableRowData) => <div className=''>{formatAmount(row.amountApproved)}</div>}
+        { title: 'Offer date', sortable: true, id: 'offerDate', selector: (row: TableRowData) => dayjs(row.dateOffered?.toString()).format('MMM D, YYYY')},
+        { title: 'Amount requested', sortable: true, id: 'amountRequested', selector: (row: TableRowData) => formatAmount(row.amountRequested)},
+        { title: 'Amount approved', sortable: true, id: 'amountApproved', selector: (row: TableRowData) => formatAmount(row.amountApproved)}
     ];
 
 
@@ -88,9 +89,9 @@ const Index = () => {
                 (
                     <div className={` `}>
 
-                        <Tables
+                        <Table
                             tableData={data?.data?.body}
-                            isLoading={isLoading}
+                            isLoading={isLoading || isFetching}
                             handleRowClick={handleRowClick}
                             tableHeader={loanOfferHeader}
                             tableHeight={54}
@@ -100,7 +101,11 @@ const Index = () => {
                             showKirkBabel={false}
                             icon={MdOutlinePeople}
                             sideBarTabName='Cohort'
-                            optionalFilterName='graduate'
+                            pageNumber={pageNumber}
+                            setPageNumber={setPageNumber}
+                            totalPages={data?.data?.totalPages}
+                            hasNextPage={data?.data?.hasNextPage}
+                            condition={true}
                         />
                     </div>
                 )

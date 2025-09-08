@@ -2,7 +2,7 @@
 import React from "react";
 import {Icon} from "@iconify/react";
 import {MdOutlinePeople} from "react-icons/md";
-import Tables from "@/reuseable/table/index";
+import Table from '@/reuseable/table/Table';
 import {useRouter} from "next/navigation";
 import {useViewAllLoanRequestQuery} from "@/service/admin/loan/loan-request-api";
 import {formatAmount} from "@/utils/Format";
@@ -34,27 +34,29 @@ interface viewAllLoanee {
 type viewAllLoanees = viewAllLoanee & TableRowData;
 
 const Index = () => {
+     const [pageNumber, setPageNumber] = React.useState(0);
+      
     const router = useRouter();
     const clickedOrganization = useAppSelector(state => state.selectedLoan.clickedOrganization);
 
     const request ={
-        pageSize: 100,
-        pageNumber: 0,
+        pageSize: 10,
+        pageNumber:pageNumber,
         organizationId: clickedOrganization?.id || '',
     }
 
 
-    const { data, isLoading} = useViewAllLoanRequestQuery(request,{refetchOnMountOrArgChange: true})
+    const { data, isLoading,isFetching} = useViewAllLoanRequestQuery(request,{refetchOnMountOrArgChange: true})
 
 
     const loanRequestHeader = [
-        { title: 'Loanee', sortable: true, id: 'firstName', selector: (row: viewAllLoanees) =><div className='flex  gap-2 '>{capitalizeFirstLetters(row.userIdentity?.firstName?.toString())} <div className={``}></div>{capitalizeFirstLetters(row.userIdentity?.lastName?.toString())}</div>  },
+        { title: 'Loanee', sortable: true, id: 'firstName', selector: (row: viewAllLoanees) =>capitalizeFirstLetters(row.userIdentity?.firstName?.toString()) + " " + capitalizeFirstLetters(row.userIdentity?.lastName?.toString()) },
         { title: 'Program', sortable: true, id: 'program', selector: (row:  viewAllLoanees) =>row.programName },
         { title: 'Cohort', sortable: true, id: 'cohort', selector: (row:  viewAllLoanees) => row.cohortName },
-        { title: 'Start date', sortable: true, id: 'startDate', selector: (row:  viewAllLoanees) => <div>{dayjs(row.cohortStartDate?.toString()).format('MMM D, YYYY')}</div> },
-        { title: 'Request date', sortable: true, id: 'requestDate', selector: (row: viewAllLoanees) =><div>{dayjs(row.requestDate?.toString()).format('MMM D, YYYY')}</div> },
-        { title: 'Initial deposit', sortable: true, id: 'initialDeposit', selector: (row:  viewAllLoanees) => <div className=''>{formatAmount(row.initialDeposit)}</div>},
-        { title: 'Amount requested', sortable: true, id: 'amountRequested', selector: (row: viewAllLoanees) => <div className=''>{formatAmount(row.loanAmountRequested)}</div>}
+        { title: 'Start date', sortable: true, id: 'startDate', selector: (row:  viewAllLoanees) => dayjs(row.cohortStartDate?.toString()).format('MMM D, YYYY')},
+        { title: 'Request date', sortable: true, id: 'requestDate', selector: (row: viewAllLoanees) => dayjs(row.requestDate?.toString()).format('MMM D, YYYY') },
+        { title: 'Initial deposit', sortable: true, id: 'initialDeposit', selector: (row:  viewAllLoanees) => formatAmount(row.initialDeposit)},
+        { title: 'Amount requested', sortable: true, id: 'amountRequested', selector: (row: viewAllLoanees) =>formatAmount(row.loanAmountRequested)}
     ];
 
 
@@ -84,9 +86,9 @@ const Index = () => {
                      ) :
                (
                     <div className={` pr-2 md:pr-0`}>
-                        <Tables
+                        <Table
                             tableData={ data?.data?.body}
-                            isLoading={isLoading }
+                            isLoading={isLoading || isFetching}
                             handleRowClick={handleRowClick}
                             tableHeader={loanRequestHeader}
                             tableHeight={54}
@@ -96,7 +98,11 @@ const Index = () => {
                             showKirkBabel={false}
                             icon={MdOutlinePeople}
                             sideBarTabName='Cohort'
-                            optionalFilterName='graduate'
+                            totalPages={data?.data?.totalPages}
+                            hasNextPage={data?.data?.hasNextPage}
+                            pageNumber={pageNumber}
+                            setPageNumber={setPageNumber}
+                            condition={true}
                         />
                     </div>
                )
