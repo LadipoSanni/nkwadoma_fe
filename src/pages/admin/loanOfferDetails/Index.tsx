@@ -1,7 +1,7 @@
 "use client"
 import React, {useState} from 'react';
 import BackButton from "@/components/back-button";
-import {useRouter, useSearchParams} from "next/navigation";
+import {useRouter} from "next/navigation";
 import {Avatar, AvatarFallback, AvatarImage} from "@/components/ui/avatar";
 import {cabinetGroteskMediumBold, inter, inter600} from "@/app/fonts";
 import {Button} from "@/components/ui/button";
@@ -32,27 +32,13 @@ const LoanOfferDetailsContent = dynamic(
 const LoanOfferDetails = () => {
     const router = useRouter();
     const [currentTab, setCurrentsTab] = useState(0);
-    const searchParams = useSearchParams()
     const [disburseLoan, {isLoading}] = useDisburseLoanOfferMutation()
      const notificationId = useAppSelector(state => (state?.notification?.setNotificationId))
       const notification = useAppSelector(state => (state?.notification?.setNotification))
     const [openDeclineLoanRequestModal, setOpenDeclineLoanRequestModal] = useState(false)
     const selectedLoanOfferId = useAppSelector(state => (state?.createLoanOffer?.loanOfferId))
 
-    const getId = () => {
-        if (searchParams) {
-            const pathVariable = searchParams.get("id")
-            if (pathVariable) {
-                return pathVariable
-            } else {
-                return ""
-            }
-        } else {
-            return ""
-        }
 
-    }
-    const id: string = getId()
     const {data, isLoading: loading} = useViewLoanOfferDetailsQuery(selectedLoanOfferId)
 
     const setOpenDeclineOffer = (value: boolean) => {
@@ -168,7 +154,7 @@ const LoanOfferDetails = () => {
     const disburseLoanOffer = async () => {
 
         const body = {
-            loanOfferId: id,
+            loanOfferId: selectedLoanOfferId,
             loaneeId: data?.data?.loaneeId
         }
         const response = await disburseLoan(body)
