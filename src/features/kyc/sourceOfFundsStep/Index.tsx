@@ -219,7 +219,7 @@ const SourceOfFundsStep = () => {
                                 </Button>
                                 <Button
                                     type={'submit'}
-                                    disabled={(values.sourceOfFund.length === 0 && values.otherSources.length === 0 && !currentOtherSource.trim()) || isLoading}
+                                    disabled={(values.sourceOfFund.length === 0 && values.otherSources.length === 0 && !currentOtherSource.trim()) || isLoading && currentOtherSource?.length  <= 1}
                                     className={`h-[2.8125rem] md:w-[9.3125rem] w-full px-4 py-2 ${(values.sourceOfFund.length === 0 && values.otherSources.length === 0 && !currentOtherSource.trim()) ? 'bg-blue550 hover:bg-blue550' : 'bg-meedlBlue hover:bg-meedlBlue'} text-white rounded-md flex items-center justify-center gap-2 order-1 md:order-2`}
                                 >
                                     {isLoading ? (
