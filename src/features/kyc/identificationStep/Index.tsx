@@ -57,7 +57,6 @@ const IdentificationStep = () => {
 
     const handleFormSubmitSuccess = async (type: 'INDIVIDUAL' | 'COOPERATE', data: IndividualFormInputs | CorporateFormInputs) => {
         setErrorMessage(null);
-        console.log('data: ', data)
         dispatch(updateIdentification({ type, data }));
         await store.dispatch(markStepCompleted("identification"));
         route.push('/kyc/sof');
