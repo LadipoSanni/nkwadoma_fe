@@ -14,6 +14,7 @@ import {Icon} from "@iconify/react";
 import { resetNotification } from '@/redux/slice/notification/notification';
 import { store } from "@/redux/store";
 import {inter} from "@/app/fonts";
+import {setLoanOfferId} from "@/redux/slice/create/createLoanOfferSlice";
 
 interface TableRowData {
     [key: string]: string | number | null | React.ReactNode;
@@ -64,7 +65,9 @@ const Index = () => {
 
 
     const handleRowClick = (ID: string | object | React.ReactNode) => {
+        store.dispatch(setLoanOfferId(String(ID)))
         router.push(`/loan-offer-details?id=${ID}`);
+
     };
 
 

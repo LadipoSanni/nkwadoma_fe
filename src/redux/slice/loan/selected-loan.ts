@@ -21,16 +21,16 @@ interface SelectedLoanState {
 }
 
 const initialState: SelectedLoanState = {
-    currentTab: 'Loan requests',
+    currentTab: 'Loan referrals',
     clickedOrganization: null,
     clickedDisbursedLoanIdNumber: "",
     disbursedLoanAccountId:"",
     clickedLoanProductId:"",
     fundProductAvailableAmount: 0,
-    currentTabStatus: "LOAN_REQUEST",
+    currentTabStatus: "LOAN_REFERRAL",
     loanReferralId: "",
     clickedLoanId: "",
-    currentTabRoute: "loan-request",
+    currentTabRoute: "loan-referral",
     cohortLoaneeId: '',
     companySelectedTab: 0,
     selectedGeneralTab: 0,
