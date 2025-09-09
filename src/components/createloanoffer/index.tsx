@@ -29,7 +29,7 @@ const Index = () => {
         pageSize: 10,
         pageNumber: pageNumber
     }
-    const [respondToLoanRequest, { isLoading:isLoanOfferCreating}] = useRespondToLoanRequestMutation(); // Use the new mutation
+    const [respondToLoanRequest, { isLoading:isLoanOfferCreating}] = useRespondToLoanRequestMutation();
     const {data, isFetching,isLoading  } = useViewAllLoanProductQuery(parameter)
     const loanRequestId = useAppSelector(state => state.createLoanOffer.selectedLoanRequestId);
     const [disableButton, setDiableButton] = useState(true)

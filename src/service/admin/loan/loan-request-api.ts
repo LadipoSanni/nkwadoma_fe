@@ -42,7 +42,13 @@ export const loanRequestApi = createApi({
                 url: `/loan/withdraw/loan-offer?loanOfferId=${data.loanOfferId}&loanOfferStatus=${data.loanOfferStatus}`,
                 method: 'POST'
             })
-        })
+        }),
+        viewLoanSchedule: builder.query({
+            query:(loanRequestId: string) => ({
+                url:  `/repayment/history/generate/repayment/schedule?loanRequestId=${loanRequestId}`,
+                method: 'GET'
+            })
+        }),
 
 
 
@@ -55,4 +61,5 @@ export const {
     useRespondToLoanRequestMutation,
     useViewAllLoanReferralQuery,
     useWithdrawLoanOfferMutation,
+    useViewLoanScheduleQuery,
 } = loanRequestApi;
