@@ -27,7 +27,7 @@ const Details = () => {
     const [docError, setDocError] = useState<string | null>(null);
     const router = useRouter()
 
-    const {data, isLoading,refetch} = useGetInvestmentVehicleDetailQuery({id: investmentId}, {skip: !investmentId});
+    const {data, isLoading,refetch} = useGetInvestmentVehicleDetailQuery({id: investmentId}, {skip: !investmentId, refetchOnMountOrArgChange: true});
 
 
     useEffect(() => {
@@ -164,7 +164,7 @@ const Details = () => {
       const { type: statusTypes, value: statusValue } = getVehicleStatus();
 
     return (
-        <div className={`${styles.container} `}>
+        <div className={`${styles.container} max-h-[68vh] md:mb-10`}>
             {isLoading ? (<SkeletonForDetailPage/>) : (
                 <div
                     className={`flex flex-col md:flex-row md:justify-between ${inter.className}`}
@@ -290,8 +290,8 @@ const Details = () => {
                       </div>
                     </div>
                     
-                    <div className='w-full'>
-                        <InfoPanel infoList={detailInfo}/>
+                    <div className='w-full mb-10'>
+                        <InfoPanel infoList={detailInfo} />
                     </div>
                 </div>
             )}

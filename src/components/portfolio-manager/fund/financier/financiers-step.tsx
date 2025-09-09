@@ -91,8 +91,8 @@ function InviteFinanciers({setIsOpen,investmentId,amountCommitedAndDesignationCo
            organizationName: Yup.string()
               .trim()
               .matches(
-                /^[a-zA-Z0-9\-_ ]*$/,
-               "Name can include at least a letter and then numbers, hyphens and underscores.",
+               /^[a-zA-Z](?:[a-zA-Z0-9_-\s]*[a-zA-Z0-9])?$/,
+               "Organization name can not end with hyphen or underscore .",
               )
               .max(200, "Organization name cannot be more than 200 characters.")
               .when('financierType', {
@@ -209,6 +209,7 @@ const handleSubmit = async  (values: typeof initialFormValue) => {
               setFieldValue('email', '');
               setFieldValue('investmentVehicleDesignation', []);
               setFieldValue('amountCommited', '');
+              setError('')
             }
             setFieldValue(field, value, shouldValidate);
           }}
@@ -233,7 +234,7 @@ const handleSubmit = async  (values: typeof initialFormValue) => {
         </div>
           {
             <div
-                className={`text-error500 flex justify-center items-center text-center relative bottom-5`}>{error}</div>
+                className={`text-error500 flex justify-center items-center text-center relative bottom-3`}>{error}</div>
         }
         </div>
         )

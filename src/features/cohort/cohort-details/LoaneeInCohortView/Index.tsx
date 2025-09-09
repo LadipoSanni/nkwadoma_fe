@@ -21,6 +21,7 @@ import SearchEmptyState from "@/reuseable/emptyStates/SearchEmptyState";
 import { useAppSelector } from '@/redux/store';
 import CheckBoxTable from '@/reuseable/table/Checkbox-table';
 import { useDebounce } from '@/hooks/useDebounce';
+import {capitalizeFirstLetters} from "@/utils/GlobalMethods";
 
 interface userIdentity {
     firstName: string;
@@ -108,7 +109,7 @@ export const LoaneeInCohortView = ({cohortFee}: props) => {
     },[debouncedSearchTerm,searchResults,data])
 
     const loanProduct = [
-        {title: "Loanee", sortable: true, id: "firstName", selector: (row: viewAllLoanees) => row.userIdentity?.firstName + " " + row.userIdentity?.lastName},
+        {title: "Loanee", sortable: true, id: "firstName", selector: (row: viewAllLoanees) => capitalizeFirstLetters(row.userIdentity?.firstName) + " " + capitalizeFirstLetters(row.userIdentity?.lastName)},
         {title: "Initial deposit", sortable: true, id: "InitialDeposit", selector: (row: viewAllLoanees) => formatAmount((row.loaneeLoanDetail as loaneeLoanDetail)?.initialDeposit)},
         {title: "Amount requested", sortable: true, id: "AmountRequested", selector: (row: viewAllLoanees) => formatAmount((row.loaneeLoanDetail as loaneeLoanDetail)?.amountRequested)},
         {title: "Amount received", sortable: true, id: "AmountReceived", selector:(row: viewAllLoanees) => formatAmount((row.loaneeLoanDetail as loaneeLoanDetail)?.amountReceived)},

@@ -59,11 +59,11 @@ const ViewAllLoaneeOverview = () => {
     };
 
     const tableHeader = [
-        { title: 'Name', sortable: true, id: 'name', selector: (row: TableRowData) => <div>{row.firstName?.toString() } {row.lastName?.toString()}</div>  },
-        { title: 'Email address', sortable: true, id: 'emailAddress', selector: (row: TableRowData) =><div>{row?.email}</div>},
-        { title: 'No. of loans', sortable: true, id: 'noOfLoans', selector: (row: TableRowData) => <div className=''>{formateDigits(Number(row.numberOfLoans))}</div> },
-        { title: 'Historical debt', sortable: true, id: 'historicalDebt', selector: (row: TableRowData) => <div className={`  `}>{formateDigits(Number(row.historicalDebt))}</div>},
-        { title: 'Total outstanding', sortable: true, id: 'totalOutstanding', selector: (row: TableRowData) =><div className=''>{formatAmount(row.totalAmountOutstanding)}</div> },
+        { title: 'Name', sortable: true, id: 'name', selector: (row: TableRowData) => row.firstName?.toString() + " " + row.lastName?.toString() },
+        { title: <div className='md:mr-8'>Email address</div>, sortable: true, id: 'emailAddress', selector: (row: TableRowData) =>row?.email},
+        { title: 'No. of loans', sortable: true, id: 'noOfLoans', selector: (row: TableRowData) =>formateDigits(Number(row.numberOfLoans)) },
+        { title: 'Historical debt', sortable: true, id: 'historicalDebt', selector: (row: TableRowData) => formateDigits(Number(row.historicalDebt))},
+        { title: 'Total outstanding', sortable: true, id: 'totalOutstanding', selector: (row: TableRowData) =>formatAmount(row.totalAmountOutstanding)},
     ];
 
     const handleRowClick = (ID: string | object | React.ReactNode) => {
@@ -108,7 +108,7 @@ const ViewAllLoaneeOverview = () => {
             <div
                 id={'tableAndSearchContainer'}
                 data-testid={'tableAndSearchContainer'}
-                className={`grid  `}
+                className={`mb-6 `}
 
             >
 
@@ -117,7 +117,7 @@ const ViewAllLoaneeOverview = () => {
                     tableData={debouncedSearchTerm ? searchData?.data?.body : data?.data?.body }
                     tableHeader={tableHeader}
                     handleRowClick={handleRowClick}
-                    tableHeight={40}
+                    tableHeight={ data?.data?.body?.length < 10 || searchData?.data?.body?.length < 10 ? 60 : undefined}
                     tableCellStyle={'h-12'}
                     condition={true}
                     // searchEmptyState={false}
