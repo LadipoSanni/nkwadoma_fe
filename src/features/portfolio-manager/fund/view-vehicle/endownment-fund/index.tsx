@@ -16,31 +16,13 @@ import { setInvestmentVehicleType } from '@/redux/slice/vehicle/vehicle';
 import { resetAll,clearSaveCreateInvestmentField} from '@/redux/slice/vehicle/vehicle';
 import { clearAll } from '@/redux/slice/multiselect/vehicle-multiselect';
 import { useDebounce } from '@/hooks/useDebounce';
-
-
+import { capitalizeFirstLetters } from "@/utils/GlobalMethods";
 
 interface TableRowData {
     [key: string]: string | number | null | React.ReactNode;
 }
 
 
-// interface investmentVehicleProps     {
-//     id: string,
-//     name: string,
-//     investmentVehicleType: string,
-//     mandate: string,
-//     sponsors: string,
-//     tenure: number,
-//     size: number,
-//     rate: number,
-//     fundRaisingStatus?: string,
-//     totalAmountInInvestmentVehicle: number,
-//     amountRaised?: string,
-//     amountDisbursed?: string,
-//     totalAvailableAmount?: number,
-//     totalIncomeGenerated?: string,
-//     netAssetValue?: string
-// }
 
 function EndownmentFund() {
     const [searchTerm, setSearchTerm] = useState('');
@@ -121,7 +103,7 @@ function EndownmentFund() {
                        title: <div className='h-11 flex justify-center items-center'>Vehicle</div>,
                        sortable: true,
                        id: 'name',
-                       selector: (row: TableRowData) => row.name
+                       selector: (row: TableRowData) => capitalizeFirstLetters(row?.name?.toString())
                    },
                    {
                        title: 'Start date',

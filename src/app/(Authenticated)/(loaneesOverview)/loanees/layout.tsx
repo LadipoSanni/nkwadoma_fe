@@ -9,7 +9,7 @@ interface Props {
 const Layout = ({children}:Props) => {
     return (
         <TabSwitch triggerStyle={styles.switchTabStyle} tabData={loaneeView} defaultTab="/loanees" disabledTabs={[]}>
-            <div className={` max-h-[78vh] ${styles.verticalContainer}`}>
+            <div className={` max-h-[74vh] ${styles.verticalContainer}`}>
                 {children}
             </div>
         </TabSwitch>
