@@ -5,25 +5,28 @@ import Details from "@/components/loanee-my-profile/Details";
 import {formatAmount} from "@/utils/Format";
 import dayjs from "dayjs";
 import InfiniteScrollTable from "@/reuseable/table/InfiniteScrollTable";
-import {repaymentSchedule} from "@/utils/LoanRequestMockData/Index";
+import {useAppSelector} from "@/redux/store";
+import {useViewLoanScheduleQuery} from "@/service/admin/loan/loan-request-api";
 
 interface viewAllType {
     principalAmount: string
-    date: string
-    amountPaid: string
-    outStanding:string
-    outstanding:number
+    repaymentDate: string
+    expectedMonthlyAmount: string
+    amountOutStanding:string
+    totalAmountPaid:number
     totalPayment: string
 }
 
 const GenerateRepaymentSchedule = () => {
-
+    const loanRequestId = useAppSelector(state => state.createLoanOffer.selectedLoanRequestId);
+    const {data} = useViewLoanScheduleQuery(loanRequestId);
+    console.log('data: ', data)
     const tableHeader =  [
-        { title: 'Date', sortable: true, id: 'date', selector: (row: viewAllType) =><div>{dayjs(row.date?.toString()).format('MMM D, YYYY')}</div> },
+        { title: 'Date', sortable: true, id: 'date', selector: (row: viewAllType) =><div>{dayjs(row.repaymentDate?.toString()).format('MMM D, YYYY')}</div> },
         { title: 'Principal amount', sortable: true, id: 'principalAmount', selector: (row:  viewAllType) => <div className=''>{formatAmount(row.principalAmount)}</div>},
-        { title: 'Amount paid', sortable: true, id: 'amountPaid', selector: (row: viewAllType) => <div className=''>{formatAmount(row.amountPaid)}</div>},
-        { title: 'Outstanding', sortable: true, id: 'outstanding', selector: (row: viewAllType) =><div>{formatAmount(row.outStanding?.toString())}</div> },
-        { title: 'Total payment', sortable: true, id: 'totalPayment', selector: (row: viewAllType) =><div>{formatAmount(row.totalPayment?.toString())}</div> },
+        { title: 'Amount paid', sortable: true, id: 'amountPaid', selector: (row: viewAllType) => <div className=''>{formatAmount(row.expectedMonthlyAmount)}</div>},
+        { title: 'Outstanding', sortable: true, id: 'outstanding', selector: (row: viewAllType) =><div>{formatAmount(row.amountOutStanding?.toString())}</div> },
+        { title: 'Total payment', sortable: true, id: 'totalPayment', selector: (row: viewAllType) =><div>{formatAmount(row.totalAmountPaid?.toString())}</div> },
 
     ]
 
@@ -40,15 +43,15 @@ const GenerateRepaymentSchedule = () => {
             </div>
             <div className={` grid  md:flex gap-3  `}>
                 <div className={` w-full md:w-[50%] `}>
-                    <Details showIcon={false} isLoading={false} sx={` w-full md:w-[100%] `} id={'total'} showAsWholeNumber={false}    name={'Sum total'} value={'200000'} valueType={'currency'}  />
+                    <Details showIcon={false} isLoading={false} sx={` w-full md:w-[100%] `} id={'total'} showAsWholeNumber={false}    name={'Sum total'} value={data?.data?.sumTotal ? data?.data?.sumTotal :0} valueType={'currency'}  />
                 </div>
                 <div className={`w-full md:w-[50%] grid md:flex gap-3  `}>
-                    <Details showIcon={false} isLoading={false} sx={` w-full md:w-[100%] `} id={'totalamountEarned'} showAsWholeNumber={false}    name={'Tenor'} value={'9'} valueType={'years'}  />
-                    <Details showIcon={false} isLoading={false} sx={` w-full md:w-[100%] `} id={'totalamountEarned'} showAsWholeNumber={false}    name={'Tenor'} value={'0'} valueType={'years'}  />
+                    <Details showIcon={false} isLoading={false} sx={` w-full md:w-[100%] `} id={'tenor'} showAsWholeNumber={false}    name={'Tenor'} value={data?.data?.tenor ? data?.data?.tenor : 0 } valueType={'years'}  />
+                    <Details showIcon={false} isLoading={false} sx={` w-full md:w-[100%] `} id={'moratorium'} showAsWholeNumber={false}    name={'Moratorium'} value={data?.data?.moratorium ? data?.data?.moratorium : 0} valueType={'years'}  />
                 </div>
             </div>
             <InfiniteScrollTable
-                tableData={repaymentSchedule}
+                tableData={data?.data?.repaymentScheduleEntries}
                 //eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-expect-error
                 tableHeader={tableHeader}
