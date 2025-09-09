@@ -90,10 +90,14 @@ function InviteFinanciers({setIsOpen,investmentId,amountCommitedAndDesignationCo
      }),
            organizationName: Yup.string()
               .trim()
-              .matches(
-                /^[a-zA-Z0-9\-_ ]*$/,
-               "Name can include at least a letter and then numbers, hyphens and underscores.",
-              )
+              .test(
+                "valid-name",
+                "Name must not end with hyphen or underscore",
+                (value = "") => {
+                  const regex = /^[a-zA-Z](?:[a-zA-Z0-9_-\s]*[a-zA-Z0-9])?$/;
+                    return regex.test(value);
+                }
+            )
               .max(200, "Organization name cannot be more than 200 characters.")
               .when('financierType', {
                 is: 'COOPERATE', 
