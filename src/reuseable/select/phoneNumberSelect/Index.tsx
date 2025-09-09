@@ -21,6 +21,7 @@ import Image from 'next/image';
 import { Virtuoso } from 'react-virtuoso';
 import { parsePhoneNumberFromString, CountryCode } from 'libphonenumber-js';
 import { useGetCountriesQuery } from '@/service/admin/external-api/countryCalling_code_query';
+import { safeDecodeURI } from '@/utils/GlobalMethods';
 
 interface PhoneNumberSelectProps {
   phoneNumber: string;
@@ -223,7 +224,7 @@ const PhoneNumberSelect: React.FC<PhoneNumberSelectProps> = ({
                   >
                     <div className="flex items-center gap-2">
                       <Image
-                        src={option.flag}
+                        src={safeDecodeURI(option.flag)}
                         alt={option.name}
                         width={20}
                         height={20}

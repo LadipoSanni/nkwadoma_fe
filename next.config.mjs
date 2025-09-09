@@ -8,7 +8,34 @@ const nextConfig = {
         NEXT_PUBLIC_CLOUD_NAME: process.env.NEXT_PUBLIC_CLOUD_NAME,
         APP_URL:process.env.APP_URL,
     },
-    images: {domains: ['res.cloudinary.com', 'via.placeholder.com', "images.unsplash.com", "png.pngtree.com",'flagcdn.com','upload.wikimedia.org',"cdn.jsdelivr.net"],},
+    images: {domains: ['res.cloudinary.com', 'via.placeholder.com', "images.unsplash.com", "png.pngtree.com",'flagcdn.com','upload.wikimedia.org',"cdn.jsdelivr.net"],
+        remotePatterns: [
+            {
+                protocol: 'https',
+                hostname: 'cdn.jsdelivr.net',
+                port: '',
+                pathname: '/npm/banks-ng@1.1.1/bin/logos/**',
+            },
+            {
+                protocol: 'https',
+                hostname: '**.jsdelivr.net', 
+                port: '',
+                pathname: '/**',
+            },
+            {
+                protocol: 'https',
+                hostname: 'flagcdn.com',
+                port: '',
+                pathname: '/**', 
+            },
+            {
+                protocol: 'https',
+                hostname: '**.flagcdn.com',
+                port: '',
+                pathname: '/**',
+            },
+        ],
+    },
 };
 
 
