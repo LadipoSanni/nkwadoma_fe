@@ -154,7 +154,7 @@ const LoanOfferDetails = () => {
     const disburseLoanOffer = async () => {
 
         const body = {
-            loanOfferId: id,
+            loanOfferId: selectedLoanOfferId,
             loaneeId: data?.data?.loaneeId
         }
         const response = await disburseLoan(body)
