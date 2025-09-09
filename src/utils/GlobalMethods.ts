@@ -261,5 +261,15 @@ export const ensureHttpsUrl = (url: string | null | undefined): string | undefin
         .replace(/_/g, ' ')
         .replace(/^\w/, (firstChar) => firstChar.toUpperCase()); 
 }
+
+export const safeDecodeURI = (url: string) => {
+    try {
+      return decodeURIComponent(url);
+    } catch {
+      return url;
+    }
+  };
+  
+  
   
   
