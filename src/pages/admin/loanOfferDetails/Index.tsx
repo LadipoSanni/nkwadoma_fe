@@ -37,6 +37,7 @@ const LoanOfferDetails = () => {
      const notificationId = useAppSelector(state => (state?.notification?.setNotificationId))
       const notification = useAppSelector(state => (state?.notification?.setNotification))
     const [openDeclineLoanRequestModal, setOpenDeclineLoanRequestModal] = useState(false)
+    const selectedLoanOfferId = useAppSelector(state => (state?.createLoanOffer?.loanOfferId))
 
     const getId = () => {
         if (searchParams) {
@@ -52,7 +53,7 @@ const LoanOfferDetails = () => {
 
     }
     const id: string = getId()
-    const {data, isLoading: loading} = useViewLoanOfferDetailsQuery(id)
+    const {data, isLoading: loading} = useViewLoanOfferDetailsQuery(selectedLoanOfferId)
 
     const setOpenDeclineOffer = (value: boolean) => {
         setOpenDeclineLoanRequestModal(value)
@@ -90,28 +91,28 @@ const LoanOfferDetails = () => {
 
 
     const basicDetails = [
-        {label: 'Gender', value: data?.data?.gender},
-        {label: 'Email address', value: data?.data?.email},
-        {label: 'Phone number', value: data?.data?.phoneNumer},
-        {label: 'Date of birth', value: data?.data?.dateOfBirth},
-        {label: 'Marital status', value: data?.data?.maritalStatus},
-        {label: 'Nationality', value: data?.data?.nationality},
-        {label: 'State of origin ', value: data?.data?.stateOfOrigin},
-        {label: 'State of residence', value: data?.data?.stateOfResidence},
-        {label: "Residential address", value: data?.data?.residentialAddress},
+        {label: 'Gender', value: data?.data?.gender ? data?.data?.gender : '' },
+        {label: 'Email address', value: data?.data?.email ? data?.data?.email : ''},
+        {label: 'Phone number', value: data?.data?.phoneNumer ? data?.data?.phoneNumer : ''},
+        {label: 'Date of birth', value: data?.data?.dateOfBirth ? data?.data?.dateOfBirth : ''},
+        {label: 'Marital status', value: data?.data?.maritalStatus ? data?.data?.maritalStatus : ''},
+        {label: 'Nationality', value: data?.data?.nationality ? data?.data?.nationality : ''},
+        {label: 'State of origin ', value: data?.data?.stateOfOrigin ? data?.data?.stateOfOrigin : ''},
+        {label: 'State of residence', value: data?.data?.stateOfResidence ? data?.data?.stateOfResidence : ''},
+        {label: "Residential address", value: data?.data?.residentialAddress ? data?.data?.residentialAddress : ''},
     ];
 
     const additionalDetails = [
-        {label: 'Alternate email address', value: data?.data?.alternateEmail},
-        {label: 'Alternate phone number', value: data?.data?.alternatePhoneNumber},
-        {label: 'Alternate residential address', value: data?.data?.alternateContactAddress},
+        {label: 'Alternate email address', value: data?.data?.alternateEmail ? data?.data?.alternateEmail : ''},
+        {label: 'Alternate phone number', value: data?.data?.alternatePhoneNumber ? data?.data?.alternatePhoneNumber : ''},
+        {label: 'Alternate residential address', value: data?.data?.alternateContactAddress ? data?.data?.alternateContactAddress : ''},
         {
             label: 'Next of kin name',
             value: data?.data?.nextOfKinFirstName + " " + data?.data?.nextOfKinLastName
         },
-        {label: 'Next of kin email address', value: data?.data?.nextOfKinEmail},
-        {label: 'Next of kin phone number', value: data?.data?.nextOfKinPhoneNumber},
-        {label: 'Next of kin relationship ', value: data?.data?.nextOfKinRelationship},
+        {label: 'Next of kin email address', value: data?.data?.nextOfKinEmail ?  data?.data?.nextOfKinEmail : ''},
+        {label: 'Next of kin phone number', value: data?.data?.nextOfKinPhoneNumber ? data?.data?.nextOfKinPhoneNumber : '' },
+        {label: 'Next of kin relationship ', value: data?.data?.nextOfKinRelationship ? data?.data?.nextOfKinRelationship : ''},
     ];
 
     const loanDetails = [
@@ -130,7 +131,7 @@ const LoanOfferDetails = () => {
         },
         {
             label: "Start date", value:
-                dayjs(data?.data?.startDate?.toString()).format('MMMM D, YYYY')
+            data?.data?.startDate ?  dayjs(data?.data?.startDate?.toString()).format('MMMM D, YYYY') : ''
         },
         {
             label: "Loan amount requested", value: <NumericFormat
@@ -352,7 +353,7 @@ const LoanOfferDetails = () => {
                             </div>
                         </div>
                     </div>
-                    <DeclineLoanModal isOpen={openDeclineLoanRequestModal} loanOfferId={getId()}
+                    <DeclineLoanModal isOpen={openDeclineLoanRequestModal} loanOfferId={selectedLoanOfferId}
                                       setIsOpen={setOpenDeclineOffer} loanOfferStatus={data?.data?.loanOfferStatus}
                                       title={"Withdraw loan"}/>
                 </div>
