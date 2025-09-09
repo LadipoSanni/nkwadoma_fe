@@ -59,7 +59,6 @@ const DeclineLoanModal: React.FC<DeclineLoanModalProps> = ({ isOpen,loanOfferSta
             declineReason: reason.trim()
         };
 
-        try {
            const response = await respondToLoanRequest(payload)
             setReason('');
             setIsOpen(false);
@@ -75,25 +74,12 @@ const DeclineLoanModal: React.FC<DeclineLoanModalProps> = ({ isOpen,loanOfferSta
                 store.dispatch(setCurrentTab('Loan offers'))
                 store.dispatch(setCurrentTabStatus('LOAN_OFFER'))
                 store.dispatch(setcurrentTabRoute('loan-offer'))
-                router.push('/loan/loan-offert')
+                router.push('/loan/loan-offer')
                 toast({
                     description: 'loan request declined',
                     status: 'success',
                 })
             }
-        } catch(error)  {
-            //eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-expect-error
-            setError(error?.data?.message);
-            toast({
-                //eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // @ts-expect-error
-                description: error?.data?.message,
-                status: 'error',
-            })
-
-
-        }
     }
 
     const withdrawALoanOffer = async () => {
@@ -110,6 +96,10 @@ const DeclineLoanModal: React.FC<DeclineLoanModalProps> = ({ isOpen,loanOfferSta
                     status: 'error',
                 })
             }else{
+                store.dispatch(setCurrentTab('Loan offers'))
+                store.dispatch(setCurrentTabStatus('LOAN_OFFER'))
+                store.dispatch(setcurrentTabRoute('loan-offer'))
+                router.push('/loan/loan-offer')
                 toast({
                     // description: response?.error?.data?.message,
                     description: 'Loan withdrawn successfully',
