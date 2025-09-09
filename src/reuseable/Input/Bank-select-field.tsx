@@ -83,6 +83,7 @@ const BankSelectField = ({
             height={20}
             priority={index < 10}
             className="w-5 h-5 rounded-sm"
+            unoptimized={process.env.NODE_ENV !== 'development'}
           />
           <span>{bank.displayName}</span>
         </div>
@@ -112,6 +113,7 @@ const BankSelectField = ({
                 width={20}
                 height={20}
                 className="w-4 h-4 rounded-sm"
+               unoptimized={process.env.NODE_ENV !== 'development'}
               />
             )}
             {selectedBank ? selectedBank.displayName : <span className="text-grey400 opacity-50">{placeHolder}</span>}

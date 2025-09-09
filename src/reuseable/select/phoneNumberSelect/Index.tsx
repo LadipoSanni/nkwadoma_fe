@@ -230,6 +230,7 @@ const PhoneNumberSelect: React.FC<PhoneNumberSelectProps> = ({
                         height={20}
                         priority={index < 10}
                         className="w-5 h-5 rounded-sm"
+                        unoptimized={true}
                       />
                       <span>
                         {option.dialCode} {option.code}
