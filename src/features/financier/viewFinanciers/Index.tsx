@@ -147,7 +147,7 @@ const ViewFinanciers = () => {
 
 
     const financierHeader = [
-        { title: 'Name', id: 'name', selector: (row: viewAllfinancier) => row?.name},
+        { title: 'Name', id: 'name', selector: (row: viewAllfinancier) => capitalizeFirstLetters(row?.name?.toString())},
         { title: 'Type', id: 'type', selector: (row: viewAllfinancier) => (
                 <span className={`${row.financierType === "INDIVIDUAL"  ? 'text-[#66440A] bg-[#FEF6E8]' : 'text-[#142854] bg-[#EEF5FF]'} rounded-[32px] px-2 h-5`}>
             {capitalizeFirstLetters(row.financierType)}

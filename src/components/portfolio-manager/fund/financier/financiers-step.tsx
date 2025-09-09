@@ -90,14 +90,10 @@ function InviteFinanciers({setIsOpen,investmentId,amountCommitedAndDesignationCo
      }),
            organizationName: Yup.string()
               .trim()
-              .test(
-                "valid-name",
-                "Name must not end with hyphen or underscore",
-                (value = "") => {
-                  const regex = /^[a-zA-Z](?:[a-zA-Z0-9_-\s]*[a-zA-Z0-9])?$/;
-                    return regex.test(value);
-                }
-            )
+              .matches(
+               /^[a-zA-Z](?:[a-zA-Z0-9_-\s]*[a-zA-Z0-9])?$/,
+               "Organization name can not end with hyphen or underscore .",
+              )
               .max(200, "Organization name cannot be more than 200 characters.")
               .when('financierType', {
                 is: 'COOPERATE', 
@@ -213,6 +209,7 @@ const handleSubmit = async  (values: typeof initialFormValue) => {
               setFieldValue('email', '');
               setFieldValue('investmentVehicleDesignation', []);
               setFieldValue('amountCommited', '');
+              setError('')
             }
             setFieldValue(field, value, shouldValidate);
           }}
@@ -237,7 +234,7 @@ const handleSubmit = async  (values: typeof initialFormValue) => {
         </div>
           {
             <div
-                className={`text-error500 flex justify-center items-center text-center relative bottom-5`}>{error}</div>
+                className={`text-error500 flex justify-center items-center text-center relative bottom-3`}>{error}</div>
         }
         </div>
         )
