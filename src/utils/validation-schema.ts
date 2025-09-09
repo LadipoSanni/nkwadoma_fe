@@ -220,7 +220,15 @@ export const validationStaffSchema = Yup.object().shape({
           name: Yup.string()
           .trim()
           .required('Name is required')
-          .matches(/^[^0-9]*$/, 'Numbers are not allowed'),
+          .test(
+            "valid-name",
+            "Name must not end with hyphen or underscore",
+            (value = "") => {
+              const regex = /^[a-zA-Z](?:[a-zA-Z0-9_-\s]*[a-zA-Z0-9])?$/;
+                return regex.test(value);
+            }
+          )
+          .max(200, "Terms exceeds 200 characters"),
       email: Yup.string()
           .email('Invalid email address')
           // .matches(/^\S*$/, 'Email address should not contain spaces')

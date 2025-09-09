@@ -51,7 +51,15 @@ function InviteFinancier({financierType,isloading,isValid,handleBack,errors,touc
            name="organizationName"
            placeholder="Enter organization name"
            className="w-full p-3 border rounded focus:outline-none mt-2"
-            
+           onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+            const value = e.target.value;
+            const cleanedValue = value.replace(/[^a-zA-Z0-9_-\s]/g, '');
+            if (cleanedValue.length > 0 && !/^[a-zA-Z]/.test(cleanedValue)) {
+              setFieldValue("organizationName", cleanedValue.substring(1));
+            } else {
+              setFieldValue("organizationName", cleanedValue);
+            }
+          }}
           />
            {errors.organizationName && touched.organizationName && (
                             <ErrorMessage

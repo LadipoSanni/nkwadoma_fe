@@ -149,14 +149,12 @@ function StepOne() {
                 "valid-name",
                 "Name must not end with hyphen or underscore",
                 (value = "") => {
-                    // const regex = /^[a-zA-Z][a-zA-Z0-9\s-_]*[a-zA-Z0-9]$/;
-                    // return regex.test(value);
-                    const regex = /^[a-zA-Z](?:[a-zA-Z0-9_-]*[a-zA-Z0-9])?$/;
+                  const regex = /^[a-zA-Z](?:[a-zA-Z0-9_-\s]*[a-zA-Z0-9])?$/;
                     return regex.test(value);
                 }
             )
 
-            .max(200, "Terms exceeds 100 characters"),
+            .max(200, "Terms exceeds 200 characters"),
         investmentVehicleId: Yup.string()
             .trim()
             .required("Fund product is required"),
@@ -308,14 +306,14 @@ function StepOne() {
                                 className="w-full p-3 border rounded focus:outline-none mt-2 text-sm"
                                 placeholder="Enter Product name"
                                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                                    const value = e.target.value;
-                                    const cleanedValue = value.replace(/[^a-zA-Z0-9_-]/g, '');
-                                    if (cleanedValue.length > 0 && !/^[a-zA-Z]/.test(cleanedValue)) {
-                                      setFieldValue("productName", cleanedValue.substring(1));
-                                    } else {
-                                      setFieldValue("productName", cleanedValue);
-                                    }
-                                  }}
+                                           const value = e.target.value;
+                                           const cleanedValue = value.replace(/[^a-zA-Z0-9_-\s]/g, '');
+                                           if (cleanedValue.length > 0 && !/^[a-zA-Z]/.test(cleanedValue)) {
+                                             setFieldValue("productName", cleanedValue.substring(1));
+                                           } else {
+                                             setFieldValue("productName", cleanedValue);
+                                           }
+                                         }}
                             />
                             {
                                 errors.productName && touched.productName && (
