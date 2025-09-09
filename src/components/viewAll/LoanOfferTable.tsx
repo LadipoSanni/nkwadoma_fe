@@ -66,8 +66,10 @@ const Index = () => {
 
 
     const handleRowClick = (ID: string | object | React.ReactNode) => {
-        if (typeof ID === "string"){
-            store.dispatch(setLoanOfferId(String(ID)))
+        if (typeof ID === "object"){
+            //eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-expect-error
+            store.dispatch(setLoanOfferId(String(ID?.id)))
         }
         router.push(`/loan-offer-details`);
 

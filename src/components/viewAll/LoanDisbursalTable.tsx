@@ -71,8 +71,12 @@ function Index() {
     ];
 
     const handleRowClick = (ID: string | object | React.ReactNode) => {
-        store.dispatch(setClickedDisbursedLoanIdNumber(ID))
-        router.push(`/disbursed-loan-details?id=${ID}`);
+        if (typeof ID === "object"){
+            //eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-expect-error
+            store.dispatch(setClickedDisbursedLoanIdNumber(ID?.id))
+        }
+        router.push(`/disbursed-loan-details`);
     };
 
     return (
