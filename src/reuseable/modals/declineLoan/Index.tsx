@@ -1,3 +1,4 @@
+'use client'
 import React, { useState } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Textarea } from '@/components/ui/textarea';
@@ -6,6 +7,9 @@ import { Button } from '@/components/ui/button';
 import { cabinetGrotesk } from "@/app/fonts";
 import { useRespondToLoanRequestMutation, useWithdrawLoanOfferMutation } from '@/service/admin/loan/loan-request-api';
 import {useToast} from "@/hooks/use-toast";
+import {store} from "@/redux/store";
+import {setCurrentTab, setcurrentTabRoute, setCurrentTabStatus} from "@/redux/slice/loan/selected-loan";
+import {useRouter} from "next/navigation";
 
 interface DeclineLoanModalProps {
     isOpen: boolean;
@@ -34,6 +38,7 @@ const DeclineLoanModal: React.FC<DeclineLoanModalProps> = ({ isOpen,loanOfferSta
     const [respondToLoanRequest, { isLoading }] = useRespondToLoanRequestMutation();
     const [withdrawLoanOffer, {isLoading:isLoadingWithdraw}] = useWithdrawLoanOfferMutation()
 
+    const router = useRouter();
     const {toast} = useToast()
 
     const handleDecline = async (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -67,8 +72,11 @@ const DeclineLoanModal: React.FC<DeclineLoanModalProps> = ({ isOpen,loanOfferSta
                     status: 'error',
                 })
             }else{
+                store.dispatch(setCurrentTab('Loan offers'))
+                store.dispatch(setCurrentTabStatus('LOAN_OFFER'))
+                store.dispatch(setcurrentTabRoute('loan-offer'))
+                router.push('/loan/loan-offert')
                 toast({
-
                     description: 'loan request declined',
                     status: 'success',
                 })
