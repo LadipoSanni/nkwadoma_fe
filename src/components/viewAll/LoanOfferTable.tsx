@@ -65,7 +65,9 @@ const Index = () => {
 
 
     const handleRowClick = (ID: string | object | React.ReactNode) => {
-        store.dispatch(setLoanOfferId(String(ID)))
+        if (typeof ID === "string"){
+            store.dispatch(setLoanOfferId(String(ID)))
+        }
         router.push(`/loan-offer-details`);
 
     };
