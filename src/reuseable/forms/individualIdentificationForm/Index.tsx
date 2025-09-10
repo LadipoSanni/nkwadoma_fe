@@ -59,7 +59,7 @@ const IndividualIdentificationForm: React.FC<IndividualIdentificationFormProps> 
             <div className={'grid gap-2'}>
                 <Label htmlFor="nin">National identification number</Label>
                 <Input
-                    type="number"
+                    type="text"
                     placeholder="Enter NIN"
                     {...register("nin", {
                         required: "NIN is required",
@@ -67,8 +67,13 @@ const IndividualIdentificationForm: React.FC<IndividualIdentificationFormProps> 
                             value: /^\d{11}$/,
                             message: "NIN must be 11 digits"
                         },
+                        // onChange: (e) => {
+                        //     setNinValue(e.target.value);
+                        // }
                         onChange: (e) => {
-                            setNinValue(e.target.value);
+                            const value = e.target.value.replace(/[^\d]/g, '');
+                            setNinValue(value);
+                            e.target.value = value; 
                         }
                     })}
                     className={'p-4 focus-visible:outline-0 shadow-none focus-visible:ring-transparent rounded-md h-[3.375rem] placeholder:text-black100'}
@@ -79,7 +84,7 @@ const IndividualIdentificationForm: React.FC<IndividualIdentificationFormProps> 
             <div className={'grid gap-2'}>
                 <Label htmlFor="bvn">Bank verification number</Label>
                 <Input
-                    type="number"
+                    type="text"
                     placeholder="Enter BVN"
                     {...register("bvn", {
                         required: "BVN is required",
@@ -87,8 +92,13 @@ const IndividualIdentificationForm: React.FC<IndividualIdentificationFormProps> 
                             value: /^\d{11}$/,
                             message: "BVN must be 11 digits"
                         },
+                        // onChange: (e) => {
+                        //     setBvnValue(e.target.value);
+                        // }
                         onChange: (e) => {
-                            setBvnValue(e.target.value);
+                            const value = e.target.value.replace(/[^\d]/g, '');
+                            setBvnValue(value);
+                            e.target.value = value; 
                         }
                     })}
                     className={'p-4 focus-visible:outline-0 shadow-none focus-visible:ring-transparent rounded-md h-[3.375rem] placeholder:text-black100'}
