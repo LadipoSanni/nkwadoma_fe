@@ -15,6 +15,8 @@ import {
 } from "@/service/users/Loanee_query";
 import {store} from "@/redux/store";
 import {setSelectedLoaneeId,setSelectedLoaneeFirstName ,setSelectedLoaneeLastName} from "@/redux/slice/loan/loanees";
+import {capitalizeFirstLetters} from "@/utils/GlobalMethods";
+
 interface TableRowType {
     "loaneeId": string,
     "firstName": string,
@@ -59,7 +61,7 @@ const ViewAllLoaneeOverview = () => {
     };
 
     const tableHeader = [
-        { title: 'Name', sortable: true, id: 'name', selector: (row: TableRowData) => row.firstName?.toString() + " " + row.lastName?.toString() },
+        { title: 'Name', sortable: true, id: 'name', selector: (row: TableRowData) => capitalizeFirstLetters(row.firstName?.toString()) + " " + capitalizeFirstLetters(row.lastName?.toString()) },
         { title: <div className='md:mr-8'>Email address</div>, sortable: true, id: 'emailAddress', selector: (row: TableRowData) =>row?.email},
         { title: 'No. of loans', sortable: true, id: 'noOfLoans', selector: (row: TableRowData) =>formateDigits(Number(row.numberOfLoans)) },
         { title: 'Historical debt', sortable: true, id: 'historicalDebt', selector: (row: TableRowData) => formateDigits(Number(row.historicalDebt))},
