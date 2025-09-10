@@ -61,8 +61,11 @@ const Index = () => {
 
 
 
-    const handleRowClick = (row:TableRowData) => {
-        router.push(`/loan-request-details?id=${row?.id}`);
+    const handleRowClick = (ID: string | object | React.ReactNode) => {
+
+        //eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-expect-error
+        router.push(`/loan-request-details?id=${ID?.id}`);
     };
 
 
@@ -91,7 +94,7 @@ const Index = () => {
                             isLoading={isLoading || isFetching}
                             handleRowClick={handleRowClick}
                             tableHeader={loanRequestHeader}
-                            tableHeight={data?.data?.body?.length < 10 ? 58 : undefined}
+                            tableHeight={54}
                             sx='cursor-pointer'
                             staticColunm='firstName'
                             staticHeader='Loanee'
