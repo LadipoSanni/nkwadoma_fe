@@ -28,6 +28,8 @@ const SourceOfFundsStep = () => {
     const savedSourceOfFunds = useAppSelector(state => state.kycForm.sourceOfFunds);
     const identificationType = useAppSelector(state => state.kycForm.identification.type);
 
+    const [disableButton, setDisableButton] = useState(true)
+
     // Extract any "Source (specify others):" items from savedSourceOfFunds
     const regularSources = savedSourceOfFunds?.filter(v => !v.startsWith("Source (specify others):")) || [];
     const initialOtherSources = savedSourceOfFunds
@@ -75,6 +77,7 @@ const SourceOfFundsStep = () => {
     };
 
     const updateOtherSource = (index: number, value: string, values: FormValues, setFieldValue: (field: string, value: string[]) => void) => {
+        console.log('value: ', value)
         const updatedOtherSources = [...values.otherSources];
         updatedOtherSources[index] = value;
         setFieldValue("otherSources", updatedOtherSources);
@@ -83,6 +86,7 @@ const SourceOfFundsStep = () => {
     const removeOtherSource = (index: number, values: FormValues, setFieldValue: (field: string, value: string[]) => void) => {
         const updatedOtherSources = values.otherSources.filter((_, i) => i !== index);
         setFieldValue("otherSources", updatedOtherSources);
+        // if (values.sourceOfFund.includes('Others'))
     };
 
     const clearOtherSource = () => {
@@ -128,11 +132,18 @@ const SourceOfFundsStep = () => {
                         <div className={`${cabinetGroteskMediumBold.className} max-w-[27.5rem] md:mx-auto w-full`}>
                             <h1 className={`text-meedlBlack text-[24px] leading-[120%] font-medium`}>Source of funds</h1>
                         </div>
+                        {console.log('values:', values)}
 
                         <div className={'w-full md:max-w-[27.5rem] md:mx-auto grid gap-5'}>
                             <CustomMultiselect
                                 multiselectList={sourceOptions}
                                 onValueChange={(newValues) => {
+                                    console.log('newValues:', newValues);
+                                    if(newValues?.includes('Others')) {
+                                        setDisableButton(true)
+                                    }else {
+                                        setDisableButton(false)
+                                    }
                                     if (values.sourceOfFund.includes('Others') && !newValues.includes('Others')) {
                                         setFieldValue("otherSources", []);
                                         setCurrentOtherSource("");
@@ -219,8 +230,11 @@ const SourceOfFundsStep = () => {
                                 </Button>
                                 <Button
                                     type={'submit'}
-                                    disabled={(values.sourceOfFund.length === 0 && values.otherSources.length === 0 && !currentOtherSource.trim()) || isLoading && currentOtherSource?.length  <= 1}
-                                    className={`h-[2.8125rem] md:w-[9.3125rem] w-full px-4 py-2 ${(values.sourceOfFund.length === 0 && values.otherSources.length === 0 && !currentOtherSource.trim()) ? 'bg-blue550 hover:bg-blue550' : 'bg-meedlBlue hover:bg-meedlBlue'} text-white rounded-md flex items-center justify-center gap-2 order-1 md:order-2`}
+                                    // disabled={disableButton}
+                                    disabled={(values.sourceOfFund.length === 0 && values.otherSources.length === 0 && !currentOtherSource.trim()) || isLoading && disableButton }
+                                    className={`h-[2.8125rem] md:w-[9.3125rem] w-full px-4 py-2 ${(values.sourceOfFund.length === 0 && values.otherSources.length === 0 && !currentOtherSource.trim() && disableButton  ) ? 'bg-blue550 hover:bg-blue550' : 'bg-meedlBlue hover:bg-meedlBlue'} text-white rounded-md flex items-center justify-center gap-2 order-1 md:order-2`}
+                                    // className={`h-[2.8125rem] md:w-[9.3125rem] w-full px-4 py-2 ${disableButton ? 'bg-blue550 hover:bg-blue550' : 'bg-meedlBlue hover:bg-meedlBlue'} text-white rounded-md flex items-center justify-center gap-2 order-1 md:order-2`}
+
                                 >
                                     {isLoading ? (
                                         <Isloading color="white" height={24} width={24} />
