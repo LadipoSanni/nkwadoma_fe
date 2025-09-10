@@ -83,7 +83,6 @@ function LoanDetails() {
         "Loan details"
     ]
 
-    console.log(id)
 
     const toggleArrow = () => {
         if (!arrowDown) {
