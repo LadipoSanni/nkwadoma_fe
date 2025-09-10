@@ -101,7 +101,7 @@ const Index = () => {
                             isLoading={isLoading || isFetching}
                             handleRowClick={handleRowClick}
                             tableHeader={loanOfferHeader}
-                            tableHeight={54}
+                            tableHeight={data?.data?.body?.length < 10 ? 58 : undefined}
                             sx='cursor-pointer'
                             staticColunm='firstName'
                             staticHeader='Loanee'

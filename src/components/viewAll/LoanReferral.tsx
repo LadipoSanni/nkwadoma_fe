@@ -4,7 +4,7 @@ import Table from '@/reuseable/table/Table';
 import {capitalizeFirstLetters} from "@/utils/GlobalMethods";
 import {formatAmount} from "@/utils/Format";
 import dayjs from "dayjs";
-import {loanReferralTable} from "@/utils/LoanRequestMockData/Index";
+// import {loanReferralTable} from "@/utils/LoanRequestMockData/Index";
 import {Icon} from "@iconify/react";
 import { useViewAllLoanReferralQuery } from '@/service/admin/loan/loan-request-api';
 
@@ -54,7 +54,7 @@ const LoanReferral = () => {
                 icon={<Icon icon="material-symbols:money-bag-outline" height={"2rem"} width={"2rem"} color={ '#142854' }></Icon>}
                 sideBarTabName='Loan referral'
                 tableCellStyle="h-12"
-                tableHeight={loanReferralTable?.length < 10 ? 58 : undefined}
+                tableHeight={data?.data?.body?.length < 10 ? 58 : undefined}
                 isLoading={isLoading || isFetching}
                 hasNextPage={data?.data?.hasNextPage}
                 pageNumber={pageNumber}

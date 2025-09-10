@@ -23,6 +23,8 @@ import CreditScore from "@/features/display/CreditScore";
 import { useAppSelector } from '@/redux/store';
 import { setCurrentNavbarItem } from "@/redux/slice/layout/adminLayout";
 import DeclineLoanModal from "@/reuseable/modals/declineLoan/Index";
+import { capitalizeFirstLetters } from "@/utils/GlobalMethods";
+import { formatMonthInDate } from '@/utils/Format'
 
 const LoanOfferDetailsContent = dynamic(
     () => Promise.resolve(LoanOfferDetails),
@@ -80,11 +82,11 @@ const LoanOfferDetails = () => {
         {label: 'Gender', value: data?.data?.gender ? data?.data?.gender : '' },
         {label: 'Email address', value: data?.data?.email ? data?.data?.email : ''},
         {label: 'Phone number', value: data?.data?.phoneNumer ? data?.data?.phoneNumer : ''},
-        {label: 'Date of birth', value: data?.data?.dateOfBirth ? data?.data?.dateOfBirth : ''},
+        {label: 'Date of birth', value: data?.data?.dateOfBirth ? formatMonthInDate(data?.data?.dateOfBirth) : ''},
         {label: 'Marital status', value: data?.data?.maritalStatus ? data?.data?.maritalStatus : ''},
         {label: 'Nationality', value: data?.data?.nationality ? data?.data?.nationality : ''},
-        {label: 'State of origin ', value: data?.data?.stateOfOrigin ? data?.data?.stateOfOrigin : ''},
-        {label: 'State of residence', value: data?.data?.stateOfResidence ? data?.data?.stateOfResidence : ''},
+        {label: 'State of origin ', value: data?.data?.stateOfOrigin ? capitalizeFirstLetters(data?.data?.stateOfOrigin) : ''},
+        {label: 'State of residence', value: data?.data?.stateOfResidence ? capitalizeFirstLetters(data?.data?.stateOfResidence) : ''},
         {label: "Residential address", value: data?.data?.residentialAddress ? data?.data?.residentialAddress : ''},
     ];
 
@@ -94,11 +96,11 @@ const LoanOfferDetails = () => {
         {label: 'Alternate residential address', value: data?.data?.alternateContactAddress ? data?.data?.alternateContactAddress : ''},
         {
             label: 'Next of kin name',
-            value: data?.data?.nextOfKinFirstName + " " + data?.data?.nextOfKinLastName
+            value: capitalizeFirstLetters(data?.data?.nextOfKinFirstName) + " " + capitalizeFirstLetters(data?.data?.nextOfKinLastName)
         },
         {label: 'Next of kin email address', value: data?.data?.nextOfKinEmail ?  data?.data?.nextOfKinEmail : ''},
         {label: 'Next of kin phone number', value: data?.data?.nextOfKinPhoneNumber ? data?.data?.nextOfKinPhoneNumber : '' },
-        {label: 'Next of kin relationship ', value: data?.data?.nextOfKinRelationship ? data?.data?.nextOfKinRelationship : ''},
+        {label: 'Next of kin relationship ', value: data?.data?.nextOfKinRelationship ? capitalizeFirstLetters(data?.data?.nextOfKinRelationship) : ''},
     ];
 
     const loanDetails = [

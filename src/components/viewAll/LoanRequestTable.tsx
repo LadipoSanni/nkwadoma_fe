@@ -61,8 +61,8 @@ const Index = () => {
 
 
 
-    const handleRowClick = (ID: string | object | React.ReactNode) => {
-        router.push(`/loan-request-details?id=${ID}`);
+    const handleRowClick = (row:TableRowData) => {
+        router.push(`/loan-request-details?id=${row?.id}`);
     };
 
 
@@ -91,7 +91,7 @@ const Index = () => {
                             isLoading={isLoading || isFetching}
                             handleRowClick={handleRowClick}
                             tableHeader={loanRequestHeader}
-                            tableHeight={54}
+                            tableHeight={data?.data?.body?.length < 10 ? 58 : undefined}
                             sx='cursor-pointer'
                             staticColunm='firstName'
                             staticHeader='Loanee'
