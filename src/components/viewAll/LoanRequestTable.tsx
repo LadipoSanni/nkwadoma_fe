@@ -62,7 +62,10 @@ const Index = () => {
 
 
     const handleRowClick = (ID: string | object | React.ReactNode) => {
-        router.push(`/loan-request-details?id=${ID}`);
+
+        //eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-expect-error
+        router.push(`/loan-request-details?id=${ID?.id}`);
     };
 
 

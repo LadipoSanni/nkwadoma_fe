@@ -383,7 +383,7 @@ function LoanDetails() {
                                     {/* <CreateLoanOffer loanRequestId={getId()} isOpen={openCreateLoanOffer}
                                                      setIsOpen={open} /> */}
                                     <DeclineLoanModal isOpen={openDeclineLoanRequestModal} loanRequestId={getId()}
-                                                      setIsOpen={setOpenDeclineOffer} loanProductId={id}
+                                                      setIsOpen={setOpenDeclineOffer}
                                                       title={"Decline loan request"}/>
 
                                 </div>
