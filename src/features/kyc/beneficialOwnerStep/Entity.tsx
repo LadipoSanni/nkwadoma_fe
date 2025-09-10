@@ -61,7 +61,7 @@ const Entity = ({id, updateOwner, currentObj}: IndividualProps) => {
                         id={`entityName-${entityData.name}`}
                         value={entityData.name}
                         onChange={(e) => {
-                            const isInputValid = validateName(e.target.value)
+                            const isInputValid = validateName(e.target.value,false)
                             if (typeof  isInputValid === "string") {
                                 setEntityData((prevState) => (
                                     { ...prevState, ['entityError']: 'name' }
@@ -75,6 +75,24 @@ const Entity = ({id, updateOwner, currentObj}: IndividualProps) => {
                                     { ...prevState, ['errorMessage']: '' }
                                 ))
                                 handleInputChange('name', e.target.value)
+                            }
+                        }}
+                        onBlur={(e) => {
+                            const value = e.target.value;
+                            const isInputValid = validateName(value, true);
+                            
+                            if (typeof isInputValid === "string") {
+                                setEntityData((prevState) => ({
+                                    ...prevState,
+                                    entityError: 'name',
+                                    errorMessage: isInputValid
+                                }));
+                            } else {
+                                setEntityData((prevState) => ({
+                                    ...prevState,
+                                    entityError: '',
+                                    errorMessage: ''
+                                }));
                             }
                         }}
                         placeholder="Enter name"

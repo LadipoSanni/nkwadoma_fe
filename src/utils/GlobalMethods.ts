@@ -85,16 +85,37 @@ export const isTokenExpired = (token?: string): boolean => {
     }
 }
 
-export const validateName = (name: string) : boolean | string  => {
-    // const regex = /^[a-zA-Z][a-zA-Z0-9\s-_]*[a-zA-Z0-9]$/;
-    if (/[\d ]/.test(name)) {
-      return  'name can not contain digit'
+export const validateName = (name: string,isBlurValidation: boolean = false) : boolean | string  => {
+    
+    // if (/[\d ]/.test(name)) {
+    //   return  'name can not contain digit'
 
+    // }
+    // if (/[|#%^*@()?>,.{!$}[=+":<]/.test(name)|| /^--+$/.test(name)) {
+    //     return  'name can not contain special characters'
+    // }
+    // return /[a-zA-Z&]$/.test(name)
+    if (!isBlurValidation && !name) {
+        return true;
     }
-    if (/[|#%^*@()?>,.{!$}[=+":<]/.test(name)|| /^--+$/.test(name)) {
-        return  'name can not contain special characters'
+    
+    if (!name.trim()) {
+        return 'Entity name is required';
     }
-    return /[a-zA-Z&]$/.test(name)
+    
+    if (name.startsWith(' ')) {
+        return 'Entity name cannot start with a space';
+    }
+    
+    if (/[|#%^*@()?>,.{!$}[=+":<]/.test(name)) {
+        return 'Name cannot contain special characters except hyphens and underscores';
+    }
+    
+    if (/--+/.test(name)) {
+        return '';
+    }
+
+    return true;
 
 }
 
