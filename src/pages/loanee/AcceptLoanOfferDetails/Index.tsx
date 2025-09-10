@@ -22,6 +22,8 @@ import { useAppSelector } from '@/redux/store';
 import SkeletonForDetailPage from "@/reuseable/Skeleton-loading-state/Skeleton-for-detailPage";
 import { setCurrentNavbarItem } from "@/redux/slice/layout/adminLayout";
 import {store} from "@/redux/store";
+import { capitalizeFirstLetters } from "@/utils/GlobalMethods";
+import { formatMonthInDate } from '@/utils/Format'
 
 const AcceptLoanOfferDetails = dynamic(
     () => Promise.resolve(AcceptLoanOffer),
@@ -74,10 +76,8 @@ const AcceptLoanOffer: React.FC = () => {
     };
 
     useEffect(() => {
-        if(data?.data?.loaneeResponse === "ACCEPTED" ||  data?.data?.loaneeResponse === "DECLINED") {
-           refetch()
-        }
-    },[refetch,data])
+           refetch() 
+    },[refetch])
 
     const loanRequestDetailsTab = [
         "Basic details",
@@ -117,15 +117,15 @@ const AcceptLoanOffer: React.FC = () => {
         switch (currentTab) {
             case 0:
                 return [
-                    { label: "First Name", value: firstName },
-                    { label: "Last Name", value: lastName  },
+                    { label: "First Name", value: capitalizeFirstLetters(firstName) },
+                    { label: "Last Name", value: capitalizeFirstLetters(lastName) },
                     { label: "Email address", value: email },
                     { label: "Phone number", value: phoneNumber  },
-                    { label: "Date of birth", value: dateOfBirth  },
-                    { label: "Marital status", value: maritalStatus  },
-                    { label: "Nationality", value: nationality },
-                    { label: "State of origin", value: stateOfOrigin },
-                    { label: "State of residence", value: stateOfResidence },
+                    { label: "Date of birth", value: formatMonthInDate(dateOfBirth)  },
+                    { label: "Marital status", value: capitalizeFirstLetters(maritalStatus) },
+                    { label: "Nationality", value: capitalizeFirstLetters(nationality) },
+                    { label: "State of origin", value: capitalizeFirstLetters(stateOfOrigin)},
+                    { label: "State of residence", value: capitalizeFirstLetters(stateOfResidence) },
                     { label: "Residential address", value: residentialAddress }
                 ];
             case 1:
@@ -133,7 +133,7 @@ const AcceptLoanOffer: React.FC = () => {
                     { label: "Alternate email address", value: alternateEmail },
                     { label: "Alternate phone number", value: alternatePhoneNumber },
                     { label: "Alternate residential address", value: alternateContactAddress  },
-                    { label: "Next of kin name", value: `${nextOfKinFirstName} ${nextOfKinLastName}`},
+                    { label: "Next of kin name", value: `${capitalizeFirstLetters(nextOfKinFirstName)} ${capitalizeFirstLetters(nextOfKinLastName)}`},
                     { label: "Next of kin email address", value: nextOfKinEmail },
                     { label: "Next of kin phone number", value: nextOfKinPhoneNumber  },
                     { label: "Next of kin relationship", value: nextOfKinRelationship },

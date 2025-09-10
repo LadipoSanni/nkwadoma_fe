@@ -14,6 +14,8 @@ import {useViewDisbursedLoanDetailsQuery} from "@/service/admin/loan/Loan-disbur
 import Image from "next/image";
 import {Card} from "@/components/ui/card";
 import SkeletonForDetailPage from '@/reuseable/Skeleton-loading-state/Skeleton-for-detailPage';
+import { capitalizeFirstLetters } from "@/utils/GlobalMethods";
+import { formatMonthInDate } from '@/utils/Format'
 
 
 interface LoaneeLoanBreakDown {
@@ -48,12 +50,12 @@ const Index = () => {
     }
 
     const basicDetails = [
-        {label: 'Gender', value: details?.dataa?.userIdentity?.gender},
+        {label: 'Gender', value: details?.data?.userIdentity?.gender},
         {label: 'Email address', value: details?.data?.userIdentity?.email},
         {label: 'Phone number', value: details?.data?.userIdentity?.phoneNumber},
-        {label: 'Date of birth', value: details?.data?.userIdentity?.dateOfBirth},
-        {label: 'Marital status', value: details?.data?.userIdentity?.maritalStatus},
-        {label: 'Nationality', value: details?.data?.userIdentity?.nationality},
+        {label: 'Date of birth', value: formatMonthInDate(details?.data?.userIdentity?.dateOfBirth)},
+        {label: 'Marital status', value: capitalizeFirstLetters(details?.data?.userIdentity?.maritalStatus)},
+        {label: 'Nationality', value: capitalizeFirstLetters(details?.data?.userIdentity?.nationality)},
         {label: 'State of origin', value: details?.data?.userIdentity?.stateOfOrigin},
         {label: 'State of residence', value: details?.data?.userIdentity?.stateOfResidence},
         {label: 'Residential address', value: details?.deta?.userIdentity?.residentialAddress},
@@ -116,7 +118,7 @@ const Index = () => {
         {label: 'Alternate residential address', value: details?.data?.userIdentity?.alternateContactAddress},
         {
             label: 'Next of kin name',
-            value: `${details?.data?.nextOfKin?.firstName} ${details?.data?.nextOfKin?.lastName}`
+            value: `${capitalizeFirstLetters(details?.data?.nextOfKin?.firstName)} ${capitalizeFirstLetters(details?.data?.nextOfKin?.lastName)}`
         },
         {label: 'Next of kin email address', value: details?.data?.nextOfKin?.email},
         {label: 'Next of kin phone number', value: details?.data?.nextOfKin?.phoneNumber},
@@ -213,7 +215,7 @@ const Index = () => {
                                        tabContent={tabContent} handleChange={handleTabChange}/>
                         </div>
                         <div className={`px ${styles.loanRequestDetails} md:h-fit md:max-h-[90%] w-full - 2`}>
-                            <div className={`bg-grey105 `}>
+                            <div className={`bg-grey105 overflow-y-auto md:max-h-[55vh]`}>
                                 {getCurrentDataList().map((item, index) => (
                                     <li key={"key" + index} className={'p-5  grid gap-9 rounded-md'}>
                                         <div
