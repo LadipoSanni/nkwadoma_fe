@@ -40,11 +40,11 @@ const ViewAllLoaneeOverview = () => {
     const {data: loanCounts, isLoading: isLoadingLoanCounts, isFetching: isFetchingCounts} = useViewAllLoansTotalCountsByAdminsQuery(undefined)
 
     useEffect(() => {
-        if(debouncedSearchTerm) {
+        if(debouncedSearchTerm && searchData?.data && searchData?.data?.body) {
             setNextPage(searchData?.data?.hasNextPage)
             setTotalPage(searchData?.data?.totalPages)
             setPageNumber(searchData?.data?.pageNumber)
-        }else{
+        }else if(!debouncedSearchTerm && data?.data && data?.data?.body ){
             setNextPage(data?.data?.hasNextPage)
             setTotalPage(data?.data?.totalPages)
             setPageNumber(data?.data?.pageNumber ? data?.data?.pageNumber : 0)
@@ -54,7 +54,7 @@ const ViewAllLoaneeOverview = () => {
 
     const router = useRouter()
     const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setPageNumber(0)
+         setPageNumber(0)
         setSearchTerm(event.target.value);
     };
 
@@ -80,6 +80,13 @@ const ViewAllLoaneeOverview = () => {
         }
 
     };
+
+
+    const getTableData = () => {
+        if (!data?.data?.body) return [];
+        if (debouncedSearchTerm) return searchData?.data?.body || [];
+        return data?.data?.body;
+    }
     return (
         <div
             id={'viewAllLoaneeOverviewContainer'}
@@ -114,7 +121,7 @@ const ViewAllLoaneeOverview = () => {
 
 
                 <Table
-                    tableData={debouncedSearchTerm ? searchData?.data?.body : data?.data?.body }
+                    tableData={getTableData()}
                     tableHeader={tableHeader}
                     handleRowClick={handleRowClick}
                     tableHeight={ data?.data?.body?.length < 10 || searchData?.data?.body?.length < 10 ? 60 : undefined}
