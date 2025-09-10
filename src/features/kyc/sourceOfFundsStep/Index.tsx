@@ -148,6 +148,7 @@ const SourceOfFundsStep = () => {
                                         setFieldValue("otherSources", []);
                                         setCurrentOtherSource("");
                                     }
+                                    console.log('disableButton: ', disableButton);
                                     setFieldValue("sourceOfFund", newValues);
                                 }}
                                 placeholder="Select source"
@@ -228,10 +229,11 @@ const SourceOfFundsStep = () => {
                                 >
                                     Back
                                 </Button>
+                                {console.log("hehe: ", values.sourceOfFund.length === 0 && values.otherSources.length === 0 && !currentOtherSource.trim() && disableButton)}
                                 <Button
                                     type={'submit'}
                                     // disabled={disableButton}
-                                    disabled={(values.sourceOfFund.length === 0 && values.otherSources.length === 0 && !currentOtherSource.trim()) || isLoading && disableButton }
+                                    disabled={(values.sourceOfFund.length === 0 && values.otherSources.length === 0 && !currentOtherSource.trim() && disableButton === true ) || isLoading  }
                                     className={`h-[2.8125rem] md:w-[9.3125rem] w-full px-4 py-2 ${(values.sourceOfFund.length === 0 && values.otherSources.length === 0 && !currentOtherSource.trim() && disableButton  ) ? 'bg-blue550 hover:bg-blue550' : 'bg-meedlBlue hover:bg-meedlBlue'} text-white rounded-md flex items-center justify-center gap-2 order-1 md:order-2`}
                                     // className={`h-[2.8125rem] md:w-[9.3125rem] w-full px-4 py-2 ${disableButton ? 'bg-blue550 hover:bg-blue550' : 'bg-meedlBlue hover:bg-meedlBlue'} text-white rounded-md flex items-center justify-center gap-2 order-1 md:order-2`}
 
