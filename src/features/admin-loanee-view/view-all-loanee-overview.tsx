@@ -15,6 +15,8 @@ import {
 } from "@/service/users/Loanee_query";
 import {store} from "@/redux/store";
 import {setSelectedLoaneeId,setSelectedLoaneeFirstName ,setSelectedLoaneeLastName} from "@/redux/slice/loan/loanees";
+import {capitalizeFirstLetters} from "@/utils/GlobalMethods";
+
 interface TableRowType {
     "loaneeId": string,
     "firstName": string,
@@ -40,11 +42,11 @@ const ViewAllLoaneeOverview = () => {
     const {data: loanCounts, isLoading: isLoadingLoanCounts, isFetching: isFetchingCounts} = useViewAllLoansTotalCountsByAdminsQuery(undefined)
 
     useEffect(() => {
-        if(debouncedSearchTerm) {
+        if(debouncedSearchTerm && searchData?.data && searchData?.data?.body) {
             setNextPage(searchData?.data?.hasNextPage)
             setTotalPage(searchData?.data?.totalPages)
             setPageNumber(searchData?.data?.pageNumber)
-        }else{
+        }else if(!debouncedSearchTerm && data?.data && data?.data?.body ){
             setNextPage(data?.data?.hasNextPage)
             setTotalPage(data?.data?.totalPages)
             setPageNumber(data?.data?.pageNumber ? data?.data?.pageNumber : 0)
@@ -54,12 +56,12 @@ const ViewAllLoaneeOverview = () => {
 
     const router = useRouter()
     const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setPageNumber(0)
+         setPageNumber(0)
         setSearchTerm(event.target.value);
     };
 
     const tableHeader = [
-        { title: 'Name', sortable: true, id: 'name', selector: (row: TableRowData) => row.firstName?.toString() + " " + row.lastName?.toString() },
+        { title: 'Name', sortable: true, id: 'name', selector: (row: TableRowData) => capitalizeFirstLetters(row.firstName?.toString()) + " " + capitalizeFirstLetters(row.lastName?.toString()) },
         { title: <div className='md:mr-8'>Email address</div>, sortable: true, id: 'emailAddress', selector: (row: TableRowData) =>row?.email},
         { title: 'No. of loans', sortable: true, id: 'noOfLoans', selector: (row: TableRowData) =>formateDigits(Number(row.numberOfLoans)) },
         { title: 'Historical debt', sortable: true, id: 'historicalDebt', selector: (row: TableRowData) => formateDigits(Number(row.historicalDebt))},
@@ -80,6 +82,13 @@ const ViewAllLoaneeOverview = () => {
         }
 
     };
+
+
+    const getTableData = () => {
+        if (!data?.data?.body) return [];
+        if (debouncedSearchTerm) return searchData?.data?.body || [];
+        return data?.data?.body;
+    }
     return (
         <div
             id={'viewAllLoaneeOverviewContainer'}
@@ -114,7 +123,7 @@ const ViewAllLoaneeOverview = () => {
 
 
                 <Table
-                    tableData={debouncedSearchTerm ? searchData?.data?.body : data?.data?.body }
+                    tableData={getTableData()}
                     tableHeader={tableHeader}
                     handleRowClick={handleRowClick}
                     tableHeight={ data?.data?.body?.length < 10 || searchData?.data?.body?.length < 10 ? 60 : undefined}
