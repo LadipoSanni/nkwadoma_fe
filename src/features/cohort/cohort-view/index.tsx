@@ -290,7 +290,14 @@ const handleDeleteCohortByOrganisation = async (id: string) => {
 
 
   return (
-    <div className=''>
+    <div className={` ${["PORTFOLIO_MANAGER", "MEEDL_SUPER_ADMIN","MEEDL_ADMIN","MEEDL_ASSOCIATE"].includes(user_role || "") ? "md:overflow-scroll max-h-[65vh]" : ""} `}
+    style={{
+      scrollbarWidth: 'none',
+      msOverflowStyle: 'none',
+      scrollbarGutter: "stable both-edge"
+
+  }}
+    >
         <div id='cohortName' className={` ${ ["PORTFOLIO_MANAGER", "MEEDL_SUPER_ADMIN","MEEDL_ADMIN","MEEDL_ASSOCIATE"].includes(user_role || "") ? "" : "md:px-6 px-4"}`}>
           <div id='buttonFilterCreate' className={` ${["PORTFOLIO_MANAGER", "MEEDL_SUPER_ADMIN","MEEDL_ADMIN","MEEDL_ASSOCIATE"].includes(user_role || "") ? "md:flex top-2" : "flex top-6  bottom-2"} justify-between items-center z-50 relative  ${inter.className} `}>
             <div id='buttonFilter' className='md:flex gap-4 w-full'>
@@ -477,6 +484,7 @@ const handleDeleteCohortByOrganisation = async (id: string) => {
          />
          
         </div>
+        <div className='mb-20'></div>
         <div>
           <Modal
             isOpen={isOpen}

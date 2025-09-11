@@ -237,7 +237,7 @@ useEffect(() => {
         tableData={listOfCohorts}
         handleRowClick={handleRowClick}
         tableHeader={ProgramHeader}
-        tableHeight={["PORTFOLIO_MANAGER","MEEDL_SUPER_ADMIN","MEEDL_ADMIN","MEEDL_ASSOCIATE"].includes(userRole|| "")? 40 : 52}
+        tableHeight={["PORTFOLIO_MANAGER","MEEDL_SUPER_ADMIN","MEEDL_ADMIN","MEEDL_ASSOCIATE"].includes(userRole|| "") && listOfCohorts.length < 10 ? 60 : 52}
         sx='cursor-pointer'
         staticColunm='name'
         staticHeader='cohort'
@@ -248,12 +248,13 @@ useEffect(() => {
         optionalFilterName={tabValue}
         handleDropDownClick={handleDropdownClick}
         isLoading={isLoading}
-        condition={["PORTFOLIO_MANAGER","MEEDL_SUPER_ADMIN","MEEDL_ADMIN","MEEDL_ASSOCIATE"].includes(userRole|| "")? false : true}
+        condition={["PORTFOLIO_MANAGER","MEEDL_SUPER_ADMIN","MEEDL_ADMIN","MEEDL_ASSOCIATE"].includes(userRole|| "")? true : false}
         hasNextPage={hasNextPage}
         pageNumber={pageNumber}
         setPageNumber={handlePageChange}
         totalPages={totalPages}
         tableStyle={["PORTFOLIO_MANAGER","MEEDL_SUPER_ADMIN","MEEDL_ADMIN","MEEDL_ASSOCIATE"].includes(userRole|| "")? 'h-8 flex items-center' : ""}
+        
         />
       )
   }

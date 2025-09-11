@@ -167,7 +167,7 @@ function Organization() {
             <Table
                 tableData={organizationList}
                 tableHeader={organizationHeader}
-                tableHeight={55}
+                tableHeight={organizationList.length < 10? 60 : undefined}
                 sx='cursor-pointer'
                 handleRowClick={handleRowClick}
                 tableCellStyle={'h-12'}
@@ -189,7 +189,14 @@ function Organization() {
     const tabContent = tabData.map(tab => ({
         value: tab.value,
         content: (
-            <div>
+            <div className='md:overflow-scroll max-h-[70vh]'
+            style={{
+                scrollbarWidth: 'none',
+                msOverflowStyle: 'none',
+                scrollbarGutter: "stable both-edge"
+          
+            }}
+            >
                 <OrganizationActionBar
                     id={`${tab.value}Id`}
                     inviteButton={tab.value}
@@ -197,15 +204,16 @@ function Organization() {
                     onChange={handleSearchChange}
                     handleInviteOrganizationClick={handleInviteOrganizationClick}
                 />
-                <div className='mt-6'>
+                <div className='mt-6 mb-8'>
                     {renderTable(tab.value)}
                 </div>
+
             </div>
         )
     }));
 
     return (
-        <div className={`px-6 py-5 ${inter.className}`}>
+        <div className={`px-6 py-5 ${inter.className} `}>
             <Tabs 
                 value={tabType} 
                 onValueChange={(value) => {
