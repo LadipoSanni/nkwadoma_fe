@@ -115,7 +115,7 @@ const Entity = ({id, updateOwner, currentObj}: IndividualProps) => {
                                     { ...prevState, ['errorMessage']: isInputValid }
                                 ))
 
-                            }else if(entityData?.rcNumber?.length > 8){
+                            }else if(entityData?.rcNumber?.length > 7){
                                 // /^\d{8}$/.test(entityData.rcNumber
                                 setEntityData((prevState) => (
                                     { ...prevState, ['entityError']: 'rcNumber' }
