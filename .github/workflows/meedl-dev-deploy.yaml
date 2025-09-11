@@ -15,7 +15,7 @@ env:
   S3_BUCKET_NAME: ${{ secrets.S3_BUCKET_NAME }}
   S3_ENV_FILE_PATH: nkwadoma/frontend/dev/nkwadomafrontend.env
   AWS_REGION: eu-west-1
-  NGINX_CONFIG_PATH: /etc/nginx/sites-available/dev.meedl.africa
+  NGINX_CONFIG_PATH: /etc/nginx/sites-available/meedl.africa
   IMAGE_RETENTION_COUNT: 5
 
 jobs:
