@@ -232,7 +232,7 @@ const Individual = ({id, updateOwner,currentObj}: IndividualProps) => {
                     placeholder="0"
                     value={individualData.ownership || ""}
                     onChange={(e) => {
-                        const value = e.target.value.replace(/^rc/i, 'RC');
+                        const value = e.target.value;
                         const isInputValid = validateEntityOwnership(e.target.value)
                         if (typeof  isInputValid === "string") {
                             setIndividualData((prevState) => (

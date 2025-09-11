@@ -85,36 +85,27 @@ export const isTokenExpired = (token?: string): boolean => {
     }
 }
 
-export const validateName = (name: string,isBlurValidation: boolean = false) : boolean | string  => {
-    
+export const validateName = (name: string) : boolean | string  => {
+    // const regex = /^[a-zA-Z][a-zA-Z0-9\s-_]*[a-zA-Z0-9]$/;
     // if (/[\d ]/.test(name)) {
     //   return  'name can not contain digit'
-
+    //
     // }
     // if (/[|#%^*@()?>,.{!$}[=+":<]/.test(name)|| /^--+$/.test(name)) {
     //     return  'name can not contain special characters'
     // }
     // return /[a-zA-Z&]$/.test(name)
-    if (!isBlurValidation && !name) {
-        return true;
-    }
-    
-    if (!name.trim()) {
-        return 'Entity name is required';
-    }
-    
-    if (name.startsWith(' ')) {
-        return 'Entity name cannot start with a space';
-    }
-    
-    if (/[|#%^*@()?>,.{!$}[=+":<]/.test(name)) {
-        return 'Name cannot contain special characters except hyphens and underscores';
-    }
-    
-    if (/--+/.test(name)) {
-        return '';
+    if (/\d/.test(name)) {
+        return "Name cannot contain digits";
     }
 
+    if (!/^[a-zA-Z& ]+$/.test(name)) {
+        return "Name can only contain letters, spaces, and &";
+    }
+
+    if (!/[a-zA-Z]$/.test(name.trim())) {
+        return "Name must end with a letter";
+    }
     return true;
 
 }
@@ -128,7 +119,7 @@ export const validateRcNumber = (name: string) : boolean | string  => {
     if (/[^a-zA-Z0-9]/.test(name) || /^-+$/.test(name)|| /[|#%^&*@()?>,.{!$}[=+":<]/.test(name) ) {
         return  'name can not contain special characters'
     }
-    return /^\d{8}$/.test(name)
+    return /^\d{7}$/.test(name)
 
 }
 export const validateEntityOwnership = (ownership: string) : boolean | string => {

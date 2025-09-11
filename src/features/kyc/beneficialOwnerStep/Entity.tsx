@@ -61,7 +61,7 @@ const Entity = ({id, updateOwner, currentObj}: IndividualProps) => {
                         id={`entityName-${entityData.name}`}
                         value={entityData.name}
                         onChange={(e) => {
-                            const isInputValid = validateName(e.target.value,false)
+                            const isInputValid = validateName(e.target.value)
                             if (typeof  isInputValid === "string") {
                                 setEntityData((prevState) => (
                                     { ...prevState, ['entityError']: 'name' }
@@ -79,7 +79,7 @@ const Entity = ({id, updateOwner, currentObj}: IndividualProps) => {
                         }}
                         onBlur={(e) => {
                             const value = e.target.value;
-                            const isInputValid = validateName(value, true);
+                            const isInputValid = validateName(value);
                             
                             if (typeof isInputValid === "string") {
                                 setEntityData((prevState) => ({
@@ -133,13 +133,13 @@ const Entity = ({id, updateOwner, currentObj}: IndividualProps) => {
                                     { ...prevState, ['errorMessage']: isInputValid }
                                 ))
 
-                            }else if(entityData?.rcNumber?.length > 8){
+                            }else if(value?.length > 7){
                                 // /^\d{8}$/.test(entityData.rcNumber
                                 setEntityData((prevState) => (
                                     { ...prevState, ['entityError']: 'rcNumber' }
                                 ))
                                 setEntityData((prevState) => (
-                                    { ...prevState, ['errorMessage']: 'rc number must be 8 digits long' }
+                                    { ...prevState, ['errorMessage']: 'rc number must be 7 digits long' }
                                 ))
                                 handleInputChange('rcNumber', value)
                             }

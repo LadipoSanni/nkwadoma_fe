@@ -24,7 +24,7 @@ import { resetAllState } from '@/redux/reducer';
 import { notificationApi } from '@/service/notification/notification_query';
 import {setCurrentTab,setcurrentTabRoute} from "@/redux/slice/loan/selected-loan";
 import { resetOrganizationInitialState } from '@/redux/slice/organization/organization';
-
+import styles from './index.module.css'
 
 const SideBar = () => {
     const router = useRouter();
@@ -172,26 +172,29 @@ const SideBar = () => {
                 data-testid={'adminMediumSideBar'}
                 className={`hidden md:grid  md:bg-meedlWhite md:content-between md:w-[16vw]  md:px-4  md:py-6 md:border-r md:border-r-[blue300] md:z-0 md:h-[100%]`}
             >
-
-
-                <div className={`  md:grid md:gap-8    md:h-fit `}>
-                    <div className={`md:h-fit md:mt-2  m md:w-fit   md:grid   `}>
-                        <Image
-                            id={'meddleMainLogoOnAdminLayout'}
-                            data-testid={'meddleMainLogoOnAdminLayout'}
-                            width={100}
-                            height={50}
-                            src={'/Meedle Logo Primary Main.svg'} alt={'meedleYellowLogo'}
-                        />
-                    </div>
-                    <div className={` hidden md:mt-3  md:grid md:h-fit  md:w-full `}>
-                        <NavbarRouter currentTab={current} handleClick={clickNavbar}
-                                      navbarItems={getUserSideBarByRole(userRole)}/>
-                    </div>
+                <div className={`md:h-fit md:mt-2  m md:w-fit   md:grid   `}>
+                    <Image
+                        id={'meddleMainLogoOnAdminLayout'}
+                        data-testid={'meddleMainLogoOnAdminLayout'}
+                        width={100}
+                        height={50}
+                        src={'/Meedle Logo Primary Main.svg'} alt={'meedleYellowLogo'}
+                    />
                 </div>
 
-                <div className={` `}>
-                    < NavbarContainer current={currentNavBottom} items={navbarContainerItems}/>
+                <div className={` h-[90vh] grid    ${styles.sideBar} `}>
+
+                    <div className={`  md:grid md:gap-8   md:h-fit `}>
+
+                        <div className={` hidden md:mt-3  md:grid md:h-fit  md:w-full `}>
+                            <NavbarRouter currentTab={current} handleClick={clickNavbar}
+                                          navbarItems={getUserSideBarByRole(userRole)}/>
+                        </div>
+                    </div>
+
+                    <div className={` content-end `}>
+                        < NavbarContainer current={currentNavBottom} items={navbarContainerItems}/>
+                    </div>
                 </div>
 
             </aside>
