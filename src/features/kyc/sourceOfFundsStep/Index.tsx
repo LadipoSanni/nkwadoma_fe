@@ -69,7 +69,6 @@ const SourceOfFundsStep = () => {
     };
 
     const addOtherSource = (values: FormValues, setFieldValue: (field: string, value: string[]) => void) => {
-        // if (currentOtherSource.trim()) {
             const updatedOtherSources = [...values.otherSources, ''];
         const isAnyArrayElementEmpty =  updatedOtherSources?.some(str => str === "");
         if (values?.sourceOfFund?.includes("Others")){
@@ -84,25 +83,23 @@ const SourceOfFundsStep = () => {
         // }
     };
 
-    // const updateOtherSource = (index: number, value: string, values: FormValues, setFieldValue: (field: string, value: string[]) => void) => {
-    //     const updatedOtherSources = [...values.otherSources];
-    //     updatedOtherSources[index] = value;
-    //     setFieldValue("otherSources", updatedOtherSources);
-    // };
+
 
     const removeOtherSource = (index: number, values: FormValues, setFieldValue: (field: string, value: string[]) => void) => {
         const updatedOtherSources = values.otherSources.filter((_, i) => i !== index);
         const isAnyArrayElementEmpty =  updatedOtherSources?.some(str => str === "");
-        console.log('updatedOtherSourcesrjrhrjjhr', updatedOtherSources)
-
-        console.log('isAnyArrayElementEmpty: ', isAnyArrayElementEmpty)
-        if (values?.sourceOfFund?.includes("Others")){
-            if (isAnyArrayElementEmpty) {
-                setDisableButton(true)
-            }else{
-                setDisableButton(false);
+        if(updatedOtherSources?.length === 0 ){
+            setDisableButton(true)
+        }else{
+            if (values?.sourceOfFund?.includes("Others")){
+                if (isAnyArrayElementEmpty) {
+                    setDisableButton(true)
+                }else{
+                    setDisableButton(false);
+                }
             }
         }
+
         setFieldValue("otherSources", updatedOtherSources);
     };
 
@@ -202,8 +199,6 @@ const SourceOfFundsStep = () => {
                                                     e?.preventDefault();
                                                     removeOtherSource(index, values, setFieldValue)
 
-                                                    // checkIfArrayIsEmpty(values?.otherSources, values?.sourceOfFund)
-
                                                 }}
                                                 className="text-[#939CB0]"
                                             >
@@ -212,49 +207,15 @@ const SourceOfFundsStep = () => {
                                         </div>
                                     ))}
                                     
-                                    {/*<div className="flex w-full gap-3 items-center justify-between">*/}
-                                    {/*    <Input*/}
-                                    {/*        id="otherSource"*/}
-                                    {/*        type="text"*/}
-                                    {/*        placeholder="Enter source"*/}
-                                    {/*        value={currentOtherSource}*/}
-                                    {/*        onChange={(e) => {*/}
-                                    {/*            e.preventDefault();*/}
-                                    {/*            setCurrentOtherSource(e.target.value)*/}
-
-                                    {/*        }}*/}
-                                    {/*        className="p-4 focus-visible:outline-0 shadow-none focus-visible:ring-transparent rounded-md h-[3.375rem] w-[25.5rem] font-normal leading-[21px] text-[14px] placeholder:text-grey250 text-black500 border border-solid border-neutral650"*/}
-                                    {/*        onKeyDown={(e) => {*/}
-                                    {/*            if (e.key === 'Enter' && currentOtherSource.trim()) {*/}
-                                    {/*                console.log('entwr is workign ')*/}
-                                    {/*                e.preventDefault();*/}
-                                    {/*                addOtherSource(values, setFieldValue);*/}
-                                    {/*            }*/}
-                                    {/*        }}*/}
-                                    {/*    />*/}
-                                    {/*    <button*/}
-                                    {/*        type="button"*/}
-                                    {/*        onClick={clearOtherSource}*/}
-                                    {/*        className="text-[#939CB0]"*/}
-                                    {/*    >*/}
-                                    {/*        <MdDeleteOutline className="h-5 w-5" />*/}
-                                    {/*    </button>*/}
-                                    {/*</div>*/}
-                                    
                                     <div className="flex items-center gap-1 mt-4">
                                         <div className="flex items-center gap-1">
                                             <Button
                                                 onClick={(e) => {
                                                     e?.preventDefault();
-                                                    // setCurrentOtherSource(e.target.value)
                                                     addOtherSource(values, setFieldValue)
-
-                                                    // checkIfArrayIsEmpty(values?.otherSources, values?.sourceOfFund)
-
                                                 }}
                                                 type="button"
                                                 className="flex items-center gap-2 bg-transparent text-meedlBlue shadow-none px-0 py-2 rounded-md"
-                                                // disabled={!currentOtherSource.trim()}
                                             >
                                                 <MdAdd className="text-meedlBlue h-5 w-5" />
                                                 <span className="font-semibold text-[14px] leading-[150%]">Add</span>
@@ -274,10 +235,8 @@ const SourceOfFundsStep = () => {
                                 </Button>
                                 <Button
                                     type={'submit'}
-                                    // disabled={disableButton}
                                     disabled={(values.sourceOfFund.length === 0 && values.otherSources.length === 0 && !currentOtherSource.trim() && disableButton  ) || isLoading   }
                                     className={`h-[2.8125rem] md:w-[9.3125rem] w-full px-4 py-2 ${(values.sourceOfFund.length === 0 && values.otherSources.length === 0 && !currentOtherSource.trim() || disableButton  ) ? 'bg-blue550 hover:bg-blue550' : 'bg-meedlBlue hover:bg-meedlBlue'} text-white rounded-md flex items-center justify-center gap-2 order-1 md:order-2`}
-                                    // className={`h-[2.8125rem] md:w-[9.3125rem] w-full px-4 py-2 ${disableButton ? 'bg-blue550 hover:bg-blue550' : 'bg-meedlBlue hover:bg-meedlBlue'} text-white rounded-md flex items-center justify-center gap-2 order-1 md:order-2`}
 
                                 >
                                     {isLoading ? (
