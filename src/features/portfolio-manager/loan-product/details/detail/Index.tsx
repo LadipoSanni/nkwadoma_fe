@@ -95,7 +95,7 @@ const Details = () => {
          </div>
          <div className='grid grid-cols-1 md:grid-cols-2 gap-y-5 md:gap-4'>
          <Detail isLoading={loading} showAsWholeNumber={true}  id={'costOfFund'}   maxWidth={'100%'} name={'Tenor'} value={loanProduct?.data?.tenor} valueType={'tenor'}   className='w-full'/>
-         <Detail isLoading={loading} showAsWholeNumber={true}  id={'interestRate'}   maxWidth={'100%'} name={'Moratorium'} value={loanProduct?.data?.interestRate } valueType={'tenor'}  className='w-full'/>
+         <Detail isLoading={loading} showAsWholeNumber={true}  id={'moratorium'}   maxWidth={'100%'} name={'Moratorium'} value={loanProduct?.data?.moratorium } valueType={'tenor'}  className='w-full'/>
          </div>
          </div>
         </div>
