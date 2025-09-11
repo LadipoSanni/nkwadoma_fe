@@ -121,6 +121,9 @@ const kycFormSlice = createSlice({
         updateDeclaration: (state, action: PayloadAction<Partial<KYCFormState['declaration']>>) => {
             state.declaration = {...state.declaration, ...action.payload};
         },
+        resetAllForm: () => {
+            return initialState;
+        },
     },
 });
 
@@ -129,6 +132,7 @@ export const {
     updateSourceOfFunds,
     updateBeneficialOwner,
     updateDeclaration,
+    resetAllForm,
 } = kycFormSlice.actions;
 
 export default kycFormSlice.reducer;

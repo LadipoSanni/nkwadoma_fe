@@ -51,7 +51,7 @@ function InviteFinanciers({setIsOpen,investmentId,amountCommitedAndDesignationCo
            .trim()
            .matches(/^[A-Za-z]+$/, 'First name should only contain letters')
            .max(100, "First name cannot be more than 50 characters.")
-           .required('Last Name is required'),
+           .required('First name is required'),
         //    .when('financierType', {
         //     is: 'INDIVIDUAL', 
         //     then: (schema) => schema.required('First name is required'),
@@ -61,7 +61,7 @@ function InviteFinanciers({setIsOpen,investmentId,amountCommitedAndDesignationCo
            .trim()
            .matches(/^[A-Za-z]+$/, 'Last name should only contain letters')
            .max(100, "Last name cannot be more than 50 characters.")
-           .required('Last Name is required'),
+           .required('Last name is required'),
           //  .when('financierType', {
           //   is: 'INDIVIDUAL', 
           //   then: (schema) => schema.required('Last Name is required'),
@@ -71,8 +71,7 @@ function InviteFinanciers({setIsOpen,investmentId,amountCommitedAndDesignationCo
            .trim()
            .email('Invalid email address')
            .matches(/^[^\s@]+@[^\s@]+\.[^\s@]+$/, 'Invalid email format')
-           .required('Email Address is required')
-           .required('Last Name is required'),
+           .required('Email address is required'),
         //    .when('financierType', {
         //     is: 'INDIVIDUAL', 
         //     then: (schema) => schema.required('email is required'),
@@ -82,10 +81,10 @@ function InviteFinanciers({setIsOpen,investmentId,amountCommitedAndDesignationCo
         .trim()
         .email('Invalid email address')
         .matches(/^[^\s@]+@[^\s@]+\.[^\s@]+$/, 'Invalid email format')
-        .required('Email Address is required')
+        .required('Company email address is required')
         .when('financierType', {
          is: 'COOPERATE', 
-         then: (schema) => schema.required('email is required'),
+         then: (schema) => schema.required('Company email is required'),
          otherwise: (schema) => schema.notRequired(),
      }),
            organizationName: Yup.string()
