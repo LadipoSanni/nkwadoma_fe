@@ -115,13 +115,13 @@ const Entity = ({id, updateOwner, currentObj}: IndividualProps) => {
                                     { ...prevState, ['errorMessage']: isInputValid }
                                 ))
 
-                            }else if(entityData?.rcNumber?.length > 7){
+                            }else if(value?.length > 7){
                                 // /^\d{8}$/.test(entityData.rcNumber
                                 setEntityData((prevState) => (
                                     { ...prevState, ['entityError']: 'rcNumber' }
                                 ))
                                 setEntityData((prevState) => (
-                                    { ...prevState, ['errorMessage']: 'rc number must be 8 digits long' }
+                                    { ...prevState, ['errorMessage']: 'rc number must be 7 digits long' }
                                 ))
                                 handleInputChange('rcNumber', value)
                             }
