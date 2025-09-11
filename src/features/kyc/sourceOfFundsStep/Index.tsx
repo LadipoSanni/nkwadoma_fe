@@ -69,31 +69,44 @@ const SourceOfFundsStep = () => {
     };
 
     const addOtherSource = (values: FormValues, setFieldValue: (field: string, value: string[]) => void) => {
-        console.log('adding another one')
-        if (currentOtherSource.trim()) {
-            const updatedOtherSources = [...values.otherSources, currentOtherSource.trim()];
+        // if (currentOtherSource.trim()) {
+            const updatedOtherSources = [...values.otherSources, ''];
+        const isAnyArrayElementEmpty =  updatedOtherSources?.some(str => str === "");
+        if (values?.sourceOfFund?.includes("Others")){
+            if (isAnyArrayElementEmpty) {
+                setDisableButton(true)
+            }else{
+                setDisableButton(false);
+            }
+        }
             setFieldValue("otherSources", updatedOtherSources);
             setCurrentOtherSource("");
-        }
+        // }
     };
 
-    const updateOtherSource = (index: number, value: string, values: FormValues, setFieldValue: (field: string, value: string[]) => void) => {
-        console.log('value: ', value)
-        const updatedOtherSources = [...values.otherSources];
-        updatedOtherSources[index] = value;
-        setFieldValue("otherSources", updatedOtherSources);
-    };
+    // const updateOtherSource = (index: number, value: string, values: FormValues, setFieldValue: (field: string, value: string[]) => void) => {
+    //     const updatedOtherSources = [...values.otherSources];
+    //     updatedOtherSources[index] = value;
+    //     setFieldValue("otherSources", updatedOtherSources);
+    // };
 
     const removeOtherSource = (index: number, values: FormValues, setFieldValue: (field: string, value: string[]) => void) => {
-        console.log('deletingggggg')
         const updatedOtherSources = values.otherSources.filter((_, i) => i !== index);
+        const isAnyArrayElementEmpty =  updatedOtherSources?.some(str => str === "");
+        console.log('updatedOtherSourcesrjrhrjjhr', updatedOtherSources)
+
+        console.log('isAnyArrayElementEmpty: ', isAnyArrayElementEmpty)
+        if (values?.sourceOfFund?.includes("Others")){
+            if (isAnyArrayElementEmpty) {
+                setDisableButton(true)
+            }else{
+                setDisableButton(false);
+            }
+        }
         setFieldValue("otherSources", updatedOtherSources);
-        // if (values.sourceOfFund.includes('Others'))
     };
 
-    const clearOtherSource = () => {
-        setCurrentOtherSource("");
-    };
+
 
     const handleSubmit = async (values: FormValues) => {
         const { sourceOfFund, otherSources } = values;
@@ -134,15 +147,12 @@ const SourceOfFundsStep = () => {
                         <div className={`${cabinetGroteskMediumBold.className} max-w-[27.5rem] md:mx-auto w-full`}>
                             <h1 className={`text-meedlBlack text-[24px] leading-[120%] font-medium`}>Source of funds</h1>
                         </div>
-                        {console.log('values:', values)}
-
                         <div className={'w-full md:max-w-[27.5rem] md:mx-auto grid gap-5'}>
                             <CustomMultiselect
                                 multiselectList={sourceOptions}
                                 onValueChange={(newValues) => {
-                                    console.log('changing')
                                     if(newValues?.includes('Others')) {
-                                        setFieldValue("otherSources", []);
+                                        setFieldValue("otherSources", ['']);
                                         setDisableButton(true)
                                     }else {
                                         setDisableButton(false)
@@ -171,17 +181,30 @@ const SourceOfFundsStep = () => {
                                                 type="text"
                                                 value={source}
                                                 onChange={(e) => {
-                                                    console.log('before updatingg ggg')
+                                                    e.preventDefault();
                                                     const updatedOtherSources = [...values.otherSources];
                                                     updatedOtherSources[index] = e.target.value;
                                                     setFieldValue("otherSources", updatedOtherSources);
-                                                    // updateOtherSource(index, e.target.value, values, setFieldValue)
+                                                    const isAnyArrayElementEmpty =  values?.otherSources.some(str => str === "");
+                                                    if (values?.sourceOfFund?.includes("Others")){
+                                                        if (isAnyArrayElementEmpty) {
+                                                            setDisableButton(true)
+                                                        }else{
+                                                            setDisableButton(false);
+                                                        }
+                                                    }
                                                 }}
                                                 className="p-4 focus-visible:outline-0 shadow-none focus-visible:ring-transparent rounded-md h-[3.375rem] w-[25.5rem] font-normal leading-[21px] text-[14px] placeholder:text-grey250 text-black500 border border-solid border-neutral650"
                                             />
                                             <button
                                                 type="button"
-                                                onClick={() => removeOtherSource(index, values, setFieldValue)}
+                                                onClick={(e) => {
+                                                    e?.preventDefault();
+                                                    removeOtherSource(index, values, setFieldValue)
+
+                                                    // checkIfArrayIsEmpty(values?.otherSources, values?.sourceOfFund)
+
+                                                }}
                                                 className="text-[#939CB0]"
                                             >
                                                 <MdDeleteOutline className="h-5 w-5" />
@@ -189,40 +212,49 @@ const SourceOfFundsStep = () => {
                                         </div>
                                     ))}
                                     
-                                    <div className="flex w-full gap-3 items-center justify-between">
-                                        <Input
-                                            id="otherSource"
-                                            type="text"
-                                            placeholder="Enter source"
-                                            value={currentOtherSource}
-                                            onChange={(e) => {
-                                                setCurrentOtherSource(e.target.value)
+                                    {/*<div className="flex w-full gap-3 items-center justify-between">*/}
+                                    {/*    <Input*/}
+                                    {/*        id="otherSource"*/}
+                                    {/*        type="text"*/}
+                                    {/*        placeholder="Enter source"*/}
+                                    {/*        value={currentOtherSource}*/}
+                                    {/*        onChange={(e) => {*/}
+                                    {/*            e.preventDefault();*/}
+                                    {/*            setCurrentOtherSource(e.target.value)*/}
 
-                                            }}
-                                            className="p-4 focus-visible:outline-0 shadow-none focus-visible:ring-transparent rounded-md h-[3.375rem] w-[25.5rem] font-normal leading-[21px] text-[14px] placeholder:text-grey250 text-black500 border border-solid border-neutral650"
-                                            onKeyDown={(e) => {
-                                                if (e.key === 'Enter' && currentOtherSource.trim()) {
-                                                    e.preventDefault();
-                                                    addOtherSource(values, setFieldValue);
-                                                }
-                                            }}
-                                        />
-                                        <button
-                                            type="button"
-                                            onClick={clearOtherSource}
-                                            className="text-[#939CB0]"
-                                        >
-                                            <MdDeleteOutline className="h-5 w-5" />
-                                        </button>
-                                    </div>
+                                    {/*        }}*/}
+                                    {/*        className="p-4 focus-visible:outline-0 shadow-none focus-visible:ring-transparent rounded-md h-[3.375rem] w-[25.5rem] font-normal leading-[21px] text-[14px] placeholder:text-grey250 text-black500 border border-solid border-neutral650"*/}
+                                    {/*        onKeyDown={(e) => {*/}
+                                    {/*            if (e.key === 'Enter' && currentOtherSource.trim()) {*/}
+                                    {/*                console.log('entwr is workign ')*/}
+                                    {/*                e.preventDefault();*/}
+                                    {/*                addOtherSource(values, setFieldValue);*/}
+                                    {/*            }*/}
+                                    {/*        }}*/}
+                                    {/*    />*/}
+                                    {/*    <button*/}
+                                    {/*        type="button"*/}
+                                    {/*        onClick={clearOtherSource}*/}
+                                    {/*        className="text-[#939CB0]"*/}
+                                    {/*    >*/}
+                                    {/*        <MdDeleteOutline className="h-5 w-5" />*/}
+                                    {/*    </button>*/}
+                                    {/*</div>*/}
                                     
                                     <div className="flex items-center gap-1 mt-4">
                                         <div className="flex items-center gap-1">
                                             <Button
-                                                onClick={() => addOtherSource(values, setFieldValue)}
+                                                onClick={(e) => {
+                                                    e?.preventDefault();
+                                                    // setCurrentOtherSource(e.target.value)
+                                                    addOtherSource(values, setFieldValue)
+
+                                                    // checkIfArrayIsEmpty(values?.otherSources, values?.sourceOfFund)
+
+                                                }}
                                                 type="button"
                                                 className="flex items-center gap-2 bg-transparent text-meedlBlue shadow-none px-0 py-2 rounded-md"
-                                                disabled={!currentOtherSource.trim()}
+                                                // disabled={!currentOtherSource.trim()}
                                             >
                                                 <MdAdd className="text-meedlBlue h-5 w-5" />
                                                 <span className="font-semibold text-[14px] leading-[150%]">Add</span>
