@@ -87,6 +87,8 @@ const Loan = ({data, isLoading}:LoanProps) => {
                 title={'Loan breakdown'}
                 dataKey={'loanBreakdown'}
                 isLoading={isLoading}
+                isPercentage={true}
+
             />
             <BarChartWithDate id={'LoanBookPortfolioGrowthRate'}
                               years={AumLifeSpan}

@@ -92,12 +92,14 @@ const Investment = ({data, isLoading}:LoanProps) => {
                    title={'Investment vehicle breakdown'}
                    dataKey={'investmentBreakdown'}
                    isLoading={isLoading}
+                   isPercentage={false}
                />
                <PieCharts
                    chartData={financierChartData}
                    title={'Financiers breakdown'}
                    dataKey={'financiersBreakdown'}
                    isLoading={isLoading}
+                   isPercentage={false}
                />
            </div>
 

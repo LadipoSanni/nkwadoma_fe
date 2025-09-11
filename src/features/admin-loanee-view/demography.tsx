@@ -45,12 +45,14 @@ export function ChartPieLegend() {
                 title={'Gender breakdown'}
                 dataKey={'genderBreakdown'}
                 isLoading={isLoading || isFetching}
+                isPercentage={true}
             />
             <PieCharts
                 chartData={ageChartData}
                 title={'Age breakdown'}
                 dataKey={'ageBreakdown'}
                 isLoading={isLoading || isFetching}
+                isPercentage={true}
 
             />
             <PieCharts
@@ -58,6 +60,7 @@ export function ChartPieLegend() {
                 title={'Geography breakdown'}
                 dataKey={'geographyBreakdown'}
                 isLoading={isLoading || isFetching}
+                isPercentage={true}
 
             />
             <PieCharts
@@ -65,6 +68,7 @@ export function ChartPieLegend() {
                 title={'Education breakdown'}
                 dataKey={'educationBreakdown'}
                 isLoading={isLoading || isFetching}
+                isPercentage={true}
 
             />
         </div>
