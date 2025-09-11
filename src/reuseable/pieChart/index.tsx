@@ -13,9 +13,10 @@ interface PieChartProps {
     dataKey: string, // what is the chart demonstrating
     chartData: {browser: string, visitors: number, fill: string}[], // browser is the chat item, visitors is the percentage of the chart item, the fill is the chart item color.
     isLoading?: boolean,
+    isPercentage?: boolean,
 }
 
-export function PieCharts({title, chartData, dataKey, isLoading}: PieChartProps) {
+export function PieCharts({title, chartData, dataKey, isLoading, isPercentage }: PieChartProps) {
 
 
 
@@ -87,7 +88,7 @@ export function PieCharts({title, chartData, dataKey, isLoading}: PieChartProps)
                                                    className={` aspect-square rounded-full  mt-auto mb-auto w-2 h-2  md:w-2.5 md:h-2.5  `}></div>
                                                <p id={'chartItem' + item?.browser} data-testid={'chartItem' + item?.browser} className={` text-[12px]  text-[#6A6B6A]  ${inter.className} `}>{item?.browser}</p>
                                            </div>
-                                           <span id={'chartPercentage' + item?.browser} data-testid={'chartPercentage' + item?.browser} className={` text-black w-fit text-[12px] ${inter500.className}`}>{Math.round(item?.visitors)} %</span>
+                                           <span id={'chartPercentage' + item?.browser} data-testid={'chartPercentage' + item?.browser} className={` text-black w-fit text-[12px] ${inter500.className}`}>{Math.round(item?.visitors)} {isPercentage ? '%' : ''}</span>
                                        </div>
                                     }
                                </div>

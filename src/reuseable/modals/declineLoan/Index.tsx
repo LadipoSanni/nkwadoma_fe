@@ -32,7 +32,7 @@ interface LoanRequestPayload {
     loanOfferStatus?: string,
 }
 
-const DeclineLoanModal: React.FC<DeclineLoanModalProps> = ({ isOpen,loanOfferStatus, setIsOpen,loanOfferId, loanRequestId, loanProductId, title }) => {
+const DeclineLoanModal: React.FC<DeclineLoanModalProps> = ({ isOpen, setIsOpen,loanOfferId, loanRequestId, loanProductId, title }) => {
     const [reason, setReason] = useState('');
     const [error, setError] = useState<string | null>(null);
     const [respondToLoanRequest, { isLoading }] = useRespondToLoanRequestMutation();
@@ -85,7 +85,7 @@ const DeclineLoanModal: React.FC<DeclineLoanModalProps> = ({ isOpen,loanOfferSta
     const withdrawALoanOffer = async () => {
         const props = {
             loanOfferId: loanOfferId ? loanOfferId : '',
-            loanOfferStatus: loanOfferStatus ? loanOfferStatus : '',
+            loanOfferStatus:  'WITHDRAW',
         }
 
             const response = await withdrawLoanOffer(props)

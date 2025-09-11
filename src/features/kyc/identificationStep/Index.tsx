@@ -29,6 +29,7 @@ const IdentificationStep = () => {
     const financierType = useAppSelector(state => state.financier.financierType);
     const savedData = useAppSelector(state => state.kycForm.identification);
 
+
     const {
         register: individualRegister,
         handleSubmit: handleIndividualSubmit,
