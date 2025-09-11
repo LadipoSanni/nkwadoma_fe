@@ -16,6 +16,7 @@ import { updateDeclaration } from "@/redux/slice/kyc/kycFormSlice";
 import { useCompleteKycMutation } from "@/service/financier/api";
 import { mapKycDataToApiRequest, mapCountryCodeToEnum } from "@/utils/kycDataMapper";
 import { useToast } from "@/hooks/use-toast";
+import { resetAllForm } from '@/redux/slice/kyc/kycFormSlice';
 
 interface ApiError {
     data?: {
@@ -116,6 +117,7 @@ const PoliticalExposure: React.FC = () => {
 
             if (response && (response.statusCode === "200 OK" || response.message === "Response is successful.")) {
                 setShowSuccessDialog(true);
+                resetAllForm()
             } else {
                 setErrorMessage(response?.message || "Failed to complete KYC. Please try again.");
             }

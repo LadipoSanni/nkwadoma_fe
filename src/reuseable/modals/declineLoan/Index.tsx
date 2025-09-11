@@ -23,7 +23,7 @@ interface DeclineLoanModalProps {
 }
 
 interface LoanRequestPayload {
-    id: string;
+    loanRequestId: string;
     loanProductId?: string;
     status: 'APPROVED' | 'DECLINED';
     amountApproved: number;
@@ -51,7 +51,7 @@ const DeclineLoanModal: React.FC<DeclineLoanModalProps> = ({ isOpen,loanOfferSta
 
         const id = loanRequestId ? loanRequestId : '';
         const payload: LoanRequestPayload = {
-            id,
+            loanRequestId:id,
             loanProductId,
             status: 'DECLINED',
             amountApproved: 0,
@@ -151,9 +151,9 @@ const DeclineLoanModal: React.FC<DeclineLoanModalProps> = ({ isOpen,loanOfferSta
                                 reason.trim() ? 'bg-error500 hover:bg-error500' : 'bg-blue50 hover:bg-blue50'
                             }`}
                             disabled={!reason.trim() || isLoading}
-                            onClick={loanProductId ? handleDecline : withdrawALoanOffer}
+                            onClick={!loanOfferId ? handleDecline : withdrawALoanOffer}
                         >
-                            {loanProductId ?
+                            {!loanOfferId ?
                             <div>{isLoading ? 'Declining...' : 'Decline'}</div>
                             :
                             <div>{isLoadingWithdraw ? 'Withdrawing...' : 'Withdraw'}</div>}
