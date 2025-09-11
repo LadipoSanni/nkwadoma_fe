@@ -69,6 +69,7 @@ const SourceOfFundsStep = () => {
     };
 
     const addOtherSource = (values: FormValues, setFieldValue: (field: string, value: string[]) => void) => {
+        console.log('adding another one')
         if (currentOtherSource.trim()) {
             const updatedOtherSources = [...values.otherSources, currentOtherSource.trim()];
             setFieldValue("otherSources", updatedOtherSources);
@@ -84,6 +85,7 @@ const SourceOfFundsStep = () => {
     };
 
     const removeOtherSource = (index: number, values: FormValues, setFieldValue: (field: string, value: string[]) => void) => {
+        console.log('deletingggggg')
         const updatedOtherSources = values.otherSources.filter((_, i) => i !== index);
         setFieldValue("otherSources", updatedOtherSources);
         // if (values.sourceOfFund.includes('Others'))
@@ -138,8 +140,9 @@ const SourceOfFundsStep = () => {
                             <CustomMultiselect
                                 multiselectList={sourceOptions}
                                 onValueChange={(newValues) => {
-                                    console.log('newValues:', newValues);
+                                    console.log('changing')
                                     if(newValues?.includes('Others')) {
+                                        setFieldValue("otherSources", []);
                                         setDisableButton(true)
                                     }else {
                                         setDisableButton(false)
@@ -148,7 +151,6 @@ const SourceOfFundsStep = () => {
                                         setFieldValue("otherSources", []);
                                         setCurrentOtherSource("");
                                     }
-                                    console.log('disableButton: ', disableButton);
                                     setFieldValue("sourceOfFund", newValues);
                                 }}
                                 placeholder="Select source"
@@ -168,7 +170,13 @@ const SourceOfFundsStep = () => {
                                             <Input
                                                 type="text"
                                                 value={source}
-                                                onChange={(e) => updateOtherSource(index, e.target.value, values, setFieldValue)}
+                                                onChange={(e) => {
+                                                    console.log('before updatingg ggg')
+                                                    const updatedOtherSources = [...values.otherSources];
+                                                    updatedOtherSources[index] = e.target.value;
+                                                    setFieldValue("otherSources", updatedOtherSources);
+                                                    // updateOtherSource(index, e.target.value, values, setFieldValue)
+                                                }}
                                                 className="p-4 focus-visible:outline-0 shadow-none focus-visible:ring-transparent rounded-md h-[3.375rem] w-[25.5rem] font-normal leading-[21px] text-[14px] placeholder:text-grey250 text-black500 border border-solid border-neutral650"
                                             />
                                             <button
@@ -187,7 +195,10 @@ const SourceOfFundsStep = () => {
                                             type="text"
                                             placeholder="Enter source"
                                             value={currentOtherSource}
-                                            onChange={(e) => setCurrentOtherSource(e.target.value)}
+                                            onChange={(e) => {
+                                                setCurrentOtherSource(e.target.value)
+
+                                            }}
                                             className="p-4 focus-visible:outline-0 shadow-none focus-visible:ring-transparent rounded-md h-[3.375rem] w-[25.5rem] font-normal leading-[21px] text-[14px] placeholder:text-grey250 text-black500 border border-solid border-neutral650"
                                             onKeyDown={(e) => {
                                                 if (e.key === 'Enter' && currentOtherSource.trim()) {
@@ -229,12 +240,11 @@ const SourceOfFundsStep = () => {
                                 >
                                     Back
                                 </Button>
-                                {console.log("hehe: ", values.sourceOfFund.length === 0 && values.otherSources.length === 0 && !currentOtherSource.trim() && disableButton)}
                                 <Button
                                     type={'submit'}
                                     // disabled={disableButton}
-                                    disabled={(values.sourceOfFund.length === 0 && values.otherSources.length === 0 && !currentOtherSource.trim() && disableButton === true ) || isLoading  }
-                                    className={`h-[2.8125rem] md:w-[9.3125rem] w-full px-4 py-2 ${(values.sourceOfFund.length === 0 && values.otherSources.length === 0 && !currentOtherSource.trim() && disableButton  ) ? 'bg-blue550 hover:bg-blue550' : 'bg-meedlBlue hover:bg-meedlBlue'} text-white rounded-md flex items-center justify-center gap-2 order-1 md:order-2`}
+                                    disabled={(values.sourceOfFund.length === 0 && values.otherSources.length === 0 && !currentOtherSource.trim() && disableButton  ) || isLoading   }
+                                    className={`h-[2.8125rem] md:w-[9.3125rem] w-full px-4 py-2 ${(values.sourceOfFund.length === 0 && values.otherSources.length === 0 && !currentOtherSource.trim() || disableButton  ) ? 'bg-blue550 hover:bg-blue550' : 'bg-meedlBlue hover:bg-meedlBlue'} text-white rounded-md flex items-center justify-center gap-2 order-1 md:order-2`}
                                     // className={`h-[2.8125rem] md:w-[9.3125rem] w-full px-4 py-2 ${disableButton ? 'bg-blue550 hover:bg-blue550' : 'bg-meedlBlue hover:bg-meedlBlue'} text-white rounded-md flex items-center justify-center gap-2 order-1 md:order-2`}
 
                                 >
