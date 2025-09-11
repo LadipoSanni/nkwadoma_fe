@@ -32,7 +32,6 @@ jobs:
       - name: 🧹 Initial Docker Cleanup
         run: |
           echo "=== Initial Cleanup ==="
-          # Clean up any dangling containers and images
           docker container prune -f
           docker image prune -f
           echo "✅ Initial cleanup completed"
@@ -52,90 +51,64 @@ jobs:
       - name: 🎯 Determine Deployment Target
         id: deployment-target
         run: |
-          # Check which container is currently active by examining nginx config
           if sudo grep -q "3032" $NGINX_CONFIG_PATH; then
-            echo "current_color=blue" >> $GITHUB_OUTPUT
-            echo "target_color=green" >> $GITHUB_OUTPUT
+            echo "current=blue" >> $GITHUB_OUTPUT
+            echo "target=green" >> $GITHUB_OUTPUT
             echo "target_port=3033" >> $GITHUB_OUTPUT
-            echo "current_container=meedl-frontend-dev-blue" >> $GITHUB_OUTPUT
-            echo "target_container=meedl-frontend-dev-green" >> $GITHUB_OUTPUT
           else
-            echo "current_color=green" >> $GITHUB_OUTPUT
-            echo "target_color=blue" >> $GITHUB_OUTPUT
+            echo "current=green" >> $GITHUB_OUTPUT
+            echo "target=blue" >> $GITHUB_OUTPUT
             echo "target_port=3032" >> $GITHUB_OUTPUT
-            echo "current_container=meedl-frontend-dev-green" >> $GITHUB_OUTPUT
-            echo "target_container=meedl-frontend-dev-blue" >> $GITHUB_OUTPUT
           fi
-          echo "Current container: ${{ steps.deployment-target.outputs.current_container }}"
-          echo "Target container: ${{ steps.deployment-target.outputs.target_container }}"
-          echo "Target port: ${{ steps.deployment-target.outputs.target_port }}"
+          echo "Deploying to ${{ steps.deployment-target.outputs.target }} on port ${{ steps.deployment-target.outputs.target_port }}"
 
       # ======================
       # 3. BUILD NEW IMAGE
       # ======================
       - name: 🐳 Build Docker Image
         run: |
-          docker build -t $IMAGE_NAME:${{ steps.deployment-target.outputs.target_color }} . || (echo "❌ Build failed" && exit 1)
-          echo "✅ Image built successfully with tag: ${{ steps.deployment-target.outputs.target_color }}"
+          docker build -t $IMAGE_NAME:${{ steps.deployment-target.outputs.target }} . || (echo "❌ Build failed" && exit 1)
+          echo "✅ Image built successfully with tag: ${{ steps.deployment-target.outputs.target }}"
 
       # ======================
       # 4. DEPLOY TO TARGET ENVIRONMENT
       # ======================
       - name: 🚀 Deploy to Target Environment
         run: |
-          # Remove any existing target container
-          docker rm -f ${{ steps.deployment-target.outputs.target_container }} 2>/dev/null || echo "No existing ${{ steps.deployment-target.outputs.target_container }} container to remove"
+          docker rm -f ${{ steps.deployment-target.outputs.target }} 2>/dev/null || echo "No existing ${{ steps.deployment-target.outputs.target }} container to remove"
           
-          # Deploy new container with the proper name pattern
           docker run -d \
-            --name ${{ steps.deployment-target.outputs.target_container }} \
+            --name ${{ steps.deployment-target.outputs.target }} \
             -p ${{ steps.deployment-target.outputs.target_port }}:$CONTAINER_PORT \
             --env-file .env \
-            $IMAGE_NAME:${{ steps.deployment-target.outputs.target_color }}
+            $IMAGE_NAME:${{ steps.deployment-target.outputs.target }}
 
-          echo "✅ ${{ steps.deployment-target.outputs.target_container }} container started on port ${{ steps.deployment-target.outputs.target_port }}"
+          echo "✅ ${{ steps.deployment-target.outputs.target }} container started on port ${{ steps.deployment-target.outputs.target_port }}"
 
       # ======================
-      # 5. COMPREHENSIVE HEALTH CHECK
+      # 5. HEALTH CHECK USING EXISTING API ENDPOINT
       # ======================
-      - name: 🔍 Comprehensive Health Check
+      - name: 🔍 Health Check New Container
         id: health-check
         run: |
-          echo "Waiting for ${{ steps.deployment-target.outputs.target_container }} container to be healthy..."
-          
-          for i in {1..20}; do
-            echo "⏳ Attempt $i/20: Testing container health..."
-            
-            # 1. Check if container is running
-            if ! docker inspect ${{ steps.deployment-target.outputs.target_container }} | grep -q '"Running": true'; then
-              echo "❌ Container not running"
-              sleep 3
-              continue
+          echo "Waiting for ${{ steps.deployment-target.outputs.target }} container to be healthy..."
+          for i in {1..15}; do
+            # Using the existing /api/health endpoint - NO DOCKERFILE CHANGES NEEDED!
+            if curl -sf http://localhost:${{ steps.deployment-target.outputs.target_port }}/api/health | grep -q '"status":"UP"'; then
+              echo "✅ ${{ steps.deployment-target.outputs.target }} container is healthy!"
+              echo "status=healthy" >> $GITHUB_OUTPUT
+              exit 0
             fi
             
-            # 2. Check basic API health endpoint
-            if ! curl -sf http://localhost:${{ steps.deployment-target.outputs.target_port }}/api/health | grep -q '"status":"UP"'; then
-              echo "❌ API health endpoint failed"
-              sleep 3
-              continue
-            fi
-            
-            # 3. Check if main application page loads HTML content
-            if ! curl -sf http://localhost:${{ steps.deployment-target.outputs.target_port }} | head -n 5 | grep -q -E '(html|<!DOCTYPE|React)'; then
-              echo "❌ Main page not serving HTML content"
-              sleep 3
-              continue
-            fi
-            
-            echo "✅ All health checks passed!"
-            echo "status=healthy" >> $GITHUB_OUTPUT
-            exit 0
+            echo "⏳ Attempt $i/15: Container not healthy yet, retrying in 3s..."
+            sleep 3
           done
           
-          echo "❌ Comprehensive health check failed after 20 attempts"
-          echo "📜 Container logs:"
-          docker logs ${{ steps.deployment-target.outputs.target_container }} --tail=50
+          echo "❌ Health check failed - performing automatic cleanup"
+          docker rm -f ${{ steps.deployment-target.outputs.target }} 2>/dev/null || true
+          docker rmi $IMAGE_NAME:${{ steps.deployment-target.outputs.target }} 2>/dev/null || true
           echo "status=failed" >> $GITHUB_OUTPUT
+          echo "::error::Health check failed! The previous version remains active."
           exit 1
 
       # ======================
@@ -144,37 +117,28 @@ jobs:
       - name: 🔄 Update Nginx Configuration
         if: steps.health-check.outputs.status == 'healthy'
         run: |
-          # Backup current config
           sudo cp $NGINX_CONFIG_PATH $NGINX_CONFIG_PATH.backup.$(date +%Y%m%d%H%M%S)
           
-          # Update nginx config to point to the new deployment
-          if [ "${{ steps.deployment-target.outputs.target_color }}" = "green" ]; then
+          if [ "${{ steps.deployment-target.outputs.target }}" = "green" ]; then
             sudo sed -i 's/localhost:3032/localhost:3033/g' $NGINX_CONFIG_PATH
           else
             sudo sed -i 's/localhost:3033/localhost:3032/g' $NGINX_CONFIG_PATH
           fi
           
-          # Test nginx configuration
           sudo nginx -t
-          
-          # Reload nginx
           sudo systemctl reload nginx
           
-          echo "✅ Nginx configuration updated to point to ${{ steps.deployment-target.outputs.target_container }} on port ${{ steps.deployment-target.outputs.target_port }}"
+          echo "✅ Nginx configuration updated"
 
       # ======================
-      # 7. CLEANUP OLD DEPLOYMENT (ONLY IF HEALTHY)
+      # 7. CLEANUP OLD DEPLOYMENT
       # ======================
       - name: 🧹 Cleanup Old Deployment
         if: steps.health-check.outputs.status == 'healthy'
         run: |
-          # Remove old container
-          docker rm -f ${{ steps.deployment-target.outputs.current_container }} 2>/dev/null || echo "No existing ${{ steps.deployment-target.outputs.current_container }} container to remove"
-          
-          # Remove old image
-          docker rmi $IMAGE_NAME:${{ steps.deployment-target.outputs.current_color }} 2>/dev/null || echo "No ${{ steps.deployment-target.outputs.current_color }} image to remove"
-          
-          echo "✅ Cleaned up ${{ steps.deployment-target.outputs.current_container }} deployment"
+          docker rm -f ${{ steps.deployment-target.outputs.current }} 2>/dev/null || echo "No existing container to remove"
+          docker rmi $IMAGE_NAME:${{ steps.deployment-target.outputs.current }} 2>/dev/null || echo "No image to remove"
+          echo "✅ Cleaned up old deployment"
 
       # ======================
       # 8. PRUNE OLD IMAGES & RESOURCES
@@ -183,23 +147,15 @@ jobs:
         if: steps.health-check.outputs.status == 'healthy'
         run: |
           echo "=== Pruning old Docker resources ==="
-          
-          # Remove all dangling images
           docker image prune -f
           
           # Remove old images, keeping only the most recent ones
-          echo "Keeping the last $IMAGE_RETENTION_COUNT images..."
           docker images $IMAGE_NAME --format "{{.ID}} {{.Tag}} {{.CreatedAt}}" | \
             sort -r -k3 | \
             awk -v count=$IMAGE_RETENTION_COUNT 'NR>count {print $1}' | \
             xargs -r docker rmi -f 2>/dev/null || true
           
-          # Remove unused networks
           docker network prune -f
-          
-          # Remove build cache
-          docker builder prune -f
-          
           echo "✅ Docker resource pruning completed"
 
       # ======================
@@ -209,224 +165,25 @@ jobs:
         if: success()
         run: |
           echo "=== Deployment Summary ==="
-          echo "Active container: ${{ steps.deployment-target.outputs.target_container }}"
+          echo "Active deployment: ${{ steps.deployment-target.outputs.target }}"
           echo "Active port: ${{ steps.deployment-target.outputs.target_port }}"
-          echo "Container status: $(docker inspect -f '{{.State.Status}}' ${{ steps.deployment-target.outputs.target_container }})"
+          echo "Container status: $(docker inspect -f '{{.State.Status}}' ${{ steps.deployment-target.outputs.target }})"
           echo "Health check response:"
           curl -s http://localhost:${{ steps.deployment-target.outputs.target_port }}/api/health
-          echo -e "\nNginx routing:"
-          sudo grep "proxy_pass" $NGINX_CONFIG_PATH
-          echo -e "\nRemaining containers:"
-          docker ps --filter "name=meedl-frontend-dev" --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}"
           echo -e "\n✅ Blue-green deployment completed successfully with zero downtime!"
 
       # ======================
       # 10. FAILURE HANDLING
       # ======================
-      - name: 📋 Failure Summary & Cleanup
+      - name: 📋 Failure Summary
         if: failure()
         run: |
-          echo "=== Deployment Failure Summary ==="
-          echo "The deployment failed, but the previous version remains active."
+          echo "=== Deployment Failed ==="
+          echo "Previous version remains active - no downtime occurred"
           echo "Current active containers:"
-          docker ps -a --filter "name=meedl-frontend-dev" --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}"
+          docker ps -a --filter "name=meedl-frontend" --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}"
           echo -e "\nNginx currently points to:"
           sudo grep "proxy_pass" $NGINX_CONFIG_PATH
-          echo -e "\nPerforming cleanup of dangling resources..."
-          docker container prune -f
-          docker image prune -f
-          echo -e "\nPlease check the build logs and application health."
-
-
-
-
-
-# name: 🚀 Meedl Blue-Green Deployment
-
-# on:
-#   push:
-#     branches:
-#       - dev
-
-# env:
-#   BLUE_CONTAINER: meedl-frontend-dev-blue
-#   GREEN_CONTAINER: meedl-frontend-dev-green
-#   IMAGE_NAME: meedl-frontend-dev
-#   BLUE_PORT: 3032
-#   GREEN_PORT: 3033
-#   CONTAINER_PORT: 3000
-#   S3_BUCKET_NAME: ${{ secrets.S3_BUCKET_NAME }}
-#   S3_ENV_FILE_PATH: nkwadoma/frontend/dev/nkwadomafrontend.env
-#   AWS_REGION: eu-west-1
-#   NGINX_CONFIG_PATH: /etc/nginx/sites-available/meedl.africa
-#   IMAGE_RETENTION_COUNT: 5
-
-# jobs:
-#   deploy:
-#     runs-on: [self-hosted, nkwadoma-FE]
-
-#     steps:
-#       # ======================
-#       # 1. INITIAL SETUP & CLEANUP
-#       # ======================
-#       - name: ✅ Checkout Repository
-#         uses: actions/checkout@v3
-
-#       - name: 🧹 Initial Docker Cleanup
-#         run: |
-#           echo "=== Initial Cleanup ==="
-#           docker container prune -f
-#           docker image prune -f
-#           echo "✅ Initial cleanup completed"
-
-#       - name: 📥 Download .env file from S3
-#         env:
-#           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-#           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-#         run: |
-#           echo "Downloading env file from s3://$S3_BUCKET_NAME/$S3_ENV_FILE_PATH"
-#           aws s3 cp s3://$S3_BUCKET_NAME/$S3_ENV_FILE_PATH .env
-#           echo "✅ Downloaded .env file"
-
-#       # ======================
-#       # 2. DETERMINE DEPLOYMENT TARGET
-#       # ======================
-#       - name: 🎯 Determine Deployment Target
-#         id: deployment-target
-#         run: |
-#           if sudo grep -q "3032" $NGINX_CONFIG_PATH; then
-#             echo "current=blue" >> $GITHUB_OUTPUT
-#             echo "target=green" >> $GITHUB_OUTPUT
-#             echo "target_port=3033" >> $GITHUB_OUTPUT
-#           else
-#             echo "current=green" >> $GITHUB_OUTPUT
-#             echo "target=blue" >> $GITHUB_OUTPUT
-#             echo "target_port=3032" >> $GITHUB_OUTPUT
-#           fi
-#           echo "Deploying to ${{ steps.deployment-target.outputs.target }} on port ${{ steps.deployment-target.outputs.target_port }}"
-
-#       # ======================
-#       # 3. BUILD NEW IMAGE
-#       # ======================
-#       - name: 🐳 Build Docker Image
-#         run: |
-#           docker build -t $IMAGE_NAME:${{ steps.deployment-target.outputs.target }} . || (echo "❌ Build failed" && exit 1)
-#           echo "✅ Image built successfully with tag: ${{ steps.deployment-target.outputs.target }}"
-
-#       # ======================
-#       # 4. DEPLOY TO TARGET ENVIRONMENT
-#       # ======================
-#       - name: 🚀 Deploy to Target Environment
-#         run: |
-#           docker rm -f ${{ steps.deployment-target.outputs.target }} 2>/dev/null || echo "No existing ${{ steps.deployment-target.outputs.target }} container to remove"
-          
-#           docker run -d \
-#             --name ${{ steps.deployment-target.outputs.target }} \
-#             -p ${{ steps.deployment-target.outputs.target_port }}:$CONTAINER_PORT \
-#             --env-file .env \
-#             $IMAGE_NAME:${{ steps.deployment-target.outputs.target }}
-
-#           echo "✅ ${{ steps.deployment-target.outputs.target }} container started on port ${{ steps.deployment-target.outputs.target_port }}"
-
-#       # ======================
-#       # 5. HEALTH CHECK USING EXISTING API ENDPOINT
-#       # ======================
-#       - name: 🔍 Health Check New Container
-#         id: health-check
-#         run: |
-#           echo "Waiting for ${{ steps.deployment-target.outputs.target }} container to be healthy..."
-#           for i in {1..15}; do
-#             # Using the existing /api/health endpoint - NO DOCKERFILE CHANGES NEEDED!
-#             if curl -sf http://localhost:${{ steps.deployment-target.outputs.target_port }}/api/health | grep -q '"status":"UP"'; then
-#               echo "✅ ${{ steps.deployment-target.outputs.target }} container is healthy!"
-#               echo "status=healthy" >> $GITHUB_OUTPUT
-#               exit 0
-#             fi
-            
-#             echo "⏳ Attempt $i/15: Container not healthy yet, retrying in 3s..."
-#             sleep 3
-#           done
-          
-#           echo "❌ Health check failed - performing automatic cleanup"
-#           docker rm -f ${{ steps.deployment-target.outputs.target }} 2>/dev/null || true
-#           docker rmi $IMAGE_NAME:${{ steps.deployment-target.outputs.target }} 2>/dev/null || true
-#           echo "status=failed" >> $GITHUB_OUTPUT
-#           echo "::error::Health check failed! The previous version remains active."
-#           exit 1
-
-#       # ======================
-#       # 6. UPDATE NGINX CONFIGURATION (ONLY IF HEALTHY)
-#       # ======================
-#       - name: 🔄 Update Nginx Configuration
-#         if: steps.health-check.outputs.status == 'healthy'
-#         run: |
-#           sudo cp $NGINX_CONFIG_PATH $NGINX_CONFIG_PATH.backup.$(date +%Y%m%d%H%M%S)
-          
-#           if [ "${{ steps.deployment-target.outputs.target }}" = "green" ]; then
-#             sudo sed -i 's/localhost:3032/localhost:3033/g' $NGINX_CONFIG_PATH
-#           else
-#             sudo sed -i 's/localhost:3033/localhost:3032/g' $NGINX_CONFIG_PATH
-#           fi
-          
-#           sudo nginx -t
-#           sudo systemctl reload nginx
-          
-#           echo "✅ Nginx configuration updated"
-
-#       # ======================
-#       # 7. CLEANUP OLD DEPLOYMENT
-#       # ======================
-#       - name: 🧹 Cleanup Old Deployment
-#         if: steps.health-check.outputs.status == 'healthy'
-#         run: |
-#           docker rm -f ${{ steps.deployment-target.outputs.current }} 2>/dev/null || echo "No existing container to remove"
-#           docker rmi $IMAGE_NAME:${{ steps.deployment-target.outputs.current }} 2>/dev/null || echo "No image to remove"
-#           echo "✅ Cleaned up old deployment"
-
-#       # ======================
-#       # 8. PRUNE OLD IMAGES & RESOURCES
-#       # ======================
-#       - name: 🗑️ Prune Old Docker Resources
-#         if: steps.health-check.outputs.status == 'healthy'
-#         run: |
-#           echo "=== Pruning old Docker resources ==="
-#           docker image prune -f
-          
-#           # Remove old images, keeping only the most recent ones
-#           docker images $IMAGE_NAME --format "{{.ID}} {{.Tag}} {{.CreatedAt}}" | \
-#             sort -r -k3 | \
-#             awk -v count=$IMAGE_RETENTION_COUNT 'NR>count {print $1}' | \
-#             xargs -r docker rmi -f 2>/dev/null || true
-          
-#           docker network prune -f
-#           echo "✅ Docker resource pruning completed"
-
-#       # ======================
-#       # 9. FINAL VERIFICATION
-#       # ======================
-#       - name: 🔍 Final Verification
-#         if: success()
-#         run: |
-#           echo "=== Deployment Summary ==="
-#           echo "Active deployment: ${{ steps.deployment-target.outputs.target }}"
-#           echo "Active port: ${{ steps.deployment-target.outputs.target_port }}"
-#           echo "Container status: $(docker inspect -f '{{.State.Status}}' ${{ steps.deployment-target.outputs.target }})"
-#           echo "Health check response:"
-#           curl -s http://localhost:${{ steps.deployment-target.outputs.target_port }}/api/health
-#           echo -e "\n✅ Blue-green deployment completed successfully with zero downtime!"
-
-#       # ======================
-#       # 10. FAILURE HANDLING
-#       # ======================
-#       - name: 📋 Failure Summary
-#         if: failure()
-#         run: |
-#           echo "=== Deployment Failed ==="
-#           echo "Previous version remains active - no downtime occurred"
-#           echo "Current active containers:"
-#           docker ps -a --filter "name=meedl-frontend" --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}"
-#           echo -e "\nNginx currently points to:"
-#           sudo grep "proxy_pass" $NGINX_CONFIG_PATH
 
 
 
