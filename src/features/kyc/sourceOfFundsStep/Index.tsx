@@ -12,6 +12,7 @@ import Isloading from '@/reuseable/display/Isloading';
 import CustomMultiselect from "@/reuseable/mult-select/customMultiselect/Index";
 import { Input } from "@/components/ui/input";
 import {MdAdd, MdDeleteOutline} from "react-icons/md";
+import styles from '@/components/side-bar/index.module.css'
 
 interface FormValues {
     sourceOfFund: string[];
@@ -139,7 +140,7 @@ const SourceOfFundsStep = () => {
             onSubmit={handleSubmit}
         >
             {({ values, setFieldValue }) => (
-                <Form>
+                <Form >
                     <main className={`${inter.className} w-full xl:px-48 grid-cols-1 gap-y-6 grid`}>
                         <div className={`${cabinetGroteskMediumBold.className} max-w-[27.5rem] md:mx-auto w-full`}>
                             <h1 className={`text-meedlBlack text-[24px] leading-[120%] font-medium`}>Source of funds</h1>
@@ -167,7 +168,7 @@ const SourceOfFundsStep = () => {
                             />
 
                             {values.sourceOfFund.includes('Others') && (
-                                <div className="max-h-[300px] overflow-y-auto p">
+                                <div className={`max-h-[300px] ${styles.sideBar} overflow-y-auto p`}>
                                     <div className="flex items-center justify-between mb-4">
                                         <h3 className="text-sm font-medium">Source (specify others)</h3>
                                     </div>

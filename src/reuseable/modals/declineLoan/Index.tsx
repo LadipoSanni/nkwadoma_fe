@@ -85,7 +85,7 @@ const DeclineLoanModal: React.FC<DeclineLoanModalProps> = ({ isOpen,loanOfferSta
     const withdrawALoanOffer = async () => {
         const props = {
             loanOfferId: loanOfferId ? loanOfferId : '',
-            loanOfferStatus: loanOfferStatus ? loanOfferStatus : '',
+            loanOfferStatus:  'WITHDRAW',
         }
 
             const response = await withdrawLoanOffer(props)
