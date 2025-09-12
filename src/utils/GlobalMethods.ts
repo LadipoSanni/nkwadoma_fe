@@ -94,19 +94,35 @@ export const validateName = (name: string) : boolean | string  => {
     // if (/[|#%^*@()?>,.{!$}[=+":<]/.test(name)|| /^--+$/.test(name)) {
     //     return  'name can not contain special characters'
     // }
-    // return /[a-zA-Z&]$/.test(name)
-    if (/\d/.test(name)) {
-        return "Name cannot contain digits";
+    // // /[|#%^*@()?>,.!${}[\]=+":<>]/
+    //
+    // return /[a-zA-Z& ]+$/.test(name)
+    const invalidChars = /[|#%^*@()?>,.!${}[\]=+":<>]/;
+    // Prevent consecutive dashes
+    const consecutiveDashes = /--+/;
+
+    if (invalidChars.test(name)) {
+        return "Name contains invalid special characters.";
     }
 
-    if (!/^[a-zA-Z& ]+$/.test(name)) {
-        return "Name can only contain letters, spaces, and &";
+    if (consecutiveDashes.test(name)) {
+        return "Name cannot contain consecutive dashes.";
     }
 
-    if (!/[a-zA-Z]$/.test(name.trim())) {
-        return "Name must end with a letter";
-    }
-    return true;
+    return true; // ✅ means valid
+
+    // if (/\d/.test(name)) {
+    //     return "Name cannot contain digits";
+    // }
+    //
+    // if (!/^[a-zA-Z& ]+$/.test(name)) {
+    //     return "Name can only contain letters, spaces, and &";
+    // }
+    //
+    // if (!/[a-zA-Z]$/.test(name.trim())) {
+    //     return "Name must end with a letter";
+    // }
+    // return true;
 
 }
 

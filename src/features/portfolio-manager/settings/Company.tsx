@@ -19,7 +19,7 @@ const Company = () => {
         store.dispatch(setSelectedCompanyTab(currentTab))
     }, [currentTab]);
 
-    const {data:organizationData, isFetching ,isLoading} = useGetOrganizationDetailsQuery({})
+    const {data:organizationData, isFetching ,isLoading} = useGetOrganizatioknDetailsQuery({})
 
 
     const getCurrentDataList = () => {
