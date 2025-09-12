@@ -68,10 +68,12 @@ const DetailsImageSection: React.FC<detailsProps> = ({
                 </div>
 
                 <div id="cohort-info" data-testid="cohort-info" className={`flex flex-col pt-3 gap-4`}>
-                    <h1 id="cohort-title" data-testid="cohort-title"
-                        className={`${cabinetGrotesk.className} text-3xl font-medium text-black`}>
-                        {cohortTitle}
-                    </h1>
+                    <article className={` text-wrap  `}>
+                        <h1 id="cohort-title" data-testid="cohort-title"
+                            className={`${cabinetGrotesk.className} text-3xl break-all  font-medium text-black`}>
+                            {cohortTitle}
+                        </h1>
+                    </article>
                     <div>
                         <p
                             id="cohort-description"
