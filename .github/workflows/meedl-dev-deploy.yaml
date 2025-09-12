@@ -1,4 +1,4 @@
-name: 🚀 Meedl dev Deployment
+name: 🚀 Meedl Blue-Green Deployment
 
 on:
   push:
@@ -6,13 +6,17 @@ on:
       - dev
 
 env:
-  CONTAINER_NAME: meedl-frontend-dev
+  BLUE_CONTAINER: meedl-frontend-dev-blue
+  GREEN_CONTAINER: meedl-frontend-dev-green
   IMAGE_NAME: meedl-frontend-dev
-  HOST_PORT: 3032         # external port (host)
-  CONTAINER_PORT: 3000     # internal port (container)
+  BLUE_PORT: 3032
+  GREEN_PORT: 3033
+  CONTAINER_PORT: 3000
   S3_BUCKET_NAME: ${{ secrets.S3_BUCKET_NAME }}
   S3_ENV_FILE_PATH: nkwadoma/frontend/dev/nkwadomafrontend.env
   AWS_REGION: eu-west-1
+  NGINX_CONFIG_PATH: /etc/nginx/sites-available/meedl.africa
+  IMAGE_RETENTION_COUNT: 5
 
 jobs:
   deploy:
@@ -20,59 +24,249 @@ jobs:
 
     steps:
       # ======================
-      # 1. ENVIRONMENT CLEANUP
+      # 1. INITIAL SETUP & CLEANUP
       # ======================
       - name: ✅ Checkout Repository
         uses: actions/checkout@v3
 
-      - name: 🧹 Clean Existing Docker Container
+      - name: 🧹 Initial Docker Cleanup
         run: |
-          docker rm -f $CONTAINER_NAME 2>/dev/null || echo "No existing container to remove"
+          echo "=== Initial Cleanup ==="
           docker container prune -f
+          docker image prune -f
+          echo "✅ Initial cleanup completed"
 
-      # ======================
-      # 2. DOWNLOAD ENV FROM S3
-      # ======================
       - name: 📥 Download .env file from S3
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          # AWS_REGION: ${{ secrets.AWS_REGION }}
         run: |
           echo "Downloading env file from s3://$S3_BUCKET_NAME/$S3_ENV_FILE_PATH"
           aws s3 cp s3://$S3_BUCKET_NAME/$S3_ENV_FILE_PATH .env
           echo "✅ Downloaded .env file"
 
       # ======================
-      # 3. BUILD AND DEPLOY
+      # 2. DETERMINE DEPLOYMENT TARGET
+      # ======================
+      - name: 🎯 Determine Deployment Target
+        id: deployment-target
+        run: |
+          if sudo grep -q "3032" $NGINX_CONFIG_PATH; then
+            echo "current=blue" >> $GITHUB_OUTPUT
+            echo "target=green" >> $GITHUB_OUTPUT
+            echo "target_port=3033" >> $GITHUB_OUTPUT
+          else
+            echo "current=green" >> $GITHUB_OUTPUT
+            echo "target=blue" >> $GITHUB_OUTPUT
+            echo "target_port=3032" >> $GITHUB_OUTPUT
+          fi
+          echo "Deploying to ${{ steps.deployment-target.outputs.target }} on port ${{ steps.deployment-target.outputs.target_port }}"
+
+      # ======================
+      # 3. BUILD NEW IMAGE
       # ======================
       - name: 🐳 Build Docker Image
         run: |
-          docker build -t $IMAGE_NAME . || (echo "❌ Build failed" && exit 1)
-          echo "✅ Image built successfully"
+          docker build -t $IMAGE_NAME:${{ steps.deployment-target.outputs.target }} . || (echo "❌ Build failed" && exit 1)
+          echo "✅ Image built successfully with tag: ${{ steps.deployment-target.outputs.target }}"
 
-      - name: 🚀 Deploy Application
+      # ======================
+      # 4. DEPLOY TO TARGET ENVIRONMENT
+      # ======================
+      - name: 🚀 Deploy to Target Environment
         run: |
+          docker rm -f ${{ steps.deployment-target.outputs.target }} 2>/dev/null || echo "No existing ${{ steps.deployment-target.outputs.target }} container to remove"
+          
           docker run -d \
-            --name $CONTAINER_NAME \
-            -p ${HOST_PORT}:${CONTAINER_PORT} \
+            --name ${{ steps.deployment-target.outputs.target }} \
+            -p ${{ steps.deployment-target.outputs.target_port }}:$CONTAINER_PORT \
             --env-file .env \
-            --restart unless-stopped \
-            $IMAGE_NAME || (echo "❌ Deployment failed" && exit 1)
+            $IMAGE_NAME:${{ steps.deployment-target.outputs.target }}
 
-          echo "✅ Container started successfully"
-          echo "=== Basic Verification ==="
-          echo "Container status: $(docker inspect -f '{{.State.Status}}' $CONTAINER_NAME)"
-          echo "Port mapping: $(docker port $CONTAINER_NAME)"
+          echo "✅ ${{ steps.deployment-target.outputs.target }} container started on port ${{ steps.deployment-target.outputs.target_port }}"
 
       # ======================
-      # 4. FINAL VERIFICATION
+      # 5. HEALTH CHECK USING EXISTING API ENDPOINT
       # ======================
-      - name: 🔍 Quick Container Check
+      - name: 🔍 Health Check New Container
+        id: health-check
+        run: |
+          echo "Waiting for ${{ steps.deployment-target.outputs.target }} container to be healthy..."
+          for i in {1..15}; do
+            # Using the existing /api/health endpoint - NO DOCKERFILE CHANGES NEEDED!
+            if curl -sf http://localhost:${{ steps.deployment-target.outputs.target_port }}/api/health | grep -q '"status":"UP"'; then
+              echo "✅ ${{ steps.deployment-target.outputs.target }} container is healthy!"
+              echo "status=healthy" >> $GITHUB_OUTPUT
+              exit 0
+            fi
+            
+            echo "⏳ Attempt $i/15: Container not healthy yet, retrying in 3s..."
+            sleep 3
+          done
+          
+          echo "❌ Health check failed - performing automatic cleanup"
+          docker rm -f ${{ steps.deployment-target.outputs.target }} 2>/dev/null || true
+          docker rmi $IMAGE_NAME:${{ steps.deployment-target.outputs.target }} 2>/dev/null || true
+          echo "status=failed" >> $GITHUB_OUTPUT
+          echo "::error::Health check failed! The previous version remains active."
+          exit 1
+
+      # ======================
+      # 6. UPDATE NGINX CONFIGURATION (ONLY IF HEALTHY)
+      # ======================
+      - name: 🔄 Update Nginx Configuration
+        if: steps.health-check.outputs.status == 'healthy'
+        run: |
+          sudo cp $NGINX_CONFIG_PATH $NGINX_CONFIG_PATH.backup.$(date +%Y%m%d%H%M%S)
+          
+          if [ "${{ steps.deployment-target.outputs.target }}" = "green" ]; then
+            sudo sed -i 's/localhost:3032/localhost:3033/g' $NGINX_CONFIG_PATH
+          else
+            sudo sed -i 's/localhost:3033/localhost:3032/g' $NGINX_CONFIG_PATH
+          fi
+          
+          sudo nginx -t
+          sudo systemctl reload nginx
+          
+          echo "✅ Nginx configuration updated"
+
+      # ======================
+      # 7. CLEANUP OLD DEPLOYMENT
+      # ======================
+      - name: 🧹 Cleanup Old Deployment
+        if: steps.health-check.outputs.status == 'healthy'
+        run: |
+          docker rm -f ${{ steps.deployment-target.outputs.current }} 2>/dev/null || echo "No existing container to remove"
+          docker rmi $IMAGE_NAME:${{ steps.deployment-target.outputs.current }} 2>/dev/null || echo "No image to remove"
+          echo "✅ Cleaned up old deployment"
+
+      # ======================
+      # 8. PRUNE OLD IMAGES & RESOURCES
+      # ======================
+      - name: 🗑️ Prune Old Docker Resources
+        if: steps.health-check.outputs.status == 'healthy'
+        run: |
+          echo "=== Pruning old Docker resources ==="
+          docker image prune -f
+          
+          # Remove old images, keeping only the most recent ones
+          docker images $IMAGE_NAME --format "{{.ID}} {{.Tag}} {{.CreatedAt}}" | \
+            sort -r -k3 | \
+            awk -v count=$IMAGE_RETENTION_COUNT 'NR>count {print $1}' | \
+            xargs -r docker rmi -f 2>/dev/null || true
+          
+          docker network prune -f
+          echo "✅ Docker resource pruning completed"
+
+      # ======================
+      # 9. FINAL VERIFICATION
+      # ======================
+      - name: 🔍 Final Verification
+        if: success()
         run: |
           echo "=== Deployment Summary ==="
-          echo "Container ID: $(docker ps -q --filter "name=$CONTAINER_NAME")"
-          echo "Logs tail:"
-          docker logs --tail=20 $CONTAINER_NAME
-          echo "Network status:"
-          docker inspect $CONTAINER_NAME | jq -r '.[].NetworkSettings.Ports'
+          echo "Active deployment: ${{ steps.deployment-target.outputs.target }}"
+          echo "Active port: ${{ steps.deployment-target.outputs.target_port }}"
+          echo "Container status: $(docker inspect -f '{{.State.Status}}' ${{ steps.deployment-target.outputs.target }})"
+          echo "Health check response:"
+          curl -s http://localhost:${{ steps.deployment-target.outputs.target_port }}/api/health
+          echo -e "\n✅ Blue-green deployment completed successfully with zero downtime!"
+
+      # ======================
+      # 10. FAILURE HANDLING
+      # ======================
+      - name: 📋 Failure Summary
+        if: failure()
+        run: |
+          echo "=== Deployment Failed ==="
+          echo "Previous version remains active - no downtime occurred"
+          echo "Current active containers:"
+          docker ps -a --filter "name=meedl-frontend" --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}"
+          echo -e "\nNginx currently points to:"
+          sudo grep "proxy_pass" $NGINX_CONFIG_PATH
+
+
+
+
+
+
+
+
+# name: 🚀 Meedl dev Deployment
+
+# on:
+#   push:
+#     branches:
+#       - dev
+
+# env:
+#   CONTAINER_NAME: meedl-frontend-dev
+#   IMAGE_NAME: meedl-frontend-dev
+#   HOST_PORT: 3032         # external port (host)
+#   CONTAINER_PORT: 3000     # internal port (container)
+#   S3_BUCKET_NAME: ${{ secrets.S3_BUCKET_NAME }}
+#   S3_ENV_FILE_PATH: nkwadoma/frontend/dev/nkwadomafrontend.env
+#   AWS_REGION: eu-west-1
+
+# jobs:
+#   deploy:
+#     runs-on: [self-hosted, nkwadoma-FE]
+
+#     steps:
+#       # ======================
+#       # 1. ENVIRONMENT CLEANUP
+#       # ======================
+#       - name: ✅ Checkout Repository
+#         uses: actions/checkout@v3
+
+#       - name: 🧹 Clean Existing Docker Container
+#         run: |
+#           docker rm -f $CONTAINER_NAME 2>/dev/null || echo "No existing container to remove"
+#           docker container prune -f
+
+#       # ======================
+#       # 2. DOWNLOAD ENV FROM S3
+#       # ======================
+#       - name: 📥 Download .env file from S3
+#         env:
+#           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+#           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+#           # AWS_REGION: ${{ secrets.AWS_REGION }}
+#         run: |
+#           echo "Downloading env file from s3://$S3_BUCKET_NAME/$S3_ENV_FILE_PATH"
+#           aws s3 cp s3://$S3_BUCKET_NAME/$S3_ENV_FILE_PATH .env
+#           echo "✅ Downloaded .env file"
+
+#       # ======================
+#       # 3. BUILD AND DEPLOY
+#       # ======================
+#       - name: 🐳 Build Docker Image
+#         run: |
+#           docker build -t $IMAGE_NAME . || (echo "❌ Build failed" && exit 1)
+#           echo "✅ Image built successfully"
+
+#       - name: 🚀 Deploy Application
+#         run: |
+#           docker run -d \
+#             --name $CONTAINER_NAME \
+#             -p ${HOST_PORT}:${CONTAINER_PORT} \
+#             --env-file .env \
+#             --restart unless-stopped \
+#             $IMAGE_NAME || (echo "❌ Deployment failed" && exit 1)
+
+#           echo "✅ Container started successfully"
+#           echo "=== Basic Verification ==="
+#           echo "Container status: $(docker inspect -f '{{.State.Status}}' $CONTAINER_NAME)"
+#           echo "Port mapping: $(docker port $CONTAINER_NAME)"
+
+#       # ======================
+#       # 4. FINAL VERIFICATION
+#       # ======================
+#       - name: 🔍 Quick Container Check
+#         run: |
+#           echo "=== Deployment Summary ==="
+#           echo "Container ID: $(docker ps -q --filter "name=$CONTAINER_NAME")"
+#           echo "Logs tail:"
+#           docker logs --tail=20 $CONTAINER_NAME
+#           echo "Network status:"
+#           docker inspect $CONTAINER_NAME | jq -r '.[].NetworkSettings.Ports'
