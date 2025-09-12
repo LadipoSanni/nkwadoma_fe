@@ -11,7 +11,7 @@ export async function GET(): Promise<NextResponse<HealthResponse>> {
   const healthData: HealthResponse = {
     status: 'UP',
     timestamp: new Date().toISOString(),
-    service: 'frontend-app',
+    service: 'meedl-app',
     uptime: process.uptime()
   };
   
