@@ -66,9 +66,8 @@ function EditProgramForm({setIsOpen,programDetail}: Props) {
   
     // const maxChars = 2500;
 
-    const programDeliveryTypes = ["ONSITE", "ONLINE","HYBRID"];
-    // const programModes=["FULL_TIME", "PART_TIME"]
-    const programModes = [ { value: "FULL_TIME", label: "Full Time" }, { value: "PART_TIME", label: "Part Time" } ];
+    const programDeliveryTypes = [ { value: "ONSITE", label: "Onsite" }, { value: "ONLINE", label: "Online" }, { value: "HYBRID", label: "Hybrid" } ];
+    const programModes = [ { value: "FULL_TIME", label: "Full time" }, { value: "PART_TIME", label: "Part time" } ];
     const programDurations=Array.from({ length: 24 }, (_, i) => (i + 1).toString());
 
     const validationSchema = Yup.object().shape({
@@ -116,6 +115,8 @@ function EditProgramForm({setIsOpen,programDetail}: Props) {
       status: "error",
       
     });
+
+
     
 
     const handleCloseModal = () => {
@@ -143,14 +144,14 @@ function EditProgramForm({setIsOpen,programDetail}: Props) {
       }}
     } catch (err) {
       const error = err as ApiError;
-      setError(error ? "Name already exist" : "" );
+        console.log('error: ', error)
+      setError(error ? error?.data?.message : "" );
       // console.log("The error: ",error?.message);
       // setError(err instanceof Error ? err.message : 'An error occurred try again later');
     }
   }
 
-    console.log("The error: ",error);
-   
+
 
   return (
     <div>
@@ -194,16 +195,15 @@ function EditProgramForm({setIsOpen,programDetail}: Props) {
                   </div>
                   <div>
                     <Label htmlFor="programDeliveryType">Program delivery type</Label>
-                  
-                    <CustomSelect
-                      triggerId='editProgramDeliveryTypeTriggerId'
-                      id="editProgramDeliveryType"
-                      selectContent={programDeliveryTypes}
-                      value={values.deliveryType} 
-                      onChange={(value) => setFieldValue("deliveryType", value)} 
-                      name="deliveryType"
-                      placeHolder='Select a program Delivery Type'
-                    />
+                      <CustomSelectObj
+                          triggerId='editProgramDeliveryTypeTriggerId'
+                          id="editProgramDeliveryType"
+                          selectContent={programDeliveryTypes}
+                          value={values.deliveryType}
+                          onChange={(value) => setFieldValue("deliveryType", value)}
+                          name="deliveryType"
+                          placeHolder='Select a program Delivery Type'
+                      />
                      {
                     errors.deliveryType && touched.deliveryType &&  (
                        <ErrorMessage
