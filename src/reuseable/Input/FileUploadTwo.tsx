@@ -187,6 +187,7 @@ const FileUpload: React.FC<FileUploadProps> = ({
                                         className="h-14 w-16 object-cover mr-2" 
                                         width={100} 
                                         height={100}
+                                        unoptimized={true}
                                     />
                                     <div className="flex justify-center items-center h-5 w-5 rounded-full bg-green500">
                                         <MdCheck className="text-meedlWhite w-3 h-3" />

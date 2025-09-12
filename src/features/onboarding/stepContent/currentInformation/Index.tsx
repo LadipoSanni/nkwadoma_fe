@@ -36,7 +36,8 @@ const CurrentInformation: React.FC<CurrentInformationProps> = ({ setCurrentStep 
         alternatePhoneNumber: currentLoaneeInfo.alternatePhoneNumber,
         alternateContactAddress: currentLoaneeInfo.alternateContactAddress,
         stateOfResidence: currentLoaneeInfo.stateOfResidence,
-        levelOfEducation:  currentLoaneeInfo.levelOfEducation
+        levelOfEducation:  currentLoaneeInfo.levelOfEducation,
+        others: currentLoaneeInfo.others || ''
       }
 
 
@@ -62,7 +63,8 @@ const CurrentInformation: React.FC<CurrentInformationProps> = ({ setCurrentStep 
         alternatePhoneNumber: alternateFormattedPhoneNumber || values.alternatePhoneNumber,
         alternateContactAddress: values.alternateContactAddress,
         stateOfResidence: values.stateOfResidence,
-        levelOfEducation:  values.levelOfEducation
+        levelOfEducation:  values.levelOfEducation,
+        others: values.others
         }
         store.dispatch(setLoaneeCurrentInfo(additionalLoaneeInfo)) 
     }
@@ -143,7 +145,7 @@ const CurrentInformation: React.FC<CurrentInformationProps> = ({ setCurrentStep 
                         </div>
                         <div className={'md:flex md:justify-between md:items-center md:gap-0 grid gap-3'}>
                             <p className={'text-black300 text-[14px] leading-[150%] font-normal'}>Level of education</p>
-                            <p className={'text-black500 text-[14px] leading-[150%] font-normal'}>{currentLoaneeInfo.levelOfEducation === "DIPLOMA"? "Diploma" : currentLoaneeInfo.levelOfEducation === "O_LEVEL"? "O'level" : capitalizeFirstLetters(currentLoaneeInfo.levelOfEducation)}</p>
+                            <p className={'text-black500 text-[14px] leading-[150%] font-normal'}>{currentLoaneeInfo.levelOfEducation === "DIPLOMA"? "Diploma" : currentLoaneeInfo.levelOfEducation === "O_LEVEL"? "O'level" : currentLoaneeInfo.levelOfEducation === "OTHERS"? capitalizeFirstLetters(currentLoaneeInfo.others) : capitalizeFirstLetters(currentLoaneeInfo.levelOfEducation)}</p>
                         </div>
                         <div className={'md:flex md:justify-between md:items-center md:gap-0 grid gap-3 '}>
                             <p className={'text-black300 text-[14px] leading-[150%] font-normal'}>Alternate email

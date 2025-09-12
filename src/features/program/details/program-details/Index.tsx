@@ -167,7 +167,7 @@ const ProgramDetails = () => {
 
     return (
         <div 
-        className={`max-h-[70vh]  ${styles.container}`}
+        className={`md:max-h-[70vh]  ${styles.container}`}
         style={{
             scrollbarWidth: 'none',
             msOverflowStyle: 'none',  
@@ -175,7 +175,7 @@ const ProgramDetails = () => {
         >
           {loading ? ( <SkeletonForDetailPage /> ) : (
         <main className={`${inter.className} w-full max-h-full`} id={"mainDiv"}>
-                    <section className={`p- flex md:flex-row flex-col md:gap-0 md:justify-between`} id={`section`}>
+                    <section className={`p- flex md:flex-row flex-col md:gap-0 md:justify-between md:mb-10`} id={`section`}>
                         <div className={'flex flex-col gap-5 md:h-[70vh] md:max-h-none'} id={`status`}>
                             <div
                                 id={`fibookIcon`}

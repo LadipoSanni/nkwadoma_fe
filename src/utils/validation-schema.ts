@@ -143,6 +143,19 @@ export const LoaneeInformationvalidationSchema = Yup.object().shape({
     .required('State of residence is required'),
   levelOfEducation:  Yup.string()
   .required('Level of education is required'),
+  others: Yup.string()
+    .when('levelOfEducation', {
+      is: (levelOfEducation: string) => levelOfEducation === 'OTHERS',
+      then: (schema) => schema
+        .required('Please specify your education level')
+        .matches(
+          /^[A-Za-z\s\-'.]+$/,
+          'Education level can only contain letters, spaces, hyphens, apostrophes, and periods'
+        )
+        .min(2, 'Education level must be at least 2 characters')
+        .max(100, 'Education level cannot exceed 100 characters'),
+      otherwise: (schema) => schema.notRequired(),
+    }),
 });
 
 
