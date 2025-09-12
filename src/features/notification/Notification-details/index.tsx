@@ -27,6 +27,9 @@ interface notificationIdProp {
 
 function NotificationDetailPage({notificationId}: notificationIdProp) {
    const user_role = getUserDetailsFromStorage('user_role');
+   const user = ["COOPERATE_FINANCIER_SUPER_ADMIN", "MEEDL_ADMIN","MEEDL_SUPER_ADMIN"].includes(user_role || "")
+  const coperateFinancierUser = ["COOPERATE_FINANCIER_SUPER_ADMIN", "COOPERATE_FINANCIER_ADMIN"].includes(user_role || "")
+  const meedlBackofficeUser = ["PORTFOLIO_MANAGER_ASSOCIATE", "MEEDL_ADMIN","MEEDL_SUPER_ADMIN","PORTFOLIO_MANAGER"].includes(user_role || "")
   const router = useRouter();
   const handleBack = () => {
     router.back()
@@ -62,12 +65,15 @@ function NotificationDetailPage({notificationId}: notificationIdProp) {
   } else if(notification?.data?.notificationFlag === "LOAN_OFFER_DECISION"){
      store.dispatch(setCurrentNavbarItem("Loan"))
      router.push(`/loan-offer-details?id=${notification?.data?.contentId}`);
+  }else if(notification?.data?.notificationFlag === "LOAN_REFERRAL" && meedlBackofficeUser){
+    store.dispatch(setCurrentNavbarItem("Loan"))
+    router.push(`/loan/loan-referral`);   
   } else if(notification?.data?.notificationFlag === "LOAN_REFERRAL"){
     store.dispatch(setCurrentNavbarItem("Loan refferral"))
     store.dispatch(setLoanReferralId(notification?.data?.contentId))
        router.push(`/onboarding`);
        store.dispatch(setCurrentStep(0))
-  } else if( notification?.data?.notificationFlag === "LOANEE_DATA_UPLOAD_SUCCESS" || notification?.data?.notificationFlag === "LOANEE_DATA_UPLOAD_FAILURE"){
+  } else if( notification?.data?.notificationFlag === "LOANEE_DATA_UPLOAD_SUCCESS" || notification?.data?.notificationFlag === "LOANEE_DATA_UPLOAD_FAILURE" || notification?.data?.notificationFlag === "REPAYMENT_UPLOAD_FAILURE"){
     store.dispatch(setNotificationCohortId(notification?.data?.contentId))
     store.dispatch(resetSelectedCohortInOrganization())
     store.dispatch(setCurrentNavbarItem("Organizations"))
@@ -113,10 +119,7 @@ function NotificationDetailPage({notificationId}: notificationIdProp) {
     router.push(`/settings/team`);
   }
   }
-   
-  const user = ["COOPERATE_FINANCIER_SUPER_ADMIN", "MEEDL_ADMIN","MEEDL_SUPER_ADMIN"].includes(user_role || "")
-  const coperateFinancierUser = ["COOPERATE_FINANCIER_SUPER_ADMIN", "COOPERATE_FINANCIER_ADMIN"].includes(user_role || "")
-  const meedlBackofficeUser = ["PORTFOLIO_MANAGER_ASSOCIATE", "MEEDL_ADMIN","MEEDL_SUPER_ADMIN","PORTFOLIO_MANAGER"].includes(user_role || "")
+  
   
 
    const buttonName = () => {
@@ -130,7 +133,8 @@ function NotificationDetailPage({notificationId}: notificationIdProp) {
    return "loan offer"
  }else if (notification?.data?.notificationFlag === "LOAN_OFFER_DECISION"){
   return "loan offer"
-} else if(notification?.data?.notificationFlag === "LOAN_REFERRAL"){
+} 
+else if(notification?.data?.notificationFlag === "LOAN_REFERRAL"){
   return "loan Referral"
 } else if(user && notification?.data?.notificationFlag === "INVITE_COLLEAGUE" ){
   return "Request"
@@ -180,7 +184,7 @@ function NotificationDetailPage({notificationId}: notificationIdProp) {
                            </div>
                          </div>
                          <div 
-                         className='max-h-[57vh] w-full  overflow-y-auto'
+                         className='max-h-[57vh] w-full  overflow-y-auto mb-10'
                          style={{
                           scrollbarWidth: 'none',
                           msOverflowStyle: 'none',
@@ -199,8 +203,7 @@ function NotificationDetailPage({notificationId}: notificationIdProp) {
                          </p>
                         </div>
                         <div className='mt-4 mb-4'>
-                        {!(notification?.data?.notificationFlag === "REPAYMENT_UPLOAD_FAILURE" || (notification?.data?.notificationFlag === "INVESTMENT_VEHICLE" &&  meedlBackofficeUser) ||
-   notification?.data?.notificationFlag === "LOANEE_DATA_UPLOAD_FAILURE") ? 
+                        {!(notification?.data?.notificationFlag === "REPAYMENT_UPLOAD_FAILURE" || (notification?.data?.notificationFlag === "INVESTMENT_VEHICLE" &&  meedlBackofficeUser)) ? 
   <p className='mb-4'>Click on the button to view the full details of the <span className='lowercase'>{notification?.data?.title}</span></p>
   : ""
 }
@@ -208,7 +211,7 @@ function NotificationDetailPage({notificationId}: notificationIdProp) {
                         </div>
                          <div>
                          {!(
-    notification?.data?.notificationFlag === "REPAYMENT_UPLOAD_FAILURE" ||
+    notification?.data?.notificationFlag === "REPAYMENT_UPLOAD_FAILUREs" ||
     (notification?.data?.notificationFlag === "INVESTMENT_VEHICLE" && meedlBackofficeUser)
   ) ?
                           <Button 
