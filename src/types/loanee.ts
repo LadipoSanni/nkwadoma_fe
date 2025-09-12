@@ -9,7 +9,8 @@ export interface LoaneeCurentInformation {
     alternatePhoneNumber: string,
     alternateContactAddress: string,
     stateOfResidence: string,
-    levelOfEducation: string
+    levelOfEducation: string,
+    others: string
 }
 export interface LoanProduct {
     "id": "c7a268c7-136d-4963-984a-46ff70ad869f",

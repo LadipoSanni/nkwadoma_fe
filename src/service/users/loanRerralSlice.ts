@@ -29,7 +29,8 @@ const initialState: LoanReferralState = {
         alternatePhoneNumber: "",
         alternateContactAddress: "",
         stateOfResidence: "", 
-        levelOfEducation: ""
+        levelOfEducation: "",
+        others: "",
     },
 };
 
@@ -61,7 +62,8 @@ const loanReferralSlice = createSlice({
                 alternatePhoneNumber: "",
                 alternateContactAddress: "",
                 stateOfResidence: "",
-                levelOfEducation: ""
+                levelOfEducation: "",
+                others: "",
             }
         },
         setIsFormSubmited: (state, action: PayloadAction<boolean>) => {
