@@ -37,8 +37,14 @@ const ConfirmLoanReferralAcceptance = () => {
 
     const handleSubmitAdditionalDetails = async (e: React.FormEvent) => {
         e.preventDefault();
-        const dataToSubmit = {
-           ...currentLoaneeAdditionalInfo
+      
+        let dataToSubmit = { ...currentLoaneeAdditionalInfo };
+
+        if (dataToSubmit.levelOfEducation === "OTHERS" && dataToSubmit.others) {
+            dataToSubmit = {
+                ...dataToSubmit,
+                levelOfEducation: dataToSubmit.others
+            };
         }
         try {
             const result =  await saveNextOfKinDetails(dataToSubmit).unwrap();

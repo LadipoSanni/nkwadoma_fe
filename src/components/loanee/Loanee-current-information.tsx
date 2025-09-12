@@ -22,7 +22,8 @@ export interface initialFormValue {
   alternatePhoneNumber: string;
   alternateContactAddress: string;
   stateOfResidence: string;
-  levelOfEducation: string
+  levelOfEducation: string;
+  others: string
 }
 
 interface Props {
@@ -93,12 +94,43 @@ function LoaneeCurrentInformation({initialFormValue,handleSubmit,nextOfCountryCo
                    value={values.levelOfEducation}
                    onChange={(value)=> {setFieldValue("levelOfEducation", value)}}
                    name='levelOfEducation'
-                  placeHolder='Select state of residence'
+                  placeHolder='Select level of education'
                   selectContent={educationalQualifications}
                   className='h-[3.5rem]'
                  />
                 </div>
               </div>
+
+              <div className='relative bottom-4'>
+                  {
+                    values?.levelOfEducation === "OTHERS" && 
+                    <div>
+                      <Label htmlFor="others">Others</Label>
+                    <Field
+                    name={"others"}
+                    value={values.others}
+                    className="w-full p-3 border border-[#B6BCCA] rounded-md focus:outline-none mt-2 text-[14px] h-14 border-opacity-65"
+                    placeholder="Enter other level of education"
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                      let value = e.target.value;
+                      value = value.replace(/[^A-Za-z\s\-'.]/g, '');
+                      if (value.length > 0 && /^[-'.]/.test(value)) {
+                        value = value.replace(/^[-'.]+/, '');
+                      }
+                      value = value.slice(0, 50);
+                      setFieldValue("others", value);
+                    }}
+                    />
+                     {errors.others && touched.others && (
+                      <ErrorMessage
+                        name="others"
+                        component="div"
+                        className="text-red-500 text-sm"
+                      />
+                    )}
+                    </div>
+                  }
+                </div>
               <div className={'grid gap-2 relative bottom-2'}>
               <Label htmlFor="alternateEmail" className="block text-sm font-medium text-labelBlue">Alternate
                email address</Label>

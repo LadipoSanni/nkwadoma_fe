@@ -57,6 +57,7 @@ const DetailsImageSection: React.FC<detailsProps> = ({
                                 height={500}
                                 className="w-full h-60 rounded-md object-cover"
                                 data-testid="cohort-image"
+                                unoptimized={true}
                             />
                         ) : Icon ? (
                             <div
