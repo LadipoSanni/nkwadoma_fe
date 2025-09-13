@@ -31,7 +31,7 @@ export const loanRequestApi = createApi({
             })
         }),
         viewAllLoanReferral: builder.query({
-            query: (data: {pageSize:number, pageNumber: number}) => ({
+            query: (data: {pageSize:number, pageNumber: number,organizationId?: string  | number}) => ({
                 url: `/loan/view/loan-referrals`,
                 method: 'GET',
                 params: data

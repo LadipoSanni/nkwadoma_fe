@@ -178,7 +178,7 @@ function StepOne() {
             .test("max-number", "Invalid tenor limit", value => !value || Number(value) <= 999),
             loanProductSize: Yup.string()
             .trim()
-            .matches(/^(?!0$)([1-9]\d*|0\.\d*[1-9]\d*)$/, "Product size must be greater than 0")
+            // .matches(/^(?!0$)([1-9]\d*|0\.\d*[1-9]\d*)$/, "Product size must be greater than 0")
             .required("Loan product is required")
             .test("max-number", "Product size must be less than or equal to a quadrillion",
                 value => !value || Number(value) <= 1e15)
@@ -200,7 +200,7 @@ function StepOne() {
             ),
         obligorLimit: Yup.string()
             .trim()
-            .matches(/^(?!0$)([1-9]\d*|0\.\d*[1-9]\d*)$/, "Limit must be greater than 0")
+            // .matches(/^(?!0$)([1-9]\d*|0\.\d*[1-9]\d*)$/, "Limit must be greater than 0")
             .required("Obligor limit is required")
             .test('is-less-than-loan-product-size', 'Obligor can\'t be greater than product size',
                 function (value) {
@@ -209,7 +209,7 @@ function StepOne() {
                 }),
         minimumRepaymentAmount: Yup.string()
             .trim()
-            .matches(/^(?!0$)([1-9]\d*|0\.\d*[1-9]\d*)$/, "Amount must be greater than 0")
+            // .matches(/^(?!0$)([1-9]\d*|0\.\d*[1-9]\d*)$/, "Amount must be greater than 0")
             .required("Amount is required")
             .test('is-greater-than-loan-product-size', 'Repayment amount can\'t be greater than product size',
                 function (value) {
