@@ -179,7 +179,7 @@ const ProgramDetails = () => {
                         <div className={'flex flex-col gap-5 md:h-[70vh] md:max-h-none'} id={`status`}>
                             <div
                                 id={`fibookIcon`}
-                                className={'grid place-items-center h-[7.5rem] w-[7.5rem] bg-lightBlue500 rounded-full'}>
+                                className={'grid place-items-center aspect-square h-[7.5rem] w-[7.5rem] bg-lightBlue500 rounded-full'}>
                                 <FiBook id={`book`} className={'h-[50px] w-[50px] text-meedlBlue'}/>
                             </div>
                             <div className={'flex flex-col gap-3'} id={`tagDiv`}>
