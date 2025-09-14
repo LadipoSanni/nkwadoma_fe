@@ -52,12 +52,12 @@ jobs:
         id: deployment-target
         run: |
           if sudo grep -q "3032" $NGINX_CONFIG_PATH; then
-            echo "current=blue" >> $GITHUB_OUTPUT
-            echo "target=green" >> $GITHUB_OUTPUT
+            echo "current=meedl-fdev-blue" >> $GITHUB_OUTPUT
+            echo "target=meedl-fdev-green" >> $GITHUB_OUTPUT
             echo "target_port=3033" >> $GITHUB_OUTPUT
           else
-            echo "current=green" >> $GITHUB_OUTPUT
-            echo "target=blue" >> $GITHUB_OUTPUT
+            echo "current=meedl-fdev-green" >> $GITHUB_OUTPUT
+            echo "target=meedl-fdev-blue" >> $GITHUB_OUTPUT
             echo "target_port=3032" >> $GITHUB_OUTPUT
           fi
           echo "Deploying to ${{ steps.deployment-target.outputs.target }} on port ${{ steps.deployment-target.outputs.target_port }}"
@@ -118,7 +118,7 @@ jobs:
         if: steps.health-check.outputs.status == 'healthy'
         run: |
           
-          if [ "${{ steps.deployment-target.outputs.target }}" = "green" ]; then
+          if [ "${{ steps.deployment-target.outputs.target }}" = "meedl-fdev-green" ]; then
             sudo sed -i 's/localhost:3032/localhost:3033/g' $NGINX_CONFIG_PATH
           else
             sudo sed -i 's/localhost:3033/localhost:3032/g' $NGINX_CONFIG_PATH
