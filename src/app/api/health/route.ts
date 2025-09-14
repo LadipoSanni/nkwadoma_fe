@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 
 interface HealthResponse {
-  status: string;
+  status: string; 
   timestamp: string;
   service: string;
   uptime: number;
