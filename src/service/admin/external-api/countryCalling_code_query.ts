@@ -26,6 +26,8 @@ interface Country {
 
 const baseUrl = process.env.COUNTRY_CODE_URL;
 
+console.log('baseUrl', baseUrl);
+
 export const countryApi = createApi({
   reducerPath: 'countryApi',
   baseQuery: fetchBaseQuery({ baseUrl }),
