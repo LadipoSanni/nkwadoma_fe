@@ -49,7 +49,14 @@ function InviteFinanciers({setIsOpen,investmentId,amountCommitedAndDesignationCo
  const validationschema = Yup.object().shape({
       firstName: Yup.string()
            .trim()
-           .matches(/^[A-Za-z]+$/, 'First name should only contain letters')
+           .test(
+            "valid-name",
+            "First name must not end with hyphen or underscore or apostrophe",
+            (value = "") => {
+                const regex = /^[a-zA-Z](?:[a-zA-Z'_-\s]*[a-zA-Z])?$/;
+                return regex.test(value);
+            }
+        )
            .max(100, "First name cannot be more than 50 characters.")
            .required('First name is required'),
         //    .when('financierType', {
@@ -59,7 +66,14 @@ function InviteFinanciers({setIsOpen,investmentId,amountCommitedAndDesignationCo
         // }),
          lastName: Yup.string()
            .trim()
-           .matches(/^[A-Za-z]+$/, 'Last name should only contain letters')
+           .test(
+            "valid-name",
+            "Last name must not end with hyphen or underscore or apostrophe",
+            (value = "") => {
+                const regex = /^[a-zA-Z](?:[a-zA-Z'_-\s]*[a-zA-Z])?$/;
+                return regex.test(value);
+            }
+        )
            .max(100, "Last name cannot be more than 50 characters.")
            .required('Last name is required'),
           //  .when('financierType', {
@@ -89,10 +103,14 @@ function InviteFinanciers({setIsOpen,investmentId,amountCommitedAndDesignationCo
      }),
            organizationName: Yup.string()
               .trim()
-              .matches(
-               /^[a-zA-Z](?:[a-zA-Z0-9_-\s]*[a-zA-Z0-9])?$/,
-               "Organization name can not end with hyphen or underscore .",
-              )
+              .test(
+                "valid-name",
+                "Company name must not end with hyphen or underscore or apostrophe",
+                (value = "") => {
+                    const regex = /^[a-zA-Z0-9](?:[a-zA-Z0-9'_-\s]*[a-zA-Z0-9])?$/;
+                    return regex.test(value);
+                }
+            )
               .max(200, "Organization name cannot be more than 200 characters.")
               .when('financierType', {
                 is: 'COOPERATE', 
