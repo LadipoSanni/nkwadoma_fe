@@ -19,6 +19,7 @@ import {setCurrentStep} from "@/service/users/loanRerralSlice";
 import { setNotificationCohortId,resetSelectedCohortInOrganization } from '@/redux/slice/create/cohortSlice';
 import { getUserDetailsFromStorage } from "@/components/topBar/action";
 import { setRequestStatusTab,setIsRequestedStaffOpen,setRequestedStaffId,setIsRequestedOrganizationOpen,setrequestOrganizationStatusTab,setRequestedOrganizationId,setIsStaffOpen,setModalType } from '@/redux/slice/staff-and-request/request';
+import { setLoanOfferId as setLoanOfferIdFromLoan } from '@/redux/slice/create/createLoanOfferSlice';
 
 
 interface notificationIdProp {
@@ -64,7 +65,8 @@ function NotificationDetailPage({notificationId}: notificationIdProp) {
       router.push("/accept-loan-offer");
   } else if(notification?.data?.notificationFlag === "LOAN_OFFER_DECISION"){
      store.dispatch(setCurrentNavbarItem("Loan"))
-     router.push(`/loan-offer-details?id=${notification?.data?.contentId}`);
+     router.push(`/loan-offer-details`);
+     store.dispatch(setLoanOfferIdFromLoan(notification?.data?.contentId))
   }else if(notification?.data?.notificationFlag === "LOAN_REFERRAL" && meedlBackofficeUser){
     store.dispatch(setCurrentNavbarItem("Loan"))
     router.push(`/loan/loan-referral`);   
