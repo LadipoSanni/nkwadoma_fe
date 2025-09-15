@@ -7,7 +7,6 @@ import {getItemSessionStorage} from "@/utils/storage";
 
 const baseUrl = process.env.APP_DEV_AUTH_URL;
 
-
 export const customFetchBaseQuery = fetchBaseQuery({
     baseUrl,
     // mode: 'no-cors',

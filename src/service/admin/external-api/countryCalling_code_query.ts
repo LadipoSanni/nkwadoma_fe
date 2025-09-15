@@ -26,9 +26,8 @@ interface Country {
 
 const baseUrl = process.env.COUNTRY_CODE_URL;
 
-console.log('baseUrl', baseUrl);
-
 export const countryApi = createApi({
+
   reducerPath: 'countryApi',
   baseQuery: fetchBaseQuery({ baseUrl }),
   endpoints: (builder) => ({
@@ -39,7 +38,7 @@ export const countryApi = createApi({
             throw new Error('Unexpected API response format');
           }
         return response.map((country) => ({
-          id: country.cca2, 
+          id: country.cca2,
           name: country.name.common,
           code: country.cca2,
           dialCode: `${country.idd.root}${country.idd.suffixes?.[0] || ''}`,
