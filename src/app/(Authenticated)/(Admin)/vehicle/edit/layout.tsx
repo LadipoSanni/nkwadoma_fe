@@ -11,7 +11,7 @@ const layout: React.FC<props> = ({ children }) => {
 
    
   return (
-    <CustomAuthorization authorizedRoles={['PORTFOLIO_MANAGER']}>
+    <CustomAuthorization authorizedRoles={['PORTFOLIO_MANAGER','MEEDL_SUPER_ADMIN']}>
          <BackToInvestmentVehicleDetail/>
       { children }
     </CustomAuthorization>
