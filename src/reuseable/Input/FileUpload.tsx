@@ -202,7 +202,7 @@ import React, { useRef, useState, useEffect } from 'react';
 import { FiUploadCloud } from "react-icons/fi";
 import { Label } from "@/components/ui/label";
 import { MdOutlineDelete, MdOutlineEdit, MdCheck, MdErrorOutline } from "react-icons/md";
-import { uploadImageToCloudinary } from '@/utils/UploadToCloudinary';
+import { useUploadImageToCloudinary } from '@/utils/UploadToCloudinary';
 
 interface FileUploadProps {
     handleDrop?: (event: React.DragEvent<HTMLDivElement>) => void;
@@ -229,6 +229,8 @@ const FileUpload: React.FC<FileUploadProps> = ({
     const [error, setError] = useState<string | null>(null);
     const [fileName, setFileName] = useState("");
     const [isDragActive, setIsDragActive] = useState(false);
+
+    const {upload} = useUploadImageToCloudinary();
 
     useEffect(() => {
         if (file) {
@@ -264,7 +266,9 @@ const FileUpload: React.FC<FileUploadProps> = ({
 
         setFile(selectedFile);
         try {
-            const uploadedFileUrl = await uploadImageToCloudinary(selectedFile, "cohort_image");
+            // const uploadedFileUrl = useUploadImageToCloudinary(selectedFile, "cohort_image");
+            // const uploadedFileUrl = useUploadImageToCloudinary(selectedFile, "cohort_image");
+            const uploadedFileUrl = await upload(selectedFile, "cohort_image");
             setUploadedImageUrl(uploadedFileUrl);
         } catch (uploadError) {
             setError("Failed to upload image");
@@ -308,7 +312,8 @@ const FileUpload: React.FC<FileUploadProps> = ({
 
         setFile(droppedFile);
         try {
-            const uploadedFileUrl = await uploadImageToCloudinary(droppedFile, "cohort_image");
+            // const uploadedFileUrl = await useUploadImageToCloudinary(droppedFile, "cohort_image");
+            const uploadedFileUrl = await upload(droppedFile, "cohort_image");
             setUploadedImageUrl(uploadedFileUrl);
         } catch (uploadError) {
             setError("Failed to upload image");

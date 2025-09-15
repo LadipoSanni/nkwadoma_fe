@@ -24,7 +24,7 @@ interface Country {
   flag: string;
 }
 
-const baseUrl = process.env.NEXT_PUBLIC_COUNTRY_CODE_URL;
+const baseUrl = process.env.COUNTRY_CODE_URL;
 
 export const countryApi = createApi({
   reducerPath: 'countryApi',

@@ -9,7 +9,7 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/component
 import { Button } from '@/components/ui/button';
 import CapturePhotoWithTips from "@/components/SmartCameraWrapper/capturePhotoWithTips/Index";
 import CryptoJS from "crypto-js";
-import { uploadImageToCloudinary } from "@/utils/UploadToCloudinary";
+import { useUploadImageToCloudinary } from "@/utils/UploadToCloudinary";
 import { useVerifyIdentityMutation } from "@/service/users/Loanee_query";
 import WarningModal from "@/reuseable/modals/WarningDialog/WarningModal";
 import {useAppSelector} from "@/redux/store";
@@ -65,9 +65,11 @@ const IdentityVerificationModal: React.FC<IdentityVerificationModalProps> = ({
     // const dispatch = useDispatch();
     const invitedLoaneeFromPmId = useAppSelector(state => state.selectedLoan.cohortLoaneeId)
 
+    const {upload} = useUploadImageToCloudinary();
 
     const handleCapture = async (imageFile: File) => {
-        loaneeIdentityData.imageUrl = await uploadImageToCloudinary(imageFile,"loanee_verification");
+        // loaneeIdentityData.imageUrl = await useUploadImageToCloudinary(imageFile,"loanee_verification");
+        loaneeIdentityData.imageUrl = await upload(imageFile,"loanee_verification");
         loaneeIdentityData.loanReferralId = invitedLoaneeFromPmId ? '' : loanReferralId;
         try {
             const formData: FormData = loaneeIdentityData;

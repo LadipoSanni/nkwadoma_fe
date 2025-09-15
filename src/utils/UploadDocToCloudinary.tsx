@@ -1,5 +1,8 @@
-const upload_preset = process.env.NEXT_PUBLIC_UPLOAD_PRESET;
-const cloud_name = process.env.NEXT_PUBLIC_CLOUD_NAME;
+// const upload_preset = process.env.NEXT_PUBLIC_UPLOAD_PRESET;
+// const cloud_name = process.env.NEXT_PUBLIC_CLOUD_NAME;
+
+const upload_preset = process.env.UPLOAD_PRESET;
+const cloud_name = process.env.CLOUD_NAME;
 const api_url = `https://api.cloudinary.com/v1_1/${cloud_name}/auto/upload`;
 
 if (!upload_preset || !cloud_name) {

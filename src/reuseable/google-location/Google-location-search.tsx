@@ -200,6 +200,7 @@ import usePlacesAutocomplete from "use-places-autocomplete"
 import { Input } from "@/components/ui/input"
 import { Textarea } from '@/components/ui/textarea'
 import { useFloating, autoUpdate, offset, flip, shift, size } from '@floating-ui/react-dom'
+import { useConfig } from '@/app/config-context'
 
 interface GoogleLocationSearchProps {
   setAddress: (address: string | null) => void
@@ -251,8 +252,13 @@ const GoogleLocationsearch: React.FC<GoogleLocationSearchProps> = ({
     }
   }
 
+
+  const {
+    googleMapsApiKey,
+  }= useConfig();
+
   useEffect(() => {
-    const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY
+    const apiKey = googleMapsApiKey;
     if (!apiKey) {
       console.error("Google Maps API key is missing") 
       return
