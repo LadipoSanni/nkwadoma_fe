@@ -1,10 +1,10 @@
 import {createApi} from "@reduxjs/toolkit/query/react";
-import {fetchBaseQuery} from "@reduxjs/toolkit/query";
+import {customFetchBaseQuery} from "@/service/customFetchBaseQuery";
 
 
 export const unauthorizedApis = createApi({
     reducerPath: "unauthorizedApis",
-    baseQuery: fetchBaseQuery({ baseUrl: 'https://api-systest.meedl.africa/api/v1' }),
+    baseQuery: customFetchBaseQuery,
     endpoints: (builder) => ({
         viewPublicInvestmentDetails: builder.query({
             query: (investmentName: string| undefined)=> ({
