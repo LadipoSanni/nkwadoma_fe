@@ -18,6 +18,7 @@ import { MultiSelect } from "@/reuseable/mult-select/customMultiselectWithId/Mul
 import { useViewFinanciersByInvestmentmentVehicleQuery } from '@/service/admin/financier';
 import {useRouter } from 'next/navigation';
 import { setLoanProductField } from "@/redux/slice/loan-product/Loan-product";
+import { formatPlaceName } from "@/utils/GlobalMethods";
 
 interface viewAllProps {
     id: string;
@@ -147,14 +148,21 @@ function StepOne() {
             .required("Product name is required")
             .test(
                 "valid-name",
-                "Name must not end with hyphen or underscore",
+                "Name must not end with hyphen or underscore or apostrophe",
                 (value = "") => {
-                  const regex = /^[a-zA-Z](?:[a-zA-Z0-9_-\s]*[a-zA-Z0-9])?$/;
+                    const regex = /^[a-zA-Z0-9](?:[a-zA-Z0-9'_-\s]*[a-zA-Z0-9])?$/;
                     return regex.test(value);
                 }
             )
-
-            .max(200, "Terms exceeds 200 characters"),
+            // .test(
+            //     "valid-name",
+            //     "Name must not contain multiple consecutive hyphens or underscores",
+            //     (value = "") => {
+            //       const regex = /^[a-zA-Z0-9]+(?:[_-]?[a-zA-Z0-9]+)*$/;
+            //       return regex.test(value);
+            //     }
+            // )
+            .max(200, "Characters exceeds 200 characters"),
         investmentVehicleId: Yup.string()
             .trim()
             .required("Fund product is required"),
@@ -307,8 +315,10 @@ function StepOne() {
                                 placeholder="Enter Product name"
                                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                                            const value = e.target.value;
-                                           const cleanedValue = value.replace(/[^a-zA-Z0-9_-\s]/g, '');
-                                           if (cleanedValue.length > 0 && !/^[a-zA-Z]/.test(cleanedValue)) {
+                                           const formattedValue = formatPlaceName(value,true);
+                                           const cleanedValue = formattedValue.replace(/[^a-zA-Z0-9'_-\s]/g, '');
+                                           if (cleanedValue.length > 0 && !/^[a-zA-Z0-9]/.test(cleanedValue)) {
+                                              
                                              setFieldValue("productName", cleanedValue.substring(1));
                                            } else {
                                              setFieldValue("productName", cleanedValue);

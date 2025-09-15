@@ -67,8 +67,8 @@ function OrganizationDetails() {
     <div className='md:flex h-full'>
      
       <div className={` md:w-[62%] md:border-r md:border-r-gray-200 pr-4`}>
-        <p className={`text-[16px mb-2 mt-[1] ${inter.className}`}>Loan details</p>
-         <div className={`${style.detailContainer}`}>
+        <p className={`text-[16px mb-2 mt-[1]  ${inter.className}`}>Loan details</p>
+         <div className={` ${style.detailContainer}`}>
          <div className='grid grid-cols-1 gap-y-5 mt-2'>
         <Details isLoading={isLoading}  id={'historicalDebt'}    maxWidth={'100%'} name={'Historical debt'} value={organizationDetails?.data.totalAmountReceived} valueType={'currency'} className='w-full'/>
         <Details isLoading={isLoading}  id={'amountRepaid '}    maxWidth={'100%'} name={'Amount repaid '} value={organizationDetails?.data.totalDebtRepaid} valueType={'currency'}  className='w-full'/>
@@ -79,6 +79,7 @@ function OrganizationDetails() {
          <Details isLoading={isLoading}  id={'totalPendingOffers'}  showAsWholeNumber={true}  maxWidth={'100%'} name={'Total pending offers'} value={organizationDetails?.data?.pendingLoanOfferCount} valueType={'digit'}  className='w-full'/>
          </div>
         </div>
+        <div className='md:mb-20'></div>
          </div>
       </div>
       <div className='md:w-[38%] flex items-start pl-4 mt-5 md:mt-0 mb-5 md:mb-0'>
@@ -115,8 +116,10 @@ function OrganizationDetails() {
     </div>
   </div>
 ))}
+<div className='md:mb-12'></div>
     </div> }
         </div>
+        
       </div>
     </div>
   );

@@ -7,6 +7,7 @@ import SubmitAndCancelButton from '@/reuseable/buttons/Submit-and-cancelButton';
  import { validateNumber} from "@/utils/Format";
  import CustomInputField from "@/reuseable/Input/CustomNumberFormat";
 import Multiselect from '@/reuseable/mult-select/multi-select';
+import { formatPlaceName } from "@/utils/GlobalMethods";
 
 
 interface Props {
@@ -53,12 +54,10 @@ function InviteFinancier({financierType,isloading,isValid,handleBack,errors,touc
            className="w-full p-3 border rounded focus:outline-none mt-2"
            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
             const value = e.target.value;
-            const cleanedValue = value.replace(/[^a-zA-Z0-9_-\s]/g, '');
-            if (cleanedValue.length > 0 && !/^[a-zA-Z]/.test(cleanedValue)) {
-              setFieldValue("organizationName", cleanedValue.substring(1));
-            } else {
+            const cleanedValue = formatPlaceName(value,true);
+            
               setFieldValue("organizationName", cleanedValue);
-            }
+           
           }}
           />
            {errors.organizationName && touched.organizationName && (
@@ -101,10 +100,8 @@ function InviteFinancier({financierType,isloading,isValid,handleBack,errors,touc
                 className="w-full p-3 border rounded focus:outline-none mt-2"
                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                                     const value = e.target.value;
-                                    const regex = /^[A-Za-z]+$/;
-                                    if (regex.test(value) || value === "") {
-                                      setFieldValue("firstName", value);
-                                    }
+                                    const formattedValue = formatPlaceName(value,false);
+                                      setFieldValue("firstName",formattedValue);
                                   }}
                />
                 {errors.firstName && touched.firstName && (
@@ -124,10 +121,8 @@ function InviteFinancier({financierType,isloading,isValid,handleBack,errors,touc
                 className="w-full p-3 border rounded focus:outline-none mt-2"
                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                                     const value = e.target.value;
-                                    const regex = /^[A-Za-z]+$/;
-                                    if (regex.test(value) || value === "") {
-                                      setFieldValue("lastName", value);
-                                    }
+                                    const formattedValue = formatPlaceName(value,false);
+                                      setFieldValue("lastName", formattedValue);
                                   }}
                />
                 {errors.lastName && touched.lastName && (

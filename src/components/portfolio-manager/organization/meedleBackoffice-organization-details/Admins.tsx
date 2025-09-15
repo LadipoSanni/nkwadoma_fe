@@ -11,6 +11,7 @@ import Table from "@/reuseable/table/Table";
 import {capitalizeFirstLetters} from "@/utils/GlobalMethods";
 import { Book } from "lucide-react";
 import { formatMonthInDate} from '@/utils/Format'
+import styles from "@/components/super-admin/staff/index.module.css"
 
 interface TableRowData {
   [key: string]: string | number | null | React.ReactNode;
@@ -107,11 +108,16 @@ function Admins() {
       
 
   return (
-    <div>
+    <div className={`max-h-[64vh] ${styles.container}`}
+    style={{
+      scrollbarWidth: 'none',
+      msOverflowStyle: 'none',  
+        }}
+    >
      <div
     id="adminActions"
     className={
-      "md:flex md:justify-between grid  gap-5 items-center mt-10"
+      "md:flex md:justify-between grid  gap-5 items-center mt-6"
     }
     >
        <SearchInput
@@ -128,12 +134,13 @@ function Admins() {
                !isTyping && debouncedSearchTerm  &&  searchResult?.data?.body === 0?  <div>
                  <SearchEmptyState icon={MdSearch} name={"Search"} />
                </div> :
+               <div className='mb-10'>
             <Table
             tableData={getTableData()}
               tableHeader={adminsHeader}
               staticHeader={"Full name"}
               staticColunm={"fullName"}
-              tableHeight={42}
+              tableHeight={getTableData().length < 10 ? 60 : undefined}
               handleRowClick={() => {}}
               icon={<Book/>}
               sideBarTabName="Admin"
@@ -146,6 +153,7 @@ function Admins() {
               totalPages={ totalPage}
               searchEmptyState={!isTyping && debouncedSearchTerm?.length > 0 && adminData?.data?.body?.length < 1 }
             />
+            </div>
             }
           </div>
     </div>
