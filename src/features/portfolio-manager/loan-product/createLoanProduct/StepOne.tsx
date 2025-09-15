@@ -179,7 +179,7 @@ function StepOne() {
             loanProductSize: Yup.string()
             .trim()
             // .matches(/^(?!0$)([1-9]\d*|0\.\d*[1-9]\d*)$/, "Product size must be greater than 0")
-            .required("Loan product is required")
+            .required("Loan product size is required")
             .test("max-number", "Product size must be less than or equal to a quadrillion",
                 value => !value || Number(value) <= 1e15)
             .test(

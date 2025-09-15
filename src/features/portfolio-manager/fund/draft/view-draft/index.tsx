@@ -113,7 +113,7 @@ const handleRowClick = (row: TableRowData) => {
         if(vehicleType === "commercial"){
             router.push("/vehicle/commercial-vehicle")
         }else {
-            router.push("/vehicle/endownment-vehicle")
+            router.push("/vehicle/endowment-vehicle")
         }
        }
 
