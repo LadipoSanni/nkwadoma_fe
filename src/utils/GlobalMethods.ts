@@ -109,7 +109,7 @@ export const validateName = (name: string) : boolean | string  => {
         return "Name cannot contain consecutive dashes.";
     }
 
-    return true; // ✅ means valid
+    return true;
 
     // if (/\d/.test(name)) {
     //     return "Name cannot contain digits";
