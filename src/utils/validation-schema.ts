@@ -186,7 +186,7 @@ export const validationStaffSchema = Yup.object().shape({
                   .required('Last name is required')
                   .test(
                     "valid-name",
-                    "Last name must not end with hyphen or underscore",
+                    "Last name must not end with hyphen or underscore or apostrophe",
                     (value = "") => {
                       const regex = /^[a-zA-Z](?:[a-zA-Z0-9'_-\s]*[a-zA-Z0-9])?$/;
                         return regex.test(value);
