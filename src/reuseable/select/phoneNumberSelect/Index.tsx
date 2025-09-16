@@ -20,8 +20,8 @@ import Isloading from '@/reuseable/display/Isloading';
 import Image from 'next/image';
 import { Virtuoso } from 'react-virtuoso';
 import { parsePhoneNumberFromString, CountryCode } from 'libphonenumber-js';
-import { useGetCountriesQuery } from '@/service/admin/external-api/countryCalling_code_query';
 import { safeDecodeURI } from '@/utils/GlobalMethods';
+import {Country, useCountryCode} from "@/service/admin/external-api/api";
 
 interface PhoneNumberSelectProps {
   phoneNumber: string;
@@ -56,7 +56,19 @@ const PhoneNumberSelect: React.FC<PhoneNumberSelectProps> = ({
   const [isSelectOpen, setIsSelectOpen] = useState(false);
   const [internalCountryCode, setInternalCountryCode] = useState(defaultCountry);
 
-  const { data: countries, isLoading } = useGetCountriesQuery();
+  const { get } = useCountryCode();
+  const [countries, setCountries] = useState<Country[]>([]);
+  const [isLoading, setLoading] = useState(true);
+
+  useEffect(() => {
+    get()
+        ?.then((data) => {
+          if (data) setCountries(data);
+        })
+        .finally(() => setLoading(false));
+  }, [get]);
+
+
 
   const isCountryControlled =
     typeof selectedCountryCode !== 'undefined' &&
@@ -71,6 +83,7 @@ const PhoneNumberSelect: React.FC<PhoneNumberSelectProps> = ({
     : setInternalCountryCode;
 
   useEffect(() => {
+    get();
     if (countries && !isCountryControlled) {
       const fallback = countries.find((c) => c.id === defaultCountry);
       if (fallback) setInternalCountryCode(fallback.id);
