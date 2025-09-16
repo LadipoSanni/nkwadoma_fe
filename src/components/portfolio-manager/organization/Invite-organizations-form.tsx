@@ -15,6 +15,8 @@ import CenterMultistep from '@/reuseable/multiStep-component/Center-multistep';
 import { organizationValidationSchema,stepTwo1ValidationSchema } from '@/utils/validation-schema';
 import { setOrganizationInitialState,resetOrganizationInitialState } from '@/redux/slice/organization/organization';
 import CustomSelectObj from '@/reuseable/Input/Custom-select-obj';
+import { formatPlaceName } from "@/utils/GlobalMethods";
+
 
 interface ApiError {
     status: number;
@@ -227,14 +229,25 @@ function InviteOrganizationsForm({setIsOpen,organizationRefetch,tabType}: props)
                     placeholder="Enter name"
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                         const value = e.target.value;
-                        const cleanedValue = value.replace(/[^a-zA-Z0-9_-\s]/g, '');
+                        let cleanedValue = value.replace(/[^a-zA-Z0-9'_-\s]/g, '');
+                        cleanedValue = cleanedValue.replace(/(['_-])\1+/g, '$1');
                         if (cleanedValue.length > 0 && !/^[a-zA-Z]/.test(cleanedValue)) {
-                          setFieldValue("name", cleanedValue.substring(1));
-                        } else {
-                          setFieldValue("name", cleanedValue);
+                          cleanedValue = cleanedValue.substring(1);
                         }
+                      
+                        setFieldValue("name", cleanedValue);
                         handleFormChange("name", cleanedValue);
-                    }}
+                      }}
+                    //   onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                    //     const value = e.target.value;
+                    //     const cleanedValue = value.replace(/[^a-zA-Z0-9_-\s]/g, '');
+                    //     if (cleanedValue.length > 0 && !/^[a-zA-Z]/.test(cleanedValue)) {
+                    //       setFieldValue("name", cleanedValue.substring(1));
+                    //     } else {
+                    //       setFieldValue("name", cleanedValue);
+                    //     }
+                    //     handleFormChange("name", cleanedValue);
+                    // }}
                 />
                     {
                         errors.name && touched.name && (
@@ -489,7 +502,7 @@ function InviteOrganizationsForm({setIsOpen,organizationRefetch,tabType}: props)
                     placeholder="Enter admin first name"
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                         const value = e.target.value;
-                        const formattedValue = value.replace(/[^A-Za-z]/g, '');
+                        const formattedValue = formatPlaceName(value,false);
                         setFieldValue("adminFirstName", formattedValue);
                         handleFormChange("adminFirstName", formattedValue);
                     }}
@@ -516,7 +529,7 @@ function InviteOrganizationsForm({setIsOpen,organizationRefetch,tabType}: props)
                     placeholder="Enter admin last name"
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                         const value = e.target.value;
-                        const formattedValue = value.replace(/[^A-Za-z]/g, '');
+                        const formattedValue = formatPlaceName(value,false);
                         setFieldValue("adminLastName", formattedValue);
                         handleFormChange("adminLastName", formattedValue);
                     }}

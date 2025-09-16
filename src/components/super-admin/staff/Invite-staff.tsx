@@ -11,6 +11,7 @@ import { getUserDetailsFromStorage } from "@/components/topBar/action";
 import { setIsStaffOpen } from '@/redux/slice/staff-and-request/request';
 import { store } from '@/redux/store';
 import {formatSentence} from "@/utils/GlobalMethods";
+import { formatPlaceName } from "@/utils/GlobalMethods";
 
 interface RoleOption {
   value: string;
@@ -111,7 +112,7 @@ function InviteStaff({setIsOpen,roleOptions,isItemDisabled}:Props) {
                 placeholder="Enter name"
                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                 const value = e.target.value;
-                const formattedValue = value.replace(/^[\s]+|[^A-Za-z\s!-]/g, '');
+                 const formattedValue = formatPlaceName(value,false);
                 setFieldValue("firstName", formattedValue);
             }}  
             />
@@ -136,7 +137,8 @@ function InviteStaff({setIsOpen,roleOptions,isItemDisabled}:Props) {
                 placeholder="Enter name"
                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                 const value = e.target.value;
-                const formattedValue = value.replace(/^[\s]+|[^A-Za-z\s!-]/g, '');
+                const formattedValue = formatPlaceName(value,false);
+                // const formattedValues = formattedValue.replace(/[^a-zA-Z'_-\s]/g, '');
                 setFieldValue("lastName", formattedValue);
             }}  
             />

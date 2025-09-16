@@ -22,6 +22,7 @@ import { setCreateInvestmentField,clearSaveCreateInvestmentField,setDraftId,clea
 import { validationSchema,draftValidationSchema } from '@/utils/validation-schema';
 import PdfAndDocFileUpload from '@/reuseable/Input/Pdf&docx-fileupload';
 import BankSelectField from '@/reuseable/Input/Bank-select-field';
+import { formatPlaceName } from "@/utils/GlobalMethods";
 
 interface ApiError {
     status: number;
@@ -248,7 +249,14 @@ function Setup({investmentVehicleType}: Props) {
                 name="name"
                 placeholder="Enter name"
                 className="w-full p-3 border rounded focus:outline-none mt-2 text-[14px]"
-                onChange={validateText("name", setFieldValue)}
+                onChange={
+                  (e: React.ChangeEvent<HTMLInputElement>) => {
+                                  const value = e.target.value;
+                                   const formattedValue = formatPlaceName(value,true);
+                                  setFieldValue("name", formattedValue);
+                              }
+                  // validateText("name", setFieldValue)
+                }
             />
             {errors.name && touched.name && (
                 <ErrorMessage

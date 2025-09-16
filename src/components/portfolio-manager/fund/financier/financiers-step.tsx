@@ -49,9 +49,16 @@ function InviteFinanciers({setIsOpen,investmentId,amountCommitedAndDesignationCo
  const validationschema = Yup.object().shape({
       firstName: Yup.string()
            .trim()
-           .matches(/^[A-Za-z]+$/, 'First name should only contain letters')
+           .test(
+            "valid-name",
+            "First name must not end with hyphen or underscore or apostrophe",
+            (value = "") => {
+              const regex = /^[a-zA-Z](?:[a-zA-Z0-9'_-\s]*[a-zA-Z0-9])?$/;
+                return regex.test(value);
+            }
+        )
            .max(100, "First name cannot be more than 50 characters.")
-           .required('First name is required'),
+           .required('Last Name is required'),
         //    .when('financierType', {
         //     is: 'INDIVIDUAL', 
         //     then: (schema) => schema.required('First name is required'),
@@ -59,9 +66,16 @@ function InviteFinanciers({setIsOpen,investmentId,amountCommitedAndDesignationCo
         // }),
          lastName: Yup.string()
            .trim()
-           .matches(/^[A-Za-z]+$/, 'Last name should only contain letters')
+           .test(
+            "valid-name",
+            "Last name must not end with hyphen or underscore",
+            (value = "") => {
+              const regex = /^[a-zA-Z](?:[a-zA-Z0-9'_-\s]*[a-zA-Z0-9])?$/;
+                return regex.test(value);
+            }
+        )
            .max(100, "Last name cannot be more than 50 characters.")
-           .required('Last name is required'),
+           .required('Last Name is required'),
           //  .when('financierType', {
           //   is: 'INDIVIDUAL', 
           //   then: (schema) => schema.required('Last Name is required'),
@@ -71,7 +85,8 @@ function InviteFinanciers({setIsOpen,investmentId,amountCommitedAndDesignationCo
            .trim()
            .email('Invalid email address')
            .matches(/^[^\s@]+@[^\s@]+\.[^\s@]+$/, 'Invalid email format')
-           .required('Email address is required'),
+           .required('Email Address is required')
+           .required('Last Name is required'),
         //    .when('financierType', {
         //     is: 'INDIVIDUAL', 
         //     then: (schema) => schema.required('email is required'),
@@ -81,17 +96,17 @@ function InviteFinanciers({setIsOpen,investmentId,amountCommitedAndDesignationCo
         .trim()
         .email('Invalid email address')
         .matches(/^[^\s@]+@[^\s@]+\.[^\s@]+$/, 'Invalid email format')
-        .required('Company email address is required')
+        .required('Email Address is required')
         .when('financierType', {
          is: 'COOPERATE', 
-         then: (schema) => schema.required('Company email is required'),
+         then: (schema) => schema.required('email is required'),
          otherwise: (schema) => schema.notRequired(),
      }),
            organizationName: Yup.string()
               .trim()
               .matches(
-               /^[a-zA-Z](?:[a-zA-Z0-9_-\s]*[a-zA-Z0-9])?$/,
-               "Organization name can not end with hyphen or underscore .",
+               /^[a-zA-Z](?:[a-zA-Z0-9'_-\s]*[a-zA-Z0-9])?$/,
+               "Company name can not end with hyphen or underscore  or apostrophe.",
               )
               .max(200, "Organization name cannot be more than 200 characters.")
               .when('financierType', {

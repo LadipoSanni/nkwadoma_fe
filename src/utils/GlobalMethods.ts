@@ -297,6 +297,23 @@ export const safeDecodeURI = (url: string) => {
       return url;
     }
   };
+
+
+  export const formatPlaceName = (value: string,condition?: boolean) => {
+    let cleanedValue = condition === false? value.replace(/[^a-zA-Z\s'_-]/g, '') : value.replace(/[^a-zA-Z0-9\s'_-]/g, '');
+
+    if (/^['_-]/.test(cleanedValue)) {
+        cleanedValue = cleanedValue.substring(1);
+      }
+
+    cleanedValue = cleanedValue
+    .replace(/'{2,}/g, "'")
+    .replace(/_{2,}/g, '_')
+    .replace(/-{2,}/g, '-')
+    .replace(/['_-]{2,}/g, "'");
+    
+    return cleanedValue;
+  };
   
   
   
