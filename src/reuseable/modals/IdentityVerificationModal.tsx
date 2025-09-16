@@ -13,9 +13,6 @@ import { useUploadImageToCloudinary } from "@/utils/UploadToCloudinary";
 import { useVerifyIdentityMutation } from "@/service/users/Loanee_query";
 import WarningModal from "@/reuseable/modals/WarningDialog/WarningModal";
 import {useAppSelector} from "@/redux/store";
-// import { clearCameraStream } from '@/redux/slice/camera/camera-slice';
-// import { useDispatch, useSelector } from 'react-redux';
-//  import { RootState } from '@/redux/store';
 
 interface IdentityVerificationModalProps {
     isOpen: boolean;
@@ -62,13 +59,11 @@ const IdentityVerificationModal: React.FC<IdentityVerificationModalProps> = ({
     const [errorMessage, setErrorMessage] = useState("");
     const [verifyIdentity] = useVerifyIdentityMutation();
     const videoRef = useRef<HTMLVideoElement>(null);
-    // const dispatch = useDispatch();
     const invitedLoaneeFromPmId = useAppSelector(state => state.selectedLoan.cohortLoaneeId)
 
     const {upload} = useUploadImageToCloudinary();
 
     const handleCapture = async (imageFile: File) => {
-        // loaneeIdentityData.imageUrl = await useUploadImageToCloudinary(imageFile,"loanee_verification");
         loaneeIdentityData.imageUrl = await upload(imageFile,"loanee_verification");
         loaneeIdentityData.loanReferralId = invitedLoaneeFromPmId ? '' : loanReferralId;
         try {
@@ -121,22 +116,10 @@ const IdentityVerificationModal: React.FC<IdentityVerificationModalProps> = ({
         }
     };
 
-    // const stopCamera = () => {
-    //     const stream = videoRef.current?.srcObject as MediaStream;
-    //     if (stream) {
-    //         stream.getTracks().forEach((track) => {
-    //             if (track.readyState === 'live' && track.kind === 'video') {
-    //                 track.stop();
-    //             }
-    //         });
-    //     }
-    // };
-    // const stream = useSelector((state: RootState) => state.camera.stream)
 
     const stopCamera = () => {
         if (stream) {
             stream.getTracks().forEach((track) => {
-                console.log("The track is : ", track)
                 track.stop() });
             // dispatch(clearCameraStream());
             setStream(null)
