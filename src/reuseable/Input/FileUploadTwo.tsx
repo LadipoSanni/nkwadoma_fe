@@ -2,7 +2,7 @@ import React, { useRef, useState, useEffect } from 'react';
 import { FiUploadCloud } from "react-icons/fi";
 import { Label } from "@/components/ui/label";
 import { MdOutlineDelete, MdOutlineEdit, MdCheck, MdErrorOutline } from "react-icons/md";
-import { uploadImageToCloudinary } from '@/utils/UploadToCloudinary';
+import { useUploadImageToCloudinary } from '@/utils/UploadToCloudinary';
 import Image from 'next/image';
 
 interface FileUploadProps {
@@ -29,6 +29,8 @@ const FileUpload: React.FC<FileUploadProps> = ({
     const [fileName, setFileName] = useState("");
     const [uploadedFileUrl, setUploadedFileUrl] = useState<string | null>(initialImageUrl || null);
     const [isDragActive, setIsDragActive] = useState(false);
+
+    const {upload} = useUploadImageToCloudinary();
 
     const supportedTypes = ["image/svg+xml", "image/png", "image/jpg", "image/jpeg","image/webp"];
     const fileTypesText = "SVG, PNG OR JPG (max. 800x400px)";
@@ -67,7 +69,7 @@ const FileUpload: React.FC<FileUploadProps> = ({
         }
 
         try {
-            const uploadedFileUrl = await uploadImageToCloudinary(selectedFile);
+            const uploadedFileUrl = await upload(selectedFile);
             setUploadedFileUrl(uploadedFileUrl);
             setUploadedImageUrl(uploadedFileUrl);
         } catch (uploadError) {
@@ -110,7 +112,8 @@ const FileUpload: React.FC<FileUploadProps> = ({
         }
 
         try {
-            const uploadedFileUrl = await uploadImageToCloudinary(droppedFile);
+            // const uploadedFileUrl = await useUploadImageToCloudinary(droppedFile);
+            const uploadedFileUrl = await upload(droppedFile);
             setUploadedFileUrl(uploadedFileUrl);
             setUploadedImageUrl(uploadedFileUrl);
         } catch (uploadError) {

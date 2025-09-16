@@ -1,49 +1,69 @@
-const upload_preset = process.env.NEXT_PUBLIC_UPLOAD_PRESET;
-const cloud_name = process.env.NEXT_PUBLIC_CLOUD_NAME;
-const api_url = `https://api.cloudinary.com/v1_1/${cloud_name}/auto/upload`;
 
-if (!upload_preset || !cloud_name) {
-  throw new Error("Missing Cloudinary environment variables");
-}
+import { useState, useCallback } from "react";
+import {useConfig} from "@/app/config-context";
 
-export const uploadDocumentToCloudinary = async (file: File,setLoader: (error:boolean) => void,  folder?: string): Promise<string> => {
-  const MAX_FILE_SIZE = 10 * 1024 * 1024;
+export const useUploadDocumentToCloudinary =  () => {
+  const { uploadPreset, cloudName } = useConfig();
 
-  const allowedTypes = [
-    'application/pdf', 
-    'application/vnd.openxmlformats-officedocument.wordprocessingml.document' // DOCX files
-  ];
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<Error | null>(null);
+  const [url, setUrl] = useState<string | null>(null);
 
-  if (!allowedTypes.includes(file.type)) {
-    throw new Error('Only PDF and DOCX documents are allowed');
-  }
+  const upload = useCallback(
+      async (file: File, setLoader: (error:boolean) => void, folder?: string) => {
+        setLoading(true);
+        setError(null);
+        const MAX_FILE_SIZE = 10 * 1024 * 1024;
 
-  if (file.size > MAX_FILE_SIZE) {
-    throw new Error('File size exceeds 10MB limit');
-  }
+        const allowedTypes = [
+          'application/pdf',
+          'application/vnd.openxmlformats-officedocument.wordprocessingml.document' // DOCX files
+        ];
 
-  const formData = new FormData();
-  formData.append('file', file);
-  formData.append('upload_preset', upload_preset);
+        if (!allowedTypes.includes(file.type)) {
+          throw new Error('Only PDF and DOCX documents are allowed');
+        }
 
-  if (folder) {
-    formData.append('folder', folder);
-  }
+        if (file.size > MAX_FILE_SIZE) {
+          throw new Error('File size exceeds 10MB limit');
+        }
+        try {
+          const cloud_name = cloudName || "";
+          const upload_preset = uploadPreset || "";
 
-  setLoader(true)
+          const api_url = `https://api.cloudinary.com/v1_1/${cloud_name}/image/upload`;
 
-  const res = await fetch(api_url, {
-    method: 'POST',
-    body: formData
-  });
 
-  if (!res.ok) {
-    const error = await res.text();
-    throw new Error(`Document upload failed: ${error}`);
-  }
+          const formData = new FormData();
+          formData.append("file", file);
+          formData.append("upload_preset", upload_preset);
 
-  const result = await res.json();
-  setLoader(false)
-  return result.secure_url;
+          if (folder) {
+            formData.append("folder", folder);
+          }
+
+          const res = await fetch(api_url, {
+            method: "POST",
+            body: formData,
+          });
+
+          if (!res.ok) {
+            throw new Error("Failed to upload image");
+          }
+
+          const data: { secure_url: string } = await res.json();
+          setUrl(data.secure_url);
+          return data.secure_url;
+        } catch (err) {
+          setError(err as Error);
+          throw err;
+        } finally {
+          setLoading(false);
+        }
+      },
+      [cloudName, uploadPreset]
+  );
+
+  return { upload, loading, error, url };
 
 };

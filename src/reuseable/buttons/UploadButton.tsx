@@ -1,5 +1,5 @@
 import React, {useEffect, useRef, useState} from 'react';
-import {uploadImageToCloudinary} from "@/utils/UploadToCloudinary";
+import {useUploadImageToCloudinary} from "@/utils/UploadToCloudinary";
 import { Button } from '@/components/ui/button';
 import {FaCircleUser} from "react-icons/fa6";
 import {inter, inter500, inter600} from "@/app/fonts";
@@ -30,6 +30,8 @@ const UploadButton = ({whose, url} : Props) => {
     const [ updateOrg, {isLoading:isLoadingOrg} ] = useAddOrganizationImageLogoMutation()
     const supportedFileTypes = ["image/svg+xml", "image/png", "image/jpg", "image/jpeg", "image/webp"];
     const ee = error + fileName
+
+    const {upload} = useUploadImageToCloudinary();
 
     const truncateFileName = (name: string, length: number) => {
         return name.length > length ? name.substring(0, length) + "..." : name;
@@ -73,7 +75,7 @@ const UploadButton = ({whose, url} : Props) => {
 
         setFile(selectedFile);
         try {
-            const uploadedFileUrl = await uploadImageToCloudinary(selectedFile, "user_image");
+            const uploadedFileUrl = await upload(selectedFile, "user_image");
             setUploadedImageUrl(uploadedFileUrl);
             setUploadedOrgUrl(uploadedOrgUrl);
         } catch (uploadError) {
