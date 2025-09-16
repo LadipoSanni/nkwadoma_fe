@@ -16,7 +16,8 @@ import {capitalizeFirstLetters, getFirstLetterOfWord} from "@/utils/GlobalMethod
 import { Badge } from "@/components/ui/badge"
 import { Skeleton } from "@/components/ui/skeleton"
 import BackButton from '../back-button';
-import {useRouter} from "next/navigation";
+import {useRouter, useSearchParams} from "next/navigation";
+import { useAppSelector} from '@/redux/store';
 
 interface Props {
     cohort: string,
@@ -34,6 +35,10 @@ const LoaneeProfileHeader = ({cohort ,userName,institutionName, program, isLoadi
     const [modalTitle, setModalTitle] = React.useState('');
     const userRole  = getItemSessionStorage("user_role")
     const router = useRouter()
+    const searchParams = useSearchParams()
+     const organizationTabStatus = useAppSelector(store => store?.organization?.organizationDetailTabStatus)
+
+     
 
     const handleOpenModal = (id: string, title: string, buttonText: string) => {
         setModalId(id);
@@ -42,17 +47,40 @@ const LoaneeProfileHeader = ({cohort ,userName,institutionName, program, isLoadi
         setOpenModal(true);
     }
     const handleBack = () => {
-        router.push("/my-loans");
+        if(['PORTFOLIO_MANAGER','MEEDL_SUPER_ADMIN','PORTFOLIO_MANAGER_ASSOCIATE'].includes(userRole || "")){
+            if (searchParams){
+                const id = searchParams.get("id");
+                if (id) {
+                    router.push('/loanees/loans')
+                }else {
+                     if(organizationTabStatus === "cohort"){
+                        router.push('/organizations/cohort/all')
+                     }else {
+                        router.push('/organizations/loanees/uploaded')
+                     }
+                    
+
+                }
+            }
+
+        }else if(userRole?.includes('ADMIN')) {
+            router.push('/loanees/loans')
+        }else if(userRole === 'LOANEE') {
+            router.push("/my-loans");
+        }
     }
 
     return (
-       <div>
-           {userRole === 'LOANEE' && <BackButton id={'backtoMyLoans'} sx={`pl-3 pt-2  `} text={'Back'} handleClick={handleBack}
+       <div className={` ${userRole?.includes('ADMIN') ? ' ' :''} grid gap-3  h-fit   border-b border-b-grey-200 `} >
+               <BackButton id={'backtoMyLoans'} sx={`  `} text={'Back'} handleClick={handleBack}
                         textColor={'meedlBlue'} iconBeforeLetters={true}/>
-           }           <div id={'loaneeProfileHeader'}
+
+
+           <div id={'loaneeProfileHeader'}
                 data-testid={'loaneeProfileHeader'}
-                className={`w-full h-fit md:h-[13vh]  py-4 border-b border-b-grey-200 px-4  mt-auto mb-auto  flex justify-between `}
+                className={`w-full h-fit md:h-fit     mt-auto mb-auto  flex justify-between `}
            >
+
                {isLoading ?
                    <div className="flex items-center space-x-4">
                        <Skeleton className="h-20 w-20 bg-[#f4f4f5] rounded-full" />
@@ -62,10 +90,11 @@ const LoaneeProfileHeader = ({cohort ,userName,institutionName, program, isLoadi
                        </div>
                    </div>
                    :
+
                <div
                    id={'cohortAndProgramInfo'}
                    data-testid={'cohortAndProgramInfo'}
-                   className={` w-fit h-full  flex gap-2`}
+                   className={` w-fit h-full   flex gap-2`}
                >
                        <div
                        id={'cohortImage'}
@@ -75,29 +104,29 @@ const LoaneeProfileHeader = ({cohort ,userName,institutionName, program, isLoadi
                        {userRole === 'LOANEE' ?
                            <Badge className={`h-[70px] w-[70px] hover:bg-[#F6F6F6]    bg-[#F6F6F6] rounded-full `}>
 
-                               <p className={` w-fit h-fit mt-auto mb-auto mr-auto ml-auto ${cabinetGroteskBold.className} text-[#4D4E4D] md:text-[#4D4E4D] text-[24px] `}>{getFirstLetterOfWord(institutionName) ? getFirstLetterOfWord(institutionName) : institutionName?.at(0)?.toUpperCase()}</p>
+                               <p className={` w-fit h-fit mt-auto mb-auto mr-auto ml-auto ${cabinetGroteskBold.className} text-[#4D4E4D] md:text-[#4D4E4D] text-[24px] `}>{institutionName ? getFirstLetterOfWord(institutionName) ? getFirstLetterOfWord(institutionName) : institutionName?.at(0)?.toUpperCase() : ''}</p>
                            </Badge>
                            :
 
                            <Badge id={'loaneeUserName'} variant={"secondary"}
                                   className={`h-[70px] w-[70px] bg-[#E7F5EC] hover:bg-[#E7F5EC] ${cabinetGroteskBold.className} text-[#063F1A] md:text-[#063F1A]  text-[24px] rounded-full `}>
-                               <p className={` w-fit h-fit mt-auto mb-auto mr-auto ml-auto `}>{getFirstLetterOfWord(userName)}</p>
+                               <p className={` w-fit h-fit mt-auto mb-auto mr-auto ml-auto `}>{userName ? getFirstLetterOfWord(userName) : ''}</p>
                            </Badge>
                        }
                    </div>
                    <div className={` mt-auto mb-auto `}>
                        <div className={`   grid  gap-0 `}>
                            {userRole === 'LOANEE' ?
-                               <span id={'cohortName'} data-testid={'cohortName'} className={` ${cabinetGroteskBold.className} text-[20px] text-[#212221] `}>{institutionName}</span>
+                               <span id={'cohortName'} data-testid={'cohortName'} className={` ${cabinetGroteskBold.className} text-[20px] text-[#212221] `}>{institutionName  ? institutionName : ''}</span>
                                :
-                               <p id={'loaneeUserName'} className={`${cabinetGroteskBold.className} 0 text-[#212221] text-[20px] `}>{capitalizeFirstLetters(userName)}</p>
+                               <p id={'loaneeUserName'} className={`${cabinetGroteskBold.className} 0 text-[#212221] text-[20px] `}>{userName ? capitalizeFirstLetters(userName) : ''}</p>
 
                            }
                            <div className={` flex gap-2`}>
-                               <p id={'loaneeCohort'} className={`${inter.className} text-[#4D4E4D] text-[16px] `}>{capitalizeFirstLetters(program)}</p>
+                               <p id={'loaneeCohort'} className={`${inter.className} text-[#4D4E4D] text-[16px] `}>{program ? capitalizeFirstLetters(program) :''}</p>
                                {cohort && program ? <Circle color={'#ECECEC'}
                                                             className="h-1 w-1 text-[#ECECEC] mt-auto mb-auto  fill-primary"/>: null}
-                               <p id={'loaneeProgram'} data-testid={'loaneeProgram'} className={`${inter.className} text-[#4D4E4D] text-[16px] `}>{capitalizeFirstLetters(cohort)}</p>
+                               <p id={'loaneeProgram'} data-testid={'loaneeProgram'} className={`${inter.className} text-[#4D4E4D] text-[16px] `}>{cohort ? capitalizeFirstLetters(cohort) : ''}</p>
                            </div>
                        </div>
                    </div>
@@ -139,7 +168,7 @@ const LoaneeProfileHeader = ({cohort ,userName,institutionName, program, isLoadi
                }
            </div>
 
-           <Modal modalId={modalId} title={modalTitle} isOpen={openModal} setIsOpen={setOpenModal} buttonText={modalButtonText} />
+           <Modal modalId={modalId} title={modalTitle} isOpen={openModal} setIsOpen={setOpenModal}   buttonText={modalButtonText} />
        </div>
     );
 };

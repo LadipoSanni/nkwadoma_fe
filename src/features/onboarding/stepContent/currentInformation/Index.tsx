@@ -8,6 +8,8 @@ import {setLoaneeCurrentInfo, setIsFormSubmited} from "@/service/users/loanRerra
 import LoaneeCurrentInformation from '@/components/loanee/Loanee-current-information';
 import { store,useAppSelector } from "@/redux/store";
 import { formatInternationalNumber } from '@/utils/phoneNumber';
+import { formatSentence } from '@/utils/GlobalMethods';
+import {capitalizeFirstLetters} from "@/utils/GlobalMethods";
 
 interface CurrentInformationProps {
     setCurrentStep?: (step: number) => void;
@@ -33,6 +35,9 @@ const CurrentInformation: React.FC<CurrentInformationProps> = ({ setCurrentStep 
         alternateEmail: currentLoaneeInfo.alternateEmail,
         alternatePhoneNumber: currentLoaneeInfo.alternatePhoneNumber,
         alternateContactAddress: currentLoaneeInfo.alternateContactAddress,
+        stateOfResidence: currentLoaneeInfo.stateOfResidence,
+        levelOfEducation:  currentLoaneeInfo.levelOfEducation,
+        others: currentLoaneeInfo.others || ''
       }
 
 
@@ -57,6 +62,9 @@ const CurrentInformation: React.FC<CurrentInformationProps> = ({ setCurrentStep 
         alternateEmail: values.alternateEmail,
         alternatePhoneNumber: alternateFormattedPhoneNumber || values.alternatePhoneNumber,
         alternateContactAddress: values.alternateContactAddress,
+        stateOfResidence: values.stateOfResidence,
+        levelOfEducation:  values.levelOfEducation,
+        others: values.others
         }
         store.dispatch(setLoaneeCurrentInfo(additionalLoaneeInfo)) 
     }
@@ -131,6 +139,14 @@ const CurrentInformation: React.FC<CurrentInformationProps> = ({ setCurrentStep 
                 ) : (
                     <div>
                     <div className={'bg-grey105 p-5  grid gap-9 rounded-md'}>
+                    <div className={'md:flex md:justify-between md:items-center md:gap-0 grid gap-3 '}>
+                            <p className={'text-black300 text-[14px] leading-[150%] font-normal'}>State of residence</p>
+                            <p className={'text-black500 text-[14px] leading-[150%] font-normal'}>{formatSentence(currentLoaneeInfo.stateOfResidence)}</p>
+                        </div>
+                        <div className={'md:flex md:justify-between md:items-center md:gap-0 grid gap-3'}>
+                            <p className={'text-black300 text-[14px] leading-[150%] font-normal'}>Level of education</p>
+                            <p className={'text-black500 text-[14px] leading-[150%] font-normal'}>{currentLoaneeInfo.levelOfEducation === "DIPLOMA"? "Diploma" : currentLoaneeInfo.levelOfEducation === "O_LEVEL"? "O'level" : currentLoaneeInfo.levelOfEducation === "OTHERS"? capitalizeFirstLetters(currentLoaneeInfo.others) : capitalizeFirstLetters(currentLoaneeInfo.levelOfEducation)}</p>
+                        </div>
                         <div className={'md:flex md:justify-between md:items-center md:gap-0 grid gap-3 '}>
                             <p className={'text-black300 text-[14px] leading-[150%] font-normal'}>Alternate email
                                 address</p>
@@ -144,28 +160,28 @@ const CurrentInformation: React.FC<CurrentInformationProps> = ({ setCurrentStep 
                         <div className={'md:flex md:justify-between md:items-center md:gap-0 grid gap-3'}>
                             <p className={'text-black300 text-[14px] leading-[150%] font-normal'}>Alternate residential
                                 address</p>
-                            <p className={'text-black500 text-[14px] leading-[150%] font-normal'}>{currentLoaneeInfo.alternateContactAddress}</p>
+                            <p className={'text-black500 text-[14px] leading-[150%] font-normal'}>{capitalizeFirstLetters(currentLoaneeInfo.alternateContactAddress)}</p>
                         </div>
                         <div className={'md:flex md:justify-between md:items-center md:gap-0 grid gap-3'}>
                             <p className={'text-black300 text-[14px] leading-[150%] font-normal'}>Next of
                                 Kin&#39;s
                                 first
                                 name</p>
-                            <p className={'text-black500 text-[14px] leading-[150%] font-normal'}>{currentLoaneeInfo.firstName}</p>
+                            <p className={'text-black500 text-[14px] leading-[150%] font-normal'}>{capitalizeFirstLetters(currentLoaneeInfo.firstName)}</p>
                         </div>
                         <div className={'md:flex md:justify-between md:items-center md:gap-0 grid gap-3'}>
                             <p className={'text-black300 text-[14px] leading-[150%] font-normal'}>Next of
                                 Kin&#39;s
                                 last
                                 name</p>
-                            <p className={'text-black500 text-[14px] leading-[150%] font-normal'}>{currentLoaneeInfo.lastName}</p>
+                            <p className={'text-black500 text-[14px] leading-[150%] font-normal'}>{capitalizeFirstLetters(currentLoaneeInfo.lastName)}</p>
                         </div>
                         <div className={'md:flex md:justify-between md:items-center md:gap-0 grid gap-3'}>
                             <p className={'text-black300 text-[14px] leading-[150%] font-normal'}>Next of
                                 Kin&#39;s
                                 email
                                 address</p>
-                            <p className={'text-black500 text-[14px] leading-[150%] font-normal'}>{currentLoaneeInfo.email}</p>
+                            <p className={'text-black500 text-[14px] leading-[150%] font-normal'}>{capitalizeFirstLetters(currentLoaneeInfo.email)}</p>
                         </div>
                         <div className={'md:flex md:justify-between md:items-center md:gap-0 grid gap-3'}>
                             <p className={'text-black300 text-[14px] leading-[150%] font-normal'}>Next of

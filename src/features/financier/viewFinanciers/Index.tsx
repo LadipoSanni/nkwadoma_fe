@@ -26,6 +26,7 @@ import CustomSelect from "@/reuseable/Input/Custom-select";
 import { useAppSelector } from '@/redux/store';
 import { setFinancierStatusTab } from '@/redux/slice/financier/financier';
 import { resetAll,clearSaveCreateInvestmentField} from '@/redux/slice/vehicle/vehicle';
+import { useDebounce } from '@/hooks/useDebounce';
 
 
 interface TableRowData {
@@ -35,6 +36,7 @@ interface TableRowData {
 interface financials {
     financierType: string,
     organizationName: string,
+    totalAmountInvested: string
     userIdentity: {
         email: string,
         firstName: string,
@@ -60,7 +62,9 @@ const ViewFinanciers = () => {
     const [financiers, setFinanciers] = useState<viewAllfinancier[]>([])
     const [isModalOpen, setIsModalOpen] = useState(false);
     const router = useRouter()
-    const isDisabled = true;
+    const isDisabled = false;
+
+    const [debouncedSearchTerm, isTyping] = useDebounce(searchTerm, 1000);
 
     const [tabStates, setTabStates] = useState<Record<string, TabState>>({
             active: { pageNumber: 0, totalPages: 0, hasNextPage: false },
@@ -80,10 +84,10 @@ const ViewFinanciers = () => {
 
 
     const {data, isLoading, refetch,isFetching} = useGetAllActiveAndInvitedFinanciersQuery(param)
-    const {data:searchData, isLoading: searchIsLoading,isFetching: isSearchFetching} = useSearchFinancierQuery({name:searchTerm, pageNumber: currentTabState.pageNumber, pageSize: 10, financierType: selectedFinancier.toUpperCase(), activationStatus: tabType.toUpperCase()},{skip: !searchTerm})
+    const {data:searchData, isLoading: searchIsLoading,isFetching: isSearchFetching} = useSearchFinancierQuery({name:debouncedSearchTerm, pageNumber: currentTabState.pageNumber, pageSize: 10, financierType: selectedFinancier.toUpperCase(), activationStatus: tabType.toUpperCase()},{skip: !debouncedSearchTerm})
 
     useEffect(()=>{
-        if(searchTerm && searchData && searchData?.data){
+        if(debouncedSearchTerm && searchData && searchData?.data){
             const result = searchData?.data?.body
             setFinanciers(result)
             setTabStates(prev => ({
@@ -109,10 +113,20 @@ const ViewFinanciers = () => {
         }
         store.dispatch(resetAll())
        store.dispatch(clearSaveCreateInvestmentField())
-    },[searchTerm, searchData,data,tabType])
+    },[debouncedSearchTerm, searchData,data,tabType])
 
     const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSearchTerm(event.target.value);
+        if(!isTyping ){
+            setTabStates(prev => ({
+                ...prev,
+                [tabType]: {
+                    ...prev[tabType],
+                    pageNumber: 0
+                }
+            }));
+        }
+       
     };
 
     const handleReset = () => {
@@ -133,14 +147,14 @@ const ViewFinanciers = () => {
 
 
     const financierHeader = [
-        { title: 'Name', id: 'name', selector: (row: viewAllfinancier) => row?.financierType === "INDIVIDUAL"? row.userIdentity?.firstName + " " + row.userIdentity?.lastName : row?.organizationName},
+        { title: 'Name', id: 'name', selector: (row: viewAllfinancier) => capitalizeFirstLetters(row?.name?.toString())},
         { title: 'Type', id: 'type', selector: (row: viewAllfinancier) => (
                 <span className={`${row.financierType === "INDIVIDUAL"  ? 'text-[#66440A] bg-[#FEF6E8]' : 'text-[#142854] bg-[#EEF5FF]'} rounded-[32px] px-2 h-5`}>
             {capitalizeFirstLetters(row.financierType)}
         </span>
             ) },
         { title: 'No. of investments', id: 'investments', selector: (row:viewAllfinancier) => row.investments || 0 },
-        { title: 'Amount invested', id: 'amountInvested', selector: (row:viewAllfinancier) => formatAmount(row.amountInvested) },
+        { title: 'Amount invested', id: 'totalAmountInvested', selector: (row:viewAllfinancier) => formatAmount(row.totalAmountInvested) },
         { title: 'Amount earned', id: 'amountEarned', selector: (row:viewAllfinancier) => formatAmount(row.amountEarned) },
         { title: 'Payout', id: 'payout', selector: (row:viewAllfinancier) => formatAmount(row.payout) },
         { title: 'Portfolio value', id: 'portfolioValue', selector: (row:viewAllfinancier) => formatAmount(row.portfolioValue) }
@@ -156,9 +170,10 @@ const ViewFinanciers = () => {
 
     return (
         <main className={'mt-7 w-[100%] md:px-4 '}>
-            <div className={'md:flex w-full justify-between grid gap-4'}>
-                <div className={'flex gap-2 w-full '}>
-                    <SearchInput id={'financiersSearch'} style='w-70' value={searchTerm} onChange={handleSearchChange} />
+            
+            <div className={'md:flex w-full justify-between  gap-4'}>
+                <div className={'flex gap-4 pr-3 md:pr-0'}>
+                    <SearchInput id={'financiersSearch'} value={searchTerm} onChange={handleSearchChange} />
                     <CustomSelect
                         id="financierId"
                         value={selectedFinancier}
@@ -172,9 +187,10 @@ const ViewFinanciers = () => {
                         selectContent={["Individual", "Cooperate", "Reset"]}
                         placeHolder="Type"
                         triggerId="financierSelectId"
-                        className="h-11 md:w-28 w-full  mt-0 bg-[#F7F7F7] border border-[#D0D5DD]"
+                        className="h-11 w-28  mt-0 bg-[#F7F7F7] border border-[#D0D5DD]"
                     />
                 </div>
+                <div className='pr-3 md:pr-0'>
                 <Button
                     variant={"secondary"}
                     size={"lg"}
@@ -185,9 +201,10 @@ const ViewFinanciers = () => {
                 >
                     Invite financier
                 </Button>
+                </div>
             </div>
 
-            <div className={`pt-2`}>
+            <div className={`pt-2 md:mt-0 mt-4`}>
                 <Tabs value={tabType} onValueChange={(value) => {
     store.dispatch(setFinancierStatusTab(value));
   }} >
@@ -205,11 +222,12 @@ const ViewFinanciers = () => {
                                 gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
                             }}
                         >
-                            {searchTerm && financiers.length === 0 ? (
+                            {!isTyping && debouncedSearchTerm?.length > 0 && searchTerm && financiers.length === 0 ? (
                                 <div className={`flex justify-center items-center text-center md:h-[32vh] h-[40%] w-full mt-32`}>
                                     <SearchEmptyState icon={MdSearch} name="Financier" />
                                 </div>
                             ) : (
+                                <div className='pr-3 md:pr-0'>
                                 <Table
                                     tableData={financiers}
                                     tableHeader={financierHeader}
@@ -228,11 +246,13 @@ const ViewFinanciers = () => {
                                     isLoading={isLoading || searchIsLoading || isFetching || isSearchFetching}
                                     tableCellStyle={'h-12'}
                                 />
+                                </div>
                             )}
                         </div>
                     </TabsContent>
 
                     <TabsContent value={"invited"} className={`pt-3`}>
+                    <div className='pr-3 md:pr-0'>
                         <Table
                             tableData={financiers}
                             tableHeader={financierHeader}
@@ -251,7 +271,7 @@ const ViewFinanciers = () => {
                             isLoading={isLoading || searchIsLoading || isFetching || isSearchFetching}
                             tableCellStyle={'h-12'}
                         />
-
+               </div>
                     </TabsContent>
 
                 </Tabs>

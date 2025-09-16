@@ -195,19 +195,19 @@ function DataTable<T extends TableRowData>({
           </div>
 
       ) : (
-        <div>
+        <div className="mb-3">
           <div
             id="loanProductTableBorder"
             className="border-[1px] border-[#D0D5DD] border-solid rounded-md hidden md:block "
           >
             <TableContainer
               id="loanProductTableScrollbar"
-              style={{ height: `${tableHeight}vh`, overflow: "auto" }}
+              style={{ height: `${tableHeight}vh`, overflow: "scroll" }}
             >
               <Table id="dynamicTable" className="">
                 <TableHeader
                   id="dynamicTableHead"
-                  className={`bg-[#F0F2F4] sticky top-0  hover:bg-[#F0F2F4]`}
+                  className={`bg-[#F0F2F4] sticky top-0  hover:bg-[#F0F2F4] z-50`}
                 >
                   <TableRow
                     id="dynamicTableHeadRow"
@@ -245,6 +245,7 @@ function DataTable<T extends TableRowData>({
                   {tableData?.map((row, rowIndex) => (
                     <TableRow
                       id={`dynamicTableBodyRow${rowIndex}`}
+                      data-testid={`dynamicTableBodyRow${rowIndex}`}
                       key={rowIndex}
                       // onClick={() => handleRowClick(row)}
                       className={`${sx}`}
@@ -254,6 +255,7 @@ function DataTable<T extends TableRowData>({
                           onClick={() => handleRowClick(row)}
                           key={`${column.id}${rowIndex} `}
                           id={`dynamicTableCell${column.id}${rowIndex}`}
+                          data-testid={`dynamicTableCell${column.id}${rowIndex}`}
                           // className={`px-[12px] py-[10px] text-[#101828] ${column.id === selectedColumn? 'bg-[#fafbfc]' : ''}`}
                           className={`h-1 ${
                             isLastPage ? "border-b border-solid " : ""

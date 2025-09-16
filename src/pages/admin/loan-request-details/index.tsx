@@ -37,6 +37,10 @@ import CreditScore from "@/features/display/CreditScore";
 import { getInitial } from '@/utils/GlobalMethods';
 import Modal from '@/reuseable/modals/TableModal';
 import { Cross2Icon } from "@radix-ui/react-icons";
+import {setSelectedLoanRequestId} from "@/redux/slice/create/createLoanOfferSlice";
+import { capitalizeFirstLetters } from "@/utils/GlobalMethods";
+import { formatMonthInDate } from '@/utils/Format'
+
 
 const LoanDetailsContent = dynamic(
     () => Promise.resolve(LoanDetails),
@@ -78,6 +82,7 @@ function LoanDetails() {
         "Additional details",
         "Loan details"
     ]
+
 
     const toggleArrow = () => {
         if (!arrowDown) {
@@ -174,23 +179,23 @@ function LoanDetails() {
         {label: 'Gender', value: data?.data?.userIdentity?.gender},
         {label: 'Email address', value: data?.data?.userIdentity?.email},
         {label: 'Phone number', value: data?.data?.userIdentity?.phoneNumber},
-        {label: 'Date of birth', value: data?.data?.userIdentity?.dateOfBirth ? data?.data?.userIdentity?.dateOfBirth?.toString() : ''},
-        {label: 'Marital status', value: data?.data?.userIdentity?.maritalStatus},
-        {label: 'Nationality', value: data?.data?.userIdentity?.nationality},
-        {label: 'State of origin ', value: data?.data?.userIdentity?.stateOfOrigin},
-        {label: 'State of residence', value: data?.data?.userIdentity?.stateOfResidence},
-        {label: 'Residential address', value: data?.data?.userIdentity?.residentialAddress
+        {label: 'Date of birth', value: data?.data?.userIdentity?.dateOfBirth ? formatMonthInDate(data?.data?.userIdentity?.dateOfBirth?.toString()): ''},
+        {label: 'Marital status', value: capitalizeFirstLetters(data?.data?.userIdentity?.maritalStatus)},
+        {label: 'Nationality', value: capitalizeFirstLetters(data?.data?.userIdentity?.nationality)},
+        {label: 'State of origin ', value: capitalizeFirstLetters(data?.data?.userIdentity?.stateOfOrigin)},
+        {label: 'State of residence', value: capitalizeFirstLetters(data?.data?.userIdentity?.stateOfResidence)},
+        {label: 'Residential address', value: capitalizeFirstLetters(data?.data?.userIdentity?.residentialAddress)
         },
     ]
 
     const additional = [
         {label: 'Alternate email address', value: data?.data?.alternateEmail},
         {label: 'Alternate phone number', value: data?.data?.alternatePhoneNumber},
-        {label: 'Alternate residential address', value: data?.data?.alternateContactAddress},
+        {label: 'Alternate residential address', value: capitalizeFirstLetters(data?.data?.alternateContactAddress)},
         {
             label: 'Next of kin name',
             value: data?.data?.nextOfKin?.firstName && data?.data?.nextOfKin?.lastName
-                ? `${data?.data?.nextOfKin?.firstName} ${data?.data?.nextOfKin?.lastName}`
+                ? `${capitalizeFirstLetters(data?.data?.nextOfKin?.firstName)} ${capitalizeFirstLetters(data?.data?.nextOfKin?.lastName)}`
                 : 'Not provided'
         },
         {label: 'Next of kin email address', value: data?.data?.nextOfKin?.email},
@@ -220,6 +225,12 @@ function LoanDetails() {
 
     const setOpenDeclineOffer = (value: boolean) => {
         setOpenDeclineLoanRequestModal(value)
+    }
+
+    const handleCreateLoanOfferFlow = () => {
+        store.dispatch(setSelectedLoanRequestId(id))
+        router.push('/create-loan-offer')
+
     }
 
 
@@ -341,7 +352,7 @@ function LoanDetails() {
                                            <MenubarItem 
                                              id={'loanRequestDetailsApproveLoanRequestButton'}
                                              data-testid={'loanRequestDetailsApproveLoanRequestButton'}
-                                             onClick={() => setOpenCreateLoanOffer(true)}
+                                             onClick={handleCreateLoanOfferFlow}
                                              className="text-meedlBlue hover:!cursor-pointer  hover:!bg-[#EEF5FF] rounded-md"
                                            >
                                              Approve loan request
@@ -376,7 +387,7 @@ function LoanDetails() {
                                     {/* <CreateLoanOffer loanRequestId={getId()} isOpen={openCreateLoanOffer}
                                                      setIsOpen={open} /> */}
                                     <DeclineLoanModal isOpen={openDeclineLoanRequestModal} loanRequestId={getId()}
-                                                      setIsOpen={setOpenDeclineOffer} loanProductId={id}
+                                                      setIsOpen={setOpenDeclineOffer}
                                                       title={"Decline loan request"}/>
 
                                 </div>

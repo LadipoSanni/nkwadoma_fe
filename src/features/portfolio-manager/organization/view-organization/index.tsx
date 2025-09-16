@@ -6,19 +6,22 @@ import OrganizationActionBar from '@/components/portfolio-manager/organization/O
 import { MdOutlineAccountBalance } from 'react-icons/md';
 import TableModal from '@/reuseable/modals/TableModal';
 import Table from '@/reuseable/table/Table';
-import InviteOrganizationForm from '@/components/portfolio-manager/organization/Invite-organization-form';
+// import InviteOrganizationForm from '@/components/portfolio-manager/organization/Invite-organization-form';
 import { Cross2Icon } from "@radix-ui/react-icons";
 import { useViewAllOrganizationByStatusQuery, useSearchOrganisationByNameQuery } from "@/service/admin/organization";
-import { formatAmount,formatToTwoDecimals } from '@/utils/Format';
+import { formatAmount,formatToTwoDecimals,formatNumberWithCommas } from '@/utils/Format';
 import { useRouter } from 'next/navigation';
 import SearchEmptyState from '@/reuseable/emptyStates/SearchEmptyState';
 import { MdSearch } from 'react-icons/md';
-import { setOrganizationTabStatus,setOrganizationId,resetOrganizationId,resetOrganizationDetailsStatus} from '@/redux/slice/organization/organization';
+import { setOrganizationTabStatus,setOrganizationId,resetOrganizationDetailsStatus,resetOrganizationStatus,setOrganizationName} from '@/redux/slice/organization/organization';
 import { useAppSelector } from '@/redux/store';
 import { store } from "@/redux/store";
 import { resetNotification } from '@/redux/slice/notification/notification';
 import { useDebounce } from '@/hooks/useDebounce';
 import { resetAll,clearSaveCreateInvestmentField} from '@/redux/slice/vehicle/vehicle';
+import InviteOrganizationForm from '@/components/portfolio-manager/organization/Invite-organizations-form';
+// import {resetOrganizationInitialState } from '@/redux/slice/organization/organization';
+import {capitalizeFirstLetters} from "@/utils/GlobalMethods";
 
 interface TableRowData {
     [key: string]: string | number | null | React.ReactNode;
@@ -112,11 +115,12 @@ function Organization() {
                 }
             }));
         }
-        store.dispatch(resetOrganizationId())
+        // store.dispatch(resetOrganizationId())
         store.dispatch(resetNotification())
         store.dispatch(resetOrganizationDetailsStatus())
         store.dispatch(resetAll())
         store.dispatch(clearSaveCreateInvestmentField())
+        store.dispatch(resetOrganizationStatus())
     }, [debouncedSearchTerm, searchResults, data, tabType]);
 
     const handleInviteOrganizationClick = () => {
@@ -125,7 +129,8 @@ function Organization() {
 
     const handleRowClick = (row: TableRowData) => {
         store.dispatch(setOrganizationId(String(row.id)))
-        router.push('/organizations/details');
+        store.dispatch(setOrganizationName(String(row?.name)))
+        router.push('/organizations/detail');
     };
 
     const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -144,8 +149,8 @@ function Organization() {
     };
     
     const organizationHeader = [
-        { title: <div>Name</div>, sortable: true, id: 'name', selector: (row: TableRowData) => row.name },
-        { title: "No. of loanees", sortable: true, id: 'numberOfLoanees', selector: (row: TableRowData) => row.numberOfLoanees },
+        { title: <div>Name</div>, sortable: true, id: 'name', selector: (row: TableRowData) => capitalizeFirstLetters(row.name as string) },
+        { title: "No. of loanees", sortable: true, id: 'numberOfLoanees', selector: (row: TableRowData) => formatNumberWithCommas(row.numberOfLoanees as number) },
         { title: "Historical debt", sortable: true, id: 'totalHistoricalDebt', selector: (row: TableRowData) => formatAmount(row.totalAmountReceived) },
         { title: "Repayment rate(%)", sortable: true, id: 'repaymentRate', selector: (row: TableRowData) => formatToTwoDecimals(row.repaymentRate) },
         { title: "Debt repaid", sortable: true, id: 'totalDebtRepaid', selector: (row: TableRowData) => formatAmount(row.totalDebtRepaid) },
@@ -162,7 +167,7 @@ function Organization() {
             <Table
                 tableData={organizationList}
                 tableHeader={organizationHeader}
-                tableHeight={55}
+                tableHeight={organizationList.length < 10? 60 : undefined}
                 sx='cursor-pointer'
                 handleRowClick={handleRowClick}
                 tableCellStyle={'h-12'}
@@ -184,7 +189,14 @@ function Organization() {
     const tabContent = tabData.map(tab => ({
         value: tab.value,
         content: (
-            <div>
+            <div className='md:overflow-scroll max-h-[70vh]'
+            style={{
+                scrollbarWidth: 'none',
+                msOverflowStyle: 'none',
+                scrollbarGutter: "stable both-edge"
+          
+            }}
+            >
                 <OrganizationActionBar
                     id={`${tab.value}Id`}
                     inviteButton={tab.value}
@@ -192,15 +204,16 @@ function Organization() {
                     onChange={handleSearchChange}
                     handleInviteOrganizationClick={handleInviteOrganizationClick}
                 />
-                <div className='mt-6'>
+                <div className='mt-6 mb-8'>
                     {renderTable(tab.value)}
                 </div>
+
             </div>
         )
     }));
 
     return (
-        <div className={`px-6 py-5 ${inter.className}`}>
+        <div className={`px-6 py-5 ${inter.className} `}>
             <Tabs 
                 value={tabType} 
                 onValueChange={(value) => {
@@ -229,7 +242,11 @@ function Organization() {
 
             <TableModal
                 isOpen={isOpen}
-                closeModal={() => setIsOpen(false)}
+                closeModal={() => {
+                    setIsOpen(false)
+                    // store.dispatch(resetOrganizationInitialState())
+                }
+                }
                 className='pb-1'
                 headerTitle='Invite organization'
                 closeOnOverlayClick={true}

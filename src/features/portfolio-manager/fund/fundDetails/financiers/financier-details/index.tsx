@@ -39,8 +39,8 @@ const FinancierDetails = () => {
         }
     }
     // const initial = getInitials(`${details?.data.firstName} ${details?.data.lastName}`);
-    const initial = getInitial(data?.data?.firstName ,data?.data?.lastName);
-    const companyInitial = getInitial(data?.data?.organizationName )
+    const initial = getInitial(data?.data?.name);
+    // const companyInitial = getInitial(data?.data?.organizationName )
     const [currentTab, setCurrentTab] = React.useState(0);
 
     const tabContent = [
@@ -55,63 +55,38 @@ const FinancierDetails = () => {
         {label: 'Financier type', value: <div className={` w-fit h-fit rounded-full px-2 bg-[#EEF5FF] text-[#142854] `}>{capitalizeFirstLetters(data?.data?.financierType)}</div>},
         {label: 'phone number', value:  data?.data?.phoneNumber ?? "Not provided"},
         {label: 'Address', value: data?.data?.address ?? "Not provided"},
+       
         {
             label: 'Company email address',
             value:  data?.data?.email
         },
-        {label: 'Organization admin name', value: data?.data?.firstName  + " " +  data?.data?.lastName },
-        {label: 'Organization admin email address', value: ''},
+        {label: 'Organization admin name', value: data?.data?.cooperateAdminName || "Not provided" },
+        {label: 'Organization admin email address', value: data?.data?.cooperateAdminEmail},
 
+    ]
+
+    const individualBasicDetails = [
+        {label: 'Financier type', value: <div className={` w-fit h-fit rounded-full px-2 text-[#66440A] bg-[#FEF6E8]`}>{capitalizeFirstLetters(data?.data?.financierType)}</div>},
+        {label: 'phone number', value:  data?.data?.phoneNumber ?? "Not provided"},
+        {label: 'Address', value: data?.data?.address ?? "Not provided"},
+        {
+            label: 'Email address',
+            value:  data?.data?.email
+        },
     ]
 
     const investmentDetails  = [
         {label: 'No. of investments', value: data?.data?.totalNumberOfInvestment},
-        {label: 'Total amount invested', value:  formatAmount(data?.data?.totalNumberOfInvestment)
-        // <NumericFormat
-        //         id={'totalAmountInvested'}
-        //         name={'totalAmountInvested'}
-        //         type="text"
-        //         disabled={true}
-        //         thousandSeparator=","
-        //         decimalScale={2}
-        //         fixedDecimalScale={true}
-        //         prefix={'₦'}
-        //         value={data?.data?.totalNumberOfInvestment}
-        //         className='bg-grey105 flex md:place-items-end'
-
-        //     />
+        {label: 'Total amount invested', value:  formatAmount(data?.data?.totalAmountInvested)
+       
         },
         {label: 'Total income earned', value: formatAmount(data?.data?.totalIncomeEarned)
-            //  <NumericFormat
-            //     id={'totalAmountInvested'}
-            //     name={'totalAmountInvested'}
-            //     type="text"
-            //     disabled={true}
-            //     thousandSeparator=","
-            //     decimalScale={2}
-            //     fixedDecimalScale={true}
-            //     prefix={'₦'}
-            //     value={'0'}
-            //     className='bg-grey105 flex md:place-items-end'
-
-            // />
+            
         },
         {
             label: 'Portfolio value',
             value: formatAmount(data?.data?.portfolioValue)
-            // <NumericFormat
-            //     id={'totalAmountInvested'}
-            //     name={'totalAmountInvested'}
-            //     type="text"
-            //     disabled={true}
-            //     thousandSeparator=","
-            //     decimalScale={2}
-            //     fixedDecimalScale={true}
-            //     prefix={'₦'}
-            //     value={'0'}
-            //     className='bg-grey105 flex md:place-items-end'
-
-            // />
+            
         },
 
     ]
@@ -119,7 +94,7 @@ const FinancierDetails = () => {
     const getCurrentDataList = () => {
         switch (currentTab) {
             case 0:
-                return basicDetails;
+                return data?.data?.financierType === "COOPERATE"? basicDetails : individualBasicDetails;
             case 1:
                 return investmentDetails;
             default:
@@ -147,7 +122,7 @@ const FinancierDetails = () => {
 
                             <div
                                 className={` ${cabinetGroteskMediumBold.className} md:text-[28px] w-32 h-32 md:w-20 md:h-20 text-[#885A3C]  flex bg-[#FEF6F0] rounded-full justify-center items-center`}>
-                                {data?.data?.organizationName === null? initial : companyInitial}
+                                {initial}
                             </div>
                     <div
                         className={`grid gap-2 mt-4`}
@@ -155,12 +130,12 @@ const FinancierDetails = () => {
                         <div id={'financierName'}
                              data-testid={'financierName'}
                              className={`${cabinetGroteskMediumBold.className} text-black text-xl md:text-[28px]  `}>
-                            {data?.data?.organizationName === null? data?.data?.firstName  + " " +  data?.data?.lastName : data?.data?.organizationName}
+                            {data?.data?.name}
                         </div>
                         <span id={'financierEmail'}
                               data-testid={'financierEmail'}
                               className={`${inter.className} text-sm text-black400`}>
-                            {data?.data?.userIdentity?.email}
+                            {data?.data?.email}
                         </span>
                     </div>
                 </div>

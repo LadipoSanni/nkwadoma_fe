@@ -115,6 +115,16 @@ function CheckBoxTable<T extends TableRowData>({
     setIsMounted(true);
   }, []);
 
+  useEffect(() => {
+    if (selectedRows.size > 0 && tableData.length === 0) {
+      setSelectAll(false);
+      setSelectedRows(new Set());
+      if (disabledButton) {
+        disabledButton();
+      }
+    }
+  }, [tableData, selectedRows, disabledButton]);
+
   if (!isMounted) return null;
 
   const handlePageChange = (

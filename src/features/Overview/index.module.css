@@ -14,6 +14,11 @@
     -ms-overflow-style: none;
     scrollbar-width: none;
 }
+.verticalScrollbar {
+    background-color: white;
+    /*-ms-overflow-style: none;*/
+    /*scrollbar-width: none;*/
+}
 
 
 .container{
@@ -29,7 +34,11 @@
     scrollbar-width: none;
 }
 
-
+@media only screen and (min-width: 960px){
+    .verticalScrollbar{
+        overflow-y: scroll;
+    }
+}
 
 @media only screen and (min-width: 600px){
     .container{

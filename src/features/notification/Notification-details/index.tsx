@@ -11,22 +11,26 @@ import {store} from "@/redux/store";
 import { setCurrentFinancierId} from '@/redux/slice/financier/financier';
 import { setNotification,resetNotification,setNotificationId,setNotificationFlag } from '@/redux/slice/notification/notification';
 import { setMarketInvestmentVehicleId } from "@/redux/slice/investors/MarketPlaceSlice";
-import { setOrganizationId,setOrganizationDetail} from '@/redux/slice/organization/organization';
+import { setOrganizationId} from '@/redux/slice/organization/organization';
 import { setLoanOfferId } from '@/redux/slice/loan/loan-offer';
 import { setCurrentNavbarItem } from "@/redux/slice/layout/adminLayout";
 import { setLoanReferralId } from '@/redux/slice/loan/selected-loan';
 import {setCurrentStep} from "@/service/users/loanRerralSlice";
 import { setNotificationCohortId,resetSelectedCohortInOrganization } from '@/redux/slice/create/cohortSlice';
-// interface NotificationDetailsPageProps{
-//     notification?: NotificationProps
-// }
+import { getUserDetailsFromStorage } from "@/components/topBar/action";
+import { setRequestStatusTab,setIsRequestedStaffOpen,setRequestedStaffId,setIsRequestedOrganizationOpen,setrequestOrganizationStatusTab,setRequestedOrganizationId,setIsStaffOpen,setModalType } from '@/redux/slice/staff-and-request/request';
+import { setLoanOfferId as setLoanOfferIdFromLoan } from '@/redux/slice/create/createLoanOfferSlice';
+
 
 interface notificationIdProp {
   notificationId: string;
 }
 
 function NotificationDetailPage({notificationId}: notificationIdProp) {
-  
+   const user_role = getUserDetailsFromStorage('user_role');
+   const user = ["COOPERATE_FINANCIER_SUPER_ADMIN", "MEEDL_ADMIN","MEEDL_SUPER_ADMIN"].includes(user_role || "")
+  const coperateFinancierUser = ["COOPERATE_FINANCIER_SUPER_ADMIN", "COOPERATE_FINANCIER_ADMIN"].includes(user_role || "")
+  const meedlBackofficeUser = ["PORTFOLIO_MANAGER_ASSOCIATE", "MEEDL_ADMIN","MEEDL_SUPER_ADMIN","PORTFOLIO_MANAGER"].includes(user_role || "")
   const router = useRouter();
   const handleBack = () => {
     router.back()
@@ -50,24 +54,28 @@ function NotificationDetailPage({notificationId}: notificationIdProp) {
          store.dispatch(setMarketInvestmentVehicleId({marketInvestmentVehicleId:notification?.data?.contentId }))
          store.dispatch(setCurrentNavbarItem("Investment vehicle"))
          router.push("/marketplace/details");
-     }else if (notification?.data?.notificationFlag === "INVITE_ORGANIZATION") {
+     }else if (notification?.data?.notificationFlag === "INVITE_ORGANIZATION" || notification?.data?.notificationFlag === "ORGANIZATION_DEACTIVATED" || notification?.data?.notificationFlag === "ORGANIZATION_REACTIVATED") {
       store.dispatch(setOrganizationId(notification?.data?.contentId))
-      store.dispatch(setOrganizationDetail("details"))
+      // store.dispatch(setOrganizationDetail("details"))
       store.dispatch(setCurrentNavbarItem("Organizations"))
-      router.push("/organizations/details");
+      router.push("/organizations/detail");
   } else if (notification?.data?.notificationFlag === "LOAN_OFFER"){
       store.dispatch(setLoanOfferId(notification?.data?.contentId))
       store.dispatch(setCurrentNavbarItem("Loan offer"))
       router.push("/accept-loan-offer");
   } else if(notification?.data?.notificationFlag === "LOAN_OFFER_DECISION"){
      store.dispatch(setCurrentNavbarItem("Loan"))
-     router.push(`/loan-offer-details?id=${notification?.data?.contentId}`);
+     router.push(`/loan-offer-details`);
+     store.dispatch(setLoanOfferIdFromLoan(notification?.data?.contentId))
+  }else if(notification?.data?.notificationFlag === "LOAN_REFERRAL" && meedlBackofficeUser){
+    store.dispatch(setCurrentNavbarItem("Loan"))
+    router.push(`/loan/loan-referral`);   
   } else if(notification?.data?.notificationFlag === "LOAN_REFERRAL"){
     store.dispatch(setCurrentNavbarItem("Loan refferral"))
     store.dispatch(setLoanReferralId(notification?.data?.contentId))
        router.push(`/onboarding`);
        store.dispatch(setCurrentStep(0))
-  } else if( notification?.data?.notificationFlag === "LOANEE_DATA_UPLOAD_SUCCESS" || notification?.data?.notificationFlag === "LOANEE_DATA_UPLOAD_FAILURE"){
+  } else if( notification?.data?.notificationFlag === "LOANEE_DATA_UPLOAD_SUCCESS" || notification?.data?.notificationFlag === "LOANEE_DATA_UPLOAD_FAILURE" || notification?.data?.notificationFlag === "REPAYMENT_UPLOAD_FAILURE"){
     store.dispatch(setNotificationCohortId(notification?.data?.contentId))
     store.dispatch(resetSelectedCohortInOrganization())
     store.dispatch(setCurrentNavbarItem("Organizations"))
@@ -77,23 +85,68 @@ function NotificationDetailPage({notificationId}: notificationIdProp) {
   } else if(notification?.data?.notificationFlag === "REPAYMENT_UPLOAD_SUCCESS" ){
     store.dispatch(setCurrentNavbarItem("Repayment"))
     router.push(`/repayment`);
+  }else if((user_role === "MEEDL_SUPER_ADMIN" || user_role === "MEEDL_ADMIN") && notification?.data?.notificationFlag === "INVITE_COLLEAGUE" ){
+    store.dispatch(setRequestStatusTab("pending"))
+    store.dispatch(setIsRequestedStaffOpen(true))
+    store.dispatch(setRequestedStaffId(notification?.data?.contentId))
+    store.dispatch(setCurrentNavbarItem("Requests"))
+    router.push(`/requests/staff`);
+  }else if(notification?.data?.notificationFlag === "APPROVE_INVITE_ORGANIZATION"){
+    store.dispatch(setrequestOrganizationStatusTab("pending"))
+    store.dispatch(setIsRequestedOrganizationOpen(true))
+    store.dispatch(setRequestedOrganizationId(notification?.data?.contentId))
+    store.dispatch(setCurrentNavbarItem("Requests"))
+    router.push(`/requests/organization`);
+  }else if(notification?.data?.notificationFlag === "ORGANIZATION_INVITATION_DECLINED"  || notification?.data?.notificationFlag ===  "ORGANIZATION_INVITATION_APPROVED"){
+    store.dispatch(setOrganizationId(notification?.data?.contentId))
+    store.dispatch(setCurrentNavbarItem("Organizations"))
+    router.push("/organizations/detail");
+  }else if(user_role === "ORGANIZATION_SUPER_ADMIN"  && notification?.data?.notificationFlag === "INVITE_COLLEAGUE" ){
+    store.dispatch(setRequestStatusTab("pending"))
+    store.dispatch(setIsRequestedStaffOpen(true))
+    store.dispatch(setRequestedStaffId(notification?.data?.contentId))
+    store.dispatch(setCurrentNavbarItem("Requests"))
+    router.push(`/organizations/request`);
+  }else if(user_role === "COOPERATE_FINANCIER_SUPER_ADMIN"  && notification?.data?.notificationFlag === "INVITE_COLLEAGUE" ){
+    store.dispatch(setRequestStatusTab("pending"))
+    store.dispatch(setIsRequestedStaffOpen(true))
+    store.dispatch(setRequestedStaffId(notification?.data?.contentId))
+    store.dispatch(setCurrentNavbarItem("Requests"))
+    router.push(`/request`);
+  }else if( ["DECLINE_COLLEAGUE_INVITE","APPROVE_COLLEAGUE_INVITE_"].includes( notification?.data?.notificationFlag) ){
+    store.dispatch(setIsStaffOpen(true))
+    store.dispatch(setRequestedStaffId(notification?.data?.contentId))
+    store.dispatch(setCurrentNavbarItem("Settings"))
+     store.dispatch(setModalType('detail'))
+    router.push(`/settings/team`);
   }
   }
+  
+  
 
    const buttonName = () => {
     if(notification?.data?.notificationFlag === "INVITE_FINANCIER"){
       return "financier"
-   } else if (notification?.data?.notificationFlag === "INVESTMENT_VEHICLE"){
+   } else if (coperateFinancierUser && notification?.data?.notificationFlag === "INVESTMENT_VEHICLE"){
       return "investment vehicle"
-   } else if (notification?.data?.notificationFlag === "INVITE_ORGANIZATION"){
+   } else if (["INVITE_ORGANIZATION","ORGANIZATION_DEACTIVATED","ORGANIZATION_REACTIVATED","ORGANIZATION_INVITATION_DECLINED","ORGANIZATION_INVITATION_APPROVED"].includes(notification?.data?.notificationFlag)){
     return "organization"
  }else if (notification?.data?.notificationFlag === "LOAN_OFFER"){
    return "loan offer"
  }else if (notification?.data?.notificationFlag === "LOAN_OFFER_DECISION"){
   return "loan offer"
-} else if(notification?.data?.notificationFlag === "LOAN_REFERRAL"){
-  return "loan Referral"
 } 
+else if(notification?.data?.notificationFlag === "LOAN_REFERRAL"){
+  return "loan Referral"
+} else if(user && notification?.data?.notificationFlag === "INVITE_COLLEAGUE" ){
+  return "Request"
+}else if((user_role === "MEEDL_SUPER_ADMIN" || user_role === "MEEDL_ADMIN") && notification?.data?.notificationFlag === "APPROVE_INVITE_ORGANIZATION" ){
+  return "Request"
+}else if(user_role === "ORGANIZATION_SUPER_ADMIN" && notification?.data?.notificationFlag === "INVITE_COLLEAGUE" ){
+  return "Request"
+}else if(["DECLINE_COLLEAGUE_INVITE","APPROVE_COLLEAGUE_INVITE_"].includes( notification?.data?.notificationFlag) ){
+   return "Admin"
+}
     
    }
 
@@ -133,7 +186,7 @@ function NotificationDetailPage({notificationId}: notificationIdProp) {
                            </div>
                          </div>
                          <div 
-                         className='max-h-[57vh] w-full  overflow-y-auto'
+                         className='max-h-[57vh] w-full  overflow-y-auto mb-10'
                          style={{
                           scrollbarWidth: 'none',
                           msOverflowStyle: 'none',
@@ -152,15 +205,17 @@ function NotificationDetailPage({notificationId}: notificationIdProp) {
                          </p>
                         </div>
                         <div className='mt-4 mb-4'>
-                        {!(notification?.data?.notificationFlag === "REPAYMENT_UPLOAD_FAILURE" || 
-   notification?.data?.notificationFlag === "LOANEE_DATA_UPLOAD_FAILURE") ? 
+                        {!(notification?.data?.notificationFlag === "REPAYMENT_UPLOAD_FAILURE" || (notification?.data?.notificationFlag === "INVESTMENT_VEHICLE" &&  meedlBackofficeUser)) ? 
   <p className='mb-4'>Click on the button to view the full details of the <span className='lowercase'>{notification?.data?.title}</span></p>
   : ""
 }
                          <p>If you have any questions or need further assistance, our customer service team is here to help</p>
                         </div>
                          <div>
-                         {notification?.data?.notificationFlag !== "REPAYMENT_UPLOAD_FAILURE"? 
+                         {!(
+    notification?.data?.notificationFlag === "REPAYMENT_UPLOAD_FAILUREs" ||
+    (notification?.data?.notificationFlag === "INVESTMENT_VEHICLE" && meedlBackofficeUser)
+  ) ?
                           <Button 
                            type='button'
                            variant={'secondary'}

@@ -10,6 +10,8 @@ export interface AuthButtonPropsType {
     handleClick: (e?: React.MouseEvent<HTMLButtonElement> )=> void;
     isLoading?: boolean;
     useCabinetGrotesk?: boolean;
+    showBorder?: boolean;
+    borderColor?: string;
 }
 
 

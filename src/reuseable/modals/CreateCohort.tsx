@@ -8,7 +8,7 @@ import {
   AddItemSection,
   ItemList
 } from "@/reuseable/feeBreakdown";
-import { CohortNameInput, FileUpload } from "@/reuseable/Input";
+import { CohortNameInput } from "@/reuseable/Input";
 import { useCreateCohortMutation } from "@/service/admin/cohort_query";
 import { useGetAllProgramsQuery } from "@/service/admin/program_query";
 import Isloading from "../display/Isloading";
@@ -17,6 +17,7 @@ import { useToast } from "@/hooks/use-toast";
 import TotalInput from "@/reuseable/display/TotalInput";
 import CustomQuillField from "../textArea/Custom-quill-field";
 import DatePickerInput from "@/reuseable/Input/DatePickerInput";
+import FileUpload from "../Input/FileUploadTwo";
 
 
 interface createCohortProps {
@@ -290,6 +291,7 @@ const CreateCohort: React.FC<createCohortProps> = ({ setIsOpen }) => {
                 handleDragOver={handleDragOver}
                  setUploadedImageUrl={setUploadedUrl}
                 labelName="Cohort image (optional)"
+                initialImageUrl={imageUrl? imageUrl : undefined}
               />
               <FormButtons
                 isButtonDisabled={isButtonDisabled}

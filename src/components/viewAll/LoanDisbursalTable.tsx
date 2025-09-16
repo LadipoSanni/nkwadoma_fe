@@ -2,7 +2,7 @@
 import React from "react";
 import {Icon} from "@iconify/react";
 import {MdOutlinePeople} from "react-icons/md";
-import Tables from "@/reuseable/table/index";
+import Table from '@/reuseable/table/Table';
 import {useRouter} from "next/navigation";
 import {formatAmount} from "@/utils/Format";
 import dayjs from "dayjs";
@@ -13,7 +13,7 @@ import {
 import {setClickedDisbursedLoanIdNumber} from "@/redux/slice/loan/selected-loan";
 import SkeletonForTable from "@/reuseable/Skeleton-loading-state/Skeleton-for-table";
 import TableEmptyState from "@/reuseable/emptyStates/TableEmptyState";
-
+import {capitalizeFirstLetters} from "@/utils/GlobalMethods";
 
 interface TableRowData {
     [key: string]: string | number | null | React.ReactNode;
@@ -21,16 +21,16 @@ interface TableRowData {
 
 function Index() {
     const router = useRouter();
-
+     const [pageNumber, setPageNumber] = React.useState(0);
     const clickedOrganizationId = useAppSelector(state => state.selectedLoan?.clickedOrganization)
 
     const request = {
-        pageSize: 400,
-        pageNumber: 0,
+        pageSize: 10,
+        pageNumber: pageNumber,
         organizationId: clickedOrganizationId?.id ? clickedOrganizationId?.id?.toString() : '',
     }
 
-    const {data, isLoading } = useViewAllLoanDisbursalQuery(request,{refetchOnMountOrArgChange: true})
+    const {data, isLoading, isFetching } = useViewAllLoanDisbursalQuery(request,{refetchOnMountOrArgChange: true})
 
 
 
@@ -41,41 +41,42 @@ function Index() {
             title: 'Loanee',
             sortable: true,
             id: 'firstName',
-            selector: (row: TableRowData) => <div className='flex gap-2 '>{row.firstName}
-                <div className={``}></div>
-                {row.lastName}</div>
-        },
+            selector: (row: TableRowData) => capitalizeFirstLetters(row.firstName?.toString()) + " " +  capitalizeFirstLetters(row.lastName?.toString()) },
         {title: 'Program', sortable: true, id: 'program', selector: (row: TableRowData) => row.programName},
         {title: 'Cohort', sortable: true, id: 'cohort', selector: (row: TableRowData) => row.cohortName},
         {
             title: 'Offer date',
             sortable: true,
             id: 'startDate',
-            selector: (row: TableRowData) => <div>{dayjs(row.offerDate?.toString()).format('MMMM D, YYYY')}</div>
+            selector: (row: TableRowData) =>dayjs(row.offerDate?.toString()).format('MMMM D, YYYY')
         },
         {
             title: 'Loan start date',
             sortable: true,
             id: 'requestDate',
-            selector: (row: TableRowData) => <div>{dayjs(row.startDate?.toString()).format('MMMM D, YYYY')}</div>
+            selector: (row: TableRowData) =>dayjs(row.startDate?.toString()).format('MMMM D, YYYY')
         },
         {
             title: 'Deposit',
             sortable: true,
             id: 'initialDeposit',
-            selector: (row: TableRowData) => <div className=''>{formatAmount(row.initialDeposit)}</div>
+            selector: (row: TableRowData) => formatAmount(row.initialDeposit)
         },
         {
             title: 'Amount requested',
             sortable: true,
             id: 'amountRequested',
-            selector: (row: TableRowData) => <div className=''>{formatAmount(row.loanAmountRequested)}</div>
+            selector: (row: TableRowData) =>formatAmount(row.loanAmountRequested)
         }
     ];
 
     const handleRowClick = (ID: string | object | React.ReactNode) => {
-        store.dispatch(setClickedDisbursedLoanIdNumber(ID))
-        router.push(`/disbursed-loan-details?id=${ID}`);
+        if (typeof ID === "object"){
+            //eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-expect-error
+            store.dispatch(setClickedDisbursedLoanIdNumber(ID?.id))
+        }
+        router.push(`/disbursed-loan-details`);
     };
 
     return (
@@ -97,12 +98,12 @@ function Index() {
                 ) :
                 (
                     <div className={``}>
-                        <Tables
+                        <Table
                             tableData={data?.data?.body}
-                            isLoading={isLoading }
+                            isLoading={isLoading || isFetching }
                             handleRowClick={handleRowClick}
                             tableHeader={loanDisbursalHeader}
-                            tableHeight={54}
+                            tableHeight={data?.data?.body?.length < 10 ? 58 : undefined}
                             sx='cursor-pointer'
                             staticColunm='firstName'
                             staticHeader='Loanee'
@@ -111,7 +112,10 @@ function Index() {
                             sideBarTabName='Loans'
                             optionalFilterName='graduate'
                             condition={true}
-                            optionalRowsPerPage={10}
+                            totalPages={data?.data?.totalPages}
+                            hasNextPage={data?.data?.hasNextPage}
+                            pageNumber={pageNumber}
+                            setPageNumber={setPageNumber}
                         />
                     </div>
                 )

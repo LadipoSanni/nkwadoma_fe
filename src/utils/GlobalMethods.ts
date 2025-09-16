@@ -1,17 +1,37 @@
 import {jwtDecode} from "jwt-decode";
-import {ADMIN_ROLES} from "@/types/roles";
+import {ROLES} from "@/types/roles";
 import {isAfter} from "date-fns";
 import {StaticImageData} from "next/image";
 
-export  function capitalizeFirstLetters(word: string | null| undefined) {
-    if (word) {
-        return word
-            .toLowerCase()
-            .split(' ')
-            .map(word => word.charAt(0).toUpperCase() + word.slice(1) + ' ')
-    }
+export function capitalizeFirstLetters(word: string | null | undefined): string {
+    if (!word) return ""; 
+    
+    return word
+        .toLowerCase()
+        .split(' ')
+        .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(' '); 
+}
+export function removeSpecialCharacterFromString(str: string | undefined): string {
+    if (!str) return "";
+
+    const cleaned = str
+        .toLowerCase()
+        .replaceAll('cooperate', 'co')
+        .replaceAll('_', " ");
+
+    return cleaned.charAt(0).toUpperCase() + cleaned.slice(1);
 
 }
+
+export  function extractFirstCharacters(text: string ): string {
+    return text
+        .split(" ")
+        .map(word => word[0])
+        .join("")
+        .toUpperCase();
+}
+
 
 export function capitalizeWordsFromArray(arr: unknown): string {
     if (!Array.isArray(arr)) return '';
@@ -45,7 +65,7 @@ export function insertSpaceCapitalized(str: unknown): string {
 
 
 export const isUserAdmin = (role: string) => {
-    return ADMIN_ROLES.includes(role)
+    return ROLES.includes(role)
 }
 
 export const isTokenExpired = (token?: string): boolean => {
@@ -67,14 +87,42 @@ export const isTokenExpired = (token?: string): boolean => {
 
 export const validateName = (name: string) : boolean | string  => {
     // const regex = /^[a-zA-Z][a-zA-Z0-9\s-_]*[a-zA-Z0-9]$/;
-    if (/[\d ]/.test(name)) {
-      return  'name can not contain digit'
+    // if (/[\d ]/.test(name)) {
+    //   return  'name can not contain digit'
+    //
+    // }
+    // if (/[|#%^*@()?>,.{!$}[=+":<]/.test(name)|| /^--+$/.test(name)) {
+    //     return  'name can not contain special characters'
+    // }
+    // // /[|#%^*@()?>,.!${}[\]=+":<>]/
+    //
+    // return /[a-zA-Z& ]+$/.test(name)
+    const invalidChars = /[|#%^*@()?>,.!${}[\]=+":<>]/;
+    // Prevent consecutive dashes
+    const consecutiveDashes = /--+/;
 
+    if (invalidChars.test(name)) {
+        return "Name contains invalid special characters.";
     }
-    if (/[|#%^*@()?>,.{!$}[=+":<]/.test(name)|| /^--+$/.test(name)) {
-        return  'name can not contain special characters'
+
+    if (consecutiveDashes.test(name)) {
+        return "Name cannot contain consecutive dashes.";
     }
-    return /[a-zA-Z&]$/.test(name)
+
+    return true; // ✅ means valid
+
+    // if (/\d/.test(name)) {
+    //     return "Name cannot contain digits";
+    // }
+    //
+    // if (!/^[a-zA-Z& ]+$/.test(name)) {
+    //     return "Name can only contain letters, spaces, and &";
+    // }
+    //
+    // if (!/[a-zA-Z]$/.test(name.trim())) {
+    //     return "Name must end with a letter";
+    // }
+    // return true;
 
 }
 
@@ -87,7 +135,7 @@ export const validateRcNumber = (name: string) : boolean | string  => {
     if (/[^a-zA-Z0-9]/.test(name) || /^-+$/.test(name)|| /[|#%^&*@()?>,.{!$}[=+":<]/.test(name) ) {
         return  'name can not contain special characters'
     }
-    return /^\d{8}$/.test(name)
+    return /^\d{7}$/.test(name)
 
 }
 export const validateEntityOwnership = (ownership: string) : boolean | string => {
@@ -208,4 +256,65 @@ export const ensureHttpsUrl = (url: string | null | undefined): string | undefin
   export const toTitleCase = (str: string) => {
     return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
   };
+
+
+  export function convertRole(roleKey: string) {
+    if (!roleKey) return 'Unknown';
+  
+    const roleMap = {
+      'COOPERATE_FINANCIER_SUPER_ADMIN': 'Super admin',
+      'COOPERATE_FINANCIER_ADMIN': 'Admin',
+      'FINANCIER': 'Financier',
+      'MEEDL_SUPER_ADMIN': 'Super admin',
+      'MEEDL_ADMIN': 'Admin',
+      'PORTFOLIO_MANAGER': 'Portfolio manager',
+      'PORTFOLIO_MANAGER_ASSOCIATE': 'Associate',
+      'ORGANIZATION_SUPER_ADMIN': 'Super admin',
+      'ORGANIZATION_ADMIN': 'Admin',
+      'LOANEE': 'Loanee',
+      'ORGANIZATION_ASSOCIATE': 'Associate'
+    } as const; 
+  
+    type RoleKey = keyof typeof roleMap;
+  
+    return roleMap[roleKey as RoleKey] || 'Unknown Role';
+  }
+
+
+  export function formatSentence(sentence: string | null | undefined): string {
+    if (!sentence) return "";
+    
+    return sentence
+        .toLowerCase()    
+        .replace(/_/g, ' ')
+        .replace(/^\w/, (firstChar) => firstChar.toUpperCase()); 
+}
+
+export const safeDecodeURI = (url: string) => {
+    try {
+      return decodeURIComponent(url);
+    } catch {
+      return url;
+    }
+  };
+
+
+  export const formatPlaceName = (value: string,condition?: boolean) => {
+    let cleanedValue = condition === false? value.replace(/[^a-zA-Z\s'_-]/g, '') : value.replace(/[^a-zA-Z0-9\s'_-]/g, '');
+
+    if (/^['_-]/.test(cleanedValue)) {
+        cleanedValue = cleanedValue.substring(1);
+      }
+
+    cleanedValue = cleanedValue
+    .replace(/'{2,}/g, "'")
+    .replace(/_{2,}/g, '_')
+    .replace(/-{2,}/g, '-')
+    .replace(/['_-]{2,}/g, "'");
+    
+    return cleanedValue;
+  };
+  
+  
+  
   

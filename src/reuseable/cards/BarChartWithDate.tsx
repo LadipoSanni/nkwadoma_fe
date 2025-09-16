@@ -14,9 +14,10 @@ interface Props {
     onChange: (month: string) => void;
     currentYear?:   string;
     years: string[];
+    mediumHeightOnWebview?:boolean;
 }
 
-const BarChartWithDate = ({id,onChange,currentYear, years, cardTile, displayDates, chartData,currentMonthDate, changeCurrentMonth, performanceValue}:Props) => {
+const BarChartWithDate = ({id,onChange,currentYear,mediumHeightOnWebview, years, cardTile, displayDates, chartData,currentMonthDate, changeCurrentMonth, performanceValue}:Props) => {
     return (
         <div id={id} className={`w-full md:w-full  rounded-md md:rounded-md py-4 px-4 md:px-3 md:py-3 md:bg-white bg-white   border border-[#D7D7D7] md:border   `}>
              <div className={`bg-grey105 grid gap-4 md:grid md:gap-3  md:bg-grey105 `}>
@@ -27,7 +28,7 @@ const BarChartWithDate = ({id,onChange,currentYear, years, cardTile, displayDate
                                    tabContent={displayDates} handleChange={changeCurrentMonth}/>
                     </div>
                     {/*<div className={`w-full md:w-full `}>*/}
-                        <MeedlBarChart dataKey={'value'}  chartData={chartData} componentId={'details'}/>
+                        <MeedlBarChart maxHeight={mediumHeightOnWebview ? `md:max-h-[200px] md:h-[100px]` : ''} dataKey={'value'}  chartData={chartData} componentId={'details'}/>
                     {/*</div>*/}
 
                 </div>

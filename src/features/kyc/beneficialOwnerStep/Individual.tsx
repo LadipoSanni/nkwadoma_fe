@@ -1,19 +1,17 @@
 import React, { useEffect } from 'react';
 import {Label} from "@/components/ui/label";
 import {Input} from "@/components/ui/input";
-import {Popover, PopoverContent, PopoverTrigger} from "@/components/ui/popover";
-import {Button} from "@/components/ui/button";
-import {Calendar} from "@/components/ui/calendar";
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/components/ui/select";
-import FileUpload from "../../../reuseable/Input/FileUpload";
+import FileUpload from "../../../reuseable/Input/FileUploadTwo";
 import {validateEntityOwnership, validateName} from "@/utils/GlobalMethods";
-import {MdOutlineDateRange} from "react-icons/md";
-import {format} from "date-fns";
+import {format,parseISO } from "date-fns";
+import {Owner} from "@/features/kyc/beneficialOwnerStep/Index";
+import DatePickerInput from "@/reuseable/Input/DatePickerInput";
 
 interface IndividualData {
     firstName: string,
     lastName: string,
-    dateOfBirth: Date | undefined,
+    dateOfBirth: string,
     relationShip: string,
     errorMessage: string,
     entityError: string,
@@ -25,21 +23,25 @@ interface IndividualData {
 }
 interface IndividualProps  {
     id?: number;
-    updateOwner :( field: string, value: string | File| boolean, id?: number) => void
+    updateOwner :( field: string, value: string | File| boolean, id?: number) => void;
+    currentObj: Owner,
+
 }
-const Individual = ({id, updateOwner}: IndividualProps) => {
-    const [date, setDate] = React.useState<Date | undefined>(new Date())
-    const initialIndividualData = {
-        firstName: '',
-        lastName: '',
-        dateOfBirth: date,
-        relationShip: '',
-        errorMessage: '',
-        entityError: '',
-        proofType: 'national_id',
-        proofFile:  null,
-        proofFileUrl: '',
-        ownership: '',
+const Individual = ({id, updateOwner,currentObj}: IndividualProps) => {
+    const [date, setDate] = React.useState<Date | undefined>(
+        currentObj?.dateOfBirth ? parseISO(currentObj.dateOfBirth) : undefined
+    );
+    const initialIndividualData : IndividualData  = {
+        firstName: currentObj?.firstName ? currentObj.firstName :  '',
+        lastName: currentObj?.lastName ? currentObj.lastName :  '',
+        dateOfBirth: currentObj?.dateOfBirth ?currentObj?.dateOfBirth : "",
+        relationShip: currentObj?.relationShip ? currentObj.relationShip :  '',
+        errorMessage: currentObj?.errorMessage ? currentObj.errorMessage :  '',
+        entityError: currentObj?.entityError ? currentObj.entityError : '',
+        proofType: currentObj?.proofType ? currentObj?.proofType : 'national_id',
+        proofFile: currentObj?.proofFile ? currentObj?.proofFile : null,
+        proofFileUrl: currentObj?.proofFileUrl ? currentObj.proofFileUrl :    '',
+        ownership: currentObj?.ownership ? currentObj?.ownership :  '',
     }
 
     const [individualData, setIndividualData] = React.useState<IndividualData>(initialIndividualData)
@@ -67,8 +69,12 @@ const Individual = ({id, updateOwner}: IndividualProps) => {
         const response = isFormField()
         updateOwner('isFormField', response, id)
         if(field === 'dateOfBirth' && typeof value === 'string'){
-            updateOwner( field, format(value, "yyyy-MM-dd"), id)
-        }else{
+            if (!value.trim()) {
+                updateOwner( field, '', id)
+            } else {
+                updateOwner( field, format(value, "yyyy-MM-dd"), id)
+            }
+        } else {
             updateOwner( field, value, id)
         }
 
@@ -164,29 +170,21 @@ const Individual = ({id, updateOwner}: IndividualProps) => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-2">
                     <Label>Date of birth</Label>
-                    <Popover>
-                        <PopoverTrigger asChild>
-                            <Button
-                                type="button"
-                                variant="outline"
-                                className="w-full h-[3.375rem] border border-solid border-neutral650 flex justify-between items-center font-normal focus:outline-none focus:ring-0"
-                            >
-                                  {individualData.dateOfBirth ?  initialIndividualData?.dateOfBirth?.toLocaleDateString() : "Select date"}
-                                <MdOutlineDateRange className="h-5 w-5 text-neutral950"/>
-                            </Button>
-                        </PopoverTrigger>
-                        <PopoverContent className="w-auto p-0 shadow-none"
-                                        align="start">
-                            <Calendar
-                                mode="single"
-                                selected={individualData.dateOfBirth ? new Date(individualData.dateOfBirth) : undefined}
-                                onSelect={setDate}
-                                disabled={(date) => date > new Date()}
-                                initialFocus
-                                defaultMonth={individualData.dateOfBirth ? new Date(individualData.dateOfBirth) : new Date()}
-                            />
-                        </PopoverContent>
-                    </Popover>
+                      <DatePickerInput
+        selectedDate={individualData.dateOfBirth ? parseISO(individualData.dateOfBirth?.toString()) : undefined}
+        onDateChange={(date) => {
+            if (date) {
+                setDate(date);
+                handleInputChange('dateOfBirth', format(date, "yyyy-MM-dd"));
+            } else {
+                setDate(undefined);
+                handleInputChange('dateOfBirth', '');
+            }
+        }}
+        placeholder="Select date"
+         className="p-6  text-[14px] text-[#6A6B6A] h-[54px] rounded-md border border-solid border-neutral650"
+    />
+                    
                 </div>
                 <div className="space-y-2">
                     <Label>Relationship</Label>
@@ -234,7 +232,7 @@ const Individual = ({id, updateOwner}: IndividualProps) => {
                     placeholder="0"
                     value={individualData.ownership || ""}
                     onChange={(e) => {
-                        const value = e.target.value.replace(/^rc/i, 'RC');
+                        const value = e.target.value;
                         const isInputValid = validateEntityOwnership(e.target.value)
                         if (typeof  isInputValid === "string") {
                             setIndividualData((prevState) => (
@@ -286,6 +284,7 @@ const Individual = ({id, updateOwner}: IndividualProps) => {
                 handleDrop={(e) => handleDrop( e)}
                 handleDragOver={(e) => e.preventDefault()}
                 setUploadedImageUrl={(url) => handleSetUploadedImageUrl( url)}
+                initialImageUrl={individualData?.proofFileUrl}
             />
         </div>
 

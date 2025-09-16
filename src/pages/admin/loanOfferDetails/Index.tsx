@@ -1,9 +1,9 @@
 "use client"
 import React, {useState} from 'react';
 import BackButton from "@/components/back-button";
-import {useRouter, useSearchParams} from "next/navigation";
+import {useRouter} from "next/navigation";
 import {Avatar, AvatarFallback, AvatarImage} from "@/components/ui/avatar";
-import {cabinetGroteskMediumBold, inter} from "@/app/fonts";
+import {cabinetGroteskMediumBold, inter, inter600} from "@/app/fonts";
 import {Button} from "@/components/ui/button";
 import TabConnector from "@/reuseable/details/tab-connector";
 import {FaCircle} from "react-icons/fa6";
@@ -22,6 +22,9 @@ import SkeletonForDetailPage from "@/reuseable/Skeleton-loading-state/Skeleton-f
 import CreditScore from "@/features/display/CreditScore";
 import { useAppSelector } from '@/redux/store';
 import { setCurrentNavbarItem } from "@/redux/slice/layout/adminLayout";
+import DeclineLoanModal from "@/reuseable/modals/declineLoan/Index";
+import { capitalizeFirstLetters } from "@/utils/GlobalMethods";
+import { formatMonthInDate } from '@/utils/Format'
 
 const LoanOfferDetailsContent = dynamic(
     () => Promise.resolve(LoanOfferDetails),
@@ -31,27 +34,18 @@ const LoanOfferDetailsContent = dynamic(
 const LoanOfferDetails = () => {
     const router = useRouter();
     const [currentTab, setCurrentsTab] = useState(0);
-    const searchParams = useSearchParams()
     const [disburseLoan, {isLoading}] = useDisburseLoanOfferMutation()
      const notificationId = useAppSelector(state => (state?.notification?.setNotificationId))
       const notification = useAppSelector(state => (state?.notification?.setNotification))
+    const [openDeclineLoanRequestModal, setOpenDeclineLoanRequestModal] = useState(false)
+    const selectedLoanOfferId = useAppSelector(state => (state?.createLoanOffer?.loanOfferId))
 
-    const getId = () => {
-        if (searchParams) {
-            const pathVariable = searchParams.get("id")
-            if (pathVariable) {
-                return pathVariable
-            } else {
-                return ""
-            }
-        } else {
-            return ""
-        }
 
+    const {data, isLoading: loading} = useViewLoanOfferDetailsQuery(selectedLoanOfferId)
+
+    const setOpenDeclineOffer = (value: boolean) => {
+        setOpenDeclineLoanRequestModal(value)
     }
-    const id: string = getId()
-    const {data, isLoading: loading} = useViewLoanOfferDetailsQuery(id)
-
     const getLoaneeLoanBreakdown = () => {
         const loaneeLoanBreakDown = data?.data?.loaneeBreakdown
         const items: { itemAmount: string, itemName: string }[] = []
@@ -85,28 +79,28 @@ const LoanOfferDetails = () => {
 
 
     const basicDetails = [
-        {label: 'Gender', value: data?.data?.gender},
-        {label: 'Email address', value: data?.data?.email},
-        {label: 'Phone number', value: data?.data?.phoneNumer},
-        {label: 'Date of birth', value: data?.data?.dateOfBirth},
-        {label: 'Marital status', value: data?.data?.maritalStatus},
-        {label: 'Nationality', value: data?.data?.nationality},
-        {label: 'State of origin ', value: data?.data?.stateOfOrigin},
-        {label: 'State of residence', value: data?.data?.stateOfResidence},
-        {label: "Residential address", value: data?.data?.residentialAddress},
+        {label: 'Gender', value: data?.data?.gender ? data?.data?.gender : '' },
+        {label: 'Email address', value: data?.data?.email ? data?.data?.email : ''},
+        {label: 'Phone number', value: data?.data?.phoneNumer ? data?.data?.phoneNumer : ''},
+        {label: 'Date of birth', value: data?.data?.dateOfBirth ? formatMonthInDate(data?.data?.dateOfBirth) : ''},
+        {label: 'Marital status', value: data?.data?.maritalStatus ? data?.data?.maritalStatus : ''},
+        {label: 'Nationality', value: data?.data?.nationality ? data?.data?.nationality : ''},
+        {label: 'State of origin ', value: data?.data?.stateOfOrigin ? capitalizeFirstLetters(data?.data?.stateOfOrigin) : ''},
+        {label: 'State of residence', value: data?.data?.stateOfResidence ? capitalizeFirstLetters(data?.data?.stateOfResidence) : ''},
+        {label: "Residential address", value: data?.data?.residentialAddress ? data?.data?.residentialAddress : ''},
     ];
 
     const additionalDetails = [
-        {label: 'Alternate email address', value: data?.data?.alternateEmail},
-        {label: 'Alternate phone number', value: data?.data?.alternatePhoneNumber},
-        {label: 'Alternate residential address', value: data?.data?.alternateContactAddress},
+        {label: 'Alternate email address', value: data?.data?.alternateEmail ? data?.data?.alternateEmail : ''},
+        {label: 'Alternate phone number', value: data?.data?.alternatePhoneNumber ? data?.data?.alternatePhoneNumber : ''},
+        {label: 'Alternate residential address', value: data?.data?.alternateContactAddress ? data?.data?.alternateContactAddress : ''},
         {
             label: 'Next of kin name',
-            value: data?.data?.nextOfKinFirstName + " " + data?.data?.nextOfKinLastName
+            value: capitalizeFirstLetters(data?.data?.nextOfKinFirstName) + " " + capitalizeFirstLetters(data?.data?.nextOfKinLastName)
         },
-        {label: 'Next of kin email address', value: data?.data?.nextOfKinEmail},
-        {label: 'Next of kin phone number', value: data?.data?.nextOfKinPhoneNumber},
-        {label: 'Next of kin relationship ', value: data?.data?.nextOfKinRelationship},
+        {label: 'Next of kin email address', value: data?.data?.nextOfKinEmail ?  data?.data?.nextOfKinEmail : ''},
+        {label: 'Next of kin phone number', value: data?.data?.nextOfKinPhoneNumber ? data?.data?.nextOfKinPhoneNumber : '' },
+        {label: 'Next of kin relationship ', value: data?.data?.nextOfKinRelationship ? capitalizeFirstLetters(data?.data?.nextOfKinRelationship) : ''},
     ];
 
     const loanDetails = [
@@ -125,7 +119,7 @@ const LoanOfferDetails = () => {
         },
         {
             label: "Start date", value:
-                dayjs(data?.data?.startDate?.toString()).format('MMMM D, YYYY')
+            data?.data?.startDate ?  dayjs(data?.data?.startDate?.toString()).format('MMMM D, YYYY') : ''
         },
         {
             label: "Loan amount requested", value: <NumericFormat
@@ -162,7 +156,7 @@ const LoanOfferDetails = () => {
     const disburseLoanOffer = async () => {
 
         const body = {
-            loanOfferId: id,
+            loanOfferId: selectedLoanOfferId,
             loaneeId: data?.data?.loaneeId
         }
         const response = await disburseLoan(body)
@@ -202,6 +196,9 @@ const LoanOfferDetails = () => {
             setCurrentsTab(currentTab - 1);
         }
     };
+    const openWithdraw = () => {
+        setOpenDeclineLoanRequestModal(true)
+    }
 
     const getCurrentDataList = () => {
         switch (currentTab) {
@@ -321,6 +318,11 @@ const LoanOfferDetails = () => {
                             </div>
                             <div
                                 className=" md:sticky md:bottom-0 py-3 px-3 md:py-3 md:bg-white md:flex grid md:justify-end gap-5 md:mt-0">
+                                {currentTab === 0 && (
+                                    <Button
+                                        className={`w-full ${inter600.className} md:w-fit md:px-6 md:py-3 h-fit py-4 text-meedlBlue border border-meedlBlue bg-meedlWhite hover:bg-meedlWhite`}
+                                        onClick={openWithdraw} >Withdraw loan</Button>
+                                )}
                                 {currentTab !== 0 && (
                                     <Button
                                         className={'w-full md:w-fit md:px-6 md:py-3 h-fit py-4 text-meedlBlue border border-meedlBlue bg-meedlWhite hover:bg-meedlWhite'}
@@ -339,6 +341,9 @@ const LoanOfferDetails = () => {
                             </div>
                         </div>
                     </div>
+                    <DeclineLoanModal isOpen={openDeclineLoanRequestModal} loanOfferId={selectedLoanOfferId}
+                                      setIsOpen={setOpenDeclineOffer} loanOfferStatus={data?.data?.loanOfferStatus}
+                                      title={"Withdraw loan"}/>
                 </div>
             )
         }

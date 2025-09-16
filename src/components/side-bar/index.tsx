@@ -1,6 +1,6 @@
 "use client"
 import React,{useEffect} from 'react';
-import { useRouter } from "next/navigation";
+import { useRouter,usePathname } from "next/navigation";
 import {persistor, RootState, store, useAppSelector} from "@/redux/store";
 import {setCurrentNavbarItem, setCurrentNavBottomItem, setShowMobileSideBar} from "@/redux/slice/layout/adminLayout";
 import {navbarItemsProps, navbarRouterItemsProps} from "@/types/Component.type";
@@ -13,56 +13,71 @@ import {
     getInstituteAdminSideBarItems,
     getLoaneeSideBarItems, getLogoutItem,
     usePortfolioManagerSideBarItems,
-    getSettingItem
+    getSettingItem,
+    getSuperAdminSideBarItems, getMeedlAdminSideBarItems,
+    getInstituteSuperAdminSideBarItems,getCoperateFinancierSuperAdminSideBarItems
 } from "@/utils/sideBarItems";
 import Image from "next/image"
 import NavbarRouter from "../../reuseable/ui/navbarRouter";
 import NavbarContainer from "@/reuseable/ui/Navbar";
-// import { resetTab } from '@/redux/slice/loan/selected-loan';
-// import { resetOrganizationDetailsStatus,resetOrganizationId } from '@/redux/slice/organization/organization';
-// import { resetcohortId } from '@/redux/slice/create/cohortSlice';
-// import { clearSaveCreateInvestmentField} from '@/redux/slice/vehicle/vehicle';
 import { resetAllState } from '@/redux/reducer';
 import { notificationApi } from '@/service/notification/notification_query';
 import {setCurrentTab,setcurrentTabRoute} from "@/redux/slice/loan/selected-loan";
-
-
+import { resetOrganizationInitialState } from '@/redux/slice/organization/organization';
+import styles from './index.module.css'
 
 const SideBar = () => {
     const router = useRouter();
+    const pathname = usePathname();
     const showMobileSideBar = useAppSelector(state => state.adminLayout.showMobileSideBar)
     const current = useAppSelector(state => state.adminLayout.currentNavbarItem)
     const currentNavBottom = useAppSelector(state => state.adminLayout.currentNavBottomItem)
     const currentTab = useAppSelector(state => state.selectedLoan?.currentTab)
     const [logout] = useLogoutMutation()
-    const userRole = getUserDetailsFromStorage('user_role') ? getUserDetailsFromStorage('user_role')  : "user role";
-    const {  isLoaneeIdentityVerified } = useSelector((state: RootState) => state.loanReferral);
+    const userRole = getUserDetailsFromStorage('user_role') ? getUserDetailsFromStorage('user_role') : "user role";
+    const {isLoaneeIdentityVerified} = useSelector((state: RootState) => state.loanReferral);
 
-    
+    const currentTabRoute = useAppSelector(state => state.selectedLoan?.currentTabRoute)
 
     useEffect(() => {
-        if (userRole === "PORTFOLIO_MANAGER" && !currentTab) {
-            store.dispatch(setCurrentTab('Loan requests'));
-            store.dispatch(setcurrentTabRoute('loan-request'));
-          }
-    }, [userRole, currentTab])
+        if (userRole === "PORTFOLIO_MANAGER") {
+            if (!currentTab) {
+                store.dispatch(setCurrentTab('Loan requests'));
+                store.dispatch(setcurrentTabRoute('loan-request'));
+            }
+            
+            if (!pathname?.startsWith('/organizations')) {
+                const orgFormState = store.getState().organization?.organizationInitialState;
+                
+                const hasFormData = orgFormState && 
+                    Object.values(orgFormState).some(
+                        value => value !== "" && value !== null && value !== undefined
+                    );
+    
+                if (hasFormData) {
+                    store.dispatch(resetOrganizationInitialState());
+                }
+            }
+        }
+    }, [userRole, currentTab,pathname])
 
 
     const closeSideBar = () => {
         store.dispatch(setShowMobileSideBar(false))
     }
 
-    const handleClick = ()=> {
-        router.push('/settings/team')
+    const handleClick = () => {
+        router.push('/settings/general')
         store.dispatch(setCurrentNavBottomItem("Settings"))
         store.dispatch(setCurrentNavbarItem('Settings'))
+        store.dispatch(setShowMobileSideBar(false))
     }
 
     const clickNavbar = (name: string, route?: string, isActive?: boolean) => {
-        if (isActive){
+        if (isActive) {
             store.dispatch(setCurrentNavBottomItem(name))
             store.dispatch(setCurrentNavbarItem(name))
-            if(route){
+            if (route) {
                 router.push(route)
             }
             closeSideBar()
@@ -70,15 +85,10 @@ const SideBar = () => {
 
     }
 
-    const handleLogout =  async () => {
+    const handleLogout = async () => {
         await logout({})
         router.push("/auth/login")
         store.dispatch(setCurrentNavBottomItem("Logout"))
-        // store.dispatch(resetTab())
-        // store.dispatch(resetOrganizationDetailsStatus())
-        // store.dispatch(resetcohortId())
-        // store.dispatch(resetOrganizationId())
-        // store.dispatch(clearSaveCreateInvestmentField())
         store.dispatch(setCurrentNavBottomItem(""))
         store.dispatch(resetAllState());
         await persistor.purge();
@@ -86,17 +96,13 @@ const SideBar = () => {
         store.dispatch(notificationApi.util.resetApiState())
         clearData()
 
-        // window.location.href = '/auth/login';
-
     }
 
 
-    const settingItem = getSettingItem( currentNavBottom, handleClick, userRole)
-    const logoutItem = getLogoutItem(currentNavBottom,handleLogout)
+    const settingItem = getSettingItem(currentNavBottom, handleClick)
+    const logoutItem = getLogoutItem(currentNavBottom, handleLogout)
 
     const navbarContainerItems: navbarItemsProps[] = [...settingItem, logoutItem];
-
-
 
 
     const getUserSideBarByRole = (userrole?: string): navbarRouterItemsProps[] | undefined => {
@@ -113,11 +119,16 @@ const SideBar = () => {
     const sideBarContent = [
         {name: "PORTFOLIO_MANAGER", value: usePortfolioManagerSideBarItems(current)},
         {name: "ORGANIZATION_ADMIN", value: getInstituteAdminSideBarItems(current)},
-        {name: 'LOANEE', value: getLoaneeSideBarItems(current, isLoaneeIdentityVerified) },
+        {name: 'LOANEE', value: getLoaneeSideBarItems(current, isLoaneeIdentityVerified)},
         {name: 'FINANCIER', value: getFinancierSideBarItems(current)},
+        {name: "MEEDL_SUPER_ADMIN", value: getSuperAdminSideBarItems(current,currentTabRoute)},
+        {name: 'MEEDL_ADMIN', value: getMeedlAdminSideBarItems(current)},
+        {name: 'PORTFOLIO_MANAGER_ASSOCIATE', value: usePortfolioManagerSideBarItems(current)},
+        {name: 'ORGANIZATION_ASSOCIATE', value: getInstituteAdminSideBarItems(current)},
+        {name: 'ORGANIZATION_SUPER_ADMIN', value:  getInstituteSuperAdminSideBarItems(current)},
+        {name: 'COOPERATE_FINANCIER_SUPER_ADMIN', value:  getCoperateFinancierSuperAdminSideBarItems(current)},
+        {name: 'COOPERATE_FINANCIER_ADMIN', value: getFinancierSideBarItems(current)},
     ]
-
-
 
 
 
@@ -147,7 +158,7 @@ const SideBar = () => {
                             <NavbarRouter currentTab={current} handleClick={clickNavbar}
                                           navbarItems={getUserSideBarByRole(userRole)}/>
 
-                            < NavbarContainer current={currentNavBottom} items={navbarContainerItems} />
+                            < NavbarContainer current={currentNavBottom} items={navbarContainerItems}/>
                         </div>
                     </div>
                     <button data-testid="blurry" id="sideBarblurBackground"
@@ -161,34 +172,36 @@ const SideBar = () => {
                 data-testid={'adminMediumSideBar'}
                 className={`hidden md:grid  md:bg-meedlWhite md:content-between md:w-[16vw]  md:px-4  md:py-6 md:border-r md:border-r-[blue300] md:z-0 md:h-[100%]`}
             >
-
-
-                <div className={`  md:grid md:gap-8    md:h-fit `}>
-                    <div className={`md:h-fit md:mt-2  m md:w-fit   md:grid   `}>
-                        <Image
-                            id={'meddleMainLogoOnAdminLayout'}
-                            data-testid={'meddleMainLogoOnAdminLayout'}
-                            width={100}
-                            height={50}
-                            src={'/Meedle Logo Primary Main.svg'} alt={'meedleYellowLogo'}
-                        />
-                    </div>
-                    <div className={` hidden md:mt-3  md:grid md:h-fit  md:w-full `}>
-                        <NavbarRouter currentTab={current} handleClick={clickNavbar}
-                                      navbarItems={getUserSideBarByRole(userRole)}/>
-                    </div>
+                <div className={`md:h-fit md:mt-2  m md:w-fit   md:grid   `}>
+                    <Image
+                        id={'meddleMainLogoOnAdminLayout'}
+                        data-testid={'meddleMainLogoOnAdminLayout'}
+                        width={100}
+                        height={50}
+                        src={'/Meedle Logo Primary Main.svg'} alt={'meedleYellowLogo'}
+                    />
                 </div>
 
-                <div className={` `}>
-                    < NavbarContainer current={currentNavBottom} items={navbarContainerItems}/>
+                <div className={` h-[90vh] grid    ${styles.sideBar} `}>
+
+                    <div className={`  md:grid md:gap-8   md:h-fit `}>
+
+                        <div className={` hidden md:mt-3  md:grid md:h-fit  md:w-full `}>
+                            <NavbarRouter currentTab={current} handleClick={clickNavbar}
+                                          navbarItems={getUserSideBarByRole(userRole)}/>
+                        </div>
+                    </div>
+
+                    <div className={` content-end `}>
+                        < NavbarContainer current={currentNavBottom} items={navbarContainerItems}/>
+                    </div>
                 </div>
 
             </aside>
-
-
-
         </div>
     );
-};
+}
 
 export default SideBar;
+
+  

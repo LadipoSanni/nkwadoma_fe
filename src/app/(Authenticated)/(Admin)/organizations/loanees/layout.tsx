@@ -9,8 +9,8 @@ type props = {
 
 const layout: React.FC<props> = ({ children }) => {
   return (
-    <CustomAuthorization authorizedRoles={['PORTFOLIO_MANAGER']}>
-      <OrganizationLoaneeLayout>
+    <CustomAuthorization authorizedRoles={['PORTFOLIO_MANAGER','MEEDL_SUPER_ADMIN',"MEEDL_ADMIN"]} >
+      <OrganizationLoaneeLayout tab="loanBook">
         {children}
       </OrganizationLoaneeLayout>
     </CustomAuthorization>

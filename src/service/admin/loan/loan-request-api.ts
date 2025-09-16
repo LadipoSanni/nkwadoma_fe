@@ -30,6 +30,25 @@ export const loanRequestApi = createApi({
                 method: 'GET',
             })
         }),
+        viewAllLoanReferral: builder.query({
+            query: (data: {pageSize:number, pageNumber: number,organizationId?: string  | number}) => ({
+                url: `/loan/view/loan-referrals`,
+                method: 'GET',
+                params: data
+            }),
+        }),
+        withdrawLoanOffer: builder.mutation({
+            query: (data: {loanOfferId : string,loanOfferStatus: string }) => ({
+                url: `/loan/withdraw/loan-offer?loanOfferId=${data.loanOfferId}&loanOfferStatus=${data.loanOfferStatus}`,
+                method: 'POST'
+            })
+        }),
+        viewLoanSchedule: builder.query({
+            query:(loanRequestId: string) => ({
+                url:  `/repayment/history/generate/repayment/schedule?loanRequestId=${loanRequestId}`,
+                method: 'GET'
+            })
+        }),
 
 
 
@@ -40,4 +59,7 @@ export const {
     useViewAllLoanRequestQuery,
     useViewLoanRequestDetailsQuery,
     useRespondToLoanRequestMutation,
+    useViewAllLoanReferralQuery,
+    useWithdrawLoanOfferMutation,
+    useViewLoanScheduleQuery,
 } = loanRequestApi;

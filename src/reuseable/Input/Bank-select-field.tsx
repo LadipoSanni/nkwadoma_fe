@@ -4,6 +4,7 @@ import { ChevronDownIcon, ChevronUpIcon } from "@radix-ui/react-icons";
 import { getBanks } from 'banks-ng';
 import Image from 'next/image';
 import { Virtuoso } from 'react-virtuoso';
+import { safeDecodeURI } from '@/utils/GlobalMethods';
 
 type Bank = {
   id: number;
@@ -76,12 +77,13 @@ const BankSelectField = ({
       >
         <div className="flex items-center gap-2">
           <Image
-            src={bank.logo}
+            src={safeDecodeURI(bank.logo)}
             alt={bank.name}
             width={20}
             height={20}
             priority={index < 10}
             className="w-5 h-5 rounded-sm"
+            unoptimized={process.env.NODE_ENV !== 'development'}
           />
           <span>{bank.displayName}</span>
         </div>
@@ -89,6 +91,7 @@ const BankSelectField = ({
     ),
     [id, isItemDisabled]
   );
+  
 
   return (
     <div>
@@ -105,11 +108,12 @@ const BankSelectField = ({
           <div className="flex items-center gap-2">
             {selectedBank?.logo && (
               <Image
-                src={selectedBank.logo}
+                src={safeDecodeURI(selectedBank.logo)}
                 alt={selectedBank.name}
                 width={20}
                 height={20}
                 className="w-4 h-4 rounded-sm"
+               unoptimized={process.env.NODE_ENV !== 'development'}
               />
             )}
             {selectedBank ? selectedBank.displayName : <span className="text-grey400 opacity-50">{placeHolder}</span>}

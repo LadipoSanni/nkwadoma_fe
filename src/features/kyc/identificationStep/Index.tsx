@@ -29,6 +29,7 @@ const IdentificationStep = () => {
     const financierType = useAppSelector(state => state.financier.financierType);
     const savedData = useAppSelector(state => state.kycForm.identification);
 
+
     const {
         register: individualRegister,
         handleSubmit: handleIndividualSubmit,
@@ -40,7 +41,7 @@ const IdentificationStep = () => {
             { 
                 nin: savedData.individual.nin, 
                 bvn: savedData.individual.bvn, 
-                taxId: savedData.individual.tin || '' 
+                taxId: savedData.individual.tin ,
             } : 
             { nin: '', bvn: '', taxId: '' }
     });

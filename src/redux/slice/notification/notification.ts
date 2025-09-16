@@ -37,6 +37,9 @@ export const notificationSlice = createSlice({
         setNotificationId: (state, action: PayloadAction<string>) => {
             state.setNotificationId = action.payload;
         },
+        resetNotificationId: (state) => {
+            state.setNotificationId = "";
+        },
         resetNotification: (state) => {
             state.setNotification = "";
             state.setNotificationId = "";
@@ -58,5 +61,5 @@ export const notificationSlice = createSlice({
     }
 })
 
-export const {setCurrentTotalNotification,triggerRefetch,setNotification,resetNotification,setNotificationId,setNotificationFlag,setNotificationPageNumber,resetNotificationPageNumber,setSelectedNotificationId} = notificationSlice.actions;
+export const {setCurrentTotalNotification,triggerRefetch,setNotification,resetNotification,setNotificationId,setNotificationFlag,setNotificationPageNumber,resetNotificationPageNumber,setSelectedNotificationId,resetNotificationId} = notificationSlice.actions;
 export default notificationSlice.reducer;

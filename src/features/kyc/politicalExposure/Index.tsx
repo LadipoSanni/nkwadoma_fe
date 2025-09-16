@@ -16,7 +16,8 @@ import { updateDeclaration } from "@/redux/slice/kyc/kycFormSlice";
 import { useCompleteKycMutation } from "@/service/financier/api";
 import { mapKycDataToApiRequest, mapCountryCodeToEnum } from "@/utils/kycDataMapper";
 import { useToast } from "@/hooks/use-toast";
-
+import { resetAllForm } from '@/redux/slice/kyc/kycFormSlice';
+import styles from '@/components/side-bar/index.module.css'
 interface ApiError {
     data?: {
         message?: string;
@@ -116,6 +117,7 @@ const PoliticalExposure: React.FC = () => {
 
             if (response && (response.statusCode === "200 OK" || response.message === "Response is successful.")) {
                 setShowSuccessDialog(true);
+                resetAllForm()
             } else {
                 setErrorMessage(response?.message || "Failed to complete KYC. Please try again.");
             }
@@ -150,7 +152,7 @@ const PoliticalExposure: React.FC = () => {
         ));
 
     return (
-        <div id="declarationContainer" className={`${inter.className} w-full xl:px-48 grid-cols-1 gap-y-6 grid gap-10`}>
+        <div id="declarationContainer" className={`${inter.className} max-h-[70vh] ${styles.sideBar} h-fit    w-full xl:px-48 grid-cols-1 gap-y-6 grid gap-10`}>
             <div id="declarationHeaderContainer" className={`${cabinetGroteskMediumBold.className} max-w-[27.5rem] md:mx-auto w-full`}>
                 <h1 id="declarationTitle" className="text-meedlBlack text-[24px] leading-[120%] font-medium">Political exposure</h1>
             </div>
@@ -249,7 +251,7 @@ const PoliticalExposure: React.FC = () => {
                     <div id="termsLabelContainer" className="grid gap-1.5 leading-snug">
                         <Label htmlFor="terms" id="termsLabel" className="text-[14px] leading-[150%] font-normal text-gray-700 cursor-pointer">
                             I have read, understood and agree to this{' '}
-                            <a id="termsLink" href="/" target="_blank" rel="noopener noreferrer" className="font-semibold text-meedlBlue underline">
+                            <a id="termsLink"  target="_blank" rel="noopener noreferrer" className="font-semibold text-meedlBlue underline">
                                 Declaration and Agreement
                             </a>
                         </Label>

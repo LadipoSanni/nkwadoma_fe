@@ -229,7 +229,7 @@ function CreateProgram({setIsOpen}:Props) {
                     >Program mode</Label> */}
                      <div style={{ overflowX: 'auto', whiteSpace: 'nowrap', scrollbarWidth: 'none',
                        msOverflowStyle: 'none'}}> 
-                    <Label htmlFor="minimumAmount" style={{ display: 'inline-block',WebkitOverflowScrolling: 'touch'  }}>Program mode</Label> 
+                    <Label htmlFor="programMode" style={{ display: 'inline-block',WebkitOverflowScrolling: 'touch'  }}>Program mode</Label> 
                     </div>
                     <CustomSelectObj
                      triggerId='programModeTriggerId'

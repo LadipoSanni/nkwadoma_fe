@@ -2,6 +2,7 @@ import React, {useEffect} from 'react';
 import {Input} from "@/components/ui/input";
 import CountrySelectPopover from "@/reuseable/select/countrySelectPopover/Index";
 import {validateEntityOwnership, validateName, validateRcNumber} from "@/utils/GlobalMethods";
+import {Owner} from "@/features/kyc/beneficialOwnerStep/Index";
 
 interface EntityData {
     name: string,
@@ -14,16 +15,17 @@ interface EntityData {
 }
 interface IndividualProps  {
     id?: number;
-    updateOwner :( field: string, value: string | File| boolean,id?: number) => void
+    updateOwner :( field: string, value: string | File| boolean,id?: number) => void,
+    currentObj: Owner,
 }
-const Entity = ({id, updateOwner}: IndividualProps) => {
+const Entity = ({id, updateOwner, currentObj}: IndividualProps) => {
     const initialEntityDate = {
-        name: '',
-        country: '',
-        rcNumber: '',
-        ownership: '',
-        entityError: '',
-        errorMessage: ''
+        name: currentObj?.name ? currentObj.name :  '',
+        country: currentObj?.country ? currentObj?.country :'',
+        rcNumber: currentObj?.rcNumber  ? currentObj?.rcNumber :'',
+        ownership: currentObj?.ownership ? currentObj?.ownership : '',
+        entityError: currentObj?.entityError ? currentObj?.entityError : '',
+        errorMessage: currentObj?.errorMessage ? currentObj?.errorMessage : '',
 
     }
 
@@ -75,6 +77,24 @@ const Entity = ({id, updateOwner}: IndividualProps) => {
                                 handleInputChange('name', e.target.value)
                             }
                         }}
+                        onBlur={(e) => {
+                            const value = e.target.value;
+                            const isInputValid = validateName(value);
+                            
+                            if (typeof isInputValid === "string") {
+                                setEntityData((prevState) => ({
+                                    ...prevState,
+                                    entityError: 'name',
+                                    errorMessage: isInputValid
+                                }));
+                            } else {
+                                setEntityData((prevState) => ({
+                                    ...prevState,
+                                    entityError: '',
+                                    errorMessage: ''
+                                }));
+                            }
+                        }}
                         placeholder="Enter name"
                         className="p-4 focus-visible:outline-0 shadow-none focus-visible:ring-transparent rounded-md h-[3.375rem] font-normal leading-[21px] text-[14px] placeholder:text-grey250 text-black500 border border-solid border-neutral650"
                     />
@@ -113,13 +133,13 @@ const Entity = ({id, updateOwner}: IndividualProps) => {
                                     { ...prevState, ['errorMessage']: isInputValid }
                                 ))
 
-                            }else if(entityData?.rcNumber?.length > 8){
+                            }else if(value?.length > 7){
                                 // /^\d{8}$/.test(entityData.rcNumber
                                 setEntityData((prevState) => (
                                     { ...prevState, ['entityError']: 'rcNumber' }
                                 ))
                                 setEntityData((prevState) => (
-                                    { ...prevState, ['errorMessage']: 'rc number must be 8 digits long' }
+                                    { ...prevState, ['errorMessage']: 'rc number must be 7 digits long' }
                                 ))
                                 handleInputChange('rcNumber', value)
                             }

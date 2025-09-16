@@ -3,24 +3,32 @@ import * as Yup from "yup";
 export const validationSchema = Yup.object().shape({
   name: Yup.string()
     .trim()
-    .matches(
-      /^[a-zA-Z][a-zA-Z0-9\-'/ ]*[a-zA-Z0-9]$/,
-      // "Name can include letters, numbers, hyphens,slash and apostrophes only, and must start with a letter."
-      "Name must start with a letter and end with a letter or number and can include  hyphens,slash and underscore only "
-    )
+    // .matches(
+    //   /^[a-zA-Z][a-zA-Z0-9\-'/ ]*[a-zA-Z0-9]$/,
+    //   // "Name can include letters, numbers, hyphens,slash and apostrophes only, and must start with a letter."
+    //   "Name must start with a letter and end with a letter or number and can include  hyphens,slash and underscore only "
+    // )
+    // .test(
+    //   "valid-name",
+    //   "Name cannot be only numbers or special characters.",
+    //   (value = "") => {
+    //     const trimmedValue = value.trim();
+    //     if (trimmedValue === "") {
+    //       return true;
+    //     }
+    //     const hasLetter = /[a-zA-Z]/.test(value);
+    //     const isOnlyNumbersOrSpecials = /^[^a-zA-Z]+$/.test(trimmedValue);
+    //     return hasLetter && !isOnlyNumbersOrSpecials;
+    //   }
+    // )
     .test(
       "valid-name",
-      "Name cannot be only numbers or special characters.",
+      "Name must not end with hyphen or underscore or apostrophe",
       (value = "") => {
-        const trimmedValue = value.trim();
-        if (trimmedValue === "") {
-          return true;
-        }
-        const hasLetter = /[a-zA-Z]/.test(value);
-        const isOnlyNumbersOrSpecials = /^[^a-zA-Z]+$/.test(trimmedValue);
-        return hasLetter && !isOnlyNumbersOrSpecials;
+          const regex = /^[a-zA-Z0-9](?:[a-zA-Z0-9'_-\s]*[a-zA-Z0-9])?$/;
+          return regex.test(value);
       }
-    )
+  )
     .max(200, "Name cannot be more than 200 characters.")
     .required("Name is required"),
   fundManager: Yup.string()
@@ -139,4 +147,287 @@ export const LoaneeInformationvalidationSchema = Yup.object().shape({
     .required('Relationship is required'), 
   contactAddress: Yup.string()
     .required('Contact address is required'),
+  stateOfResidence: Yup.string()
+    .required('State of residence is required'),
+  levelOfEducation:  Yup.string()
+  .required('Level of education is required'),
+  others: Yup.string()
+    .when('levelOfEducation', {
+      is: (levelOfEducation: string) => levelOfEducation === 'OTHERS',
+      then: (schema) => schema
+        .required('Please specify your education level')
+        .matches(
+          /^[A-Za-z\s\-'.]+$/,
+          'Education level can only contain letters, spaces, hyphens, apostrophes, and periods'
+        )
+        .min(2, 'Education level must be at least 2 characters')
+        .max(100, 'Education level cannot exceed 100 characters'),
+      otherwise: (schema) => schema.notRequired(),
+    }),
+});
+
+
+export const validationStaffSchema = Yup.object().shape({
+       firstName: Yup.string()
+                  .trim()
+                  .required('First name is required')
+                  .test(
+                    "valid-name",
+                    "First name must not end with hyphen or underscore or apostrophe",
+                    (value = "") => {
+                      const regex = /^[a-zA-Z](?:[a-zA-Z0-9'_-\s]*[a-zA-Z0-9])?$/;
+                        return regex.test(value);
+                    }
+                )
+                  .matches(/^[^0-9]*$/, 'Numbers are not allowed')
+                  .max(100, "Characters exceeds 100 characters"),
+      lastName: Yup.string()
+                  .trim()
+                  .required('Last name is required')
+                  .test(
+                    "valid-name",
+                    "Last name must not end with hyphen or underscore or apostrophe",
+                    (value = "") => {
+                      const regex = /^[a-zA-Z](?:[a-zA-Z0-9'_-\s]*[a-zA-Z0-9])?$/;
+                        return regex.test(value);
+                    }
+                )
+                  .matches(/^[^0-9]*$/, 'Numbers are not allowed')
+                  .max(100, "Characters exceeds 100 characters"),
+        email: Yup.string()
+            .email('Invalid email address')
+            .matches(/^[^\s@]+@[^\s@]+\.[^\s@]+$/, 'Invalid email format')
+            .required('Email address is required'),
+        role:Yup.string()
+              .required('Role is required'),
+    })
+
+
+  //  export const organizationValidationSchema = Yup.object().shape({
+  //           name: Yup.string()
+  //               .trim()
+  //               .required('Name is required')
+  //               .matches(/^[^0-9]*$/, 'Numbers are not allowed'),
+  //           email: Yup.string()
+  //               .email('Invalid email address')
+  //               // .matches(/^\S*$/, 'Email address should not contain spaces')
+  //               .matches(/^[^\s@]+@[^\s@]+\.[^\s@]+$/, 'Invalid email format')
+  //               .required('Email address is required'),
+  //           industry: Yup.string()
+  //               .required('Industry is required'),
+  //           serviceOffering: Yup.string()
+  //               .required('Service is required'),
+  //           rcNumber: Yup.string()
+  //               .trim()
+  //               .required('Registration number is required')
+  //               .matches(/^RC\d{7}$/, 'RC Number must start with "RC" followed by 7 digits'),
+  //           tin: Yup.string()
+  //               .trim()
+  //               .required('Tax number is required')
+  //               .min(9, 'Tax number must be at least 9 characters long')
+  //               .max(15, 'Must be the length of 15 characters long')
+  //               .matches(/^[A-Za-z0-9-]*$/, 'Tax number can only contain letters, numbers, and hyphens, and must not start with a hyphen'),
+  //           adminFirstName: Yup.string()
+  //               .trim()
+  //               .required('Admin first name is required')
+  //               .test(
+  //                 "valid-name",
+  //                 "First name must not end with hyphen or underscore or apostrophe",
+  //                 (value = "") => {
+  //                   const regex = /^[a-zA-Z](?:[a-zA-Z0-9'_-\s]*[a-zA-Z0-9])?$/;
+  //                     return regex.test(value);
+  //                 }
+  //             )
+  //             .max(100, "Characters exceeds 100 characters"),
+  //           adminLastName: Yup.string()
+  //               .trim()
+  //               .required('Admin last name is required') 
+  //               .test(
+  //                 "valid-name",
+  //                 "Last name must not end with hyphen or underscore",
+  //                 (value = "") => {
+  //                   const regex = /^[a-zA-Z](?:[a-zA-Z0-9'_-\s]*[a-zA-Z0-9])?$/;
+  //                     return regex.test(value);
+  //                 }
+  //             )
+  //               .max(100, "Characters exceeds 100 characters"),
+  //           phoneNumber: Yup.string(),
+  //               // .required('Phone number is required')
+  //               // .matches(/^(0)(70|71|80|81|90|91)\d{8}$/, 'Invalid phone number'),
+  //           adminEmail: Yup.string()
+  //               .email('Invalid email address')
+  //               // .matches(/^\S*$/, 'Email address should not contain spaces')
+  //               .matches(/^[^\s@]+@[^\s@]+\.[^\s@]+$/, 'Invalid email format')
+  //               .required('Admin email address is required')
+  //               .test(
+  //                   'email-different', 'Admin email address must be different from company email address',
+  //                   function () {
+  //                       const {email, adminEmail} = this.parent;
+  //                       return email !== adminEmail;
+  //                   }),
+  //           websiteAddress: Yup.string()
+  //           .matches(
+  //               /^(https?:\/\/)?(www\.)?([a-zA-Z0-9-]+\.){1,}[a-zA-Z]{2,}(\/[a-zA-Z0-9-._~:/?#[\]@!$&'()*+,;=]*)?$/,
+  //               'Enter a valid website URL'
+  //           )
+  //           .nullable(),
+  //       })
+
+  //       export const stepTwo1ValidationSchema = Yup.object().shape({
+  //         name: Yup.string()
+  //         .trim()
+  //         .required('Name is required')
+  //         .test(
+  //           "valid-name",
+  //           "Name must not end with hyphen, underscore, or apostrophe",
+  //           (value = "") => {
+  //             const regex = /^[a-zA-Z0-9](?:[a-zA-Z0-9_'-\s]*[a-zA-Z0-9])?$/;
+  //               return regex.test(value);
+  //           }
+  //         )
+  //         .max(200, "Terms exceeds 200 characters"),
+  //     email: Yup.string()
+  //         .email('Invalid email address')
+  //         // .matches(/^\S*$/, 'Email address should not contain spaces')
+  //         .matches(/^[^\s@]+@[^\s@]+\.[^\s@]+$/, 'Invalid email format')
+  //         .required('Email address is required'),
+  //     industry: Yup.string()
+  //         .required('Industry is required'),
+  //     serviceOffering: Yup.string()
+  //         .required('Service is required'),
+  //     rcNumber: Yup.string()
+  //         .trim()
+  //         .required('Registration number is required')
+  //         .matches(/^RC\d{7}$/, 'RC Number must start with "RC" followed by 7 digits'),
+  //     tin: Yup.string()
+  //         .trim()
+  //         .required('Tax number is required')
+  //         .min(9, 'Tax number must be at least 9 characters long')
+  //         .max(15, 'Must be the length of 15 characters long')
+  //         .matches(/^[A-Za-z0-9-]*$/, 'Tax number can only contain letters, numbers, and hyphens, and must not start with a hyphen'),
+  //    websiteAddress: Yup.string()
+  //         .matches(
+  //             /^(https?:\/\/)?(www\.)?([a-zA-Z0-9-]+\.){1,}[a-zA-Z]{2,}(\/[a-zA-Z0-9-._~:/?#[\]@!$&'()*+,;=]*)?$/,
+  //             'Enter a valid website URL'
+  //         )
+  //         .nullable(),
+  //         phoneNumber: Yup.string(),
+  //          // .required('Phone number is required')
+  //               // .matches(/^(0)(70|71|80|81|90|91)\d{8}$/, 'Invalid phone number'),
+  //       });
+
+
+  export const organizationValidationSchema = Yup.object().shape({
+    name: Yup.string()
+        .trim()
+        .required('Name is required')
+        .matches(/^[^0-9]*$/, 'Numbers are not allowed'),
+    email: Yup.string()
+        .email('Invalid email address')
+        // .matches(/^\S*$/, 'Email address should not contain spaces')
+        .matches(/^[^\s@]+@[^\s@]+\.[^\s@]+$/, 'Invalid email format')
+        .required('Email address is required'),
+    industry: Yup.string()
+        .required('Industry is required'),
+    serviceOffering: Yup.string()
+        .required('Service is required'),
+    rcNumber: Yup.string()
+        .trim()
+        .required('Registration number is required')
+        .matches(/^RC\d{7}$/, 'RC Number must start with "RC" followed by 7 digits'),
+    tin: Yup.string()
+        .trim()
+        .required('Tax number is required')
+        .min(9, 'Tax number must be at least 9 characters long')
+        .max(15, 'Must be the length of 15 characters long')
+        .matches(/^[A-Za-z0-9-]*$/, 'Tax number can only contain letters, numbers, and hyphens, and must not start with a hyphen'),
+    adminFirstName: Yup.string()
+        .trim()
+        .test(
+          "valid-name",
+          "First name must not end with hyphen or underscore or apostrophe",
+          (value = "") => {
+            const regex = /^[a-zA-Z](?:[a-zA-Z0-9'_-\s]*[a-zA-Z0-9])?$/;
+              return regex.test(value);
+          }
+      )
+      .matches(/^[^0-9]*$/, 'Numbers are not allowed')
+      .max(100, "First name exceeds 100 characters")
+        .required('Admin first name is required'),
+    adminLastName: Yup.string()
+        .trim()
+        .test(
+          "valid-name",
+          "Last name must not end with hyphen or underscore",
+          (value = "") => {
+            const regex = /^[a-zA-Z](?:[a-zA-Z0-9'_-\s]*[a-zA-Z0-9])?$/;
+              return regex.test(value);
+          }
+      )
+      .matches(/^[^0-9]*$/, 'Numbers are not allowed')
+      .max(100, "Last name exceeds 100 characters")
+        .required('Admin last name is required'),
+    phoneNumber: Yup.string(),
+        // .required('Phone number is required')
+        // .matches(/^(0)(70|71|80|81|90|91)\d{8}$/, 'Invalid phone number'),
+    adminEmail: Yup.string()
+        .email('Invalid email address')
+        // .matches(/^\S*$/, 'Email address should not contain spaces')
+        .matches(/^[^\s@]+@[^\s@]+\.[^\s@]+$/, 'Invalid email format')
+        .required('Admin email address is required')
+        .test(
+            'email-different', 'Admin email address must be different from company email address',
+            function () {
+                const {email, adminEmail} = this.parent;
+                return email !== adminEmail;
+            }),
+    websiteAddress: Yup.string()
+    .matches(
+        /^(https?:\/\/)?(www\.)?([a-zA-Z0-9-]+\.){1,}[a-zA-Z]{2,}(\/[a-zA-Z0-9-._~:/?#[\]@!$&'()*+,;=]*)?$/,
+        'Enter a valid website URL'
+    )
+    .nullable(),
+})
+
+export const stepTwo1ValidationSchema = Yup.object().shape({
+  name: Yup.string()
+  .trim()
+  .required('Name is required')
+  .test(
+    "valid-name",
+    "Name must not end with hyphen or underscore",
+    (value = "") => {
+      const regex = /^[a-zA-Z](?:[a-zA-Z0-9'_-\s]*[a-zA-Z0-9])?$/;
+        return regex.test(value);
+    }
+)
+  .max(200, "Terms exceeds 200 characters"),
+email: Yup.string()
+  .email('Invalid email address')
+  // .matches(/^\S*$/, 'Email address should not contain spaces')
+  .matches(/^[^\s@]+@[^\s@]+\.[^\s@]+$/, 'Invalid email format')
+  .required('Email address is required'),
+industry: Yup.string()
+  .required('Industry is required'),
+serviceOffering: Yup.string()
+  .required('Service is required'),
+rcNumber: Yup.string()
+  .trim()
+  .required('Registration number is required')
+  .matches(/^RC\d{7}$/, 'RC Number must start with "RC" followed by 7 digits'),
+tin: Yup.string()
+  .trim()
+  .required('Tax number is required')
+  .min(9, 'Tax number must be at least 9 characters long')
+  .max(15, 'Must be the length of 15 characters long')
+  .matches(/^[A-Za-z0-9-]*$/, 'Tax number can only contain letters, numbers, and hyphens, and must not start with a hyphen'),
+websiteAddress: Yup.string()
+  .matches(
+      /^(https?:\/\/)?(www\.)?([a-zA-Z0-9-]+\.){1,}[a-zA-Z]{2,}(\/[a-zA-Z0-9-._~:/?#[\]@!$&'()*+,;=]*)?$/,
+      'Enter a valid website URL'
+  )
+  .nullable(),
+  phoneNumber: Yup.string(),
+   // .required('Phone number is required')
+        // .matches(/^(0)(70|71|80|81|90|91)\d{8}$/, 'Invalid phone number'),
 });

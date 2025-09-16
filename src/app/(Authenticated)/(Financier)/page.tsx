@@ -3,7 +3,7 @@ import CustomAuthorization from "@/features/auth/authorization/index";
 
 const Page = () => {
     return (
-        <CustomAuthorization authorizedRoles={['FINANCIER']}>
+        <CustomAuthorization authorizedRoles={['FINANCIER','COOPERATE_FINANCIER_SUPER_ADMIN','COOPERATE_FINANCIER_ADMIN']}>
             <div>
 
             </div>

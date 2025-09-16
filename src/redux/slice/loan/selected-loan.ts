@@ -16,20 +16,24 @@ interface SelectedLoanState {
     clickedLoanId: string;
     currentTabRoute: string;
     cohortLoaneeId: string;
+    companySelectedTab: number;
+    selectedGeneralTab: number;
 }
 
 const initialState: SelectedLoanState = {
-    currentTab: 'Loan requests',
+    currentTab: 'Loan referrals',
     clickedOrganization: null,
     clickedDisbursedLoanIdNumber: "",
     disbursedLoanAccountId:"",
     clickedLoanProductId:"",
     fundProductAvailableAmount: 0,
-    currentTabStatus: "LOAN_REQUEST",
+    currentTabStatus: "LOAN_REFERRAL",
     loanReferralId: "",
     clickedLoanId: "",
-    currentTabRoute: "loan-request",
-    cohortLoaneeId: ''
+    currentTabRoute: "loan-referral",
+    cohortLoaneeId: '',
+    companySelectedTab: 0,
+    selectedGeneralTab: 0,
 };
 
 export const selectedLoanSlice = createSlice({
@@ -73,11 +77,21 @@ export const selectedLoanSlice = createSlice({
         },
         setCohortLoaneeId: (state, action: PayloadAction<string>) => {
             state.cohortLoaneeId = action.payload;
+        },
+        setSelectedCompanyTab: (state , action: PayloadAction<number>) => {
+            state.companySelectedTab = action.payload;
+        },
+        setSelectedGeneralTab: (state, action: PayloadAction<number>) => {
+            state.selectedGeneralTab = action.payload;
         }
        
     },
 });
 
-export const { setCurrentTab,setCohortLoaneeId ,setClickedLoanId, setClickedOrganization,setLoanReferralId, setClickedDisbursedLoanIdNumber, setDisbursedLoanIdNumber, setClickedLoanProductId, setFundProductAvailableAmount,setCurrentTabStatus,resetTab,setcurrentTabRoute } = selectedLoanSlice.actions;
+export const { setCurrentTab,setCohortLoaneeId , setClickedLoanId, setClickedOrganization,
+    setLoanReferralId, setClickedDisbursedLoanIdNumber, setDisbursedLoanIdNumber, setClickedLoanProductId,
+    setFundProductAvailableAmount,setCurrentTabStatus,resetTab,setcurrentTabRoute,
+    setSelectedCompanyTab,setSelectedGeneralTab
+} = selectedLoanSlice.actions;
 
 export default selectedLoanSlice.reducer;

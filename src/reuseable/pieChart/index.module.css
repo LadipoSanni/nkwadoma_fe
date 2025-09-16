@@ -1,0 +1,29 @@
+
+
+.pieChartContainer {
+    display: flex;
+
+}
+.pieChartChart {
+    width: 66.666667%;
+
+}
+.barChartWithDateHeader{
+    display: flex;
+}
+
+@media (max-width: 465px){
+    .pieChartContainer {
+        display: grid;
+        gap:  1rem;
+    }
+    .pieChartChart{
+        width: 100%;
+        height: 100%;
+
+    }
+    .barChartWithDateHeader{
+        display: grid;
+        gap: 1rem;
+    }
+}

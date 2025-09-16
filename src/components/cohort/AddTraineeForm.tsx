@@ -71,7 +71,7 @@ function AddTraineeForm({setIsOpen, tuitionFee,cohortId }: Props) {
             .required('Email address is required'),
         initialDeposit: Yup.string()
             // .required('Initial deposit is required')
-            .matches(/^[1-9]\d*$/, 'Initial deposit must be a positive number and cannot start with zero'),
+            // .matches(/^[1-9]\d*$/, 'Initial deposit must be a positive number and cannot start with zero'),
 
     });
 

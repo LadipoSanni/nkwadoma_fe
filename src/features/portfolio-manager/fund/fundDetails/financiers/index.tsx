@@ -20,6 +20,7 @@ import {store} from "@/redux/store";
 import { resetNotification } from '@/redux/slice/notification/notification';
 import { setCurrentNavbarItem } from "@/redux/slice/layout/adminLayout";
 
+
 interface TableRowData {
     [key: string]: string | number | null | React.ReactNode;
 }
@@ -51,7 +52,7 @@ function Financiers() {
      const [totalPage,setTotalPage] = useState(0)
      const [pageNumber,setPageNumber] = useState(0)
      const [financiers, setFinanciers] = useState<viewAllfinancier[]>([])
-     const isDisabled = true;
+     const isDisabled = false;
     const param = {
       pageNumber: pageNumber,
       pageSize: 10,
@@ -100,14 +101,14 @@ function Financiers() {
         }
 
     const financierHeader = [
-      { title: 'Financier', sortable: true, id: 'name', selector: (row:viewAllfinancier ) => row?.financierType === "INDIVIDUAL"? row.userIdentity?.firstName + " " + row.userIdentity?.lastName : row?.organizationName},
+      { title: 'Financier', sortable: true, id: 'name', selector: (row:viewAllfinancier ) => capitalizeFirstLetters(row?.name?.toString())},
       { title: <div className='relative md:left-4'>Type</div>, id: 'type', selector: (row:viewAllfinancier) => (
         <span className={`${row.financierType ===  "INDIVIDUAL" ? 'text-[#66440A] bg-[#FEF6E8]' : 'text-[#142854] bg-[#EEF5FF]'} rounded-[32px] px-2 h-5`}>
     {capitalizeFirstLetters(row.financierType)}
 </span>
     ) },
-      { title: 'No. of investments', sortable: true, id: 'number_of_investments', selector: (row:viewAllfinancier) => row.number_of_investments|| 0 },
-      { title: 'Amount invested', sortable: true, id: 'amount_invested', selector: (row:viewAllfinancier) => formatAmount(row.amount_invested)},
+      { title: 'No. of investments', sortable: true, id: 'number_of_investments', selector: (row:viewAllfinancier) => row.totalNumberOfInvestment|| 0 },
+      { title: 'Amount invested', sortable: true, id: 'amount_invested', selector: (row:viewAllfinancier) => formatAmount(row.totalAmountInvested)},
       { title: 'Amount earned', sortable: true, id: 'amount_earned', selector: (row:viewAllfinancier) =>formatAmount(row.amount_earned)},
       { title: 'Payout', sortable: true, id: 'payout', selector: (row:viewAllfinancier) => formatAmount(row.payout)},
       { title: 'Portfolio value', sortable: true, id: 'portfolio_value', selector: (row:viewAllfinancier) => formatAmount(row.portfolio_value)},
@@ -156,6 +157,7 @@ function Financiers() {
             setPageNumber={setPageNumber}
             totalPages={totalPage}
             isLoading={isLoading}
+            tableCellStyle={"h-12"}
           />
           )}
         </div>

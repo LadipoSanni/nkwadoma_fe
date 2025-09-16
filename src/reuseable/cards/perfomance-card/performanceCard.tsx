@@ -4,6 +4,7 @@ import {cabinetGroteskBold, inter} from "@/app/fonts";
 import { MdArrowUpward, MdOutlineArrowDownward } from "react-icons/md";
 import {formatAmount, formateDigits} from "@/utils/Format";
 import CustomSelect from "@/reuseable/Input/Custom-select";
+import styles from '@/reuseable/pieChart/index.module.css';
 
 
 interface PerformanceCardProps {
@@ -35,7 +36,7 @@ const PerformanceCard = ({id,currentYear,years,isFigure,onChangeDate,currentDate
             id={id} data-testid={id}
             className={` ${isSmall ? ` md:w-[${maxWidth}] w-full ` : `md:min-w-fit min-w-fit max-w[${maxWidth}] md:max-w-[${maxWidth}]`} md:min-w-fit min-w-fit max-w[${maxWidth}] md:max-w-[${maxWidth}]    ${showContainerBorder ? 'md:border md:border-grey-200 border border-grey-200 py-3 px-3 md:h-[9.5rem] h-fit max-h-[10rem] md:max-h-[10rem] ' : ' md:max-h-[7rem] max-h-fit '}  rounded-md `}>
             <div className={` ${isSmall? `md:w-full w-full  ` : `md:min-w-fit  min-w-fit w-[${maxWidth}] md:w-[${maxWidth}] `} h-full bg-grey105 md:bg-grey105 px-4 py-4 grid gap-2 content-between`}>
-                <div className={` md:flex md:justify-between md:full flex justify-between `}>
+                <div className={` ${styles.barChartWithDateHeader} md:justify-between  justify-between `}>
                     <p id={'performanceTitleId'+title} data-testid={title} aria-labelledby={title} className={`md:text-[16px] text-[14px] ${inter.className} text-black300`}>{title}</p>
                     {showMonthPick  && onChangeDate &&
                         <CustomSelect

@@ -1,10 +1,33 @@
 .container{
     /*display: flex;*/
     /*grid-template-columns: max-content;*/
+
     overflow-y: auto;
     -ms-overflow-style: none;
     scrollbar-width: none;
 }
+
+.switchTabStyle{
+
+}
+.containerDiv{
+    overflow-y: auto;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+    height: 56vh;
+    background-color: aqua;
+    /*grid-template-columns: 200px;*/
+    grid-template-rows: repeat(6, 1fr);
+
+}
+
+.containerTop{
+
+    grid-row: 2 / 4;
+}
+/* .containerBottom{
+
+} */
 
 .tab{
     display: flex;
@@ -20,11 +43,55 @@
     scrollbar-width: none;
 }
 
-.containers{
-    
+/* .containers{
+
+} */
+
+
+.verticalContainer{
+    width: 100%;
+    background-color: white;
 }
 @media only screen and (max-width: 960px) {
     .containers{
         visibility: hidden;
     }
+    .switchTabStyle{
+        display: flex;
+        grid-template-columns: max-content;
+        overflow-x: auto;
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+    }
+}
+.detailsWidth{
+ width: 100%;
+}
+@media only screen and (max-width: 400px) {
+    .detailsWidth{
+        width: 16em;
+    }
+}
+
+@media only screen and (min-width: 600px){
+    .verticalContainer{
+        overflow-y: auto;
+        overflow-x: hidden;
+        padding-right: 10px;
+
+    }
+
+    .verticalContainer::-webkit-scrollbar {
+        width: 2px;
+    }
+    .verticalContainer::-webkit-scrollbar-track{
+        background-color: white;
+        padding-right: 1px;
+    }
+    .verticalContainer::-webkit-scrollbar-thumb{
+        width: 1px;
+        background-color: #D9D9D9;
+        height: 4px;
+    }
+
 }

@@ -49,32 +49,49 @@ function InviteFinanciers({setIsOpen,investmentId,amountCommitedAndDesignationCo
  const validationschema = Yup.object().shape({
       firstName: Yup.string()
            .trim()
-           .matches(/^[A-Za-z]+$/, 'First name should only contain letters')
+           .test(
+            "valid-name",
+            "First name must not end with hyphen or underscore or apostrophe",
+            (value = "") => {
+              const regex = /^[a-zA-Z](?:[a-zA-Z0-9'_-\s]*[a-zA-Z0-9])?$/;
+                return regex.test(value);
+            }
+        )
            .max(100, "First name cannot be more than 50 characters.")
-           .when('financierType', {
-            is: 'INDIVIDUAL', 
-            then: (schema) => schema.required('First name is required'),
-            otherwise: (schema) => schema.notRequired(),
-        }),
+           .required('Last Name is required'),
+        //    .when('financierType', {
+        //     is: 'INDIVIDUAL', 
+        //     then: (schema) => schema.required('First name is required'),
+        //     otherwise: (schema) => schema.notRequired(),
+        // }),
          lastName: Yup.string()
            .trim()
-           .matches(/^[A-Za-z]+$/, 'Last name should only contain letters')
+           .test(
+            "valid-name",
+            "Last name must not end with hyphen or underscore",
+            (value = "") => {
+              const regex = /^[a-zA-Z](?:[a-zA-Z0-9'_-\s]*[a-zA-Z0-9])?$/;
+                return regex.test(value);
+            }
+        )
            .max(100, "Last name cannot be more than 50 characters.")
-           .when('financierType', {
-            is: 'INDIVIDUAL', 
-            then: (schema) => schema.required('Last Name is required'),
-            otherwise: (schema) => schema.notRequired(),
-        }),
+           .required('Last Name is required'),
+          //  .when('financierType', {
+          //   is: 'INDIVIDUAL', 
+          //   then: (schema) => schema.required('Last Name is required'),
+          //   otherwise: (schema) => schema.notRequired(),
+        // }),
          email: Yup.string()
            .trim()
            .email('Invalid email address')
            .matches(/^[^\s@]+@[^\s@]+\.[^\s@]+$/, 'Invalid email format')
            .required('Email Address is required')
-           .when('financierType', {
-            is: 'INDIVIDUAL', 
-            then: (schema) => schema.required('email is required'),
-            otherwise: (schema) => schema.notRequired(),
-        }),
+           .required('Last Name is required'),
+        //    .when('financierType', {
+        //     is: 'INDIVIDUAL', 
+        //     then: (schema) => schema.required('email is required'),
+        //     otherwise: (schema) => schema.notRequired(),
+        // }),
         organizationEmail: Yup.string()
         .trim()
         .email('Invalid email address')
@@ -88,8 +105,8 @@ function InviteFinanciers({setIsOpen,investmentId,amountCommitedAndDesignationCo
            organizationName: Yup.string()
               .trim()
               .matches(
-                /^[a-zA-Z0-9\-_ ]*$/,
-               "Name can include at least a letter and then numbers, hyphens and underscores.",
+               /^[a-zA-Z](?:[a-zA-Z0-9'_-\s]*[a-zA-Z0-9])?$/,
+               "Company name can not end with hyphen or underscore  or apostrophe.",
               )
               .max(200, "Organization name cannot be more than 200 characters.")
               .when('financierType', {
@@ -149,7 +166,7 @@ const handleSubmit = async  (values: typeof initialFormValue) => {
        organizationEmail: values.organizationEmail,
        organizationName: values.organizationName,
        financierType: values.financierType,
-       
+       amountToInvest: values.amountCommited
 
   }
     const formData = {
@@ -163,6 +180,7 @@ const handleSubmit = async  (values: typeof initialFormValue) => {
         toast({
             description: result.message,
             status: "success",
+            duration: 1000
         });
         if (setIsOpen) {
             setIsOpen(false);
@@ -196,7 +214,19 @@ const handleSubmit = async  (values: typeof initialFormValue) => {
            financierType={values.financierType || ""}
            handleCloseModal={handleCloseModal}
            handleContinue={handleContinue}
-           setFieldValue={setFieldValue}
+           setFieldValue={(field, value, shouldValidate) => {
+            if (field === 'financierType' && value !== values.financierType) {
+              setFieldValue('organizationName', '');
+              setFieldValue('organizationEmail', '');
+              setFieldValue('firstName', '');
+              setFieldValue('lastName', '');
+              setFieldValue('email', '');
+              setFieldValue('investmentVehicleDesignation', []);
+              setFieldValue('amountCommited', '');
+              setError('')
+            }
+            setFieldValue(field, value, shouldValidate);
+          }}
            context={context}
           />
         </div>
@@ -218,7 +248,7 @@ const handleSubmit = async  (values: typeof initialFormValue) => {
         </div>
           {
             <div
-                className={`text-error500 flex justify-center items-center text-center relative bottom-5`}>{error}</div>
+                className={`text-error500 flex justify-center items-center text-center relative bottom-3`}>{error}</div>
         }
         </div>
         )

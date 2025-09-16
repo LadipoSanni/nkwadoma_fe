@@ -3,7 +3,7 @@ import {customFetchBaseQuery} from "@/service/customFetchBaseQuery";
 
 
 export const loanDisbursalApi = createApi({
-    tagTypes: ['loanDisbursal', 'disburse-loan-offer','loanOffer'],
+    tagTypes: ['loanDisbursal', 'disburse-loan-offer','loanOffer','upload-repayment'],
     baseQuery: customFetchBaseQuery,
     reducerPath: 'loanDisbursalApi',
     endpoints: (builder) => ({
@@ -24,14 +24,15 @@ export const loanDisbursalApi = createApi({
                 method: 'GET',
                 params: data
             }),
-            providesTags: ['loanDisbursal','loanOffer']
+            providesTags: ['loanDisbursal','loanOffer','upload-repayment']
         }),
         viewLoansTotalCalculation: builder.query({
             query: () => ({
                 url: `/loan/total`,
                 method: `GET`,
-            })
-        })
+            }),
+            providesTags: ['upload-repayment']
+        }),
 
     })
 })

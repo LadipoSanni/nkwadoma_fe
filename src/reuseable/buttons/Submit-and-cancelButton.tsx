@@ -11,9 +11,11 @@ interface ButtonGroupProps {
     hasContinue?: boolean
     id?: string
     hasBack?: boolean
+    buttonStyle?: string
+    disabledButtonStyle?: string
 }
 
-function SubmitAndCancelButton({ isValid, isLoading, handleCloseModal,submitButtonName,handleContinueOrBack,hasContinue,id,hasBack }: ButtonGroupProps) {
+function SubmitAndCancelButton({ isValid, isLoading, handleCloseModal,submitButtonName,handleContinueOrBack,hasContinue,id,hasBack,buttonStyle,disabledButtonStyle }: ButtonGroupProps) {
     
   return (
     <div className='md:flex gap-4 justify-end mt-2 mb-4 md:mb-0 text-[14px]'>
@@ -37,7 +39,7 @@ function SubmitAndCancelButton({ isValid, isLoading, handleCloseModal,submitButt
 }
       { !hasContinue? <Button 
         variant={'default'} 
-        className={`w-full md:w-36 h-[57px] ${!isValid ? "bg-neutral650 cursor-auto hover:bg-neutral650" : "hover:bg-[#435376] focus:bg-meedlBlue bg-meedlBlue cursor-pointer"}`} 
+        className={`w-full md:w-36 h-[57px] ${!isValid ? disabledButtonStyle || "bg-neutral650 cursor-auto hover:bg-neutral650" : buttonStyle || `"hover:bg-[#435376] focus:bg-meedlBlue bg-meedlBlue cursor-pointer"`}`} 
         type='submit'
          disabled={!isValid}
          id={`submit${id}`} 

@@ -25,6 +25,7 @@ import { capitalizeFirstLetters } from "@/utils/GlobalMethods";
 import SkeletonForDetailPage from "@/reuseable/Skeleton-loading-state/Skeleton-for-detailPage";
 import { useToast } from "@/hooks/use-toast";
 import {useAppSelector} from "@/redux/store";
+import styles from "../../index.module.css"
 
 
 
@@ -165,14 +166,20 @@ const ProgramDetails = () => {
 
 
     return (
-        <>
+        <div 
+        className={`md:max-h-[70vh]  ${styles.container}`}
+        style={{
+            scrollbarWidth: 'none',
+            msOverflowStyle: 'none',  
+              }}
+        >
           {loading ? ( <SkeletonForDetailPage /> ) : (
         <main className={`${inter.className} w-full max-h-full`} id={"mainDiv"}>
-                    <section className={`p- flex md:flex-row flex-col md:gap-0 md:justify-between`} id={`section`}>
+                    <section className={`p- flex md:flex-row flex-col md:gap-0 md:justify-between md:mb-10`} id={`section`}>
                         <div className={'flex flex-col gap-5 md:h-[70vh] md:max-h-none'} id={`status`}>
                             <div
-                                id={`fibookIcon`}
-                                className={'grid place-items-center h-[7.5rem] w-[7.5rem] bg-lightBlue500 rounded-full'}>
+                                id={`fiBookIcon`}
+                                className={'grid place-items-center aspect-square h-[7.5rem] w-[7.5rem] bg-lightBlue500 rounded-full'}>
                                 <FiBook id={`book`} className={'h-[50px] w-[50px] text-meedlBlue'}/>
                             </div>
                             <div className={'flex flex-col gap-3'} id={`tagDiv`}>
@@ -251,7 +258,7 @@ const ProgramDetails = () => {
             }
         </main>
           )}
-        </>
+        </div>
     );
 }
 export default ProgramDetails;

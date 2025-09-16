@@ -21,6 +21,7 @@ import Image from 'next/image';
 import { Virtuoso } from 'react-virtuoso';
 import { parsePhoneNumberFromString, CountryCode } from 'libphonenumber-js';
 import { useGetCountriesQuery } from '@/service/admin/external-api/countryCalling_code_query';
+import { safeDecodeURI } from '@/utils/GlobalMethods';
 
 interface PhoneNumberSelectProps {
   phoneNumber: string;
@@ -125,19 +126,47 @@ const PhoneNumberSelect: React.FC<PhoneNumberSelectProps> = ({
   }, [selectedCountry?.code, phoneNumber, validatePhoneNumber]);
 
 
+  // const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   const raw = e.target.value.replace(/\D/g, '');
+  //    setPhoneNumber(raw);
+
+  //   if (localError) {
+  //     setLocalError(null);
+  //     setFieldError(name, undefined);
+  //     setError(false);
+  //   }
+  // };
+
+  // const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+  //   onBlur(e);
+  //   if (selectedCountry?.code && phoneNumber) {
+  //     validatePhoneNumber(selectedCountry.code, phoneNumber);
+  //   }
+  // };
+
   const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const raw = e.target.value.replace(/\D/g, '');
-     setPhoneNumber(raw);
-
+    setPhoneNumber(raw);
+    
     if (localError) {
       setLocalError(null);
       setFieldError(name, undefined);
       setError(false);
     }
+    
+    if (debounceRef.current) clearTimeout(debounceRef.current);
+    debounceRef.current = setTimeout(() => {
+      if (selectedCountry?.code && raw) {
+        validatePhoneNumber(selectedCountry.code, raw);
+      }
+    }, 300);
   };
 
   const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
     onBlur(e);
+    if (debounceRef.current) {
+      clearTimeout(debounceRef.current);
+    }
     if (selectedCountry?.code && phoneNumber) {
       validatePhoneNumber(selectedCountry.code, phoneNumber);
     }
@@ -195,12 +224,13 @@ const PhoneNumberSelect: React.FC<PhoneNumberSelectProps> = ({
                   >
                     <div className="flex items-center gap-2">
                       <Image
-                        src={option.flag}
+                        src={safeDecodeURI(option.flag)}
                         alt={option.name}
                         width={20}
                         height={20}
                         priority={index < 10}
                         className="w-5 h-5 rounded-sm"
+                        unoptimized={true}
                       />
                       <span>
                         {option.dialCode} {option.code}

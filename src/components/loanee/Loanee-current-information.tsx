@@ -7,6 +7,8 @@ import PhoneNumberSelect from '@/reuseable/select/phoneNumberSelect/Index';
 import GoogleLocationsearch from '@/reuseable/google-location/Google-location-search';
 import Select from "@/reuseable/select/ProgramSelect";
 import { Button } from "@/components/ui/button";
+import NigeriaStatesSelect from '@/reuseable/select/NigeriaStatesSelect';
+import CustomSelectObj from '@/reuseable/Input/Custom-select-obj';
 
 
 export interface initialFormValue {
@@ -19,6 +21,9 @@ export interface initialFormValue {
   alternateEmail: string;
   alternatePhoneNumber: string;
   alternateContactAddress: string;
+  stateOfResidence: string;
+  levelOfEducation: string;
+  others: string
 }
 
 interface Props {
@@ -35,6 +40,17 @@ function LoaneeCurrentInformation({initialFormValue,handleSubmit,nextOfCountryCo
   const [isRelationshipSelectOpen, setIsRelationshipSelectOpen] = useState(false);
   const [isPhoneNumberError,setPhoneNumberError] = useState(false)
   const [isAltPhoneNumberError,setAltPhoneNumberError] = useState(false)
+
+  const educationalQualifications = [
+    { value: "O_LEVEL", label: "O'level" },
+    { value: "OND", label: "OND" },
+    { value: "HND", label: "HND" },
+    { value: "BSC", label: "BSC" },
+    { value: "MSC", label: "MSC" },
+    { value: "PHD", label: "PHD" },
+    { value: "DIPLOMA", label: "Diploma" },
+    { value: "OTHERS", label: "Others" }
+  ] 
 
   return (
     <div>
@@ -57,7 +73,65 @@ function LoaneeCurrentInformation({initialFormValue,handleSubmit,nextOfCountryCo
           className={`${inter.className}`}
           >
             <div className='grid gap-3 z-50 relative'>
-              <div className={'grid gap-2'}>
+              <div className={'grid lg:grid-cols-2 gap-4'}>
+                <div className={'relative top-2 lg:top-0'}>
+                <Label htmlFor="stateOfResidence" className="block text-sm font-medium text-labelBlue">State of residence</Label>
+                 <NigeriaStatesSelect
+                   triggerId='selectStateTriggerId'
+                   id='stateId'
+                   value={values.stateOfResidence}
+                   onChange={(value)=> {setFieldValue("stateOfResidence", value)}}
+                   name='stateOfResidence'
+                  placeHolder='Select state of residence'
+                  className='h-[3.5rem]'
+                 />
+                </div>
+                <div className={''}>
+                <Label htmlFor="levelOfEducation" className="block text-sm font-medium text-labelBlue">Level of education</Label>
+                 <CustomSelectObj
+                   triggerId='selectlevelOfEducationTriggerId'
+                   id='levelOfEducationId'
+                   value={values.levelOfEducation}
+                   onChange={(value)=> {setFieldValue("levelOfEducation", value)}}
+                   name='levelOfEducation'
+                  placeHolder='Select level of education'
+                  selectContent={educationalQualifications}
+                  className='h-[3.5rem]'
+                 />
+                </div>
+              </div>
+
+              <div className='relative bottom-4'>
+                  {
+                    values?.levelOfEducation === "OTHERS" && 
+                    <div>
+                      <Label htmlFor="others">Others</Label>
+                    <Field
+                    name={"others"}
+                    value={values.others}
+                    className="w-full p-3 border border-[#B6BCCA] rounded-md focus:outline-none mt-2 text-[14px] h-14 border-opacity-65"
+                    placeholder="Enter other level of education"
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                      let value = e.target.value;
+                      value = value.replace(/[^A-Za-z\s\-'.]/g, '');
+                      if (value.length > 0 && /^[-'.]/.test(value)) {
+                        value = value.replace(/^[-'.]+/, '');
+                      }
+                      value = value.slice(0, 50);
+                      setFieldValue("others", value);
+                    }}
+                    />
+                     {errors.others && touched.others && (
+                      <ErrorMessage
+                        name="others"
+                        component="div"
+                        className="text-red-500 text-sm"
+                      />
+                    )}
+                    </div>
+                  }
+                </div>
+              <div className={'grid gap-2 relative bottom-2'}>
               <Label htmlFor="alternateEmail" className="block text-sm font-medium text-labelBlue">Alternate
                email address</Label>
                <Field
@@ -250,6 +324,11 @@ function LoaneeCurrentInformation({initialFormValue,handleSubmit,nextOfCountryCo
                   { id: "3", name: "Brother" },
                   { id: "4", name: "Sister" },
                   { id: "5", name: "Friend" },
+                  { id: "6", name: "Spouse" },
+                   { id: "7", name: "Aunt" },
+                   { id: "8", name: "Uncle" },
+                  { id: "9", name: "Niece" },
+                  { id: "10", name: "Nephew" },
                 ]}
                 setId={(id: string) => {
                   const selected = [
@@ -258,6 +337,11 @@ function LoaneeCurrentInformation({initialFormValue,handleSubmit,nextOfCountryCo
                     { id: "3", name: "Brother" },
                     { id: "4", name: "Sister" },
                     { id: "5", name: "Friend" },
+                    { id: "6", name: "Spouse" },
+                    { id: "7", name: "Aunt" },
+                    { id: "8", name: "Uncle" },
+                    { id: "9", name: "Niece" },
+                    { id: "10", name: "Nephew" },
                   ].find(opt => opt.id === id);
                   if (selected) {
                     setFieldValue('nextOfKinRelationship', selected.name);

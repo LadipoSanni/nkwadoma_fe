@@ -1,5 +1,5 @@
 import React from 'react';
-import ReviewLoan from "@/features/loanee/review-loan";
+import ReviewLoan from "@/features/loaneeViews/review-loan";
 
 const Page = () => {
     return (

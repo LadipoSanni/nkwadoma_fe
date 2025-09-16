@@ -1,238 +1,227 @@
-export const LoanRequestTable = [
+export const repaymentSchedule = [
     {
         id: 1,
-        firstName: 'Anoluwapo',
-        lastName: 'Ogungbemi',
-        programName: 'Software Engineering',
-        cohort: 'Gems',
-        cohortStartDate: '2024-12-16T16:17:42.934384',
+        date: '2024-12-16T16:17:42.934384',
         requestDate: '2024-12-16T16:17:42.934384',
-        initialDeposit: '#3,000,0000',
-        amountRequested: '#3,000,0000'
+        principalAmount: '30000000',
+        amountPaid: '30000000',
+        totalPayment: '30000000',
+        outStanding: '499999999'
     },
     {
         id: 2,
-        firstName: 'Anoluwapo',
-        lastName: 'Ogungbemi',
-        programName: 'Software Engineering',
-        cohort: 'Gems',
-        cohortStartDate: '2024-12-16T16:17:42.934384',
+        date: '2022-12-16T16:17:42.934384',
         requestDate: '2024-12-16T16:17:42.934384',
-        initialDeposit: '#3,000,0000',
-        amountRequested: '#3,000,0000'
+        principalAmount: '32000000',
+        amountPaid: '32000000',
+        totalPayment: '20000000',
+        outStanding: '429999999'
+
     }, {
         id: 3,
-        firstName: 'Anoluwapo',
-        lastName: 'Ogungbemi',
-        programName: 'Software Engineering',
-        cohort: 'Gems',
-        cohortStartDate: '2024-12-16T16:17:42.934384',
-        requestDate: '2024-10-18',
-        initialDeposit: '#3,000,0000',
-        amountRequested: '#3,000,0000'
+        date: '2024-12-16T16:17:42.934384',
+        requestDate: '2024-12-16T16:17:42.934384',
+        principalAmount: '30000000',
+        amountPaid: '30000000',
+        totalPayment: '30000000',
+        outStanding: '499999999'
+
     }, {
         id: 4,
-        firstName: 'Anoluwapo',
-        lastName: 'Ogungbemi',
-        programName: 'Software Engineering',
-        cohort: 'Gems',
-        cohortStartDate: '2024-12-16T16:17:42.934384',
-        requestDate: '2024-10-18',
-        initialDeposit: '#3,000,0000',
-        amountRequested: '#3,000,0000'
+        date: '2024-12-16T16:17:42.934384',
+        requestDate: '2024-12-16T16:17:42.934384',
+        principalAmount: '30000000',
+        outStanding: '499999999',
+        amountPaid: '30000000',
+        totalPayment: '30000000',
     }, {
         id: 5,
-        firstName: 'Anoluwapo',
-        lastName: 'Ogungbemi',
-        programName: 'Software Engineering',
-        cohort: 'Gems',
-        cohortStartDate: '2024-12-16T16:17:42.934384',
-        requestDate: '2024-10-18',
-        initialDeposit: '#3,000,0000',
-        amountRequested: '#3,000,0000'
+        date: '2024-12-16T16:17:42.934384',
+        requestDate: '2024-12-16T16:17:42.934384',
+        principalAmount: '30000000',
+        amountPaid: '30000000',
+        totalPayment: '30000000',
+        outStanding: '499999999',
+
     }, {
         id: 6,
-        firstName: 'Anoluwapo',
-        lastName: 'Ogungbemi',
-        program: 'Software Engineering',
-        cohort: 'Gems',
-        startDate: '12 Dec, 2021',
-        requestDate: '12 Jan, 2022',
-        initialDeposit: '#3,000,0000',
-        amountRequested: '#3,000,0000'
+        date: '2024-12-16T16:17:42.934384',
+        requestDate: '2024-12-16T16:17:42.934384',
+        principalAmount: '30000000',
+        outStanding: '499999999',
+
+        amountPaid: '30000000',
+        totalPayment: '30000000',
     }, {
         id: 6,
-        firstName: 'Anoluwapo',
-        lastName: 'Ogungbemi',
-        program: 'Software Engineering',
-        cohort: 'Gems',
-        startDate: '12 Dec, 2021',
-        requestDate: '12 Jan, 2022',
-        initialDeposit: '#3,000,0000',
-        amountRequested: '#3,000,0000'
+        date: '2024-12-16T16:17:42.934384',
+        requestDate: '2024-12-16T16:17:42.934384',
+        principalAmount: '30000000',
+        amountPaid: '30000000',
+        totalPayment: '30000000',
+        outStanding: '499999999',
+
     }, {
         id: 7,
-        firstName: 'Anoluwapo',
-        lastName: 'Ogungbemi',
-        program: 'Software Engineering',
-        cohort: 'Gems',
-        startDate: '12 Dec, 2021',
-        requestDate: '12 Jan, 2022',
-        initialDeposit: '#3,000,0000',
-        amountRequested: '#3,000,0000'
+        date: '2024-12-16T16:17:42.934384',
+        requestDate: '2024-12-16T16:17:42.934384',
+        principalAmount: '30000000',
+        outStanding: '499999999',
+
+        amountPaid: '30000000',
+        totalPayment: '30000000',
     }, {
         id: 8,
-        firstName: 'Anoluwapo',
-        lastName: 'Ogungbemi',
-        program: 'Software Engineering',
-        cohort: 'Gems',
-        startDate: '12 Dec, 2021',
-        requestDate: '12 Jan, 2022',
-        initialDeposit: '#3,000,0000',
-        amountRequested: '#3,000,0000'
+        date: '2024-12-16T16:17:42.934384',
+        requestDate: '2024-12-16T16:17:42.934384',
+        principalAmount: '30000000',
+        amountPaid: '30000000',
+        outStanding: '499999999',
+
+        totalPayment: '30000000',
     }, {
         id: 9,
-        traineeName: 'Anoluwapo Ogungbemi',
-        program: 'Software Engineering',
-        cohort: 'Gems',
-        startDate: '12 Dec, 2021',
-        requestDate: '12 Jan, 2022',
-        initialDeposit: '#3,000,0000',
-        amountRequested: '#3,000,0000'
+        date: '2024-12-16T16:17:42.934384',
+        requestDate: '2024-12-16T16:17:42.934384',
+        principalAmount: '30000000',
+        amountPaid: '30000000',
+        outStanding: '499999999',
+
+        totalPayment: '30000000',
     }, {
         id: 10,
-        traineeName: 'Anoluwapo Ogungbemi',
-        program: 'Software Engineering',
-        cohort: 'Gems',
-        startDate: '12 Dec, 2021',
-        requestDate: '12 Jan, 2022',
-        initialDeposit: '#3,000,0000',
-        amountRequested: '#3,000,0000'
+        date: '2024-12-16T16:17:42.934384',
+        requestDate: '2024-12-16T16:17:42.934384',
+        principalAmount: '30000000',
+        amountPaid: '30000000',
+        totalPayment: '30000000',
+        outStanding: '499999999',
+
     }, {
         id: 11,
-        traineeName: 'Anoluwapo Ogungbemi',
-        program: 'Software Engineering',
-        cohort: 'Gems',
-        startDate: '12 Dec, 2021',
-        requestDate: '12 Jan, 2022',
-        initialDeposit: '#3,000,0000',
-        amountRequested: '#3,000,0000'
+        date: '2024-12-16T16:17:42.934384',
+        requestDate: '2024-12-16T16:17:42.934384',
+        principalAmount: '30000000',
+        amountPaid: '30000000',
+        outStanding: '499999999',
+
+        totalPayment: '30000000',
     }, {
         id: 12,
-        traineeName: 'Anoluwapo Ogungbemi',
-        program: 'Software Engineering',
-        cohort: 'Gems',
-        startDate: '12 Dec, 2021',
-        requestDate: '12 Jan, 2022',
-        initialDeposit: '#3,000,0000',
-        amountRequested: '#3,000,0000'
+        date: '2024-12-16T16:17:42.934384',
+        requestDate: '2024-12-16T16:17:42.934384',
+        principalAmount: '30000000',
+        amountPaid: '30000000',
+        outStanding: '499999999',
+
+        totalPayment: '30000000',
     }, {
         id: 13,
-        traineeName: 'Anoluwapo Ogungbemi',
-        program: 'Software Engineering',
-        cohort: 'Gems',
-        startDate: '12 Dec, 2021',
-        requestDate: '12 Jan, 2022',
-        initialDeposit: '#3,000,0000',
-        amountRequested: '#3,000,0000'
+        date: '2024-12-16T16:17:42.934384',
+        requestDate: '2024-12-16T16:17:42.934384',
+        principalAmount: '30000000',
+        outStanding: '499999999',
+
+        amountPaid: '30000000',
+        totalPayment: '30000000',
     }, {
         id: 14,
-        traineeName: 'Anoluwapo Ogungbemi',
-        program: 'Software Engineering',
-        cohort: 'Gems',
-        startDate: '12 Dec, 2021',
-        requestDate: '12 Jan, 2022',
-        initialDeposit: '#3,000,0000',
-        amountRequested: '#3,000,0000'
+        date: '2024-12-16T16:17:42.934384',
+        requestDate: '2024-12-16T16:17:42.934384',
+        principalAmount: '30000000',
+        amountPaid: '30000000',
+        totalPayment: '30000000',
     }, {
         id: 15,
-        traineeName: 'Anoluwapo Ogungbemi',
-        program: 'Software Engineering',
-        cohort: 'Gems',
-        startDate: '12 Dec, 2021',
-        requestDate: '12 Jan, 2022',
-        initialDeposit: '#3,000,0000',
-        amountRequested: '#3,000,0000'
+        date: '2024-12-16T16:17:42.934384',
+        requestDate: '2024-12-16T16:17:42.934384',
+        principalAmount: '30000000',
+        outStanding: '499999999',
+
+        amountPaid: '30000000',
+        totalPayment: '30000000',
     }, {
         id: 16,
-        traineeName: 'Anoluwapo Ogungbemi',
-        program: 'Software Engineering',
-        cohort: 'Gems',
-        startDate: '12 Dec, 2021',
-        requestDate: '12 Jan, 2022',
-        initialDeposit: '#3,000,0000',
-        amountRequested: '#3,000,0000'
+        date: '2024-12-16T16:17:42.934384',
+        requestDate: '2024-12-16T16:17:42.934384',
+        principalAmount: '30000000',
+        outStanding: '499999999',
+
+        amountPaid: '30000000',
+        totalPayment: '30000000',
     }, {
         id: 17,
-        traineeName: 'Anoluwapo Ogungbemi',
-        program: 'Software Engineering',
-        cohort: 'Gems',
-        startDate: '12 Dec, 2021',
-        requestDate: '12 Jan, 2022',
-        initialDeposit: '#3,000,0000',
-        amountRequested: '#3,000,0000'
+        date: '2024-12-16T16:17:42.934384',
+        requestDate: '2024-12-16T16:17:42.934384',
+        principalAmount: '30000000',
+        outStanding: '499999999',
+
+        amountPaid: '30000000',
+        totalPayment: '30000000',
     }, {
         id: 18,
-        traineeName: 'Anoluwapo Ogungbemi',
-        program: 'Software Engineering',
-        cohort: 'Gems',
-        startDate: '12 Dec, 2021',
-        requestDate: '12 Jan, 2022',
-        initialDeposit: '#3,000,0000',
-        amountRequested: '#3,000,0000'
+        date: '2024-12-16T16:17:42.934384',
+        requestDate: '2024-12-16T16:17:42.934384',
+        principalAmount: '30000000',
+        outStanding: '499999999',
+
+        amountPaid: '30000000',
+        totalPayment: '30000000',
     }, {
         id: 19,
-        traineeName: 'Anoluwapo Ogungbemi',
-        program: 'Software Engineering',
-        cohort: 'Gems',
-        startDate: '12 Dec, 2021',
-        requestDate: '12 Jan, 2022',
-        initialDeposit: '#3,000,0000',
-        amountRequested: '#3,000,0000'
+        date: '2024-12-16T16:17:42.934384',
+        requestDate: '2024-12-16T16:17:42.934384',
+        principalAmount: '30000000',
+        outStanding: '499999999',
+
+        amountPaid: '30000000',
+        totalPayment: '30000000',
     }, {
         id: 20,
-        traineeName: 'Anoluwapo Ogungbemi',
-        program: 'Software Engineering',
-        cohort: 'Gems',
-        startDate: '12 Dec, 2021',
-        requestDate: '12 Jan, 2022',
-        initialDeposit: '#3,000,0000',
-        amountRequested: '#3,000,0000'
+        date: '2024-12-16T16:17:42.934384',
+        requestDate: '2024-12-16T16:17:42.934384',
+        principalAmount: '30000000',
+        outStanding: '499999999',
+
+        amountPaid: '30000000',
+        totalPayment: '30000000',
     }, {
         id: 21,
-        traineeName: 'Anoluwapo Ogungbemi',
-        program: 'Software Engineering',
-        cohort: 'Gems',
-        startDate: '12 Dec, 2021',
-        requestDate: '12 Jan, 2022',
-        initialDeposit: '#3,000,0000',
-        amountRequested: '#3,000,0000'
+        date: '2024-12-16T16:17:42.934384',
+        requestDate: '2024-12-16T16:17:42.934384',
+        principalAmount: '30000000',
+        outStanding: '499999999',
+
+        amountPaid: '30000000',
+        totalPayment: '30000000',
     }, {
         id: 22,
-        traineeName: 'Anoluwapo Ogungbemi',
-        program: 'Software Engineering',
-        cohort: 'Gems',
-        startDate: '12 Dec, 2021',
-        requestDate: '12 Jan, 2022',
-        initialDeposit: '#3,000,0000',
-        amountRequested: '#3,000,0000'
+        date: '2024-12-16T16:17:42.934384',
+        requestDate: '2024-12-16T16:17:42.934384',
+        principalAmount: '30000000',
+        outStanding: '499999999',
+
+        amountPaid: '30000000',
+        totalPayment: '30000000',
     },
 
 ]
 
-export const loanOfferTable = [
-    {
-        id: 1,
-        loanee: 'Anoluwapo Ogungbemi',
-        loanProduct: 'Software Engineering',
-        offerDate: '12 Dec, 2021',
-        requestDate: '12 Jan, 2022',
-        amountRequested: '#3,000,0000',
-        amountApproved: '#3,000,0000'
-    },
+export const loanReferralTable = [
+    // {
+    //     id: 1,
+    //     firstName: 'Anoluwapo',
+    //     lastName: 'Ogungbemi',
+    //     dateReferred: '2024-12-16T16:17:42.934384',
+    //     requestDate: '2024-12-16T16:17:42.934384',
+    //     initialDeposit: '30000000',
+    //     amountReferred: '30000000'
+    // },
 
 
 ]
+
+
 
 // export const loanDisbursalTable = [
 //     {loanee: 'Farok Adegbayi', program: 'Software Engineering', cohort: 'Gems', offerDate: '2024-12-16T16:17:42.934384', loanStartDate: '2024-12-16T16:17:42.934384', deposit: '₦40,000,000.00', AmountRequested: '₦40,000,000.00'}
@@ -431,4 +420,352 @@ export const fund = [
       "amountAvailable": "₦20,000,000.00"
     }
   ]
+
+
+  export const allStaff = [
+    {
+      "Name": "Zainab Ibrahim",
+      "Email": "zainab.ibrahim@example.com",
+      "Role": "admin",
+      "Status": "Active",
+      "DateInvited": "2025-07-15"
+    },
+    {
+      "Name": "David Okonkwo",
+      "Email": "david.okonkwo@example.com",
+      "Role": "portfolio manager",
+      "Status": "Pending",
+      "DateInvited": "2025-06-11"
+    },
+    {
+      "Name": "Chinenye Obi",
+      "Email": "chinenye.obi@example.com",
+      "Role": "super admin",
+      "Status": "Active",
+      "DateInvited": "2025-05-02"
+    },
+    {
+      "Name": "James Ogunleye",
+      "Email": "james.ogunleye@example.com",
+      "Role": "admin",
+      "Status": "Deactivated",
+      "DateInvited": "2025-04-29"
+    },
+    {
+      "Name": "Amaka Eze",
+      "Email": "amaka.eze@example.com",
+      "Role": "portfolio manager",
+      "Status": "Active",
+      "DateInvited": "2025-08-01"
+    },
+    {
+      "Name": "Taiwo Adegbite",
+      "Email": "taiwo.adegbite@example.com",
+      "Role": "admin",
+      "Status": "Pending",
+      "DateInvited": "2025-08-03"
+    },
+    {
+      "Name": "Nneka Umeh",
+      "Email": "nneka.umeh@example.com",
+      "Role": "super admin",
+      "Status": "Deactivated",
+      "DateInvited": "2025-07-22"
+    },
+    {
+      "Name": "Kennedy Ojo",
+      "Email": "kennedy.ojo@example.com",
+      "Role": "portfolio manager",
+      "Status": "Active",
+      "DateInvited": "2025-08-02"
+    },
+    {
+      "Name": "Adaobi Nwachukwu",
+      "Email": "adaobi.nwachukwu@example.com",
+      "Role": "admin",
+      "Status": "Active",
+      "DateInvited": "2025-07-10"
+    },
+    {
+      "Name": "Musa Abubakar",
+      "Email": "musa.abubakar@example.com",
+      "Role": "super admin",
+      "Status": "Pending",
+      "DateInvited": "2025-06-08"
+    },
+    {
+      "Name": "Grace Oladipo",
+      "Email": "grace.oladipo@example.com",
+      "Role": "portfolio manager",
+      "Status": "Active",
+      "DateInvited": "2025-07-29"
+    },
+    {
+      "Name": "Femi Afolabi",
+      "Email": "femi.afolabi@example.com",
+      "Role": "admin",
+      "Status": "Deactivated",
+      "DateInvited": "2025-07-05"
+    },
+    {
+      "Name": "Bukola Balogun",
+      "Email": "bukola.balogun@example.com",
+      "Role": "super admin",
+      "Status": "Active",
+      "DateInvited": "2025-06-25"
+    },
+    {
+      "Name": "Samson Eze",
+      "Email": "samson.eze@example.com",
+      "Role": "portfolio manager",
+      "Status": "Pending",
+      "DateInvited": "2025-08-04"
+    },
+    {
+      "Name": "Ngozi Anyaegbunam",
+      "Email": "ngozi.anyaegbunam@example.com",
+      "Role": "admin",
+      "Status": "Active",
+      "DateInvited": "2025-06-18"
+    },
+    {
+      "Name": "Ifeanyi Uzo",
+      "Email": "ifeanyi.uzo@example.com",
+      "Role": "portfolio manager",
+      "Status": "Deactivated",
+      "DateInvited": "2025-07-02"
+    },
+    {
+      "Name": "Chukwuemeka Obi",
+      "Email": "chukwuemeka.obi@example.com",
+      "Role": "super admin",
+      "Status": "Active",
+      "DateInvited": "2025-08-05"
+    },
+    {
+      "Name": "Abiola Mustapha",
+      "Email": "abiola.mustapha@example.com",
+      "Role": "admin",
+      "Status": "Pending",
+      "DateInvited": "2025-05-29"
+    },
+    {
+      "Name": "Josephine Okafor",
+      "Email": "josephine.okafor@example.com",
+      "Role": "portfolio manager",
+      "Status": "Active",
+      "DateInvited": "2025-07-28"
+    },
+    {
+      "Name": "Tunde Akinwale",
+      "Email": "tunde.akinwale@example.com",
+      "Role": "super admin",
+      "Status": "Deactivated",
+      "DateInvited": "2025-08-06"
+    },
+    { "Name": "Zainab Ibrahim", "Email": "zainab.ibrahim@example.com", "Role": "admin", "Status": "Active", "DateInvited": "2025-07-15" },
+    { "Name": "Chinenye Obi", "Email": "chinenye.obi@example.com", "Role": "super admin", "Status": "Active", "DateInvited": "2025-05-02" },
+    { "Name": "Amaka Eze", "Email": "amaka.eze@example.com", "Role": "portfolio manager", "Status": "Active", "DateInvited": "2025-08-01" },
+    { "Name": "Kennedy Ojo", "Email": "kennedy.ojo@example.com", "Role": "portfolio manager", "Status": "Active", "DateInvited": "2025-08-02" },
+    { "Name": "Adaobi Nwachukwu", "Email": "adaobi.nwachukwu@example.com", "Role": "admin", "Status": "Active", "DateInvited": "2025-07-10" },
+    { "Name": "Grace Oladipo", "Email": "grace.oladipo@example.com", "Role": "portfolio manager", "Status": "Active", "DateInvited": "2025-07-29" },
+    { "Name": "Bukola Balogun", "Email": "bukola.balogun@example.com", "Role": "super admin", "Status": "Active", "DateInvited": "2025-06-25" },
+    { "Name": "Ngozi Anyaegbunam", "Email": "ngozi.anyaegbunam@example.com", "Role": "admin", "Status": "Active", "DateInvited": "2025-06-18" },
+    { "Name": "Chukwuemeka Obi", "Email": "chukwuemeka.obi@example.com", "Role": "super admin", "Status": "Active", "DateInvited": "2025-08-05" },
+    { "Name": "David Okonkwo", "Email": "david.okonkwo@example.com", "Role": "portfolio manager", "Status": "Pending", "DateInvited": "2025-06-11" },
+  { "Name": "Taiwo Adegbite", "Email": "taiwo.adegbite@example.com", "Role": "admin", "Status": "Pending", "DateInvited": "2025-08-03" },
+  { "Name": "Musa Abubakar", "Email": "musa.abubakar@example.com", "Role": "super admin", "Status": "Pending", "DateInvited": "2025-06-08" },
+  { "Name": "Samson Eze", "Email": "samson.eze@example.com", "Role": "portfolio manager", "Status": "Pending", "DateInvited": "2025-08-04" },
+  { "Name": "Abiola Mustapha", "Email": "abiola.mustapha@example.com", "Role": "admin", "Status": "Pending", "DateInvited": "2025-05-29" },
+  { "Name": "James Ogunleye", "Email": "james.ogunleye@example.com", "Role": "admin", "Status": "Deactivated", "DateInvited": "2025-04-29" },
+  { "Name": "Nneka Umeh", "Email": "nneka.umeh@example.com", "Role": "super admin", "Status": "Deactivated", "DateInvited": "2025-07-22" },
+  { "Name": "Femi Afolabi", "Email": "femi.afolabi@example.com", "Role": "admin", "Status": "Deactivated", "DateInvited": "2025-07-05" },
+  { "Name": "Ifeanyi Uzo", "Email": "ifeanyi.uzo@example.com", "Role": "portfolio manager", "Status": "Deactivated", "DateInvited": "2025-07-02" },
+  { "Name": "Tunde Akinwale", "Email": "tunde.akinwale@example.com", "Role": "super admin", "Status": "Deactivated", "DateInvited": "2025-08-06" }
+]
+
+export const requests = [
+  {
+    id: 1,
+    requested_by: "Adebayo Johnson",
+    invitee: "Zainab Ibrahim",
+    email: "zainab.ibrahim@example.com",
+    role: "admin",
+    status: "Active",
+    date_invited: "2025-07-15"
+  },
+  {
+    id: 2,
+    requested_by: "Chioma Eze",
+    invitee: "David Okonkwo",
+    email: "david.okonkwo@example.com",
+    role: "portfolio manager",
+    status: "Pending",
+    date_invited: "2025-06-11"
+  },
+  {
+    id: 3,
+    requested_by: "Obinna Nwachukwu",
+    invitee: "Chinenye Obi",
+    email: "chinenye.obi@example.com",
+    role: "associate", // Changed from super admin
+    status: "Active",
+    date_invited: "2025-05-02"
+  },
+  {
+    id: 4,
+    requested_by: "Folake Adebayo",
+    invitee: "James Ogunleye",
+    email: "james.ogunleye@example.com",
+    role: "admin",
+    status: "Deactivated",
+    date_invited: "2025-04-29"
+  },
+  {
+    id: 5,
+    requested_by: "Emeka Okafor",
+    invitee: "Amaka Eze",
+    email: "amaka.eze@example.com",
+    role: "portfolio manager",
+    status: "Active",
+    date_invited: "2025-08-01"
+  },
+  {
+    id: 6,
+    requested_by: "Ngozi Onyema",
+    invitee: "Taiwo Adegbite",
+    email: "taiwo.adegbite@example.com",
+    role: "admin",
+    status: "Pending",
+    date_invited: "2025-08-03"
+  },
+  {
+    id: 7,
+    requested_by: "Yusuf Bello",
+    invitee: "Nneka Umeh",
+    email: "nneka.umeh@example.com",
+    role: "associate", // Changed from super admin
+    status: "Deactivated",
+    date_invited: "2025-07-22"
+  },
+  {
+    id: 8,
+    requested_by: "Amina Mohammed",
+    invitee: "Kennedy Ojo",
+    email: "kennedy.ojo@example.com",
+    role: "portfolio manager",
+    status: "Active",
+    date_invited: "2025-08-02"
+  },
+  {
+    id: 9,
+    requested_by: "Segun Adeleke",
+    invitee: "Adaobi Nwachukwu",
+    email: "adaobi.nwachukwu@example.com",
+    role: "admin",
+    status: "Active",
+    date_invited: "2025-07-10"
+  },
+  {
+    id: 10,
+    requested_by: "Fatima Yusuf",
+    invitee: "Musa Abubakar",
+    email: "musa.abubakar@example.com",
+    role: "associate", // Changed from super admin
+    status: "Pending",
+    date_invited: "2025-06-08"
+  },
+  {
+    id: 11,
+    requested_by: "Kunle Adebisi",
+    invitee: "Grace Oladipo",
+    email: "grace.oladipo@example.com",
+    role: "portfolio manager",
+    status: "Active",
+    date_invited: "2025-07-29"
+  },
+  {
+    id: 12,
+    requested_by: "Bola Tinubu",
+    invitee: "Femi Afolabi",
+    email: "femi.afolabi@example.com",
+    role: "admin",
+    status: "Deactivated",
+    date_invited: "2025-07-05"
+  },
+  {
+    id: 13,
+    requested_by: "Aisha Balogun",
+    invitee: "Bukola Balogun",
+    email: "bukola.balogun@example.com",
+    role: "associate", // Changed from super admin
+    status: "Active",
+    date_invited: "2025-06-25"
+  },
+  {
+    id: 14,
+    requested_by: "Tunde Lawal",
+    invitee: "Samson Eze",
+    email: "samson.eze@example.com",
+    role: "portfolio manager",
+    status: "Pending",
+    date_invited: "2025-08-04"
+  },
+  {
+    id: 15,
+    requested_by: "Chidinma Okoro",
+    invitee: "Ngozi Anyaegbunam",
+    email: "ngozi.anyaegbunam@example.com",
+    role: "admin",
+    status: "Active",
+    date_invited: "2025-06-18"
+  },
+  {
+    id: 16,
+    requested_by: "Mohammed Sani",
+    invitee: "Ifeanyi Uzo",
+    email: "ifeanyi.uzo@example.com",
+    role: "portfolio manager",
+    status: "Deactivated",
+    date_invited: "2025-07-02"
+  },
+  {
+    id: 17,
+    requested_by: "Ebere Uche",
+    invitee: "Chukwuemeka Obi",
+    email: "chukwuemeka.obi@example.com",
+    role: "associate", // Changed from super admin
+    status: "Active",
+    date_invited: "2025-08-05"
+  },
+  {
+    id: 18,
+    requested_by: "Gbenga Ojo",
+    invitee: "Abiola Mustapha",
+    email: "abiola.mustapha@example.com",
+    role: "admin",
+    status: "Pending",
+    date_invited: "2025-05-29"
+  },
+  {
+    id: 19,
+    requested_by: "Halima Abubakar",
+    invitee: "Josephine Okafor",
+    email: "josephine.okafor@example.com",
+    role: "portfolio manager",
+    status: "Active",
+    date_invited: "2025-07-28"
+  },
+  {
+    id: 20,
+    requested_by: "Oluwaseun Adeyemi",
+    invitee: "Tunde Akinwale",
+    email: "tunde.akinwale@example.com",
+    role: "associate", // Changed from super admin
+    status: "Deactivated",
+    date_invited: "2025-08-06"
+  }
+];
+  
+
   

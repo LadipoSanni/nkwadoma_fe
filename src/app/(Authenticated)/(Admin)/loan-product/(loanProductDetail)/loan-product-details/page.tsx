@@ -4,7 +4,7 @@ import CustomAuthorization from '@/features/auth/authorization';
 
 const Page = () => {
     return (
-        <CustomAuthorization authorizedRoles={['PORTFOLIO_MANAGER']}>
+        <CustomAuthorization authorizedRoles={['PORTFOLIO_MANAGER',"MEEDL_SUPER_ADMIN","PORTFOLIO_MANAGER_ASSOCIATE"]}>
             <Details/>
         </CustomAuthorization>
     );

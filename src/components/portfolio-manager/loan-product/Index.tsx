@@ -365,6 +365,7 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
                                             className="text-red-500 text-sm"
                                         />
                                     )}
+                                   
                                 </div>
 
                                 <div className={`grid md:grid-cols-2 grid-col gap-y-0 gap-x-5`}>

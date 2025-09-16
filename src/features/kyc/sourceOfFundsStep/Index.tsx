@@ -12,6 +12,7 @@ import Isloading from '@/reuseable/display/Isloading';
 import CustomMultiselect from "@/reuseable/mult-select/customMultiselect/Index";
 import { Input } from "@/components/ui/input";
 import {MdAdd, MdDeleteOutline} from "react-icons/md";
+import styles from '@/components/side-bar/index.module.css'
 
 interface FormValues {
     sourceOfFund: string[];
@@ -27,6 +28,8 @@ const SourceOfFundsStep = () => {
     const completedStep = useAppSelector(state => state.kycMultistep.completedSteps);
     const savedSourceOfFunds = useAppSelector(state => state.kycForm.sourceOfFunds);
     const identificationType = useAppSelector(state => state.kycForm.identification.type);
+
+    const [disableButton, setDisableButton] = useState(true)
 
     // Extract any "Source (specify others):" items from savedSourceOfFunds
     const regularSources = savedSourceOfFunds?.filter(v => !v.startsWith("Source (specify others):")) || [];
@@ -67,27 +70,41 @@ const SourceOfFundsStep = () => {
     };
 
     const addOtherSource = (values: FormValues, setFieldValue: (field: string, value: string[]) => void) => {
-        if (currentOtherSource.trim()) {
-            const updatedOtherSources = [...values.otherSources, currentOtherSource.trim()];
+            const updatedOtherSources = [...values.otherSources, ''];
+        const isAnyArrayElementEmpty =  updatedOtherSources?.some(str => str === "");
+        if (values?.sourceOfFund?.includes("Others")){
+            if (isAnyArrayElementEmpty) {
+                setDisableButton(true)
+            }else{
+                setDisableButton(false);
+            }
+        }
             setFieldValue("otherSources", updatedOtherSources);
             setCurrentOtherSource("");
-        }
+        // }
     };
 
-    const updateOtherSource = (index: number, value: string, values: FormValues, setFieldValue: (field: string, value: string[]) => void) => {
-        const updatedOtherSources = [...values.otherSources];
-        updatedOtherSources[index] = value;
-        setFieldValue("otherSources", updatedOtherSources);
-    };
+
 
     const removeOtherSource = (index: number, values: FormValues, setFieldValue: (field: string, value: string[]) => void) => {
         const updatedOtherSources = values.otherSources.filter((_, i) => i !== index);
+        const isAnyArrayElementEmpty =  updatedOtherSources?.some(str => str === "");
+        if(updatedOtherSources?.length === 0 ){
+            setDisableButton(true)
+        }else{
+            if (values?.sourceOfFund?.includes("Others")){
+                if (isAnyArrayElementEmpty) {
+                    setDisableButton(true)
+                }else{
+                    setDisableButton(false);
+                }
+            }
+        }
+
         setFieldValue("otherSources", updatedOtherSources);
     };
 
-    const clearOtherSource = () => {
-        setCurrentOtherSource("");
-    };
+
 
     const handleSubmit = async (values: FormValues) => {
         const { sourceOfFund, otherSources } = values;
@@ -123,16 +140,21 @@ const SourceOfFundsStep = () => {
             onSubmit={handleSubmit}
         >
             {({ values, setFieldValue }) => (
-                <Form>
+                <Form >
                     <main className={`${inter.className} w-full xl:px-48 grid-cols-1 gap-y-6 grid`}>
                         <div className={`${cabinetGroteskMediumBold.className} max-w-[27.5rem] md:mx-auto w-full`}>
                             <h1 className={`text-meedlBlack text-[24px] leading-[120%] font-medium`}>Source of funds</h1>
                         </div>
-
                         <div className={'w-full md:max-w-[27.5rem] md:mx-auto grid gap-5'}>
                             <CustomMultiselect
                                 multiselectList={sourceOptions}
                                 onValueChange={(newValues) => {
+                                    if(newValues?.includes('Others')) {
+                                        setFieldValue("otherSources", ['']);
+                                        setDisableButton(true)
+                                    }else {
+                                        setDisableButton(false)
+                                    }
                                     if (values.sourceOfFund.includes('Others') && !newValues.includes('Others')) {
                                         setFieldValue("otherSources", []);
                                         setCurrentOtherSource("");
@@ -146,7 +168,7 @@ const SourceOfFundsStep = () => {
                             />
 
                             {values.sourceOfFund.includes('Others') && (
-                                <div className="max-h-[300px] overflow-y-auto p">
+                                <div className={`max-h-[300px] ${styles.sideBar} overflow-y-auto p`}>
                                     <div className="flex items-center justify-between mb-4">
                                         <h3 className="text-sm font-medium">Source (specify others)</h3>
                                     </div>
@@ -156,12 +178,29 @@ const SourceOfFundsStep = () => {
                                             <Input
                                                 type="text"
                                                 value={source}
-                                                onChange={(e) => updateOtherSource(index, e.target.value, values, setFieldValue)}
+                                                onChange={(e) => {
+                                                    e.preventDefault();
+                                                    const updatedOtherSources = [...values.otherSources];
+                                                    updatedOtherSources[index] = e.target.value;
+                                                    setFieldValue("otherSources", updatedOtherSources);
+                                                    const isAnyArrayElementEmpty =  values?.otherSources.some(str => str === "");
+                                                    if (values?.sourceOfFund?.includes("Others")){
+                                                        if (isAnyArrayElementEmpty) {
+                                                            setDisableButton(true)
+                                                        }else{
+                                                            setDisableButton(false);
+                                                        }
+                                                    }
+                                                }}
                                                 className="p-4 focus-visible:outline-0 shadow-none focus-visible:ring-transparent rounded-md h-[3.375rem] w-[25.5rem] font-normal leading-[21px] text-[14px] placeholder:text-grey250 text-black500 border border-solid border-neutral650"
                                             />
                                             <button
                                                 type="button"
-                                                onClick={() => removeOtherSource(index, values, setFieldValue)}
+                                                onClick={(e) => {
+                                                    e?.preventDefault();
+                                                    removeOtherSource(index, values, setFieldValue)
+
+                                                }}
                                                 className="text-[#939CB0]"
                                             >
                                                 <MdDeleteOutline className="h-5 w-5" />
@@ -169,37 +208,15 @@ const SourceOfFundsStep = () => {
                                         </div>
                                     ))}
                                     
-                                    <div className="flex w-full gap-3 items-center justify-between">
-                                        <Input
-                                            id="otherSource"
-                                            type="text"
-                                            placeholder="Enter source"
-                                            value={currentOtherSource}
-                                            onChange={(e) => setCurrentOtherSource(e.target.value)}
-                                            className="p-4 focus-visible:outline-0 shadow-none focus-visible:ring-transparent rounded-md h-[3.375rem] w-[25.5rem] font-normal leading-[21px] text-[14px] placeholder:text-grey250 text-black500 border border-solid border-neutral650"
-                                            onKeyDown={(e) => {
-                                                if (e.key === 'Enter' && currentOtherSource.trim()) {
-                                                    e.preventDefault();
-                                                    addOtherSource(values, setFieldValue);
-                                                }
-                                            }}
-                                        />
-                                        <button
-                                            type="button"
-                                            onClick={clearOtherSource}
-                                            className="text-[#939CB0]"
-                                        >
-                                            <MdDeleteOutline className="h-5 w-5" />
-                                        </button>
-                                    </div>
-                                    
                                     <div className="flex items-center gap-1 mt-4">
                                         <div className="flex items-center gap-1">
                                             <Button
-                                                onClick={() => addOtherSource(values, setFieldValue)}
+                                                onClick={(e) => {
+                                                    e?.preventDefault();
+                                                    addOtherSource(values, setFieldValue)
+                                                }}
                                                 type="button"
                                                 className="flex items-center gap-2 bg-transparent text-meedlBlue shadow-none px-0 py-2 rounded-md"
-                                                disabled={!currentOtherSource.trim()}
                                             >
                                                 <MdAdd className="text-meedlBlue h-5 w-5" />
                                                 <span className="font-semibold text-[14px] leading-[150%]">Add</span>
@@ -219,8 +236,9 @@ const SourceOfFundsStep = () => {
                                 </Button>
                                 <Button
                                     type={'submit'}
-                                    disabled={(values.sourceOfFund.length === 0 && values.otherSources.length === 0 && !currentOtherSource.trim()) || isLoading}
-                                    className={`h-[2.8125rem] md:w-[9.3125rem] w-full px-4 py-2 ${(values.sourceOfFund.length === 0 && values.otherSources.length === 0 && !currentOtherSource.trim()) ? 'bg-blue550 hover:bg-blue550' : 'bg-meedlBlue hover:bg-meedlBlue'} text-white rounded-md flex items-center justify-center gap-2 order-1 md:order-2`}
+                                    disabled={(values.sourceOfFund.length === 0 && values.otherSources.length === 0 && !currentOtherSource.trim() && disableButton  ) || isLoading   }
+                                    className={`h-[2.8125rem] md:w-[9.3125rem] w-full px-4 py-2 ${(values.sourceOfFund.length === 0 && values.otherSources.length === 0 && !currentOtherSource.trim() || disableButton  ) ? 'bg-blue550 hover:bg-blue550' : 'bg-meedlBlue hover:bg-meedlBlue'} text-white rounded-md flex items-center justify-center gap-2 order-1 md:order-2`}
+
                                 >
                                     {isLoading ? (
                                         <Isloading color="white" height={24} width={24} />

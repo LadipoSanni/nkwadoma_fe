@@ -8,9 +8,10 @@ interface Props {
     chartData: {month: string, value: number}[];
     dataKey: string;
     // chartConfig: {}
+    maxHeight?:string;
 }
 
-const MeedlBarChart = ({componentId, dataKey,chartData}: Props) => {
+const MeedlBarChart = ({componentId, dataKey,chartData,maxHeight}: Props) => {
 
 
 
@@ -26,7 +27,7 @@ const MeedlBarChart = ({componentId, dataKey,chartData}: Props) => {
                  className={`  w-full h-fit md:w-full   `}
             >
 
-        <ChartContainer config={chartConfig} className="min-h-[200px] w-full">
+        <ChartContainer config={chartConfig} className={`min-h-[200px]  ${maxHeight ? maxHeight : ''}  w-full`}>
             <BarChart accessibilityLayer data={chartData}>
                         <XAxis
                             dataKey="month"

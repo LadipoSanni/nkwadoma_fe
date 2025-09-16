@@ -5,7 +5,7 @@ import {customFetchBaseQuery} from "@/service/customFetchBaseQuery"
 export const loaneeApi = createApi({
     reducerPath: 'loaneeApi',
     baseQuery: customFetchBaseQuery,
-    tagTypes: ['loanee', 'accept-loan-offer','loanOffer'],
+    tagTypes: ['loanee', 'accept-loan-offer','loanOffer','upload-repayment'],
     endpoints: (builder) => ({
 
         verifyIdentity: builder.mutation({
@@ -61,7 +61,8 @@ export const loaneeApi = createApi({
             query: (data) => ({
                 url: `/loanee/cohorts/loanee?cohortId=${data.cohortId}&loaneeId=${data.loaneeId}`,
                 method:'GET'
-            })
+            }),
+            providesTags:['upload-repayment']
         }),
         checkLoaneeStatus: builder.query ({
             query : () => ({
@@ -76,7 +77,7 @@ export const loaneeApi = createApi({
                 url: `/loan/loan-disbursals/${loanId}`,
                 method: 'GET'
             }),
-            providesTags: ['loanOffer']
+            providesTags: ['loanOffer','upload-repayment']
         }),
         viewAllLoanRefferals: builder.query({
             query: () => ({
@@ -89,14 +90,55 @@ export const loaneeApi = createApi({
                 url: `loanee/loan/detail?cohortLoaneeId=${cohortLoaneeId}`,
                 method: 'GET'
             })
-        })
+        }),
+        viewAllLoaneeByAdmins : builder.query({
+            query: (data:{pageSize: number,  pageNumber: number}) => ({
+                url: `/loanee/all?pageSize=${data.pageSize}&pageNumber=${data.pageNumber}`,
+                method: 'GET'
+            })
+        }),
+        searchLoaneeByAdmins : builder.query({
+            query: (data:{pageSize: number, name?: string, pageNumber: number}) => ({
+                url: `/loanee/all/search?name=${data.name}&pageSize=${data.pageSize}&pageNumber=${data.pageNumber}`,
+                method: 'GET'
+            })
+        }),
+        viewAllLoansTotalCountsByAdmins : builder.query({
+           query: (loaneeId?: string) => ({
+               url: `/loan/total${loaneeId ? `?loaneeId=${loaneeId}` : ''}`,
+               method: 'GET'
+           })
+        }),
+        viewLoaneeLoansByAdmin : builder.query({
+            query: (data:{loaneeId: string,pageNumber: number, pageSize: number }) => ({
+                url: `/loan/view-all-disbursal?loaneeId=${data.loaneeId}&pageSize=${data.pageSize}&pageNumber=${data.pageNumber}`,
+                method: 'GET'
+            })
+        }),
+        searchLoaneeLoansByAdmin : builder.query({
+            query: (data:{loaneeId: string,pageNumber: number, pageSize: number, organizationName: string }) => ({
+                url: `/loan/search/loanee?organizationName=${data?.organizationName}&loaneeId=${data?.loaneeId}&pageSize=${data.pageSize}&pageNumber=${data.pageNumber}`,
+                method: 'GET'
+            })
+        }),
+        viewLoaneeDemography: builder.query({
+            query: () => ({
+                url: `/loanee-demography/view`,
+                method: 'GET'
+            }),
+        }),
     })
 })
 
 
 
 export const {
+    useSearchLoaneeLoansByAdminQuery,
     // useIsIdentityVerifiedQuery,
+    useSearchLoaneeByAdminsQuery,
+    useViewLoaneeLoansByAdminQuery,
+    useViewAllLoansTotalCountsByAdminsQuery,
+    useViewAllLoaneeByAdminsQuery,
     useViewLoanDetailsOnOnboardingQuery,
     useCheckLoaneeStatusQuery,
      useSaveNextOfKinDetailsMutation,
@@ -107,6 +149,7 @@ export const {
     // useLazyIsIdentityVerifiedQuery,
     useGetLoaneeDetailsQuery,
     useViewLoanDetailsQuery,
+    useViewLoaneeDemographyQuery,
     useGetLoaneeIdentityVerificationDetailsQuery,
     useViewAllLoanRefferalsQuery
 } = loaneeApi;

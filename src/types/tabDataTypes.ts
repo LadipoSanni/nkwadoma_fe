@@ -8,11 +8,23 @@ export const loanProductTab = [
     { name: "Loanees", value: "/loan-product/loan-product-loanees" },
 ]
 
-export const settingsTab = [
-    { name: "Profile", value:"/settings/profile"},
+export const MeedlAdminSettingsTabs = [
+    { name: "General", value:"/settings/general" },
+    { name: "Company", value: "/settings/company" },
+    // { name: "Settings", value: "/settings/settings"},
     { name: "Team", value: "/settings/team" },
     { name: "Roles & Permissions", value: "/settings/roles-&-permissions" },
 ]
+
+export const settingTabs = [
+    { name: "General", value:"/settings/general" },
+]
+
+export const loaneeView = [
+    {name: 'Loan', value:"/loanees" },
+    {name: 'Demography', value: '/loanees/demography' },
+]
+
 
 export const vehicleTab = [
     {name: "Commercial ", value: "/vehicle/commercial-vehicle"},
@@ -54,4 +66,31 @@ export const loaneeTabData = [
     {name: "Uploaded", value:"/organizations/loanees/uploaded"},
     {name: "Archived",value: "/organizations/loanees/archived"}
 ]
+
+export const  organizationDetailTabData = [
+    {name: "Details", value:"/organizations/detail"},
+    {name: "Cohort", value:"/organizations/cohort"},
+    {name: "Loan book", value:"/organizations/loanBook"},
+    {name: "Admin", value:"/organizations/admin"},
+]
+
+export const loaneeIncohortTab = [
+    {name: "All", value:"/organizations/cohort/all"},
+    {name: "Archived", value:"/organizations/cohort/archived"},
+]
+
+export const requestTab = [
+    {name: "Staff", value:"/requests/staff"},
+    {name: "Organization", value:"/requests/organization"},
+]
+
+export const organizationDetailTab =  [
+    {name: "Detail", value:"/organizations/organizations-details/details"},
+    {name: "Staff", value:"/organizations/organizations-details/admins"}]
+
+export const createLoanProductSteps = [
+        { id: 'step-one', title: 'Step 1' },
+        { id: 'step-two', title: 'Step 2' },
+        
+      ];
 
