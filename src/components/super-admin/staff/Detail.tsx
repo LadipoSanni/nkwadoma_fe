@@ -79,7 +79,7 @@ function Detail({role,status,email,name,dateInvited,isSwitch,setSwitch,setIsOpen
         </div>
 
         <div>
-       { !["Invited","Pending_approval","Declined"].includes(userStatus) && ["MEEDL_SUPER_ADMIN","ORGANIZATION_SUPER_ADMIN","COOPERATE_FINANCIER_SUPER_ADMIN"].includes(user_role || "") && <DropdownMenu>
+       { userRole !== "Super admin" && !["Invited","Pending_approval","Declined"].includes(userStatus) && ["MEEDL_SUPER_ADMIN","ORGANIZATION_SUPER_ADMIN","COOPERATE_FINANCIER_SUPER_ADMIN"].includes(user_role || "") && <DropdownMenu>
             <DropdownMenuTrigger asChild>
                 <div
                  id="kebabButton"
