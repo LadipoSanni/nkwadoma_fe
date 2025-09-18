@@ -51,7 +51,7 @@ const LoaneeProfileHeader = ({cohort ,userName,institutionName, program, isLoadi
             if (searchParams){
                 const id = searchParams.get("id");
                 if (id) {
-                    router.push('/loanees/loans')
+                    router.push('/loanees')
                 }else {
                      if(organizationTabStatus === "cohort"){
                         router.push('/organizations/cohort/all')
