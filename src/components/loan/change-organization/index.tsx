@@ -495,7 +495,7 @@ const ChangeInstitutionModal = () => {
   (isLoading && organizations.length === 0) ||
   (isSearching && isSearchLoading && currentResultsTerm !== debouncedSearchTerm);
 
-  const showEmptyState = !isSearching && organizations.length === 0 && !isLoading && !isInitialLoad;
+  const showEmptyState = !isSearching && organizations.length === 0 && !isLoading && !isInitialLoad && !isTyping;
   const showSearchEmptyState = isSearching && organizations.length === 0 && !isSearchLoading && currentResultsTerm === debouncedSearchTerm && !isInitialLoad;
 
   return (
