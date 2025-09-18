@@ -141,11 +141,11 @@ const SourceOfFundsStep = () => {
         >
             {({ values, setFieldValue }) => (
                 <Form >
-                    <main className={`${inter.className} w-full xl:px-48 grid-cols-1 gap-y-6 grid`}>
+                    <main className={`${inter.className} w-full xl:px-48 max-h-[70vh]   grid-cols-1 gap-y-6 grid`}>
                         <div className={`${cabinetGroteskMediumBold.className} max-w-[27.5rem] md:mx-auto w-full`}>
                             <h1 className={`text-meedlBlack text-[24px] leading-[120%] font-medium`}>Source of funds</h1>
                         </div>
-                        <div className={'w-full md:max-w-[27.5rem] md:mx-auto grid gap-5'}>
+                        <div className={`w-full md:max-w-[27.5rem] bg-red-300  max-h-[60vh]   ${styles.sideBar}  md:mx-auto grid gap-5`}>
                             <CustomMultiselect
                                 multiselectList={sourceOptions}
                                 onValueChange={(newValues) => {
@@ -168,7 +168,7 @@ const SourceOfFundsStep = () => {
                             />
 
                             {values.sourceOfFund.includes('Others') && (
-                                <div className={`max-h-[300px] ${styles.sideBar} overflow-y-auto p`}>
+                                <div className={`max-h-[300px]  overflow-y-auto p`}>
                                     <div className="flex items-center justify-between mb-4">
                                         <h3 className="text-sm font-medium">Source (specify others)</h3>
                                     </div>
