@@ -113,6 +113,7 @@ const Index = () => {
                             totalPages={data?.data?.totalPages}
                             hasNextPage={data?.data?.hasNextPage}
                             condition={true}
+                             tableCellStyle="h-12"
                         />
                     </div>
                 )

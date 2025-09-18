@@ -52,7 +52,7 @@ function Staff() {
     const dataElement = {
       name: debouncedSearchTerm,
       activationStatuses: ['INVITED',"APPROVED","ACTIVE","DEACTIVATED"],
-      identityRoles:user_role === "ORGANIZATION_SUPER_ADMIN"? ["ORGANIZATION_ADMIN","ORGANIZATION_ASSOCIATE"] : user_role === "COOPERATE_FINANCIER_SUPER_ADMIN"? ["COOPERATE_FINANCIER_ADMIN"] : ["PORTFOLIO_MANAGER","MEEDL_ADMIN","PORTFOLIO_MANAGER_ASSOCIATE"],
+      identityRoles:user_role === "ORGANIZATION_SUPER_ADMIN"? ["ORGANIZATION_ADMIN","ORGANIZATION_ASSOCIATE","ORGANIZATION_SUPER_ADMIN"] : user_role === "COOPERATE_FINANCIER_SUPER_ADMIN"? ["COOPERATE_FINANCIER_ADMIN","COOPERATE_FINANCIER_SUPER_ADMIN"] : ["PORTFOLIO_MANAGER","MEEDL_ADMIN","PORTFOLIO_MANAGER_ASSOCIATE","MEEDL_SUPER_ADMIN"],
       pageNumber:pageNumber,
       pageSize: 10
   }
@@ -87,7 +87,7 @@ function Staff() {
    const handleRowClick = (row: TableRowData) => {
     const fullName = capitalizeFirstLetters(row?.firstName?.toString())  + " " + capitalizeFirstLetters(row.lastName?.toString())
     const status = capitalizeFirstLetters(row?.activationStatus?.toString()) || "";
-     const role =  row.role === "PORTFOLIO_MANAGER"? "Portfolio manager" : row.role === "MEEDL_ADMIN"? "Admin" :row.role === "PORTFOLIO_MANAGER_ASSOCIATE"? "Associate" : row.role === "ORGANIZATION_ADMIN"? "Admin" :row.role === "ORGANIZATION_ASSOCIATE"? "Associate" : "Admin"
+     const role =  row.role === "PORTFOLIO_MANAGER"? "Portfolio manager" : row.role === "MEEDL_ADMIN"? "Admin" :row.role === "PORTFOLIO_MANAGER_ASSOCIATE"? "Associate" : row.role === "ORGANIZATION_ADMIN"? "Admin" :row.role === "ORGANIZATION_ASSOCIATE"? "Associate" : row.role === "ORGANIZATION_SUPER_ADMIN" || row.role === "MEEDL_SUPER_ADMIN" ||  row.role === "COOPERATE_FINANCIER_SUPER_ADMIN"? "Super admin": "Admin"
     setModal('detail')
     setOpen(true)
     setStatus(status)
@@ -143,7 +143,7 @@ function Staff() {
           title: "Role",  
           sortable: true, 
           id: "role", 
-          selector: (row: TableRowData) => row.role === "PORTFOLIO_MANAGER"? "Portfolio manager" : row.role === "MEEDL_ADMIN" || row.role === "ORGANIZATION_ADMIN"? "Admin" : "Associate"
+          selector: (row: TableRowData) => row.role === "PORTFOLIO_MANAGER"? "Portfolio manager" : row.role === "MEEDL_ADMIN" || row.role === "ORGANIZATION_ADMIN"? "Admin" :  row.role === "ORGANIZATION_SUPER_ADMIN" || row.role === "MEEDL_SUPER_ADMIN" ? "Super admin" : "Associate" 
         },
         { 
           title: "Status",  
