@@ -141,40 +141,40 @@ const SourceOfFundsStep = () => {
         >
             {({ values, setFieldValue }) => (
                 <Form >
-                    <main className={`${inter.className} w-full xl:px-48 max-h-[70vh]   grid-cols-1 gap-y-6 grid`}>
-                        <div className={`${cabinetGroteskMediumBold.className} max-w-[27.5rem] md:mx-auto w-full`}>
+                    <main className={`${inter.className} w-full xl:px-48  grid-cols-1 gap-y-3 grid`}>
+                        <div className={`${cabinetGroteskMediumBold.className} max-w-[27.5rem]   md:mx-auto w-full`}>
                             <h1 className={`text-meedlBlack text-[24px] leading-[120%] font-medium`}>Source of funds</h1>
                         </div>
-                        <div className={`w-full md:max-w-[27.5rem] bg-red-300  max-h-[60vh]   ${styles.sideBar}  md:mx-auto grid gap-5`}>
-                            <CustomMultiselect
-                                multiselectList={sourceOptions}
-                                onValueChange={(newValues) => {
-                                    if(newValues?.includes('Others')) {
-                                        setFieldValue("otherSources", ['']);
-                                        setDisableButton(true)
-                                    }else {
-                                        setDisableButton(false)
-                                    }
-                                    if (values.sourceOfFund.includes('Others') && !newValues.includes('Others')) {
-                                        setFieldValue("otherSources", []);
-                                        setCurrentOtherSource("");
-                                    }
-                                    setFieldValue("sourceOfFund", newValues);
-                                }}
-                                placeholder="Select source"
-                                className=""
-                                selectedValues={values.sourceOfFund}
-                                isShowButton={true}
-                            />
+                        <CustomMultiselect
+                            multiselectList={sourceOptions}
+                            onValueChange={(newValues) => {
+                                if(newValues?.includes('Others')) {
+                                    setFieldValue("otherSources", ['']);
+                                    setDisableButton(true)
+                                }else {
+                                    setDisableButton(false)
+                                }
+                                if (values.sourceOfFund.includes('Others') && !newValues.includes('Others')) {
+                                    setFieldValue("otherSources", []);
+                                    setCurrentOtherSource("");
+                                }
+                                setFieldValue("sourceOfFund", newValues);
+                            }}
+                            placeholder="Select source"
+                            className=""
+                            selectedValues={values.sourceOfFund}
+                            isShowButton={true}
+                        />
+                        <div className={`w-full relative  md:max-w-full  h-[55vh]  bg-green-300  max-h-[55vh]   ${styles.sideBar}  m grid gap-5`}>
 
                             {values.sourceOfFund.includes('Others') && (
-                                <div className={`max-h-[300px]  overflow-y-auto p`}>
+                                <div className={`max-h-[300px]   p`}>
                                     <div className="flex items-center justify-between mb-4">
                                         <h3 className="text-sm font-medium">Source (specify others)</h3>
                                     </div>
                                     
                                     {values.otherSources.map((source, index) => (
-                                        <div key={index} className="flex gap-3 items-center justify-between mb-3">
+                                        <div key={index} className="flex  gap-3 items-center justify-between mb-3">
                                             <Input
                                                 type="text"
                                                 value={source}
