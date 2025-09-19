@@ -3,6 +3,7 @@ import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import CreateCohort from '@/reuseable/modals/CreateCohort';
 import { Providers } from '@/app/provider';
+import {ConfigProvider} from "@/app/config-context";
 
 // Mock dialog components if needed
 jest.mock('@/components/ui/dialog', () => ({
@@ -36,9 +37,23 @@ describe('CreateCohort Component', () => {
     //     );
     //     expect(screen.getByText(/Create cohort/i)).toBeInTheDocument();
     // });
+    const renderWithConfig = (ui: React.ReactElement) => {
+        return render(
+            <ConfigProvider
+                config={{
+                    uploadPreset: '',
+                    cloudName: '',
+                    googleMapsApiKey: 'test-api-key',
+                    countryCodeUrl: 'https://example.com',
+                }}
+            >
+                {ui}
+            </ConfigProvider>
+        );
+    };
 
     it("displays the Cohort Name input field", async () => {
-        render(
+        renderWithConfig(
             <Providers>
                 <CreateCohort />
             </Providers>
