@@ -165,10 +165,10 @@ const SourceOfFundsStep = () => {
                             selectedValues={values.sourceOfFund}
                             isShowButton={true}
                         />
-                        <div className={`w-full relative  md:max-w-full  h-[55vh]  bg-green-300  max-h-[55vh]   ${styles.sideBar}  m grid gap-5`}>
+                        <div className={`w-full relative  pb-6 md:max-w-full  h-[55vh]    max-h-[55vh]   ${styles.sideBar}  m grid gap-5`}>
 
                             {values.sourceOfFund.includes('Others') && (
-                                <div className={`max-h-[300px]   p`}>
+                                <div className={`max-  p`}>
                                     <div className="flex items-center justify-between mb-4">
                                         <h3 className="text-sm font-medium">Source (specify others)</h3>
                                     </div>
@@ -226,7 +226,7 @@ const SourceOfFundsStep = () => {
                                 </div>
                             )}
 
-                            <div className={'md:flex  md:justify-between mt-5 grid gap-5'}>
+                            <div className={'md:flex  md:justify-between bg-white  grid gap-5'}>
                                 <Button
                                     onClick={handleBackClick}
                                     type={'button'}
