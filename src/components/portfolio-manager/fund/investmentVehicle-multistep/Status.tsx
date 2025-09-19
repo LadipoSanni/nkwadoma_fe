@@ -81,8 +81,10 @@ const Status = ({disabledTabs}: Props)=> {
            
             {
                 tabContent.map((tab, index)=> (
-                 <TabsContent key={index} value={tab.value}>
-                    <div className='mt-10 '>{tab.form}</div>
+                 <TabsContent key={index} value={tab.value} className='mt-10 md:max-h-[40vh]  overflow-y-auto'>
+                    <div className='mb-10'>
+                        {tab.form}
+                    </div>
                  </TabsContent>
                 ))
             }

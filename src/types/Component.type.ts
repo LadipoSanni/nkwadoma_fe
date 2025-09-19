@@ -18,6 +18,7 @@ export interface FinancierInInvestmentVehicle {
     nextOfKin: string,
     investmentVehicleRole: string[],
     organizationName: string,
+    name: string,
     userIdentity: {
     id: string,
         email: string,
