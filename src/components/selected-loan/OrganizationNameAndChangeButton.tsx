@@ -7,7 +7,7 @@ import InitialsAvatar from '../../reuseable/avater/InitialAvater';
 import {Cross2Icon} from "@radix-ui/react-icons";
 import TableModal from "@/reuseable/modals/TableModal";
 import {Button} from "@/components/ui/button";
-import {Tooltip,TooltipContent,TooltipTrigger,} from "@/components/ui/tooltip"
+import TruncatedTextWithTooltip from '@/reuseable/tool-tip/Truncated-textWith-tooltip';
 
 const OrganizationNameAndChangeButton = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -41,23 +41,10 @@ const OrganizationNameAndChangeButton = () => {
             <div data-testid="organizationNameContainer" id="organizationNameContainer"
                  className={`${cabinetGroteskMediumBold.className} text-2xl`}>
                 {name? <div>
-                   <Tooltip>
-                    <TooltipTrigger asChild >
-                   <div
-                   className="truncate max-w-[250px] md:max-w-[500px] cursor-default"
-                   style={{ 
-                     overflow: 'hidden',
-                     textOverflow: 'ellipsis',
-                     whiteSpace: 'nowrap'
-                   }}
-                   >
-                    {name}
-                   </div>
-                    </TooltipTrigger>
-                    <TooltipContent className="text-black py-2 shadow-md text-[13px] bg-[#EEF5FF] ">
-                        <p>{name}</p>
-                    </TooltipContent>
-                    </Tooltip> 
+                    <TruncatedTextWithTooltip
+                      text={name}
+                      className='max-w-[250px] md:max-w-[500px]'
+                    />
                 </div> : "All organizations"}
             </div>
             <Button id="changeOrganizationButton" data-testid={'changeOrganizationButton'} size={"lg"}
