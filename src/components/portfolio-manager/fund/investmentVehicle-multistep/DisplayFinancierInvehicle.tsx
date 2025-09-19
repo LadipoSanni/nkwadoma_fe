@@ -19,9 +19,9 @@ const DisplayFinancierInvehicle = ({list}:Props ) => {
 
                    <div>
                        <p className={` md:hidden flex`}>Financier</p>
-                       <div id={'name'+fina?.userIdentity?.firstName} className={`  ${styles.tab} flex  border border-[#e4e4e7] px-2 text-xs h-fit py-4  rounded-md `}>
-                           {capitalizeFirstLetters(fina?.userIdentity?.firstName)}
-                           {capitalizeFirstLetters(fina?.userIdentity?.lastName) }
+                       <div id={'name'+fina?.name} className={`  ${styles.tab} flex  border border-[#e4e4e7] px-2 text-xs h-fit py-4  rounded-md `}>
+                           {capitalizeFirstLetters(fina?.name)}
+                           {/* {capitalizeFirstLetters(fina?.userIdentity?.lastName) } */}
                        </div>
                    </div>
                     <div>
