@@ -229,8 +229,8 @@ function InviteOrganizationsForm({setIsOpen,organizationRefetch,tabType}: props)
                     placeholder="Enter name"
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                         const value = e.target.value;
-                        let cleanedValue = value.replace(/[^a-zA-Z0-9'_-\s]/g, '');
-                        cleanedValue = cleanedValue.replace(/(['_-])\1+/g, '$1');
+                        let cleanedValue = value.replace(/[^a-zA-Z0-9&'_\-\s]/g, '');
+                        cleanedValue = cleanedValue.replace(/([&'_-])\1+/g, '$1'); 
                         if (cleanedValue.length > 0 && !/^[a-zA-Z]/.test(cleanedValue)) {
                           cleanedValue = cleanedValue.substring(1);
                         }

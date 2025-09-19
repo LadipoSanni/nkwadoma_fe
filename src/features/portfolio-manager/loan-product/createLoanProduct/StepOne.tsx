@@ -148,9 +148,9 @@ function StepOne() {
             .required("Product name is required")
             .test(
                 "valid-name",
-                "Name must not end with hyphen or underscore or apostrophe",
+                "Name must not end with hyphen, underscore, apostrophe, or ampersand",
                 (value = "") => {
-                    const regex = /^[a-zA-Z0-9](?:[a-zA-Z0-9'_-\s]*[a-zA-Z0-9])?$/;
+                    const regex = /^[a-zA-Z0-9](?:[a-zA-Z0-9&'_\-\s]*[a-zA-Z0-9])?$/;
                     return regex.test(value);
                 }
             )
@@ -316,7 +316,7 @@ function StepOne() {
                                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                                            const value = e.target.value;
                                            const formattedValue = formatPlaceName(value,true);
-                                           const cleanedValue = formattedValue.replace(/[^a-zA-Z0-9'_-\s]/g, '');
+                                           const cleanedValue = formattedValue.replace(/[^a-zA-Z0-9'_&\-\s]/g, '');
                                            if (cleanedValue.length > 0 && !/^[a-zA-Z0-9]/.test(cleanedValue)) {
                                               
                                              setFieldValue("productName", cleanedValue.substring(1));

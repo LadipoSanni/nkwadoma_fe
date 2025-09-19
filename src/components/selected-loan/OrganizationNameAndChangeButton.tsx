@@ -44,7 +44,7 @@ const OrganizationNameAndChangeButton = () => {
                    <Tooltip>
                     <TooltipTrigger asChild >
                    <div
-                   className="truncate max-w-[250px] md:max-w-[500px]"
+                   className="truncate max-w-[250px] md:max-w-[500px] cursor-default"
                    style={{ 
                      overflow: 'hidden',
                      textOverflow: 'ellipsis',

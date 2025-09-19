@@ -7,6 +7,7 @@ import Detail from "@/components/loanee-my-profile/Details";
 import BasicDetailTab from "@/reuseable/details/BasicDetailTab";
 import BasicDetail from "@/reuseable/details/BasicDetail";
 import ViewDocument from "@/reuseable/details/ViewDocument";
+import { capitalizeFirstLetters } from "@/utils/GlobalMethods";
 
 const Details = () => {
 
@@ -27,7 +28,7 @@ const Details = () => {
         {
             label: "Product sponsors", 
             value: loanProduct?.data.sponsors && loanProduct.data.sponsors.length > 0 
-              ? loanProduct.data.sponsors.map((sponsor: { name: string; }) => sponsor.name).join(', ')
+              ? loanProduct.data.sponsors.map((sponsor: { name: string; }) => capitalizeFirstLetters(sponsor.name)).join(', ')
               : 'Not provided'
           },
         {label: "Bank partner", value: loanProduct?.data.bankPartner || ''},
