@@ -90,6 +90,7 @@ const Details = () => {
          <Detail isLoading={loading}  id={'amountRepaid'}    maxWidth={'100%'} name={'Amount repaid'} value={loanProduct?.data?.totalAmountRepaid} valueType={'currency'} className='w-full'/>
          <Detail isLoading={loading}  id={'amountEarned'}    maxWidth={'100%'} name={'Amount earned'} value={loanProduct?.data?.totalAmountEarned} valueType={'currency'} className='w-full'/>
          <Detail isLoading={loading}  id={'obligorLimit'}    maxWidth={'100%'} name={'Obligor limit'} value={loanProduct?.data?.obligorLoanLimit} valueType={'currency'} className='w-full'/>
+         <Detail isLoading={loading} showAsWholeNumber={true}  id={'beneficiaries'}   maxWidth={'100%'} name={'Total number of beneficiaries'} value={loanProduct?.data?.totalNumberOfLoanee } valueType={'digit'}  className='w-full'/>
          <div className='grid grid-cols-1 md:grid-cols-2 gap-y-5 md:gap-4'>
          <Detail isLoading={loading} showAsWholeNumber={true}  id={'costOfFund'}   maxWidth={'100%'} name={'Cost of fund'} value={Number(loanProduct?.data?.costOfFund)?.toFixed(2) || '0.00' } valueType={'percentage'}  className='w-full'/>
          <Detail isLoading={loading} showAsWholeNumber={true}  id={'interestRate'}   maxWidth={'100%'} name={'Interest rate'} value={Number(loanProduct?.data?.interestRate)?.toFixed(2) || '0.00' } valueType={'percentage'}  className='w-full'/>

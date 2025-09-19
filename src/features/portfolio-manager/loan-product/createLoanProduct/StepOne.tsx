@@ -46,14 +46,19 @@ function StepOne() {
     const [financierPageNumber, setFinancierPageNumber] = useState(0);
     const [financiers,setFinanciers] = useState<viewAllProps[]>([]);
     const [showSponsorError, setShowSponsorError] = useState(false);
-     const router = useRouter();
+    const [localFundAvailableAmount, setLocalFundAvailableAmount] = useState(fundProductAvailableAmount);
+    const router = useRouter();
+    
     const { data: investmentVehicleData, isFetching, isLoading: isFundLoading } =
         useGetInvestmentVehiclesByTypeAndStatusAndFundRaisingQuery({
             pageSize: 10,
             pageNumber: fundPageNumber,
             investmentVehicleStatus: "PUBLISHED",
         });
-
+     
+    useEffect(() => {
+        setLocalFundAvailableAmount(fundProductAvailableAmount);
+    }, [fundProductAvailableAmount]);
     
     const param = {
             pageNumber: financierPageNumber,
@@ -141,7 +146,6 @@ function StepOne() {
         store.dispatch(setLoanProductField(createLoanProductData))
     }
 
-
     const validationSchema = Yup.object().shape({
         productName: Yup.string()
             .trim()
@@ -154,14 +158,6 @@ function StepOne() {
                     return regex.test(value);
                 }
             )
-            // .test(
-            //     "valid-name",
-            //     "Name must not contain multiple consecutive hyphens or underscores",
-            //     (value = "") => {
-            //       const regex = /^[a-zA-Z0-9]+(?:[_-]?[a-zA-Z0-9]+)*$/;
-            //       return regex.test(value);
-            //     }
-            // )
             .max(200, "Characters exceeds 200 characters"),
         investmentVehicleId: Yup.string()
             .trim()
@@ -186,18 +182,17 @@ function StepOne() {
             .test("max-number", "Invalid tenor limit", value => !value || Number(value) <= 999),
             loanProductSize: Yup.string()
             .trim()
-            // .matches(/^(?!0$)([1-9]\d*|0\.\d*[1-9]\d*)$/, "Product size must be greater than 0")
             .required("Loan product size is required")
             .test("max-number", "Product size must be less than or equal to a quadrillion",
                 value => !value || Number(value) <= 1e15)
             .test(
               `is-greater-than-fund`,
-              `Amount can't be greater than fund product ${formatAmount(fundProductAvailableAmount)}`,
+              `Amount can't be greater than fund product ${formatAmount(localFundAvailableAmount)}`,
               function(value) {
-                if (!value || fundProductAvailableAmount === null || fundProductAvailableAmount === undefined) return true;
+                if (!value || localFundAvailableAmount === null || localFundAvailableAmount === undefined) return true;
                 
                 const loanSize = Number(value);
-                const availableAmount = Number(fundProductAvailableAmount);
+                const availableAmount = Number(localFundAvailableAmount);
                 
                 if (availableAmount === 0 && loanSize > 0) {
                   return false;
@@ -208,7 +203,6 @@ function StepOne() {
             ),
         obligorLimit: Yup.string()
             .trim()
-            // .matches(/^(?!0$)([1-9]\d*|0\.\d*[1-9]\d*)$/, "Limit must be greater than 0")
             .required("Obligor limit is required")
             .test('is-less-than-loan-product-size', 'Obligor can\'t be greater than product size',
                 function (value) {
@@ -217,7 +211,6 @@ function StepOne() {
                 }),
         minimumRepaymentAmount: Yup.string()
             .trim()
-            // .matches(/^(?!0$)([1-9]\d*|0\.\d*[1-9]\d*)$/, "Amount must be greater than 0")
             .required("Amount is required")
             .test('is-greater-than-loan-product-size', 'Repayment amount can\'t be greater than product size',
                 function (value) {
@@ -269,7 +262,6 @@ function StepOne() {
         router.push("/loan-product/step-two")
     };
 
-
     const handleDrop = (event: React.DragEvent<HTMLDivElement>) => {
         event.preventDefault();
     };
@@ -295,7 +287,27 @@ function StepOne() {
                 validateOnBlur={true} 
             >
                 {
-                    ({errors, isValid, touched, setFieldValue, values, setFieldTouched}) => (
+                    ({errors, isValid, touched, setFieldValue, values, setFieldTouched}) => {
+                        
+                        const handleFundSelection = (value: string) => {
+                            setFieldValue("investmentVehicleId", value);
+                            setFundProductId(value);
+                            setFieldValue("loanProductSize", "");
+                            if (values.sponsors.length > 0) {
+                                setFieldValue("sponsors", []);
+                            }
+
+                            const selectedVehicle = investmentVehicleFund.find(
+                                (vehicle) => vehicle.id === value 
+                            );
+                            if (selectedVehicle && selectedVehicle.totalAvailableAmount !== undefined) {
+                                const availableAmount = selectedVehicle.totalAvailableAmount;
+                                setLocalFundAvailableAmount(availableAmount);
+                                store.dispatch(setFundProductAvailableAmount(availableAmount));
+                            }
+                        };
+
+                        return (
                         <Form className={`${inter.className}`}>
                             <div>
                             <div className="grid grid-cols-1 gap-y-4 md:max-h-[45vh] md:relative overflow-y-auto lg:px-16 relative  lg:right-16  "
@@ -343,26 +355,13 @@ function StepOne() {
                                       isSelectOpen={isSelectOpen}
                                       setIsSelectOpen={setIsSelectOpen}
                                       selectOptions={investmentVehicleFund}
-                                      setId={(value) => {
-                                        setFieldValue("investmentVehicleId", value);
-                                        setFundProductId(value)
-
-                                        if (values.sponsors.length > 0) {
-                                            setFieldValue("sponsors", []);
-                                          }
-
-                                        const selectedVehicle = investmentVehicleData?.data?.body?.find(
-                                            (vehicle: { id: string }) => vehicle.id === value 
-                                          );
-                                          if (selectedVehicle) {
-                                            store.dispatch(setFundProductAvailableAmount(selectedVehicle.totalAvailableAmount))
-                                          }
-                                          
-                                    }}
+                                      setId={handleFundSelection}
+                                      onChange={() => {
+                                        setFieldValue("loanProductSize", "");
+                                      }}
                                     placeholder='Select fund'
                                     isLoading={isFundLoading}
-                                    //  onOpenChange={(open) => setIsFund(open)}
-                                     infinityScroll={{
+                                    infinityScroll={{
                                         hasMore:hasNextfundPage,
                                         loadMore: loadMoreFunds,
                                         loader: isFetching
@@ -558,7 +557,6 @@ function StepOne() {
                                     </div>
                                  
                                     <div className="grid  gap-6 relative bottom-12">
-                                        {/* Interest and Cost of Funds */}
                                         <div className="grid grid-cols-2 gap-4">
                                             {/* Interest */}
                                             <div>
@@ -593,8 +591,6 @@ function StepOne() {
                                                     />
                                                 )}
                                             </div>
-
-                                            {/* Cost of Funds */}
                                             <div>
                                                 <Label htmlFor="costOfFunds">Cost of fund</Label>
                                                 <div className="flex items-center border rounded-md h-12 mt-2">
@@ -746,14 +742,6 @@ function StepOne() {
                                         />
                                     )}
                                 </div>
-                                {/* <div className="mt-6 p-4 bg-gray-100 rounded-md">
-  <h3 className="text-sm font-medium mb-2">Form Values (Debug):</h3>
-  <pre className="text-xs bg-white p-3 rounded border overflow-auto max-h-40">
-    {JSON.stringify(values, null, 2)}
-  </pre>
-  <p>{JSON.stringify(values.sponsors, null, 2)}</p>
-</div> */}
-       
                                 </div>
                                 
                             <div className={`md:flex justify-between pt-5 gap-3 pb-5 lg:pr-12 `}>
@@ -782,7 +770,7 @@ function StepOne() {
                             </div>
                             
                         </Form>
-                    )
+                    )}
                 }
             </Formik>
        </div>
