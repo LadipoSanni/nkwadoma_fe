@@ -1,6 +1,7 @@
 import { render, screen, fireEvent,cleanup} from "@testing-library/react";
 import { Providers } from "@/app/provider";
 import InviteOrganizationForm from "@/components/portfolio-manager/organization/Invite-organizations-form";
+import {ConfigProvider} from "@/app/config-context";
 
 jest.mock("next/navigation", () => ({
     useRouter: () => ({
@@ -15,9 +16,23 @@ describe("InviteOrganizationForm", () => {
           jest.spyOn(console,'warn').mockReturnValue()
           jest.spyOn(console,'error').mockReturnValue()
       });
+    const renderWithConfig = (ui: React.ReactElement) => {
+        return render(
+            <ConfigProvider
+                config={{
+                    uploadPreset: '',
+                    cloudName: '',
+                    googleMapsApiKey: 'test-api-key',
+                    countryCodeUrl: 'https://example.com',
+                }}
+            >
+                {ui}
+            </ConfigProvider>
+        );
+    };
 
       beforeEach(() => {
-        render( <Providers> <InviteOrganizationForm /> </Providers> );  
+          renderWithConfig( <Providers> <InviteOrganizationForm /> </Providers> );
       })
 
       test("renders the form with initial elements", () => { 
