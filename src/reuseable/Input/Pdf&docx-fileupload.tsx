@@ -30,16 +30,14 @@ const PdfAndDocFileUpload: React.FC<FileUploadProps> = ({
 }) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [file, setFile] = useState<File | null>(null);
-  const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [fileName, setFileName] = useState(
     initialDocUrl ? truncateFileName(extractFileName(initialDocUrl), 13) : ''
   );
   const [uploadedFileUrl, setUploadedFileUrl] = useState<string | null>(initialDocUrl || null);
-  const [fileUploadLoading, setFileUploadLoading] = useState<boolean>(false);
   const [isDragActive, setIsDragActive] = useState<boolean>(false);
-  const {upload} = useUploadDocumentToCloudinary();
-
+  
+  const { upload, loading } = useUploadDocumentToCloudinary();
 
   function extractFileName(url: string): string {
     try {
@@ -48,10 +46,6 @@ const PdfAndDocFileUpload: React.FC<FileUploadProps> = ({
     } catch {
       return url.split('/').pop() || 'Uploaded document';
     }
-  }
-
-  const setLoader = (loadingState: boolean) => {
-    setFileUploadLoading(loadingState);
   }
 
   useEffect(() => {
@@ -96,7 +90,6 @@ const PdfAndDocFileUpload: React.FC<FileUploadProps> = ({
     const selectedFile = event.target.files?.[0];
     if (!selectedFile) return;
 
-    setLoading(true);
     setError(null);
 
     if (isFileValid(selectedFile)) {
@@ -104,18 +97,15 @@ const PdfAndDocFileUpload: React.FC<FileUploadProps> = ({
       setFileName(truncateFileName(selectedFile.name, 13));
 
       try {
-        const uploadedFileUrl = await upload(selectedFile, setLoader, cloudinaryFolderName);
+        const uploadedFileUrl = await upload(selectedFile, () => {}, cloudinaryFolderName);
         setUploadedFileUrl(uploadedFileUrl);
         setUploadedDocUrl(uploadedFileUrl);
       } catch (uploadError) {
         setError(uploadError instanceof Error ? uploadError.message : 'Failed to upload document');
         console.error(uploadError);
-      } finally {
-        setLoading(false);
       }
     } else {
       setFile(null);
-      setLoading(false);
     }
   };
 
@@ -144,7 +134,6 @@ const PdfAndDocFileUpload: React.FC<FileUploadProps> = ({
     const droppedFile = e.dataTransfer.files?.[0];
     if (!droppedFile) return;
     
-    setLoading(true);
     setError(null);
 
     if (isFileValid(droppedFile)) {
@@ -152,17 +141,13 @@ const PdfAndDocFileUpload: React.FC<FileUploadProps> = ({
       setFileName(truncateFileName(droppedFile.name, 13));
       
       try {
-        const uploadedFileUrl = await upload(droppedFile, setLoader, cloudinaryFolderName || 'investment-vehicle-documents');
+        const uploadedFileUrl = await upload(droppedFile, () => {}, cloudinaryFolderName || 'investment-vehicle-documents');
         setUploadedFileUrl(uploadedFileUrl);
         setUploadedDocUrl(uploadedFileUrl);
       } catch (uploadError) {
         setError(uploadError instanceof Error ? uploadError.message : 'Failed to upload document');
         console.error(uploadError);
-      } finally {
-        setLoading(false);
       }
-    } else {
-      setLoading(false);
     }
   };
 
@@ -275,7 +260,7 @@ const PdfAndDocFileUpload: React.FC<FileUploadProps> = ({
         ) : (
           <div className={`w-full`}>
             {error && <p className={`text-xs mr-auto ml-auto mb-2 w-fit text-red-500`}>{error}. Please choose another file</p>}
-            {fileUploadLoading ? (
+            {loading ? (
               <div className="flex justify-between w-full">
                 <div className="flex gap-2 w-fit items-start">
                   <div id={'loadingState'} className="w-5 h-5 border-2 border-l-[2px] mr-auto ml-auto mt-auto mb-auto border-l-meedlBlue border-lightBlue550 rounded-full animate-spin" />
@@ -288,10 +273,10 @@ const PdfAndDocFileUpload: React.FC<FileUploadProps> = ({
                   <button
                     type="button"
                     className={`h-[1.875rem] w-[1.875rem] bg-grey350 rounded-[50%] flex justify-center items-center ${
-                      fileUploadLoading ? 'opacity-50 cursor-not-allowed' : ''
+                      loading ? 'opacity-50 cursor-not-allowed' : ''
                     }`}
                     onClick={onDelete}
-                    disabled={fileUploadLoading}
+                    disabled={loading}
                     id={'changeFileButton'}
                   >
                     <MdOutlineDelete id={'editIcon'} className="h-5 w-5 text-primary200" />
@@ -299,10 +284,10 @@ const PdfAndDocFileUpload: React.FC<FileUploadProps> = ({
                   <button
                     type="button"
                     className={`h-[1.875rem] w-[1.875rem] bg-grey350 rounded-[50%] flex justify-center items-center ${
-                      fileUploadLoading ? 'opacity-50 cursor-not-allowed' : ''
+                      loading ? 'opacity-50 cursor-not-allowed' : ''
                     }`}
                     onClick={onClick}
-                    disabled={fileUploadLoading}
+                    disabled={loading}
                     id={'changeFileButton'}
                   >
                     <MdOutlineEdit className="h-5 w-5 text-primary200" />
