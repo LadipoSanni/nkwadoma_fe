@@ -2,6 +2,7 @@ import { fireEvent, render, screen } from '@testing-library/react';
 import * as scriptLoader from '@/lib/google-maps';
 import GoogleLocationsearch from '@/reuseable/google-location/Google-location-search';
 import usePlacesAutocomplete from 'use-places-autocomplete';
+import {ConfigProvider} from "@/app/config-context";
 
 jest.mock('use-places-autocomplete', () => ({
     __esModule: true,
@@ -31,30 +32,47 @@ jest.mock('use-places-autocomplete', () => ({
       jest.spyOn(console, 'error').mockReturnValue();
     });
 
+    const renderWithConfig = (ui: React.ReactElement) => {
+      return render(
+          <ConfigProvider
+              config={{
+                uploadPreset: '',
+                cloudName: '',
+                googleMapsApiKey: 'test-api-key',
+                countryCodeUrl: 'https://example.com',
+              }}
+          >
+            {ui}
+          </ConfigProvider>
+      );
+    };
+
     it('renders an input by default', async () => {
-        render(<GoogleLocationsearch address="" setAddress={setAddress} />);
+      renderWithConfig(
+              <GoogleLocationsearch address="" setAddress={setAddress} />
+        );
         const input = await screen.findByPlaceholderText(/search address/i);
         expect(input).toBeInTheDocument();
       });
 
       it('renders a textarea if variant is textarea', () => {
-        render(<GoogleLocationsearch address="" setAddress={setAddress} variant="textarea" />);
+        renderWithConfig(<GoogleLocationsearch address="" setAddress={setAddress} variant="textarea" />);
         const textarea = screen.getByPlaceholderText(/search address/i);
         expect(textarea.tagName.toLowerCase()).toBe('textarea');
       });
 
       it('displays helper text when provided', () => {
-        render(<GoogleLocationsearch address="" setAddress={setAddress} helperText="Hint" />);
+        renderWithConfig(<GoogleLocationsearch address="" setAddress={setAddress} helperText="Hint" />);
         expect(screen.getByText(/hint/i)).toBeInTheDocument();
       });
     
       it('applies error styles when error prop is true', () => {
-        render(<GoogleLocationsearch address="" setAddress={setAddress} error helperText="Error text" />);
+        renderWithConfig(<GoogleLocationsearch address="" setAddress={setAddress} error helperText="Error text" />);
         expect(screen.getByText(/error text/i)).toHaveClass('text-red-500');
       });
 
       it('calls setAddress when input value changes', () => {
-        render(<GoogleLocationsearch address="" setAddress={setAddress} />);
+        renderWithConfig(<GoogleLocationsearch address="" setAddress={setAddress} />);
         const input = screen.getByPlaceholderText(/search address/i);
         fireEvent.change(input, { target: { value: 'Lagos' } });
         expect(setAddress).toHaveBeenCalledWith('Lagos');
@@ -67,8 +85,8 @@ jest.mock('use-places-autocomplete', () => ({
           suggestions: { data: [] },
           clearSuggestions: jest.fn(),
         });
-    
-        render(<GoogleLocationsearch address="" setAddress={setAddress} />);
+
+        renderWithConfig(<GoogleLocationsearch address="" setAddress={setAddress} />);
         const input = await screen.findByPlaceholderText(/search address/i);
         expect(input).toBeInTheDocument();
       });
@@ -80,8 +98,8 @@ jest.mock('use-places-autocomplete', () => ({
           suggestions: { data: [] },
           clearSuggestions: jest.fn(),
         });
-    
-        render(<GoogleLocationsearch address="" setAddress={setAddress} variant="textarea" />);
+
+        renderWithConfig(<GoogleLocationsearch address="" setAddress={setAddress} variant="textarea" />);
         const textarea = screen.getByPlaceholderText(/search address/i);
         expect(textarea.tagName.toLowerCase()).toBe('textarea');
       });
@@ -93,8 +111,8 @@ jest.mock('use-places-autocomplete', () => ({
           suggestions: { data: [] },
           clearSuggestions: jest.fn(),
         });
-    
-        render(<GoogleLocationsearch address="" setAddress={setAddress} helperText="Hint message" />);
+
+        renderWithConfig(<GoogleLocationsearch address="" setAddress={setAddress} helperText="Hint message" />);
         expect(screen.getByText(/hint message/i)).toBeInTheDocument();
       });
 
@@ -106,8 +124,8 @@ jest.mock('use-places-autocomplete', () => ({
           suggestions: { data: [] },
           clearSuggestions: jest.fn(),
         });
-    
-        render(<GoogleLocationsearch address="" setAddress={setAddress} />);
+
+        renderWithConfig(<GoogleLocationsearch address="" setAddress={setAddress} />);
         const input = screen.getByPlaceholderText(/search address/i);
         fireEvent.change(input, { target: { value: 'Abuja' } });
         expect(mockSetValue).toHaveBeenCalledWith('Abuja');

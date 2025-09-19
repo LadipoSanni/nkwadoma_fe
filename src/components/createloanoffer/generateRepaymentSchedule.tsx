@@ -65,8 +65,8 @@ const GenerateRepaymentSchedule = () => {
                     <Details showIcon={false} isLoading={false} sx={` w-full md:w-[100%] `} id={'total'} showAsWholeNumber={false}    name={'Sum total'} value={data?.data?.sumTotal ? data?.data?.sumTotal :0} valueType={'currency'}  />
                 </div>
                 <div className={`w-full md:w-[50%] grid md:flex gap-3  `}>
-                    <Details showIcon={false} isLoading={false} sx={` w-full md:w-[100%] `} id={'tenor'} showAsWholeNumber={false}    name={'Tenor'} value={data?.data?.tenor ? data?.data?.tenor : 0 } valueType={'years'}  />
-                    <Details showIcon={false} isLoading={false} sx={` w-full md:w-[100%] `} id={'moratorium'} showAsWholeNumber={false}    name={'Moratorium'} value={data?.data?.moratorium ? data?.data?.moratorium : 0} valueType={'years'}  />
+                    <Details showIcon={false} isLoading={false} sx={` w-full md:w-[100%] `} id={'tenor'} showAsWholeNumber={false}    name={'Tenor'} value={data?.data?.tenor ? data?.data?.tenor : 0 } valueType={'tenor'}  />
+                    <Details showIcon={false} isLoading={false} sx={` w-full md:w-[100%] `} id={'moratorium'} showAsWholeNumber={false}    name={'Moratorium'} value={data?.data?.moratorium ? data?.data?.moratorium : 0} valueType={'tenor'}  />
                 </div>
             </div>
             <InfiniteScrollTable
