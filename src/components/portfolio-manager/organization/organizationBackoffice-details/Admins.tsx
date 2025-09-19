@@ -13,6 +13,7 @@ import Modal from '@/reuseable/modals/TableModal';
 import InviteAdmin from '@/components/super-admin/staff/Invite-staff';
 import {Cross2Icon} from "@radix-ui/react-icons";
 
+
 interface TableRowData {
   [key: string]: string | number | null | React.ReactNode;
 }
@@ -34,7 +35,7 @@ function Admins() {
     const dataElement = {
         name:debouncedSearchTerm,
         activationStatuses: ['INVITED',"APPROVED","PENDING_APPROVAL","DEACTIVATED","ACTIVE"],
-        identityRoles:  user_role === "ORGANIZATION_SUPER_ADMIN"? ["ORGANIZATION_ADMIN","ORGANIZATION_ASSOCIATE"] : ["ORGANIZATION_ADMIN","ORGANIZATION_ASSOCIATE","ORGANIZATION_SUPER_ADMIN"] ,
+        identityRoles:  ["ORGANIZATION_ADMIN","ORGANIZATION_ASSOCIATE","ORGANIZATION_SUPER_ADMIN"] ,
         pageNumber:pageNumber,
         pageSize: 10
     }
@@ -94,7 +95,7 @@ function Admins() {
                             title: "Status",  
                             sortable: true, 
                             id: "activationStatus", 
-                            selector: (row: TableRowData) => <span className={`${row.activationStatus === "DECLINED"? " bg-[#FBE9E9] text-[#971B17] " :row.activationStatus === "INVITED"? "bg-[#FEF6E8] text-[#68442E] w-20" : row.activationStatus === "PENDING_APPROVAL"? "bg-[#E6F7EE] text-[#039855]" : "bg-[#E6F2EA] text-[#045620]"} rounded-lg  px-2 `}>{row.activationStatus === "PENDING_APPROVAL"? "Pending" : row.activationStatus === "ACTIVE"? "Active" : row.activationStatus === "DECLINED"? "Declined" : "Invited"}</span> 
+                            selector: (row: TableRowData) => <span className={`${row.activationStatus === "DECLINED"? " bg-[#FBE9E9] text-[#971B17] " :row.activationStatus === "INVITED"? "bg-[#FEF6E8] text-[#68442E] w-20" : row.activationStatus === "PENDING_APPROVAL"? "bg-[#E6F7EE] text-[#039855]" : "bg-[#E6F2EA] text-[#045620]"} rounded-lg  px-2 `}>{row.activationStatus === "PENDING_APPROVAL"? "Pending" : row.activationStatus === "ACTIVE"? "Active" : row.activationStatus === "DECLINED"? "Declined" : capitalizeFirstLetters(row.activationStatus?.toString())}</span> 
                           },
                           { 
                             title: "Invited",  

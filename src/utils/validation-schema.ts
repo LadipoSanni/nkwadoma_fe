@@ -23,10 +23,10 @@ export const validationSchema = Yup.object().shape({
     // )
     .test(
       "valid-name",
-      "Name must not end with hyphen or underscore or apostrophe",
+      "Name must not end with hyphen, underscore, apostrophe, or ampersand",
       (value = "") => {
-          const regex = /^[a-zA-Z0-9](?:[a-zA-Z0-9'_-\s]*[a-zA-Z0-9])?$/;
-          return regex.test(value);
+        const regex = /^[a-zA-Z0-9](?:[a-zA-Z0-9&'_\-\s]*[a-zA-Z0-9])?$/;
+        return regex.test(value);
       }
   )
     .max(200, "Name cannot be more than 200 characters.")
@@ -395,9 +395,9 @@ export const stepTwo1ValidationSchema = Yup.object().shape({
   .required('Name is required')
   .test(
     "valid-name",
-    "Name must not end with hyphen or underscore",
+    "Name must not end with hyphen, underscore, apostrophe, or ampersand",
     (value = "") => {
-      const regex = /^[a-zA-Z](?:[a-zA-Z0-9'_-\s]*[a-zA-Z0-9])?$/;
+      const regex = /^[a-zA-Z0-9](?:[a-zA-Z0-9&'_\-\s]*[a-zA-Z0-9])?$/;
         return regex.test(value);
     }
 )
