@@ -8,6 +8,7 @@ import {PersistGate} from "redux-persist/integration/react";
 import NetworkConnectionDetector from "@/components/common/NetworkConnectionDetector";
 import SystemLogout from "@/features/systemLogout/SystemLogout";
 import RefreshUserToken from "@/features/refresh-token/refreshUserToken";
+import { TooltipProvider } from "@/components/ui/tooltip";
 
 export const Providers = ({ children }: { children: React.ReactNode }) => {
   return (
@@ -17,7 +18,9 @@ export const Providers = ({ children }: { children: React.ReactNode }) => {
         <SystemLogout/>
         <RefreshUserToken>
         <NetworkConnectionDetector>
-        {children}
+          <TooltipProvider>
+          {children}
+          </TooltipProvider>
         </NetworkConnectionDetector>
         </RefreshUserToken>
       </PersistGate>

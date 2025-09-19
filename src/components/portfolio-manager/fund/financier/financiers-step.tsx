@@ -105,8 +105,8 @@ function InviteFinanciers({setIsOpen,investmentId,amountCommitedAndDesignationCo
            organizationName: Yup.string()
               .trim()
               .matches(
-               /^[a-zA-Z](?:[a-zA-Z0-9'_-\s]*[a-zA-Z0-9])?$/,
-               "Company name can not end with hyphen or underscore  or apostrophe.",
+               /^[a-zA-Z0-9](?:[a-zA-Z0-9&'_\-\s]*[a-zA-Z0-9])?$/,
+               "Name must not end with hyphen, underscore, apostrophe, or ampersand",
               )
               .max(200, "Organization name cannot be more than 200 characters.")
               .when('financierType', {
