@@ -2,6 +2,7 @@ import EditCohortForm from "@/components/cohort/EditCohortForm";
 import { render, fireEvent, screen,cleanup } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { Providers } from "@/app/provider";
+import {ConfigProvider} from "@/app/config-context";
 
 
 jest.mock("next/navigation", () => ({
@@ -25,7 +26,20 @@ describe('EditCohort', () => {
           jest.spyOn(console,'warn').mockReturnValue()
           jest.spyOn(console,'error').mockReturnValue()
       })
-      
+    const renderWithConfig = (ui: React.ReactElement) => {
+        return render(
+            <ConfigProvider
+                config={{
+                    uploadPreset: '',
+                    cloudName: '',
+                    googleMapsApiKey: 'test-api-key',
+                    countryCodeUrl: 'https://example.com',
+                }}
+            >
+                {ui}
+            </ConfigProvider>
+        );
+    };
 
        const mockSetIsOpen = jest.fn();
 
@@ -34,7 +48,7 @@ describe('EditCohort', () => {
     setIsOpen: mockSetIsOpen,
   };
 
-  const renderComponent = (props = defaultProps) => render(<Providers><EditCohortForm {...props} /></Providers>);
+  const renderComponent = (props = defaultProps) => renderWithConfig(<Providers><EditCohortForm {...props} /></Providers>);
 
   // it('renders the form fields correctly', () => {
   //   renderComponent();

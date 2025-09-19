@@ -3,7 +3,7 @@ import React, { useRef, useState, useEffect } from 'react';
 import { FiUploadCloud } from 'react-icons/fi';
 import { Label } from '@/components/ui/label';
 import { MdOutlineDelete, MdOutlineEdit, MdCheck, MdErrorOutline } from 'react-icons/md';
-import { uploadDocumentToCloudinary } from '@/utils/UploadDocToCloudinary';
+import { useUploadDocumentToCloudinary } from '@/utils/UploadDocToCloudinary';
 
 interface FileUploadProps {
   handleDrop?: (event: React.DragEvent<HTMLDivElement>) => void;
@@ -38,6 +38,8 @@ const PdfAndDocFileUpload: React.FC<FileUploadProps> = ({
   const [uploadedFileUrl, setUploadedFileUrl] = useState<string | null>(initialDocUrl || null);
   const [fileUploadLoading, setFileUploadLoading] = useState<boolean>(false);
   const [isDragActive, setIsDragActive] = useState<boolean>(false);
+  const {upload} = useUploadDocumentToCloudinary();
+
 
   function extractFileName(url: string): string {
     try {
@@ -102,7 +104,7 @@ const PdfAndDocFileUpload: React.FC<FileUploadProps> = ({
       setFileName(truncateFileName(selectedFile.name, 13));
 
       try {
-        const uploadedFileUrl = await uploadDocumentToCloudinary(selectedFile, setLoader, cloudinaryFolderName);
+        const uploadedFileUrl = await upload(selectedFile, setLoader, cloudinaryFolderName);
         setUploadedFileUrl(uploadedFileUrl);
         setUploadedDocUrl(uploadedFileUrl);
       } catch (uploadError) {
@@ -150,11 +152,7 @@ const PdfAndDocFileUpload: React.FC<FileUploadProps> = ({
       setFileName(truncateFileName(droppedFile.name, 13));
       
       try {
-        const uploadedFileUrl = await uploadDocumentToCloudinary(
-          droppedFile, 
-          setLoader, 
-          cloudinaryFolderName || 'investment-vehicle-documents'
-        );
+        const uploadedFileUrl = await upload(droppedFile, setLoader, cloudinaryFolderName || 'investment-vehicle-documents');
         setUploadedFileUrl(uploadedFileUrl);
         setUploadedDocUrl(uploadedFileUrl);
       } catch (uploadError) {

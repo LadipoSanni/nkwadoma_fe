@@ -35,7 +35,6 @@ import {unauthorizedApis} from "@/service/unauthorized/action";
 import OrganizationReducer from "./slice/organization/organization"
 import { loanBookApi } from '@/service/admin/loan_book';
 import CsvReducer from "@/redux/slice/csv/csv"
-import { countryApi } from '@/service/admin/external-api/countryCalling_code_query';
 import LoanOfferReducer from './slice/loan/loan-offer';
 import StaffReducer from "./slice/staff-and-request/staff";
 import loaneesReducer from "./slice/loan/loanees";
@@ -88,7 +87,6 @@ const appReducer = combineReducers({
     [portfolioOverviewApi.reducerPath]: portfolioOverviewApi.reducer,
     [unauthorizedApis.reducerPath]: unauthorizedApis.reducer,
     [loanBookApi.reducerPath]: loanBookApi.reducer,
-    [countryApi.reducerPath]: countryApi.reducer,
     [walletApi.reducerPath]: walletApi.reducer,
 });
 
