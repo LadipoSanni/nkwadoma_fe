@@ -325,8 +325,8 @@ import * as Dialog from "@radix-ui/react-dialog";
 import { MdOutlineAccountBalance, MdSearch } from 'react-icons/md';
 import { inter } from "@/app/fonts";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button"
-import styles from "./index.module.css"
+import { Button } from "@/components/ui/button";
+import styles from "./index.module.css";
 import { store, useAppSelector } from "@/redux/store";
 import { setClickedOrganization } from "@/redux/slice/loan/selected-loan";
 import Image from "next/image";
@@ -338,8 +338,8 @@ import SearchEmptyState from "@/reuseable/emptyStates/SearchEmptyState";
 import { ChangeOrganization } from "@/types/loan/loan-request.type";
 import { useDebounce } from '@/hooks/useDebounce';
 import InfiniteScroll from "react-infinite-scroll-component";
-import {Tooltip,TooltipContent,TooltipTrigger,} from "@/components/ui/tooltip"
-  
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+
 interface SaveClickedId {
   id: string | number;
   name: string;
@@ -347,14 +347,13 @@ interface SaveClickedId {
 }
 
 const ChangeInstitutionModal = () => {
-  const currentTab = useAppSelector(state => state?.selectedLoan?.currentTab)
-  const currentTabStatus = useAppSelector(state => state?.selectedLoan?.currentTabStatus)
+  const currentTab = useAppSelector(state => state?.selectedLoan?.currentTab);
+  const currentTabStatus = useAppSelector(state => state?.selectedLoan?.currentTabStatus);
   const [searchTerm, setSearchTerm] = useState('');
   const [debouncedSearchTerm, isTyping] = useDebounce(searchTerm, 1000);
-  const [current, setCurrent] = useState<number | string>()
+  const [current, setCurrent] = useState<number | string>();
   const [saveClickedId, setSaveClickedId] = useState<SaveClickedId | null>(null);
   const [disabled, setDisabled] = useState(true);
-
   const [page, setPage] = useState(0);
   const [hasMore, setHasMore] = useState(true);
   const [organizations, setOrganizations] = useState<ChangeOrganization[]>([]);
@@ -362,35 +361,21 @@ const ChangeInstitutionModal = () => {
   const [isInitialLoad, setIsInitialLoad] = useState(true);
   const [currentResultsTerm, setCurrentResultsTerm] = useState('');
   const pageSize = 10;
- 
+
   const element = {
     loanType: currentTabStatus,
-    pageNumber: page, 
+    pageNumber: page,
     pageSize,
   };
 
   const searchElement = {
     name: debouncedSearchTerm,
-    pageNumber: page, 
+    pageNumber: page,
     pageSize,
   };
 
   const { data, isLoading, isFetching } = useViewOrganizationsQuery(element, { skip: isSearching });
-
   const { data: searchResults, isLoading: isSearchLoading, isFetching: isSearchFetching } = useSearchOrganisationByNameQuery(searchElement, { skip: !isSearching });
-
-  useEffect(() => {
-    if (searchResults?.data?.body) {
-      setCurrentResultsTerm(debouncedSearchTerm);
-    }
-  }, [searchResults, debouncedSearchTerm]);
-  
-
-  useEffect(() => {
-    if (data?.data?.body || searchResults?.data?.body) {
-      setIsInitialLoad(false);
-    }
-  }, [data, searchResults]);
 
   useEffect(() => {
     setPage(0);
@@ -399,6 +384,17 @@ const ChangeInstitutionModal = () => {
     setIsSearching(debouncedSearchTerm.length > 0);
   }, [debouncedSearchTerm]);
 
+  useEffect(() => {
+    if (searchResults?.data?.body) {
+      setCurrentResultsTerm(debouncedSearchTerm);
+    }
+  }, [searchResults, debouncedSearchTerm]);
+
+  useEffect(() => {
+    if (data?.data?.body || searchResults?.data?.body) {
+      setIsInitialLoad(false);
+    }
+  }, [data, searchResults]);
 
   useEffect(() => {
     if (isSearching && searchResults?.data?.body) {
@@ -420,7 +416,7 @@ const ChangeInstitutionModal = () => {
         setOrganizations(data.data.body);
       } else {
         const newOrganizations = data.data.body.filter(
-         (newOrg: ChangeOrganization) => !organizations.some(existingOrg => existingOrg.id === newOrg.id)
+          (newOrg: ChangeOrganization) => !organizations.some(existingOrg => existingOrg.id === newOrg.id)
         );
         setOrganizations(prev => [...prev, ...newOrganizations]);
       }
@@ -442,7 +438,7 @@ const ChangeInstitutionModal = () => {
       setCurrent(id);
       setDisabled(false);
     }
-    setSaveClickedId({ id, name: name || '', logoImage: logoImage || '' })
+    setSaveClickedId({ id, name: name || '', logoImage: logoImage || '' });
   };
 
   const getLoanCounts = (org: ChangeOrganization) => {
@@ -477,6 +473,10 @@ const ChangeInstitutionModal = () => {
     store.dispatch(setClickedOrganization(saveClickedId || { id: '', name: '', logoImage: '' }));
   };
 
+  const handleCancel = () => {
+    store.dispatch(setClickedOrganization({ id: '', name: '', logoImage: '' }));
+  };
+
   const getInitials = (name: string): string => {
     const nameArray = name.split(' ');
     let initials = nameArray.map(word => word[0]).join('');
@@ -486,14 +486,10 @@ const ChangeInstitutionModal = () => {
     return initials.toUpperCase();
   };
 
-  const handleCancel = () => {
-    store.dispatch(setClickedOrganization({ id: '', name: '', logoImage: '' }));
-  };
-
-  const showLoading = 
-  isInitialLoad ||
-  (isLoading && organizations.length === 0) ||
-  (isSearching && isSearchLoading && currentResultsTerm !== debouncedSearchTerm);
+  const showLoading =
+    isInitialLoad ||
+    (isLoading && organizations.length === 0) ||
+    (isSearching && isSearchFetching); // ✅ FIXED
 
   const showEmptyState = !isSearching && organizations.length === 0 && !isLoading && !isInitialLoad && !isTyping;
   const showSearchEmptyState = isSearching && organizations.length === 0 && !isSearchLoading && currentResultsTerm === debouncedSearchTerm && !isInitialLoad;
