@@ -64,7 +64,9 @@ const CohortTabs = ({listOfCohorts = [],handleDelete,isLoading,errorDeleted,sear
   const [isOpen, setIsOpen] = React.useState(false);
  const organizationTabStatus = useAppSelector(store => store?.organization?.organizationDetailTabStatus)
   const [isDeleteOpen, setIsDeleteOpen] = React.useState(false);
-  const [details, setDetails] = React.useState({
+    const cohortTab = useAppSelector(state => state?.cohort?.cohortStatusTab)
+
+    const [details, setDetails] = React.useState({
     id: "",
     programId: "",
     organizationId: "",
@@ -160,8 +162,13 @@ useEffect(() => {
           router.push('/organizations/loanees/uploaded')
          }
      }else {
-      store.dispatch(setcohortOrProgramRoute("cohort"))
-      router.push('/cohort/cohort-details')
+         // if (cohortTab === 'graduated'){
+             store.dispatch(setcohortOrProgramRoute("cohort"))
+             router.push('/cohort/details')
+         // }else{
+         //     store.dispatch(setcohortOrProgramRoute("cohort"))
+         //     router.push('/cohort/cohort-details')
+         // }
      }
      setItemSessionStorage("programsId", String(row.programId))
 
