@@ -14,7 +14,7 @@ import CreateLoanProduct from "@/components/portfolio-manager/loan-product/Index
 import SkeletonForTable from "@/reuseable/Skeleton-loading-state/Skeleton-for-table";
 import SearchEmptyState from "@/reuseable/emptyStates/SearchEmptyState";
 import {store} from "@/redux/store";
-import { clearLoanProductField,resetCompletedSteps} from "@/redux/slice/loan-product/Loan-product";
+import { resetCompletedSteps} from "@/redux/slice/loan-product/Loan-product";
 import { useDebounce } from '@/hooks/useDebounce';
 import { resetAll,clearSaveCreateInvestmentField} from '@/redux/slice/vehicle/vehicle';
 import { setLoanProductId,setLoanProductName } from "@/redux/slice/loan-product/Loan-product";
