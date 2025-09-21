@@ -17,7 +17,7 @@ import SelectWithAmount from "@/reuseable/select/SelectWithAmount";
 import { MultiSelect } from "@/reuseable/mult-select/customMultiselectWithId/Multiselect-object";
 import { useViewFinanciersByInvestmentmentVehicleQuery } from '@/service/admin/financier';
 import {useRouter } from 'next/navigation';
-import { setLoanProductField } from "@/redux/slice/loan-product/Loan-product";
+import { setLoanProductField,markStepCompleted } from "@/redux/slice/loan-product/Loan-product";
 import { formatPlaceName } from "@/utils/GlobalMethods";
 
 interface viewAllProps {
@@ -259,6 +259,7 @@ function StepOne() {
 
     const handleSubmit = async (values: typeof initialFormValue) => {
         saveToRedux(values);
+        store.dispatch(markStepCompleted("stepTwo"))
         router.push("/loan-product/step-two")
     };
 

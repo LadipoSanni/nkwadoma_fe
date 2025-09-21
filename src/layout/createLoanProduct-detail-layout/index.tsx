@@ -7,7 +7,7 @@ import { loanProductTab } from "@/types/tabDataTypes";
 import {useAppSelector} from "@/redux/store";
 import { cabinetGrotesk } from '@/app/fonts';
 import Kebab from "@/reuseable/Kebab/Kebab";
-// import { Cross2Icon } from "@radix-ui/react-icons";
+import { Cross2Icon } from "@radix-ui/react-icons";
 import { FiMoreVertical } from 'react-icons/fi';
 import TruncatedTextWithTooltip from '@/reuseable/tool-tip/Truncated-textWith-tooltip';
 
