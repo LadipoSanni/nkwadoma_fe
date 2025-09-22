@@ -64,7 +64,7 @@ const CohortTabs = ({listOfCohorts = [],handleDelete,isLoading,errorDeleted,sear
   const [isOpen, setIsOpen] = React.useState(false);
  const organizationTabStatus = useAppSelector(store => store?.organization?.organizationDetailTabStatus)
   const [isDeleteOpen, setIsDeleteOpen] = React.useState(false);
-    const cohortTab = useAppSelector(state => state?.cohort?.cohortStatusTab)
+    // const cohortTab = useAppSelector(state => state?.cohort?.cohortStatusTab)
 
     const [details, setDetails] = React.useState({
     id: "",
