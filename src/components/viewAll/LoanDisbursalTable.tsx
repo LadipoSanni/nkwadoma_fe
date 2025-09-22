@@ -116,6 +116,7 @@ function Index() {
                             hasNextPage={data?.data?.hasNextPage}
                             pageNumber={pageNumber}
                             setPageNumber={setPageNumber}
+                             tableCellStyle="h-12"
                         />
                     </div>
                 )

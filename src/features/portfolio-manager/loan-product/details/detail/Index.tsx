@@ -7,6 +7,7 @@ import Detail from "@/components/loanee-my-profile/Details";
 import BasicDetailTab from "@/reuseable/details/BasicDetailTab";
 import BasicDetail from "@/reuseable/details/BasicDetail";
 import ViewDocument from "@/reuseable/details/ViewDocument";
+import { capitalizeFirstLetters } from "@/utils/GlobalMethods";
 
 const Details = () => {
 
@@ -27,7 +28,7 @@ const Details = () => {
         {
             label: "Product sponsors", 
             value: loanProduct?.data.sponsors && loanProduct.data.sponsors.length > 0 
-              ? loanProduct.data.sponsors.map((sponsor: { name: string; }) => sponsor.name).join(', ')
+              ? loanProduct.data.sponsors.map((sponsor: { name: string; }) => capitalizeFirstLetters(sponsor.name)).join(', ')
               : 'Not provided'
           },
         {label: "Bank partner", value: loanProduct?.data.bankPartner || ''},
@@ -89,6 +90,7 @@ const Details = () => {
          <Detail isLoading={loading}  id={'amountRepaid'}    maxWidth={'100%'} name={'Amount repaid'} value={loanProduct?.data?.totalAmountRepaid} valueType={'currency'} className='w-full'/>
          <Detail isLoading={loading}  id={'amountEarned'}    maxWidth={'100%'} name={'Amount earned'} value={loanProduct?.data?.totalAmountEarned} valueType={'currency'} className='w-full'/>
          <Detail isLoading={loading}  id={'obligorLimit'}    maxWidth={'100%'} name={'Obligor limit'} value={loanProduct?.data?.obligorLoanLimit} valueType={'currency'} className='w-full'/>
+         <Detail isLoading={loading} showAsWholeNumber={true}  id={'beneficiaries'}   maxWidth={'100%'} name={'Total number of beneficiaries'} value={loanProduct?.data?.totalNumberOfLoanee } valueType={'digit'}  className='w-full'/>
          <div className='grid grid-cols-1 md:grid-cols-2 gap-y-5 md:gap-4'>
          <Detail isLoading={loading} showAsWholeNumber={true}  id={'costOfFund'}   maxWidth={'100%'} name={'Cost of fund'} value={Number(loanProduct?.data?.costOfFund)?.toFixed(2) || '0.00' } valueType={'percentage'}  className='w-full'/>
          <Detail isLoading={loading} showAsWholeNumber={true}  id={'interestRate'}   maxWidth={'100%'} name={'Interest rate'} value={Number(loanProduct?.data?.interestRate)?.toFixed(2) || '0.00' } valueType={'percentage'}  className='w-full'/>

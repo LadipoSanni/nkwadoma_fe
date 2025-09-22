@@ -7,6 +7,7 @@ import InitialsAvatar from '../../reuseable/avater/InitialAvater';
 import {Cross2Icon} from "@radix-ui/react-icons";
 import TableModal from "@/reuseable/modals/TableModal";
 import {Button} from "@/components/ui/button";
+import TruncatedTextWithTooltip from '@/reuseable/tool-tip/Truncated-textWith-tooltip';
 
 const OrganizationNameAndChangeButton = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -39,7 +40,12 @@ const OrganizationNameAndChangeButton = () => {
             )}
             <div data-testid="organizationNameContainer" id="organizationNameContainer"
                  className={`${cabinetGroteskMediumBold.className} text-2xl`}>
-                {name || "All organizations"}
+                {name? <div>
+                    <TruncatedTextWithTooltip
+                      text={name}
+                      className='max-w-[250px] md:max-w-[500px]'
+                    />
+                </div> : "All organizations"}
             </div>
             <Button id="changeOrganizationButton" data-testid={'changeOrganizationButton'} size={"lg"}
                     variant={"secondary"}

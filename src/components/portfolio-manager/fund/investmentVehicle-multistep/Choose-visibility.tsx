@@ -288,6 +288,8 @@ function ChooseVisibility() {
          return financiersInInvestmentVehicle?.data?.body?.some((financier: FinancierInInvestmentVehicle) => financier?.id === financierId)  || selectedFinancierIds.includes(financierId)  ;
       }
 
+      
+
 
   return (
     <div className={`${inter.className} `}>
@@ -313,7 +315,7 @@ function ChooseVisibility() {
            validateForm
         })=> (
             <Form className={`${inter.className}`}>
-             <div className='grid grid-cols-1 gap-y-4 lg:pr-20 rounded-lg  md:max-h-[50vh]  overflow-y-auto'
+             <div className='grid grid-cols-1 gap-y-4 lg:pr-20 rounded-lg  md:max-h-[46vh]  overflow-y-auto'
                 // style={{
                 //     overflowY: "auto",
                 //     marginRight: "-10px",  
@@ -655,7 +657,7 @@ function ChooseVisibility() {
             }
           </div>
           <div 
-          className={`py-5  border-[1px] rounded-xl cursor-pointer px-4 ${values.status === 'DEFAULT' ? 'border-[#142854]' : ''}`}
+          className={`py-5  border-[1px] rounded-xl cursor-pointer px-4 mb-16 ${values.status === 'DEFAULT' ? 'border-[#142854]' : ''}`}
           onClick={() => setFieldValue('status', 'DEFAULT')}
           >
           <label className="flex items-center space-x-2 ">

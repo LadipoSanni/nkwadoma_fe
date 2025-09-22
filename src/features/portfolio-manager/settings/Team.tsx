@@ -17,6 +17,7 @@ import { store,useAppSelector } from '@/redux/store';
 import { setModalType } from '@/redux/slice/staff-and-request/request';
 import { resetRequestedStaffId} from '@/redux/slice/staff-and-request/request';
 
+
 interface TableRowData {
     [key: string]: string | number | null | React.ReactNode;
    }
@@ -34,6 +35,7 @@ function Team() {
     const [role,setRole] = useState("")
     const [stat,setStatus] = useState("")
     const [email,setEmail] = useState('')
+      const [id,setId] = useState("")
     const [name,setName] = useState('')
     const [date, setInvitedDate] = useState('')
      const [isSwitch, setSwitch] = useState(false);
@@ -45,8 +47,8 @@ function Team() {
 
    const dataElement = {
     name:debouncedSearchTerm,
-    activationStatuses: ['DECLINED',"APPROVED","PENDING_APPROVAL","ACTIVE","INVITED"],
-    identityRoles:user_role === "ORGANIZATION_SUPER_ADMIN"? ["ORGANIZATION_ADMIN","ORGANIZATION_ASSOCIATE"] : ["COOPERATE_FINANCIER_SUPER_ADMIN","COOPERATE_FINANCIER_ADMIN"].includes( user_role || "")? ["COOPERATE_FINANCIER_ADMIN"] : ["PORTFOLIO_MANAGER","MEEDL_ADMIN","PORTFOLIO_MANAGER_ASSOCIATE"],
+    activationStatuses: ['DECLINED',"APPROVED","PENDING_APPROVAL","ACTIVE","INVITED","DEACTIVATED"],
+    identityRoles:user_role === "ORGANIZATION_SUPER_ADMIN"? ["ORGANIZATION_ADMIN","ORGANIZATION_ASSOCIATE","ORGANIZATION_SUPER_ADMIN"] : ["COOPERATE_FINANCIER_SUPER_ADMIN","COOPERATE_FINANCIER_ADMIN"].includes( user_role || "")? ["COOPERATE_FINANCIER_SUPER_ADMIN","COOPERATE_FINANCIER_ADMIN"] : ["PORTFOLIO_MANAGER","MEEDL_ADMIN","PORTFOLIO_MANAGER_ASSOCIATE","MEEDL_SUPER_ADMIN"],
     pageNumber:pageNumber,
     pageSize: 10
 }
@@ -88,7 +90,7 @@ function Team() {
      const handleRowClick = (row: TableRowData) => {
         const fullName = capitalizeFirstLetters(row?.firstName?.toString())  + " " + capitalizeFirstLetters(row.lastName?.toString())
         const status = capitalizeFirstLetters(row?.activationStatus?.toString()) || "";
-         const role =  row.role === "PORTFOLIO_MANAGER"? "Portfolio manager" : row.role === "MEEDL_ADMIN"? "Admin" :row.role === "PORTFOLIO_MANAGER_ASSOCIATE"? "Associate" : row.role === "ORGANIZATION_ADMIN"? "Admin" :row.role === "ORGANIZATION_ASSOCIATE"? "Associate" : "Admin"
+        const role =  row.role === "PORTFOLIO_MANAGER"? "Portfolio manager" : row.role === "MEEDL_ADMIN"? "Admin" :row.role === "PORTFOLIO_MANAGER_ASSOCIATE"? "Associate" : row.role === "ORGANIZATION_ADMIN"? "Admin" :row.role === "ORGANIZATION_ASSOCIATE"? "Associate" : row.role === "ORGANIZATION_SUPER_ADMIN" || row.role === "MEEDL_SUPER_ADMIN" ||  row.role === "COOPERATE_FINANCIER_SUPER_ADMIN"? "Super admin": "Admin"
          store.dispatch(setIsStaffOpen(true))
          store.dispatch(setModalType('detail'))
          store.dispatch(resetRequestedStaffId())
@@ -97,6 +99,7 @@ function Team() {
         setEmail(row?.email as string)
         setRole(role as string)
         setInvitedDate(row?.createdAt as string)
+        setId(row?.userId as string)
     }
 
     const adminsHeader = [
@@ -154,13 +157,13 @@ function Team() {
                 title: "Role",  
                 sortable: true, 
                 id: "role", 
-                selector: (row: TableRowData) => row.role === "PORTFOLIO_MANAGER"? "Portfolio manager" : row.role === "MEEDL_ADMIN"? "Admin" : "Associate"
+                selector: (row: TableRowData) => row.role === "PORTFOLIO_MANAGER"? "Portfolio manager" : row.role === "MEEDL_ADMIN" || row.role === "ORGANIZATION_ADMIN" || row.role === "COPERATE_FINANCIER_ADMIN"? "Admin" : row.role === "COPERATE_FINANCIER_SUPER_ADMIN" || row.role === "MEEDL_SUPER_ADMIN" || row.role === "ORGANIZATION_SUPER_ADMIN"? "Super admin" : "Associate"
               },
               { 
                 title: "Status",  
                 sortable: true, 
                 id: "activationStatus", 
-                selector: (row: TableRowData) => <span className={`${row.activationStatus === "DECLINED"? " bg-[#FBE9E9] text-[#971B17] " :row.activationStatus === "INVITED"? "bg-[#FEF6E8] text-[#68442E] w-20" : row.activationStatus === "PENDING_APPROVAL"? "bg-[#E6F7EE] text-[#039855]" : "bg-[#E6F2EA] text-[#045620]"} rounded-lg  px-2 `}>{row.activationStatus === "PENDING_APPROVAL"? "Pending" : row.activationStatus === "ACTIVE"? "Active" : row.activationStatus === "DECLINED"? "Declined" : "Invited"}</span> 
+                selector: (row: TableRowData) => <span className={`${row.activationStatus === "DECLINED"? " bg-[#FBE9E9] text-[#971B17] " :row.activationStatus === "INVITED"? "bg-[#FEF6E8] text-[#68442E] w-20" : row.activationStatus === "PENDING_APPROVAL"? "bg-[#E6F7EE] text-[#039855]" : "bg-[#E6F2EA] text-[#045620]"} rounded-lg  px-2 `}>{row.activationStatus === "PENDING_APPROVAL"? "Pending" : row.activationStatus === "ACTIVE"? "Active" : row.activationStatus === "DECLINED"? "Declined" : capitalizeFirstLetters(row.activationStatus?.toString())}</span> 
               },
               { 
                 title: "Invited",  
@@ -224,7 +227,7 @@ function Team() {
           
                   { modal === "invite" ?
         <InviteAdmin
-        setIsOpen={()=> {}}
+        setIsOpen={()=> { store.dispatch(setIsStaffOpen(false))}}
         roleOptions={adminRoleType}
         isItemDisabled={(item) => user_role === "PORTFOLIO_MANAGER"? item === 'MEEDL_ADMIN' &&  user_role === "PORTFOLIO_MANAGER" : item !== 'PORTFOLIO_MANAGER_ASSOCIATE' &&  user_role === "PORTFOLIO_MANAGER_ASSOCIATE" }
        /> : 
@@ -237,8 +240,8 @@ function Team() {
           dateInvited={date}
           setSwitch={setSwitch}
           isSwitch={isSwitch}
-          id={""}
-          setIsOpen={()=> {}}
+          id={id}
+          setIsOpen={()=> { store.dispatch(setIsStaffOpen(false))}}
           />
           </div>
         }

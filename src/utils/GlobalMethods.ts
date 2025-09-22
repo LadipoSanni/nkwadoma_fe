@@ -299,21 +299,29 @@ export const safeDecodeURI = (url: string) => {
   };
 
 
-  export const formatPlaceName = (value: string,condition?: boolean) => {
-    let cleanedValue = condition === false? value.replace(/[^a-zA-Z\s'_-]/g, '') : value.replace(/[^a-zA-Z0-9\s'_-]/g, '');
+  export const formatPlaceName = (value: string, condition?: boolean) => {
+    let cleanedValue = condition === false 
+        ? value.replace(/[^a-zA-Z\s'_-]/g, '') 
+        : value.replace(/[^a-zA-Z0-9\s'_\-&]/g, ''); 
 
     if (/^['_-]/.test(cleanedValue)) {
         cleanedValue = cleanedValue.substring(1);
-      }
+    }
 
     cleanedValue = cleanedValue
-    .replace(/'{2,}/g, "'")
-    .replace(/_{2,}/g, '_')
-    .replace(/-{2,}/g, '-')
-    .replace(/['_-]{2,}/g, "'");
+        .replace(/'{2,}/g, "'")
+        .replace(/_{2,}/g, '_')
+        .replace(/-{2,}/g, '-')
+        .replace(/&{2,}/g, '&') 
+        .replace(/['_-]{2,}/g, "'");
+    
+const maxLength = condition === false ? 50 : 200;
+        if (cleanedValue.length > maxLength) {
+            cleanedValue = cleanedValue.substring(0, maxLength);
+        }
     
     return cleanedValue;
-  };
+};
   
   
   
