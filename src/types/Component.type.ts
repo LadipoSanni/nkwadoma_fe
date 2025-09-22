@@ -115,6 +115,14 @@ export  interface navbarItemsProps {
     route?: string,
 }
 
+export interface ThreeDotTriggerDropDownItemsProps{
+    id: string,
+    name: string,
+    handleClick: ()=> void,
+    sx?: string,
+}
+
+
 export interface cohortLoaneeResponse {
     cohortId : string,
     createdAt: string,

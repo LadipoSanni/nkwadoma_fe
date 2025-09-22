@@ -2,9 +2,25 @@
 import BackButton from '@/components/back-button';
 import React from 'react';
 import {useRouter} from "next/navigation";
+import CircleThreeDot from "@/reuseable/Dropdown/CircleThreeDot";
+import {ThreeDotTriggerDropDownItemsProps} from "@/types/Component.type";
 
 const CohortDetails = () => {
     const router = useRouter();
+
+    const editCohort = ( ) => {
+
+    }
+
+    const deleteCohort = ( ) => {
+
+    }
+
+    const dropD: ThreeDotTriggerDropDownItemsProps[] = [
+        {id: 'editCohortDropDownItem', name: 'Edit cohort', handleClick: editCohort, sx: ``},
+        {id: 'deleteCohortDropDownItem', name: 'Delete cohort', handleClick: deleteCohort, sx: ``},
+
+    ]
 
     return (
         <div
@@ -18,6 +34,12 @@ const CohortDetails = () => {
                       data-testid={'cohortName'}
                       className={` text-[28px] text-black `}
                 >Luminary</span>
+                <CircleThreeDot
+                    id={''}
+                    dotDisplay={'vertical'}
+                    isDisabled={false}
+                    dropDownItems={dropD}
+                />
             </div>
         </div>
     );
