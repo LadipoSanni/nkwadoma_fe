@@ -328,7 +328,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import styles from "./index.module.css";
 import { store, useAppSelector } from "@/redux/store";
-import { setClickedOrganization } from "@/redux/slice/loan/selected-loan";
+import {seCurrentOrganizationId, setClickedOrganization} from "@/redux/slice/loan/selected-loan";
 import Image from "next/image";
 import { useSearchOrganisationByNameQuery, useViewOrganizationsQuery } from "@/service/admin/organization";
 import ConfirmOrgButton from "@/reuseable/buttons/filter/LoaneeButton";
@@ -349,9 +349,11 @@ interface SaveClickedId {
 const ChangeInstitutionModal = () => {
   const currentTab = useAppSelector(state => state?.selectedLoan?.currentTab);
   const currentTabStatus = useAppSelector(state => state?.selectedLoan?.currentTabStatus);
+  // currentOrganizationId
+  const currentOrganizationId = useAppSelector(state => state?.selectedLoan?.currentOrganizationId);
   const [searchTerm, setSearchTerm] = useState('');
   const [debouncedSearchTerm, isTyping] = useDebounce(searchTerm, 1000);
-  const [current, setCurrent] = useState<number | string>();
+  const [current, setCurrent] = useState<number | string>(currentOrganizationId);
   const [saveClickedId, setSaveClickedId] = useState<SaveClickedId | null>(null);
   const [disabled, setDisabled] = useState(true);
   const [page, setPage] = useState(0);
@@ -436,6 +438,7 @@ const ChangeInstitutionModal = () => {
       setDisabled(true);
     } else {
       setCurrent(id);
+      store.dispatch(seCurrentOrganizationId(String(id)))
       setDisabled(false);
     }
     setSaveClickedId({ id, name: name || '', logoImage: logoImage || '' });
