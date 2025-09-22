@@ -1,13 +1,22 @@
+'use client'
 import Details from '@/components/loanee-my-profile/Details';
 import React from 'react';
 import styles from '@/components/loanee-my-profile/index.module.css'
 import {inter500} from '@/app/fonts';
+import {useAppSelector} from "@/redux/store";
+import {useViewCohortDetailsQuery} from "@/service/admin/cohort_query";
 
 
 const DetailsComponent = () => {
+    const cohortId = useAppSelector(store => store?.cohort?.setCohortId)
+    // const cohortOrProgramRoute = useAppSelector(store => store?.program?.cohortOrProgramRoute)
 
+    // const cohortsId = sessionStorage.getItem("cohortId") ?? undefined;
+    const {data: cohortDetails, isLoading} = useViewCohortDetailsQuery({
+        cohortId: cohortId
+    }, {refetchOnMountOrArgChange: true});
     const cohort: {name: string, value: string, valueType: 'percentage'| 'digit'| 'currency' | 'tenor' | 'years', id:string}[] = [
-        {name: 'Total amount disbursed', value: '3444040', valueType: 'currency', id: 'totalAmount'},
+        {name: 'Total amount disbursed', value: cohortDetails?.data?.amountDisbursed ? cohortDetails?.data?.amountDisbursed  :'', valueType: 'currency', id: 'totalAmount'},
         {name: 'Total amount repaid', value: '3444040', valueType: 'currency', id: 'totalRepaid'},
         {name: 'Total amount outstanding', value: '3444040', valueType: 'currency', id: 'totalOutstanding'},
         {name: 'Average starting salary', value: '3444040', valueType: 'currency', id: 'averageStartingSalary'},

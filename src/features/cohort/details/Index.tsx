@@ -6,10 +6,19 @@ import CircleThreeDot from "@/reuseable/Dropdown/CircleThreeDot";
 import {ThreeDotTriggerDropDownItemsProps} from "@/types/Component.type";
 import UnderlineTab from "@/components/UnderlineTab";
 import DetailsComponent from "@/features/cohort/details/DetailsComponent";
+import {useAppSelector} from "@/redux/store";
+import {useViewCohortDetailsQuery} from "@/service/admin/cohort_query";
 
 const CohortDetails = () => {
     const router = useRouter();
+    const cohortId = useAppSelector(store => store?.cohort?.setCohortId)
+    // const cohortOrProgramRoute = useAppSelector(store => store?.program?.cohortOrProgramRoute)
 
+    // const cohortsId = sessionStorage.getItem("cohortId") ?? undefined;
+    const {data: cohortDetails, isLoading} = useViewCohortDetailsQuery({
+        cohortId: cohortId
+    }, {refetchOnMountOrArgChange: true});
+    console.log('cohortDetails: ', cohortDetails)
     const editCohort = ( ) => {
 
     }
@@ -46,7 +55,7 @@ const CohortDetails = () => {
                 <span id={'cohortName'}
                       data-testid={'cohortName'}
                       className={` text-[28px] text-black `}
-                >Luminary</span>
+                >{cohortDetails?.data?.name}</span>
                 <CircleThreeDot
                     id={'editAndDeleteCohort'}
                     dotDisplay={'vertical'}
