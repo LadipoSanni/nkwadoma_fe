@@ -4,6 +4,8 @@ import React from 'react';
 import {useRouter} from "next/navigation";
 import CircleThreeDot from "@/reuseable/Dropdown/CircleThreeDot";
 import {ThreeDotTriggerDropDownItemsProps} from "@/types/Component.type";
+import UnderlineTab from "@/components/UnderlineTab";
+import DetailsComponent from "@/features/cohort/details/DetailsComponent";
 
 const CohortDetails = () => {
     const router = useRouter();
@@ -22,6 +24,17 @@ const CohortDetails = () => {
 
     ]
 
+    const tabTriggers: {name: string; id: string,value: string}[] = [
+        {name: 'Details', id: 'details',value: 'details'},
+        {name: 'Loanee', id: 'loanees',value: 'loanee'},
+
+    ]
+    const tab:  {name: string; displayValue: React.ReactNode}[] = [
+        {name: 'details',  displayValue: <DetailsComponent/>},
+        {name: 'loanee',  displayValue: <div></div>},
+
+    ]
+
     return (
         <div
             id={'cohortDetails'}
@@ -29,18 +42,20 @@ const CohortDetails = () => {
             className={` px-4 py-4   `}
         >
             <BackButton id={'backToViewAllCohort'} handleClick={() => router.push('/cohort')} text={'Back'} textColor={'#142854'} iconBeforeLetters={true} />
-            <div className={` flex justify-between w-full `}>
+            <div className={` mt-4 mb-4 flex justify-between w-full `}>
                 <span id={'cohortName'}
                       data-testid={'cohortName'}
                       className={` text-[28px] text-black `}
                 >Luminary</span>
                 <CircleThreeDot
-                    id={''}
+                    id={'editAndDeleteCohort'}
                     dotDisplay={'vertical'}
                     isDisabled={false}
                     dropDownItems={dropD}
                 />
             </div>
+            <UnderlineTab defaultTab={'details'} tabTriggers={tabTriggers} tabValue={tab}/>
+
         </div>
     );
 };

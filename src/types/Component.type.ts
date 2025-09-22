@@ -122,7 +122,11 @@ export interface ThreeDotTriggerDropDownItemsProps{
     sx?: string,
 }
 
+export interface UnderlineTabTrigger{
+    id: string,
+    name: string,
 
+}
 export interface cohortLoaneeResponse {
     cohortId : string,
     createdAt: string,
