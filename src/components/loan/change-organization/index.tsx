@@ -338,7 +338,7 @@ import SearchEmptyState from "@/reuseable/emptyStates/SearchEmptyState";
 import { ChangeOrganization } from "@/types/loan/loan-request.type";
 import { useDebounce } from '@/hooks/useDebounce';
 import InfiniteScroll from "react-infinite-scroll-component";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import TruncatedTextWithTooltip from "@/reuseable/tool-tip/Truncated-textWith-tooltip";
 
 interface SaveClickedId {
   id: string | number;
@@ -572,23 +572,10 @@ const ChangeInstitutionModal = () => {
                         </div>
                         <div>
                         <div className={`${inter.className} text-black500 md:text-black500 grid md:grid md:place-content-start md:px-0 w-full text-sm md:text-sm md:h-fit h-fit break-words`} style={{zIndex: 4000}}>
-                        <Tooltip>
-                        <TooltipTrigger asChild>
-                        <div
-                         className="truncate max-w-[120px] md:max-w-[200px]"
-                         style={{ 
-                           overflow: 'hidden',
-                           textOverflow: 'ellipsis',
-                           whiteSpace: 'nowrap'
-                         }}
-                        >
-                          {organization.name}
-                        </div>
-                        </TooltipTrigger>  
-                        <TooltipContent className="text-black py-2 shadow-md text-[13px] bg-[#EEF5FF] ">
-                            <p> {organization.name}</p>
-                        </TooltipContent>
-                        </Tooltip>
+                        <TruncatedTextWithTooltip
+                         text={organization.name}
+                         className="max-w-[120px] md:max-w-[200px]"
+                        />
                         </div>
                         </div>
                         

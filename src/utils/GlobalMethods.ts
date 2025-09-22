@@ -315,6 +315,11 @@ export const safeDecodeURI = (url: string) => {
         .replace(/&{2,}/g, '&') 
         .replace(/['_-]{2,}/g, "'");
     
+const maxLength = condition === false ? 50 : 200;
+        if (cleanedValue.length > maxLength) {
+            cleanedValue = cleanedValue.substring(0, maxLength);
+        }
+    
     return cleanedValue;
 };
   

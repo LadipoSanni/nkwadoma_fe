@@ -5,7 +5,7 @@ import * as Yup from "yup";
 import {inter} from "@/app/fonts"
 import {Label} from '@/components/ui/label';
 import {Button} from '@/components/ui/button';
-import React, { useState} from "react";
+import React, { useState,useEffect} from "react";
 import CurrencySelectInput from "@/reuseable/Input/CurrencySelectInput";
 import {useCreateLoanProductMutation} from "@/service/admin/loan_product";
 import Isloading from "@/reuseable/display/Isloading";
@@ -41,6 +41,7 @@ function StepTwo() {
      const router = useRouter();
       const loanProductField = useAppSelector(state => (state?.loanProduct?.createLoanProductFieldStepTwo))
       const stepOneLoanProductField = useAppSelector(state => (state?.loanProduct?.createLoanProductField))
+       const completedStep = useAppSelector(state => (state?.loanProduct?.completedSteps))
       const [selectCurrency, setSelectCurrency] = useState("NGN");
     const [error, setError] = useState('');
      const [createLoanProduct, {isLoading}] = useCreateLoanProductMutation();
@@ -56,6 +57,13 @@ function StepTwo() {
           return true;
         });
       };
+
+
+      useEffect(()=> {
+           if(!completedStep.includes("stepTwo")){
+            router.push('/loan-product/step-one');
+           }
+         },[completedStep, router])
 
 
      const creditLifeInsuranceNigeria = [

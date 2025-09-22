@@ -29,6 +29,7 @@ interface ProgramSelectProps {
   isLoading?: boolean;
   onOpenChange?: (open: boolean) => void;
   emptyState?: string;
+  onChange?: (value: string) => void;
 }
 
 const SelectWithAmount: React.FC<ProgramSelectProps> = ({
@@ -43,6 +44,7 @@ const SelectWithAmount: React.FC<ProgramSelectProps> = ({
   infinityScroll,
   isLoading,
   onOpenChange,
+  onChange,
   emptyState = "No program available"
 }) => {
   const uniqueId = `select${Math.random().toString(36).substring(2, 9)}`;
@@ -62,6 +64,7 @@ const SelectWithAmount: React.FC<ProgramSelectProps> = ({
             setId(selectedProgram.id ?? "");
           }
           setSelectedProgram(value);
+          onChange?.(value);
         }}
         onOpenChange={(open) => {
           setIsSelectOpen(open);
