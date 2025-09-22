@@ -114,6 +114,7 @@ const ChangeInstitutionModal = () => {
   const handleClick = (id: string | number, name?: string, logoImage?: string) => {
     if (id === current) {
       setCurrent('');
+      store.dispatch(seCurrentOrganizationId(String('')))
       setDisabled(true);
     } else {
       setCurrent(id);
