@@ -1,13 +1,16 @@
 "use client"
-import React from "react";
+import React,{useEffect} from "react";
 import {useGetLoanProductDetailsByIdQuery} from "@/service/admin/loan_product";
-import {useAppSelector} from "@/redux/store";
+import {useAppSelector,store} from "@/redux/store";
 import style from "@/components/portfolio-manager/organization/index.module.css"
 import Detail from "@/components/loanee-my-profile/Details";
 import BasicDetailTab from "@/reuseable/details/BasicDetailTab";
 import BasicDetail from "@/reuseable/details/BasicDetail";
 import ViewDocument from "@/reuseable/details/ViewDocument";
 import { capitalizeFirstLetters } from "@/utils/GlobalMethods";
+import { setLoanProductField,setLoanProductFieldStepTwo,setTotalNumberOfLoanees} from "@/redux/slice/loan-product/Loan-product";
+import { setFundProductAvailableAmount } from "@/redux/slice/loan/selected-loan";
+import {useGetInvestmentVehicleDetailQuery} from '@/service/admin/fund_query';
 
 const Details = () => {
 
@@ -15,12 +18,89 @@ const Details = () => {
 
     const {data: loanProduct, isLoading: loading} = useGetLoanProductDetailsByIdQuery({loanProductId: loanProductId})
 
+    const {data} = useGetInvestmentVehicleDetailQuery({id: loanProduct?.data?.investmentVehicleId }, {skip: !loanProduct?.data?.investmentVehicleId });   
+
     const getVendorByProductType = (vendors: string, productType: string) => {
         if (!vendors || !Array.isArray(vendors)) return 'Not provided';
         
         const vendor = vendors.find(v => v.product === productType);
         return vendor ? vendor.vendorName : 'Not provided';
       };
+
+//       "data": {
+//         "id": "f0a9ce72-8e11-4033-85c5-a9d31c2ff29d",
+//         "name": "exces9",
+//         "moratorium": 24,
+//         "tenor": 34,
+//         "interestRate": 12.0,
+//         "termsAndCondition": "https://res.cloudinary.com/dfkxvsiiu/image/upload/v1757688196/loan-product-terms-and-conditions/WPS_PDF_Extension_h7quuu.pdf",
+//         "createdAt": "2025-09-12",
+//         "totalAmountAvailable": 9000000.00,
+//         "totalAmountDisbursed": 0.00,
+//         "obligorLoanLimit": 34.00,
+//         "totalOutstandingLoan": 1414269.63,
+//         "totalAmountRepaid": 0.00,
+//         "totalAmountEarned": 0.00,
+//         "loanProductSize": 9000000.00,
+//         "costOfFund": "34.0",
+//         "mandate": "https://res.cloudinary.com/dfkxvsiiu/image/upload/v1757688188/loan-product-mandate/WPS_PDF_Extension_euabtd.pdf",
+//         "sponsor": null,
+//         "bankPartner": "",
+//         "disbursementTerms": "",
+//         "investmentVehicleId": "238e036f-8ed1-43ba-9569-dc1d791b0d4a",
+//         "investmentVehicleName": "Student vehicle",
+//         "totalNumberOfLoanee": 2,
+//         "minRepaymentAmount": 50.00,
+//         "vendors": [],
+//         "sponsors": [
+//             {
+//                 "id": "19f2f402-9f68-43b3-adba-3cfc6093a48d",
+//                 "name": "ben black",
+//                 "financierType": "INDIVIDUAL",
+//                 "activationStatus": "INVITED",
+//                 "totalAmountInvested": null,
+//                 "totalNumberOfInvestment": 0,
+//                 "nextOfKin": null,
+//                 "investmentVehicleRole": null,
+//                 "userIdentity": null,
+//                 "invitedBy": null,
+//                 "investmentVehicles": null
+//             }
+//         ]
+//     },
+//     "statusCode": "200 OK",
+//     "timeStamp": null,
+//     "metadata": null
+// }
+
+      useEffect(() => {
+        const loanProductDetails = {
+          productName:  loanProduct?.data?.name,
+          investmentVehicleId:loanProduct?.data?.investmentVehicleId ,
+          costOfFunds:loanProduct?.data?.costOfFund ,
+          tenor: loanProduct?.data?.tenor,
+          loanProductSize: loanProduct?.data?.loanProductSize ,
+          minimumRepaymentAmount: loanProduct?.data?.minRepaymentAmount ,
+          moratorium:loanProduct?.data?.moratorium ,
+          interest: loanProduct?.data?.interestRate,
+          obligorLimit:loanProduct?.data?.obligorLoanLimit,
+          loanProductMandate: loanProduct?.data?.mandate,
+          loanProductTermsAndCondition: loanProduct?.data?.termsAndCondition,
+          sponsors: loanProduct?.data?.sponsors,
+          fundProduct: loanProduct?.data?.investmentVehicleName,
+          id: loanProduct?.data?.id
+        }
+
+        const basicDetails = {
+          bankPartner: loanProduct?.data?.bankPartner,
+          vendor: loanProduct?.data?.vendors,
+          disbursementTerms: loanProduct?.data?.disbursementTerms
+        }
+         store.dispatch(setLoanProductField(loanProductDetails))
+         store.dispatch(setLoanProductFieldStepTwo(basicDetails))
+         store.dispatch(setTotalNumberOfLoanees(loanProduct?.data?.totalNumberOfLoanee))
+         store.dispatch(setFundProductAvailableAmount(data?.data?.totalAvailableAmount))
+      },[loanProduct,data])
 
 
     const dataList = [
