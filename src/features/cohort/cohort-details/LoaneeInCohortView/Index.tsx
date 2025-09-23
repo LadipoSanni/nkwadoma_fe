@@ -237,7 +237,7 @@ export const LoaneeInCohortView = ({cohortFee}: props) => {
                         tableCellStyle="h-12"
                         isLoading={isLoading || loaneeIsloading || isFetching || isfetching}
                         condition={true}
-                        tableHeight={45}
+                        tableHeight={35}
                         hasNextPage={hasNextPage}
                         pageNumber={page}
                         setPageNumber={setPageNumber}

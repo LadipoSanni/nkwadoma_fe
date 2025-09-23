@@ -8,6 +8,7 @@ import UnderlineTab from "@/components/UnderlineTab";
 import DetailsComponent from "@/features/cohort/details/DetailsComponent";
 import {useAppSelector} from "@/redux/store";
 import {useViewCohortDetailsQuery} from "@/service/admin/cohort_query";
+import {LoaneeInCohortView} from "@/features/cohort/cohort-details/LoaneeInCohortView/Index";
 
 const CohortDetails = () => {
     const router = useRouter();
@@ -41,7 +42,8 @@ const CohortDetails = () => {
     ]
     const tab:  {name: string; displayValue: React.ReactNode}[] = [
         {name: 'details',  displayValue: <DetailsComponent/>},
-        {name: 'loanee',  displayValue: <div></div>},
+        {name: 'loanee',  displayValue: <LoaneeInCohortView cohortFee={cohortDetails?.data?.tuitionAmount}/>
+        },
 
     ]
 
@@ -56,7 +58,7 @@ const CohortDetails = () => {
                 <span id={'cohortName'}
                       data-testid={'cohortName'}
                       className={` text-[28px] text-black `}
-                >{cohortDetails?.data?.name}</span>
+                >{selectedCohortInOrganization?.name}</span>
                 <CircleThreeDot
                     id={'editAndDeleteCohort'}
                     dotDisplay={'vertical'}
