@@ -27,51 +27,6 @@ const Details = () => {
         return vendor ? vendor.vendorName : 'Not provided';
       };
 
-//       "data": {
-//         "id": "f0a9ce72-8e11-4033-85c5-a9d31c2ff29d",
-//         "name": "exces9",
-//         "moratorium": 24,
-//         "tenor": 34,
-//         "interestRate": 12.0,
-//         "termsAndCondition": "https://res.cloudinary.com/dfkxvsiiu/image/upload/v1757688196/loan-product-terms-and-conditions/WPS_PDF_Extension_h7quuu.pdf",
-//         "createdAt": "2025-09-12",
-//         "totalAmountAvailable": 9000000.00,
-//         "totalAmountDisbursed": 0.00,
-//         "obligorLoanLimit": 34.00,
-//         "totalOutstandingLoan": 1414269.63,
-//         "totalAmountRepaid": 0.00,
-//         "totalAmountEarned": 0.00,
-//         "loanProductSize": 9000000.00,
-//         "costOfFund": "34.0",
-//         "mandate": "https://res.cloudinary.com/dfkxvsiiu/image/upload/v1757688188/loan-product-mandate/WPS_PDF_Extension_euabtd.pdf",
-//         "sponsor": null,
-//         "bankPartner": "",
-//         "disbursementTerms": "",
-//         "investmentVehicleId": "238e036f-8ed1-43ba-9569-dc1d791b0d4a",
-//         "investmentVehicleName": "Student vehicle",
-//         "totalNumberOfLoanee": 2,
-//         "minRepaymentAmount": 50.00,
-//         "vendors": [],
-//         "sponsors": [
-//             {
-//                 "id": "19f2f402-9f68-43b3-adba-3cfc6093a48d",
-//                 "name": "ben black",
-//                 "financierType": "INDIVIDUAL",
-//                 "activationStatus": "INVITED",
-//                 "totalAmountInvested": null,
-//                 "totalNumberOfInvestment": 0,
-//                 "nextOfKin": null,
-//                 "investmentVehicleRole": null,
-//                 "userIdentity": null,
-//                 "invitedBy": null,
-//                 "investmentVehicles": null
-//             }
-//         ]
-//     },
-//     "statusCode": "200 OK",
-//     "timeStamp": null,
-//     "metadata": null
-// }
 
       useEffect(() => {
         const loanProductDetails = {
