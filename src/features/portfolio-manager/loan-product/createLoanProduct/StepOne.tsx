@@ -282,8 +282,9 @@ function StepOne() {
         <div className='grid grid-cols-1 gap-y-1'>
         <h1 className='text-[18px] font-normal'>
             {
-                isEdit? "Update loan product" : "Create loan product"
+                isEdit? "Update loan product" : "Loan product"
             }
+           
             </h1>
         <p className='text-[14px] font-normal'>Provide details of your loan product</p>
        </div>

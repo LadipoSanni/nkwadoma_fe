@@ -4,12 +4,12 @@ import style from "../index.module.css";
 import Details from "@/components/loanee-my-profile/Details";
 import { inter } from '@/app/fonts';
 import {useGetDetailsOfOrganizationQuery} from "@/service/admin/organization";
-import {capitalizeFirstLetters} from "@/utils/GlobalMethods";
 import { ensureHttpsUrl } from "@/utils/GlobalMethods";
 import { formatNumberWithCommas } from '@/utils/Format';
 import SkeletonForSidebar from '@/reuseable/Skeleton-loading-state/Skeleton-for-sidebar';
 import { setOrganizationName } from '@/redux/slice/organization/organization';
 import { store } from '@/redux/store';
+import { StatusBadge } from '@/reuseable/display/Status-badge';
 
 function Detail() {
       const {data:organizationDetails, isLoading} = useGetDetailsOfOrganizationQuery({})
@@ -24,18 +24,7 @@ function Detail() {
         { label: "Phone number", value: organizationDetails?.data.phoneNumber },
         {
           label: "Status",
-          value: (
-            <span
-              id="status"
-              className={`rounded-[32px] h-[21px]  flex items-center justify-center ${
-                organizationDetails?.data.activationStatus === "ACTIVE"
-                  ? "bg-[#E7F5EC] text-[#063F1A] w-16"
-                  : organizationDetails?.data.activationStatus === "DECLINED" ||  organizationDetails?.data.activationStatus === "DEACTIVATED"? " bg-[#FBE9E9] text-[#971B17] w-24" : "bg-[#FEF6E8] text-[#66440A] w-16"
-              }`}
-            >
-              {capitalizeFirstLetters(organizationDetails?.data.activationStatus?.toLowerCase())}
-            </span>
-          ),
+          value: <StatusBadge status={organizationDetails?.data?.activationStatus?.toString()}/>
         },
         {
           label: "Address",
