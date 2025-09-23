@@ -83,7 +83,10 @@ export const selectedLoanSlice = createSlice({
         },
         setSelectedGeneralTab: (state, action: PayloadAction<number>) => {
             state.selectedGeneralTab = action.payload;
-        }
+        },
+        resetFundProductAvailableAmount: (state) => {
+            state.fundProductAvailableAmount = 0
+        },
        
     },
 });
@@ -91,7 +94,7 @@ export const selectedLoanSlice = createSlice({
 export const { setCurrentTab,setCohortLoaneeId , setClickedLoanId, setClickedOrganization,
     setLoanReferralId, setClickedDisbursedLoanIdNumber, setDisbursedLoanIdNumber, setClickedLoanProductId,
     setFundProductAvailableAmount,setCurrentTabStatus,resetTab,setcurrentTabRoute,
-    setSelectedCompanyTab,setSelectedGeneralTab
+    setSelectedCompanyTab,setSelectedGeneralTab,resetFundProductAvailableAmount
 } = selectedLoanSlice.actions;
 
 export default selectedLoanSlice.reducer;

@@ -13,12 +13,13 @@ import { useRouter } from "next/navigation";
 import CreateLoanProduct from "@/components/portfolio-manager/loan-product/Index";
 import SkeletonForTable from "@/reuseable/Skeleton-loading-state/Skeleton-for-table";
 import SearchEmptyState from "@/reuseable/emptyStates/SearchEmptyState";
-import {store} from "@/redux/store";
-import { resetCompletedSteps} from "@/redux/slice/loan-product/Loan-product";
+import {store,useAppSelector} from "@/redux/store";
+import { resetCompletedSteps,clearLoanProductField,setIsEdit} from "@/redux/slice/loan-product/Loan-product";
 import { useDebounce } from '@/hooks/useDebounce';
 import { resetAll,clearSaveCreateInvestmentField} from '@/redux/slice/vehicle/vehicle';
 import { setLoanProductId,setLoanProductName } from "@/redux/slice/loan-product/Loan-product";
 import styles from "../index.module.css"
+import { resetFundProductAvailableAmount } from "@/redux/slice/loan/selected-loan";
 
 interface TableRowData {
     [key: string]: string | number | null | React.ReactNode;
@@ -26,6 +27,7 @@ interface TableRowData {
 
 const LoanProductPage = () => {
     const router = useRouter();
+    const isEdit = useAppSelector(state => (state?.loanProduct?.isEdit))
     const [createProduct, setCreateProduct] = React.useState(false);
     const [searchTerm, setSearchTerm] = useState("");
     const [hasNextPage,setNextPage] = useState(false)
@@ -60,17 +62,21 @@ const LoanProductPage = () => {
             setTotalPage(data?.data?.totalPages)
             setPageNumber(data?.data?.pageNumber)
         }
-         store.dispatch(resetAll())
-        store.dispatch(clearSaveCreateInvestmentField())
     }, [data,debouncedSearchTerm, searchResult]);
 
     useEffect(() => {
         store.dispatch(resetCompletedSteps())
-    },[])
+        store.dispatch(resetAll())
+        store.dispatch(clearSaveCreateInvestmentField())
+        if(isEdit){
+         store.dispatch(clearLoanProductField())
+         store.dispatch(resetFundProductAvailableAmount())
+        }
+    },[isEdit])
 
 
     const handleCreateButton = () => {
-        // setCreateProduct(true)
+        store.dispatch(setIsEdit(false))
         router.push('/loan-product/step-one');
     };
 

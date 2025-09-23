@@ -47,6 +47,7 @@ function StepOne() {
     const [financiers,setFinanciers] = useState<viewAllProps[]>([]);
     const [showSponsorError, setShowSponsorError] = useState(false);
     const [localFundAvailableAmount, setLocalFundAvailableAmount] = useState(fundProductAvailableAmount);
+    const isEdit = useAppSelector(state => state?.loanProduct?.isEdit)
     const router = useRouter();
     
     const { data: investmentVehicleData, isFetching, isLoading: isFundLoading } =
@@ -55,7 +56,7 @@ function StepOne() {
             pageNumber: fundPageNumber,
             investmentVehicleStatus: "PUBLISHED",
         });
-     
+       
     useEffect(() => {
         setLocalFundAvailableAmount(fundProductAvailableAmount);
     }, [fundProductAvailableAmount]);
@@ -254,7 +255,11 @@ function StepOne() {
     });
 
     const handleBackRoute =() => {
-        router.push("/loan-product")
+        if(isEdit){
+            router.push("/loan-product/loan-product-details")
+           }else {
+            router.push("/loan-product")
+           }
     }
 
     const handleSubmit = async (values: typeof initialFormValue) => {
@@ -275,7 +280,11 @@ function StepOne() {
     <div className={`${inter.className} `}>
         <div  className='xl:px-36 grid grid-cols-1 gap-y-6 '>
         <div className='grid grid-cols-1 gap-y-1'>
-        <h1 className='text-[18px] font-normal'>Create loan product</h1>
+        <h1 className='text-[18px] font-normal'>
+            {
+                isEdit? "Update loan product" : "Create loan product"
+            }
+            </h1>
         <p className='text-[14px] font-normal'>Provide details of your loan product</p>
        </div>
        <div>
@@ -743,8 +752,13 @@ function StepOne() {
                                         />
                                     )}
                                 </div>
+                                <div className="mt-6 p-4 bg-gray-100 rounded-md">
+  <h3 className="text-sm font-medium mb-2">Form Values (Debug):</h3>
+  <pre className="text-xs bg-white p-3 rounded border overflow-auto max-h-40">
+    {JSON.stringify(values, null, 2)}
+  </pre>
+</div>
                                 </div>
-                                
                             <div className={`md:flex justify-between pt-5 gap-3 pb-5 lg:pr-12 `}>
                                   <div>
                                   <Button
