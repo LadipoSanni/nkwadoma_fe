@@ -752,12 +752,12 @@ function StepOne() {
                                         />
                                     )}
                                 </div>
-                                <div className="mt-6 p-4 bg-gray-100 rounded-md">
+                                {/* <div className="mt-6 p-4 bg-gray-100 rounded-md">
   <h3 className="text-sm font-medium mb-2">Form Values (Debug):</h3>
   <pre className="text-xs bg-white p-3 rounded border overflow-auto max-h-40">
     {JSON.stringify(values, null, 2)}
   </pre>
-</div>
+</div> */}
                                 </div>
                             <div className={`md:flex justify-between pt-5 gap-3 pb-5 lg:pr-12 `}>
                                   <div>

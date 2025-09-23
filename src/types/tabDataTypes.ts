@@ -82,6 +82,7 @@ export const loaneeIncohortTab = [
 export const requestTab = [
     {name: "Staff", value:"/requests/staff"},
     {name: "Organization", value:"/requests/organization"},
+    {name: "Financier", value:"/requests/financier"},
 ]
 
 export const organizationDetailTab =  [
