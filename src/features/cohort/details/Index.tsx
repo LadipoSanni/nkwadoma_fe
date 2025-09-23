@@ -9,14 +9,15 @@ import DetailsComponent from "@/features/cohort/details/DetailsComponent";
 import {useAppSelector} from "@/redux/store";
 import {useViewCohortDetailsQuery} from "@/service/admin/cohort_query";
 import {LoaneeInCohortView} from "@/features/cohort/cohort-details/LoaneeInCohortView/Index";
+import GraduatedLoanee from "@/features/cohort/details/GraduatedLoanee";
 
 const CohortDetails = () => {
     const router = useRouter();
     const cohortId = useAppSelector(store => store?.cohort?.setCohortId)
     const selectedCohortInOrganization = useAppSelector(store => store?.cohort?.selectedCohortInOrganization)
 
-    console.log('selectedCohortInOrganization: ', selectedCohortInOrganization)
-    // const cohortsId = sessionStorage.getItem("cohortId") ?? undefined;
+    const selectedCohortInOrganizationType = useAppSelector(store => store?.cohort?.selectedCohortInOrganizationType)
+
     const {data: cohortDetails} = useViewCohortDetailsQuery({
         cohortId: cohortId
     }, {refetchOnMountOrArgChange: true});
@@ -42,7 +43,7 @@ const CohortDetails = () => {
     ]
     const tab:  {name: string; displayValue: React.ReactNode}[] = [
         {name: 'details',  displayValue: <DetailsComponent/>},
-        {name: 'loanee',  displayValue: <LoaneeInCohortView cohortFee={cohortDetails?.data?.tuitionAmount}/>
+        {name: 'loanee',  displayValue: selectedCohortInOrganizationType === 'GRADUATED' ? <GraduatedLoanee/> : <LoaneeInCohortView cohortFee={cohortDetails?.data?.tuitionAmount}/>
         },
 
     ]
@@ -57,7 +58,7 @@ const CohortDetails = () => {
             <div className={` mt-4 mb-4 flex justify-between w-full `}>
                 <span id={'cohortName'}
                       data-testid={'cohortName'}
-                      className={` text-[28px] text-black `}
+                      className={` text-[28px] break-all mr-2  text-black `}
                 >{selectedCohortInOrganization?.name}</span>
                 <CircleThreeDot
                     id={'editAndDeleteCohort'}
