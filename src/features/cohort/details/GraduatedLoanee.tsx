@@ -5,6 +5,8 @@ import {capitalizeFirstLetters} from "@/utils/GlobalMethods";
 import {formatAmount} from "@/utils/Format";
 import { loanRequestDatas} from "@/utils/LoanRequestMockData/cohortProduct";
 import Table from '@/reuseable/table/Table';
+import {ThreeDotTriggerDropDownItemsProps} from "@/types/Component.type";
+import DropDownWithActionButton from '@/reuseable/Dropdown/index';
 
 interface viewAllLoanees {
     // userIdentity: userIdentity;
@@ -27,9 +29,19 @@ const GraduatedLoanee = () => {
     const [page,setPageNumber] = useState(0);
     const [totalPage] = useState(0)
 
+    const changeLoaneeStatusToEmployed = () => {
+
+    }
+
+    const updateLoaneeEmploymentStatus: ThreeDotTriggerDropDownItemsProps[] = [
+        {id: 'employed', name: 'Employed', handleClick: changeLoaneeStatusToEmployed},
+        {id: 'unemployed', name: 'Unemployed', handleClick: changeLoaneeStatusToEmployed},
+
+    ]
+
     const tableHeader = [
         {title: "Name", sortable: true, id: "firstName", selector: (row: viewAllLoanees) => capitalizeFirstLetters(row?.firstName) + " " + capitalizeFirstLetters(row?.lastName)},
-        {title: "Employment status", sortable: true, id: "employmentStatus", selector: (row: viewAllLoanees) => row?.employmentStatus},
+        {title: "Employment status", sortable: true, id: "employmentStatus", selector: (row: viewAllLoanees) => <DropDownWithActionButton id={``} trigger={row?.employmentStatus} dropDownItems={updateLoaneeEmploymentStatus} isDisabled={false} />},
         {title: "Amount requested", sortable: true, id: "AmountRequested", selector: (row: viewAllLoanees) => formatAmount(row?.amountRequested)},
         {title: "Amount repaid", sortable: true, id: "AmountRepaid", selector:(row: viewAllLoanees) => formatAmount(row?.amountRepaid)},
     ]
