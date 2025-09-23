@@ -12,8 +12,9 @@ import {useViewCohortDetailsQuery} from "@/service/admin/cohort_query";
 const CohortDetails = () => {
     const router = useRouter();
     const cohortId = useAppSelector(store => store?.cohort?.setCohortId)
-    // const cohortOrProgramRoute = useAppSelector(store => store?.program?.cohortOrProgramRoute)
+    const selectedCohortInOrganization = useAppSelector(store => store?.cohort?.selectedCohortInOrganization)
 
+    console.log('selectedCohortInOrganization: ', selectedCohortInOrganization)
     // const cohortsId = sessionStorage.getItem("cohortId") ?? undefined;
     const {data: cohortDetails} = useViewCohortDetailsQuery({
         cohortId: cohortId
