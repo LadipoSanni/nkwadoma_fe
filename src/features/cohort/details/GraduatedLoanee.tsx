@@ -4,7 +4,6 @@ import {Input} from "@/components/ui/input";
 import {capitalizeFirstLetters} from "@/utils/GlobalMethods";
 import {formatAmount} from "@/utils/Format";
 import { loanRequestDatas} from "@/utils/LoanRequestMockData/cohortProduct";
-import {store} from "@/redux/store";
 import Table from '@/reuseable/table/Table';
 
 interface viewAllLoanees {
@@ -26,7 +25,7 @@ const GraduatedLoanee = () => {
     const [loaneeName, setLoaneeName] = React.useState("");
 
     const [page,setPageNumber] = useState(0);
-    const [totalPage,setTotalPage] = useState(0)
+    const [totalPage] = useState(0)
 
     const tableHeader = [
         {title: "Name", sortable: true, id: "firstName", selector: (row: viewAllLoanees) => capitalizeFirstLetters(row?.firstName) + " " + capitalizeFirstLetters(row?.lastName)},
@@ -35,6 +34,7 @@ const GraduatedLoanee = () => {
         {title: "Amount repaid", sortable: true, id: "AmountRepaid", selector:(row: viewAllLoanees) => formatAmount(row?.amountRepaid)},
     ]
     const handleRowClick = (row: TableRowData) => {
+        console.log('roe: ', row)
         // store.dispatch(setActiveAndInvitedFinancierId(String(row?.id)))
         // store.dispatch(setFinancierMode("platform"))
         // router.push('/financier/details')
@@ -54,6 +54,9 @@ const GraduatedLoanee = () => {
             </div>
             <Table
                 tableData={loanRequestDatas}
+
+                //eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-expect-error
                 tableHeader={tableHeader}
                 handleRowClick={handleRowClick}
                 tableHeight={45}
