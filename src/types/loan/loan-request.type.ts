@@ -103,6 +103,13 @@ export interface LoanOrganization {
     "address": string
 
 }
+
+export interface CohortItems {
+    "loanBreakdownId": string,
+    "itemName": string,
+    "itemAmount": string,
+    "currency": string,
+}
 export interface loaneeLoanBreakDown {
     "loaneeLoanBreakdownId": string,
     "itemName": string,
