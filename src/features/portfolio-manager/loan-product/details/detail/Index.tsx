@@ -1,13 +1,16 @@
 "use client"
-import React from "react";
+import React,{useEffect} from "react";
 import {useGetLoanProductDetailsByIdQuery} from "@/service/admin/loan_product";
-import {useAppSelector} from "@/redux/store";
+import {useAppSelector,store} from "@/redux/store";
 import style from "@/components/portfolio-manager/organization/index.module.css"
 import Detail from "@/components/loanee-my-profile/Details";
 import BasicDetailTab from "@/reuseable/details/BasicDetailTab";
 import BasicDetail from "@/reuseable/details/BasicDetail";
 import ViewDocument from "@/reuseable/details/ViewDocument";
 import { capitalizeFirstLetters } from "@/utils/GlobalMethods";
+import { setLoanProductField,setLoanProductFieldStepTwo,setTotalNumberOfLoanees} from "@/redux/slice/loan-product/Loan-product";
+import { setFundProductAvailableAmount } from "@/redux/slice/loan/selected-loan";
+import {useGetInvestmentVehicleDetailQuery} from '@/service/admin/fund_query';
 
 const Details = () => {
 
@@ -15,12 +18,44 @@ const Details = () => {
 
     const {data: loanProduct, isLoading: loading} = useGetLoanProductDetailsByIdQuery({loanProductId: loanProductId})
 
+    const {data} = useGetInvestmentVehicleDetailQuery({id: loanProduct?.data?.investmentVehicleId }, {skip: !loanProduct?.data?.investmentVehicleId });   
+
     const getVendorByProductType = (vendors: string, productType: string) => {
         if (!vendors || !Array.isArray(vendors)) return 'Not provided';
         
         const vendor = vendors.find(v => v.product === productType);
         return vendor ? vendor.vendorName : 'Not provided';
       };
+
+
+      useEffect(() => {
+        const loanProductDetails = {
+          productName:  loanProduct?.data?.name,
+          investmentVehicleId:loanProduct?.data?.investmentVehicleId ,
+          costOfFunds:loanProduct?.data?.costOfFund ,
+          tenor: loanProduct?.data?.tenor,
+          loanProductSize: loanProduct?.data?.loanProductSize ,
+          minimumRepaymentAmount: loanProduct?.data?.minRepaymentAmount ,
+          moratorium:loanProduct?.data?.moratorium ,
+          interest: loanProduct?.data?.interestRate,
+          obligorLimit:loanProduct?.data?.obligorLoanLimit,
+          loanProductMandate: loanProduct?.data?.mandate,
+          loanProductTermsAndCondition: loanProduct?.data?.termsAndCondition,
+          sponsors: loanProduct?.data?.sponsors,
+          fundProduct: loanProduct?.data?.investmentVehicleName,
+          id: loanProduct?.data?.id
+        }
+
+        const basicDetails = {
+          bankPartner: loanProduct?.data?.bankPartner,
+          vendor: loanProduct?.data?.vendors,
+          disbursementTerms: loanProduct?.data?.disbursementTerms
+        }
+         store.dispatch(setLoanProductField(loanProductDetails))
+         store.dispatch(setLoanProductFieldStepTwo(basicDetails))
+         store.dispatch(setTotalNumberOfLoanees(loanProduct?.data?.totalNumberOfLoanee))
+         store.dispatch(setFundProductAvailableAmount(data?.data?.totalAvailableAmount))
+      },[loanProduct,data])
 
 
     const dataList = [

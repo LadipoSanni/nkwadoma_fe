@@ -4,6 +4,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import { createLoanProductSteps } from '@/types/tabDataTypes'
 import BackButton from '@/components/back-button';
 import MultiStep from '@/reuseable/multiStep-component';
+import { useAppSelector } from '@/redux/store';
 
 interface props {
     children: React.ReactNode;
@@ -15,10 +16,17 @@ function CreateLoanProductStep({children}:props) {
    const currentStep = pathname?.split('/').pop() || 'step-one';
    const currentIndex =createLoanProductSteps.findIndex(step => step.id === currentStep);
    const completedSteps = createLoanProductSteps.slice(0, currentIndex).map(step => step.id);
+   const isEdit = useAppSelector(state => state?.loanProduct?.isEdit)
 
    const handleBack=()=> {
-       router.push("/loan-product")
+       if(isEdit){
+        router.push("/loan-product/loan-product-details")
+       }else {
+        router.push("/loan-product")
+       }
+      
   }
+
 
   return (
     <div className='md:px-10 px-4  py-4 grid grid-cols-1 gap-y-10'>

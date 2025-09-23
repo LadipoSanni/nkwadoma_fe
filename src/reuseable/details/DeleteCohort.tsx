@@ -15,11 +15,12 @@ interface deleteCohortProps {
     isLoading?: boolean
     errorDeleted?: string;
     ids?: string[];
+    image?: string
 
 }
 
 
- const DeleteCohort: React.FC<deleteCohortProps> = ({setIsOpen, headerTitle, title,handleDelete,id,isLoading,ids,handleMultipleDelete}) => {
+ const DeleteCohort: React.FC<deleteCohortProps> = ({setIsOpen, headerTitle, title,handleDelete,id,isLoading,ids,handleMultipleDelete,image}) => {
  
 
     const handleCanCelCohort = () => {
@@ -44,11 +45,13 @@ interface deleteCohortProps {
 
     return (
         <div>
-
-            <Image src={DeleteIcon} alt={"deleteIcon"} className={`md:w-[5rem] w-[4rem] md:h-[5rem] h-[4rem]`}
+           <div className="mt-2">
+           <Image src={!image? DeleteIcon : image} alt={"deleteIcon"} className={` w-[4rem]  h-[4rem]`}
                    width={200}
                    height={200}
             />
+           </div>
+           
             <div className={`pt-3`}>
                 <h1 className={`${cabinetGrotesk.className} text-2xl font-medium leading-7 text-meedlBlack`}>Delete {headerTitle}
                     </h1>
