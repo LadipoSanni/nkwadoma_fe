@@ -15,7 +15,7 @@ const CohortDetails = () => {
     // const cohortOrProgramRoute = useAppSelector(store => store?.program?.cohortOrProgramRoute)
 
     // const cohortsId = sessionStorage.getItem("cohortId") ?? undefined;
-    const {data: cohortDetails, isLoading, isFetching} = useViewCohortDetailsQuery({
+    const {data: cohortDetails} = useViewCohortDetailsQuery({
         cohortId: cohortId
     }, {refetchOnMountOrArgChange: true});
     // console.log('cohortDetails: ', cohortDetails)
