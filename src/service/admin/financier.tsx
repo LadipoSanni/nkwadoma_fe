@@ -156,16 +156,16 @@ export const financierApi = createApi({
             }),
             invalidatesTags: ['colleague']
         }),
-        approveOrDeclineFinancierAdminRequest: builder.mutation({
+        approveOrDeclineFinancierRequest: builder.mutation({
             query: (data: {
-                cooperateFinancierId: string
-                decision: string
+                financierId: string
+                activationStatus: string
             }) => ({
-                url: "/financier/respond/colleague/invitation",
+                url: "/financier/respond-to-financier-invite",
                 method: "POST",
                 params: data
             }),
-            invalidatesTags: ['colleague']
+            invalidatesTags: ['financier','colleague']
         }), 
     })
 })
@@ -175,5 +175,5 @@ export const {useInviteFinancierMutation,useViewFinanciersByInvestmentmentVehicl
     useViewFinancierDetailQuery, useGetAllActiveAndInvitedFinanciersQuery,
     useSearchFinancierVehicleQuery, useFinancierVehicleDetailsQuery,
     useViewFinancierAdminsQuery,useSearchFinancierAdminsQuery,useInviteFinancierColleagueMutation,
-    useApproveOrDeclineFinancierAdminRequestMutation
+    useApproveOrDeclineFinancierRequestMutation
    } = financierApi

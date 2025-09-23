@@ -18,7 +18,7 @@ import { setLoanReferralId } from '@/redux/slice/loan/selected-loan';
 import {setCurrentStep} from "@/service/users/loanRerralSlice";
 import { setNotificationCohortId,resetSelectedCohortInOrganization } from '@/redux/slice/create/cohortSlice';
 import { getUserDetailsFromStorage } from "@/components/topBar/action";
-import { setRequestStatusTab,setIsRequestedStaffOpen,setRequestedStaffId,setIsRequestedOrganizationOpen,setrequestOrganizationStatusTab,setRequestedOrganizationId,setIsStaffOpen,setModalType } from '@/redux/slice/staff-and-request/request';
+import { setRequestStatusTab,setIsRequestedStaffOpen,setRequestedStaffId,setIsRequestedOrganizationOpen,setrequestOrganizationStatusTab,setRequestedOrganizationId,setIsStaffOpen,setModalType,setIsRequestedFinancierOpen,setRequestFinancierStatusTab,setRequestedFinancierId } from '@/redux/slice/staff-and-request/request';
 import { setLoanOfferId as setLoanOfferIdFromLoan } from '@/redux/slice/create/createLoanOfferSlice';
 
 
@@ -46,7 +46,7 @@ function NotificationDetailPage({notificationId}: notificationIdProp) {
   const handleRoute = () => {
       store.dispatch(setNotification("notification"))
       store.dispatch(setNotificationId(notification?.data?.id))
-     if(notification?.data?.notificationFlag === "INVITE_FINANCIER"){
+     if(notification?.data?.notificationFlag === "INVITE_FINANCIER" || notification?.data?.notificationFlag ==="FINANCIER_INVITATION_RESPONSE"){
         store.dispatch(setCurrentFinancierId(notification?.data?.contentId))
         store.dispatch(setCurrentNavbarItem("Financier"))
         router.push("/funds/financier-details")
@@ -97,7 +97,15 @@ function NotificationDetailPage({notificationId}: notificationIdProp) {
     store.dispatch(setRequestedOrganizationId(notification?.data?.contentId))
     store.dispatch(setCurrentNavbarItem("Requests"))
     router.push(`/requests/organization`);
-  }else if(notification?.data?.notificationFlag === "ORGANIZATION_INVITATION_DECLINED"  || notification?.data?.notificationFlag ===  "ORGANIZATION_INVITATION_APPROVED"){
+  }
+  else if(notification?.data?.notificationFlag === "REQUESTING_APPROVAL_FINANCIER_INVITATION"){
+    store.dispatch(setRequestFinancierStatusTab("pending"))
+    store.dispatch(setIsRequestedFinancierOpen(true))
+    store.dispatch(setRequestedFinancierId(notification?.data?.contentId))
+    store.dispatch(setCurrentNavbarItem("Requests"))
+    router.push(`/requests/financier`);
+  }
+  else if(notification?.data?.notificationFlag === "ORGANIZATION_INVITATION_DECLINED"  || notification?.data?.notificationFlag ===  "ORGANIZATION_INVITATION_APPROVED"){
     store.dispatch(setOrganizationId(notification?.data?.contentId))
     store.dispatch(setCurrentNavbarItem("Organizations"))
     router.push("/organizations/detail");
@@ -125,7 +133,7 @@ function NotificationDetailPage({notificationId}: notificationIdProp) {
   
 
    const buttonName = () => {
-    if(notification?.data?.notificationFlag === "INVITE_FINANCIER"){
+    if(notification?.data?.notificationFlag === "INVITE_FINANCIER" || notification?.data?.notificationFlag ==="FINANCIER_INVITATION_RESPONSE"){
       return "financier"
    } else if (coperateFinancierUser && notification?.data?.notificationFlag === "INVESTMENT_VEHICLE"){
       return "investment vehicle"
@@ -140,7 +148,7 @@ else if(notification?.data?.notificationFlag === "LOAN_REFERRAL"){
   return "loan Referral"
 } else if(user && notification?.data?.notificationFlag === "INVITE_COLLEAGUE" ){
   return "Request"
-}else if((user_role === "MEEDL_SUPER_ADMIN" || user_role === "MEEDL_ADMIN") && notification?.data?.notificationFlag === "APPROVE_INVITE_ORGANIZATION" ){
+}else if((user_role === "MEEDL_SUPER_ADMIN" || user_role === "MEEDL_ADMIN") && (notification?.data?.notificationFlag === "APPROVE_INVITE_ORGANIZATION" || notification?.data?.notificationFlag === "REQUESTING_APPROVAL_FINANCIER_INVITATION") ){
   return "Request"
 }else if(user_role === "ORGANIZATION_SUPER_ADMIN" && notification?.data?.notificationFlag === "INVITE_COLLEAGUE" ){
   return "Request"
