@@ -1,35 +1,54 @@
+'use client'
 import Details from '@/components/loanee-my-profile/Details';
 import React from 'react';
 import styles from '@/components/loanee-my-profile/index.module.css'
 import {inter500} from '@/app/fonts';
+import {useAppSelector} from "@/redux/store";
+import {useGetCohortDetailsBreakdownQuery, useViewCohortDetailsQuery} from "@/service/admin/cohort_query";
+import dayjs from "dayjs";
+import {capitalizeFirstLetters} from "@/utils/GlobalMethods";
+import {CohortItems} from "@/types/loan/loan-request.type";
 
 
 const DetailsComponent = () => {
+    const cohortId = useAppSelector(store => store?.cohort?.setCohortId)
+    // const cohortOrProgramRoute = useAppSelector(store => store?.program?.cohortOrProgramRoute)
+
+    // const cohortsId = sessionStorage.getItem("cohortId") ?? undefined;
+    const {data: cohortDetails, isLoading, isFetching } = useViewCohortDetailsQuery({
+        cohortId: cohortId
+    }, {refetchOnMountOrArgChange: true});
+    const {data: cohortBreakDown} = useGetCohortDetailsBreakdownQuery({cohortId: cohortId}, {skip: !cohortId})
 
     const cohort: {name: string, value: string, valueType: 'percentage'| 'digit'| 'currency' | 'tenor' | 'years', id:string}[] = [
-        {name: 'Total amount disbursed', value: '3444040', valueType: 'currency', id: 'totalAmount'},
-        {name: 'Total amount repaid', value: '3444040', valueType: 'currency', id: 'totalRepaid'},
-        {name: 'Total amount outstanding', value: '3444040', valueType: 'currency', id: 'totalOutstanding'},
-        {name: 'Average starting salary', value: '3444040', valueType: 'currency', id: 'averageStartingSalary'},
-        {name: 'Tuition amount', value: '3444040', valueType: 'currency', id: 'tuitionAmount'},
-        {name: 'Device', value: '3444040', valueType: 'currency', id: 'device'},
-        {name: 'Accommodation', value: '3444040', valueType: 'currency', id: 'accommodation'},
-        {name: 'Feeding', value: '3444040', valueType: 'currency', id: 'feeding'},
-    ]
+        {name: 'Total amount disbursed', value: cohortDetails?.data?.amountReceived , valueType: 'currency', id: 'totalAmount'},
+        {name: 'Total amount repaid', value: cohortDetails?.data?.totalAmountRepaid , valueType: 'currency', id: 'totalRepaid'},
+        {name: 'Total amount outstanding', value: cohortDetails?.data?.amountOutstanding , valueType: 'currency', id: 'totalOutstanding'},
+        {name: 'Average starting salary', value: '' , valueType: 'currency', id: 'averageStartingSalary'},
+        {name: 'Tuition amount', value: cohortDetails?.data?.tuitionAmount , valueType: 'currency', id: 'tuitionAmount'},
+  ]
+
     const cohort2: {name: string, value: string, valueType: 'percentage'| 'digit'| 'currency' | 'tenor' | 'years', id:string}[] = [
-        {name: 'Total loanees', value: '3444040', valueType: 'currency', id: 'totalLoanees'},
-        {name: 'Total dropouts', value: '3444040', valueType: 'currency', id: 'totalDropouts'},
-        {name: 'Total employed', value: '3444040', valueType: 'currency', id: 'totalEmployed'},
-        {name: 'Employment rate', value: '2', valueType: 'percentage', id: 'employmentRate'},
-        {name: 'Repayment rate', value: '9', valueType: 'percentage', id: 'repaymentRate'},
+        {name: 'Total loanees', value: cohortDetails?.data?.numberOfLoanees , valueType: 'digit', id: 'totalLoanees'},
+        {name: 'Total dropouts', value: cohortDetails?.data?.numberOfDropout , valueType: 'digit', id: 'totalDropouts'},
+        {name: 'Total employed', value: cohortDetails?.data?.numberEmployed , valueType: 'digit', id: 'totalEmployed'},
+        {name: 'Employment rate', value: cohortDetails?.data?.totalAmountRepaid , valueType: 'percentage', id: 'employmentRate'},
+        {name: 'Repayment rate', value: cohortDetails?.data?.repaymentRate , valueType: 'percentage', id: 'repaymentRate'},
     ]
 
     const cohortS = [
-        {title: 'Description', id: 'programDiscription', value: <span className={` text-[#212221] text-[14px] ${inter500.className} `}>Luminary is a dynamic cohort of visionary thinkers and creators, pursuing excellence in product design. Together, we’re pushing boundaries, sparking innovation, and shaping the future of design with creativity and purpose.</span>},
-        {title: 'Program', id:'programname', value: <span className={` text-meedlBlue bg-[#F3F8FF] rounded-full max-w-[100%] px-2 py-2  `}>Product design thinking for children older than thirteen years and four  five </span>},
-        {title: 'Status', id: 'status', value: <span className={`rounded-full bg-[#FEF6E8] h-fit w-fit px-2 py-2  text-[#66440A] text-[14px] `}>Incoming</span>},
-        {title: 'Start date',id:'startDate', value: <span className={` ${inter500.className} text-[#212221] text-[14px] `}>23 October 2023</span>},
-        {title: 'Start date',id:'startDate', value: <span className={` ${inter500.className} text-[#212221] text-[14px] `}>23 October 2023</span>},
+        {title: 'Description', id: 'programDiscription', value: <p
+                id="cohort-description"
+                data-testid="cohort-description"
+                // style={{ height: "auto",    overflowY: "auto", minWidth: "300px", maxWidth: "100%",  fontSize:"14px" }}
+                className={`${inter500.className}  text-[#212221] text-[14px]  text-sm w-full`}
+                dangerouslySetInnerHTML={{__html: cohortDetails?.data?.cohortDescription}}
+            />},
+        {title: 'Program', id:'programname', value: <span className={` text-meedlBlue bg-[#F3F8FF] rounded-full w-fit h-fit  max-w-[100%] px-4 py-2  `}>{cohortDetails?.data?.programName}</span>},
+        {title: 'Status', id: 'status', value: <span className={`rounded-full bg-[#FEF6E8] h-fit w-fit px-2 py-2  text-[#66440A] text-[14px] `}>{capitalizeFirstLetters(cohortDetails?.data?.cohortStatus)}</span>},
+        {title: 'Start date',id:'startDate', value: <span className={` ${inter500.className} text-[#212221] text-[14px] `}>{dayjs(cohortDetails?.data?.startDate?.toString()).format('MMM D, YYYY')}</span>},
+        {title: 'End  date',id:'endDate', value: <span className={` ${inter500.className} text-[#212221] text-[14px] `}>{dayjs(cohortDetails?.data?.expectedEndDate?.toString()).format('MMM D, YYYY')}</span>},
+
 
     ]
 
@@ -45,8 +64,19 @@ const DetailsComponent = () => {
                         key={'index'+i}
                         id={item.id} name={item.name} valueType={item.valueType}
                         value={item.value}
+                        isLoading={isLoading || isFetching}
                     />
                 ))}
+                <div className={` md:grid ${cohortBreakDown?.data?.length === 1 ? 'md:grid-cols-1' :  'md:grid-cols-2 '} md:gap-4  `}>
+                    {cohortBreakDown?.data?.map((item: CohortItems , i: number) => (
+                        <Details
+                            key={'index'+i}
+                            id={item.loanBreakdownId} name={item.itemName} valueType='currency'
+                            value={item.itemAmount}
+                        />
+                    ))}
+                </div>
+
                 <div className={` md:grid md:grid-cols-2 md:gap-4  `}>
                     {cohort2?.map((item, i) => (
                         <Details
@@ -58,13 +88,14 @@ const DetailsComponent = () => {
                 </div>
             </div>
             <div
-                className={` ${styles.container} md:max-w-[35%] grid  md:w-[35%] pt-3 pl-3  md:border-l md:border-l-[#ECECEC] md:h-[60vh] `}
+                className={` ${styles.container} overflow-x-hidden md:max-w-[35%] grid  md:w-[35%] pt-3 pl-3  md:border-l md:border-l-[#ECECEC] md:h-[60vh] `}
             >
                 {cohortS?.map((item, i) => (
                     <div
                         key={'index'+i}
                         className={` grid gap-3 h-fit  mb-2   `}
                         id={item.id}
+                        data-testid={item.id}
                     >
                         <p className={` text-[#6A6B6A] text-[14px]  `}>{item.title}</p>
                         {item.value}

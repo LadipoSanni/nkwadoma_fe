@@ -162,9 +162,13 @@ useEffect(() => {
           router.push('/organizations/loanees/uploaded')
          }
      }else {
-         // if (cohortTab === 'graduated'){
-             store.dispatch(setcohortOrProgramRoute("cohort"))
-             router.push('/cohort/details')
+
+         const cohort = {name: String(row?.name),id: String(row?.id)}
+         store.dispatch(setSelectedCohortInOrganization(cohort))
+         store.dispatch(setcohortOrProgramRoute("cohort"))
+
+
+         router.push('/cohort/details')
          // }else{
          //     store.dispatch(setcohortOrProgramRoute("cohort"))
          //     router.push('/cohort/cohort-details')

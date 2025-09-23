@@ -6,10 +6,21 @@ import CircleThreeDot from "@/reuseable/Dropdown/CircleThreeDot";
 import {ThreeDotTriggerDropDownItemsProps} from "@/types/Component.type";
 import UnderlineTab from "@/components/UnderlineTab";
 import DetailsComponent from "@/features/cohort/details/DetailsComponent";
+import {useAppSelector} from "@/redux/store";
+import {useViewCohortDetailsQuery} from "@/service/admin/cohort_query";
+import {LoaneeInCohortView} from "@/features/cohort/cohort-details/LoaneeInCohortView/Index";
 
 const CohortDetails = () => {
     const router = useRouter();
+    const cohortId = useAppSelector(store => store?.cohort?.setCohortId)
+    const selectedCohortInOrganization = useAppSelector(store => store?.cohort?.selectedCohortInOrganization)
 
+    console.log('selectedCohortInOrganization: ', selectedCohortInOrganization)
+    // const cohortsId = sessionStorage.getItem("cohortId") ?? undefined;
+    const {data: cohortDetails} = useViewCohortDetailsQuery({
+        cohortId: cohortId
+    }, {refetchOnMountOrArgChange: true});
+    // console.log('cohortDetails: ', cohortDetails)
     const editCohort = ( ) => {
 
     }
@@ -31,7 +42,8 @@ const CohortDetails = () => {
     ]
     const tab:  {name: string; displayValue: React.ReactNode}[] = [
         {name: 'details',  displayValue: <DetailsComponent/>},
-        {name: 'loanee',  displayValue: <div></div>},
+        {name: 'loanee',  displayValue: <LoaneeInCohortView cohortFee={cohortDetails?.data?.tuitionAmount}/>
+        },
 
     ]
 
@@ -46,7 +58,7 @@ const CohortDetails = () => {
                 <span id={'cohortName'}
                       data-testid={'cohortName'}
                       className={` text-[28px] text-black `}
-                >Luminary</span>
+                >{selectedCohortInOrganization?.name}</span>
                 <CircleThreeDot
                     id={'editAndDeleteCohort'}
                     dotDisplay={'vertical'}
