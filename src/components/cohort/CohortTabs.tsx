@@ -18,7 +18,7 @@ import { useGetCohortDetailsQuery } from '@/service/admin/cohort_query'
 import SearchEmptyState from '@/reuseable/emptyStates/SearchEmptyState'
 import { MdSearch } from 'react-icons/md'
 import { store,useAppSelector } from '@/redux/store'
-import {setcohortStatusTab, setcohortId, setSelectedCohortInOrganization} from '@/redux/slice/create/cohortSlice'
+import {setcohortStatusTab, setcohortId, setSelectedCohortInOrganization, setSelectedCohortInOrganizationType} from '@/redux/slice/create/cohortSlice'
 import {capitalizeFirstLetters} from "@/utils/GlobalMethods";
 import { setcohortOrProgramRoute } from '@/redux/slice/program/programSlice';
 import { resetNotificationCohortId } from '@/redux/slice/create/cohortSlice'
@@ -166,13 +166,10 @@ useEffect(() => {
          const cohort = {name: String(row?.name),id: String(row?.id)}
          store.dispatch(setSelectedCohortInOrganization(cohort))
          store.dispatch(setcohortOrProgramRoute("cohort"))
-
+         store.dispatch(setSelectedCohortInOrganizationType(String(row?.cohortStatus)))
 
          router.push('/cohort/details')
-         // }else{
-         //     store.dispatch(setcohortOrProgramRoute("cohort"))
-         //     router.push('/cohort/cohort-details')
-         // }
+
      }
      setItemSessionStorage("programsId", String(row.programId))
 

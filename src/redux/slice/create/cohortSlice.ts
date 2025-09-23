@@ -9,6 +9,7 @@ interface CohortState {
   selectedCohortInOrganization: {name: string, id: string} | undefined ;
   notificationCohortId: string
    backOfficeAdmin: string
+  selectedCohortInOrganizationType: string
 }
 
 const initialState: CohortState = {
@@ -18,7 +19,8 @@ const initialState: CohortState = {
   setCohortId: "",
   selectedCohortInOrganization:undefined,
   notificationCohortId: "",
-  backOfficeAdmin: ""
+  backOfficeAdmin: "",
+  selectedCohortInOrganizationType: '',
 };
 
 const cohortSlice = createSlice({
@@ -56,9 +58,12 @@ const cohortSlice = createSlice({
     setBackOfficeAdmin: ( state, action: PayloadAction<string >) => {
       state.backOfficeAdmin= action.payload;
   },
+    setSelectedCohortInOrganizationType: (state, action: PayloadAction<string>) => {
+      state.selectedCohortInOrganizationType = action.payload;
+    }
   
   },
 });
 
-export const {resetSelectedCohortInOrganization, resetNotificationCohortId,setNotificationCohortId, setSelectedProgram, setSelectedCohortInOrganization, setUploadedUrl,setcohortStatusTab,resetcohortId,setcohortId,setBackOfficeAdmin} = cohortSlice.actions;
+export const {resetSelectedCohortInOrganization, resetNotificationCohortId,setNotificationCohortId,setSelectedCohortInOrganizationType, setSelectedProgram, setSelectedCohortInOrganization, setUploadedUrl,setcohortStatusTab,resetcohortId,setcohortId,setBackOfficeAdmin} = cohortSlice.actions;
 export default cohortSlice.reducer;
