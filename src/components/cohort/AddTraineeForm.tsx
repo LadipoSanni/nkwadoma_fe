@@ -15,6 +15,7 @@ import { NumericFormat } from 'react-number-format';
 // import { useToast } from '@/hooks/use-toast';
 import CustomInputField from "@/reuseable/Input/CustomNumberFormat";
 import {MdOutlineDelete} from "react-icons/md";
+import CenterMultistep from "@/reuseable/multiStep-component/Center-multistep";
 
 interface Props {
     tuitionFee?: string;
@@ -205,6 +206,8 @@ function AddTraineeForm({setIsOpen, tuitionFee,cohortId }: Props) {
 
                     }}
                     >
+                        <CenterMultistep currentStep={step} totalSteps={2} />
+
                         {step === 1 ? (
                             <div className="grid grid-cols-1 gap-y-4  px-2">
                                 <div>
@@ -293,7 +296,7 @@ function AddTraineeForm({setIsOpen, tuitionFee,cohortId }: Props) {
                                     {initialDepositError.length > 1 &&
                                         <span className="text-red-500 text-sm" >{initialDepositError}</span>}
                                 </div>
-                                <div className="md:flex gap-4 justify-end mt-2 md:mb-0 mb-3">
+                                <div className="md:flex border-t border-t-[#D7D7D7] gap-4 justify-end mt-2 md:mb-0 mb-3">
                                     <Button
                                         variant="outline"
                                         type="reset"
