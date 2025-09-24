@@ -79,6 +79,13 @@ export const loanProductApi = createApi({
                 params: param,
             })
         }),
+        updateLoanProduct: builder.mutation({
+            query: (formData) => ({
+                url: 'loan/loan-product/update',
+                method: 'POST',
+                body: formData,
+            }), invalidatesTags: ['loanProduct'],
+        }),
 
     }),
 })
@@ -89,6 +96,7 @@ export const {
     useGetLoanProductDetailsByIdQuery,
     useGetAllLoaneeInALoanProductQuery,
     useSearchLoaneesInALoanProductQuery,
-    useDeleteLoanProductMutation
+    useDeleteLoanProductMutation,
+    useUpdateLoanProductMutation
 } = loanProductApi;
 
