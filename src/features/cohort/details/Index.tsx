@@ -17,14 +17,11 @@ import TableModal from "@/reuseable/modals/TableModal";
 const CohortDetails = () => {
     const router = useRouter();
     const cohortId = useAppSelector(store => store?.cohort?.setCohortId)
-    const selectedCohortInOrganization = useAppSelector(store => store?.cohort?.selectedCohortInOrganization)
-
     const selectedCohortInOrganizationType = useAppSelector(store => store?.cohort?.selectedCohortInOrganizationType)
 
     const {data: cohortDetails} = useViewCohortDetailsQuery({
         cohortId: cohortId
     }, {refetchOnMountOrArgChange: true});
-    console.log('current cohort details ', cohortDetails);
 
     const [openEditModal, setOpenEditModal] = React.useState(false);
 
@@ -43,11 +40,8 @@ const CohortDetails = () => {
         expectedEndDate: "",
     })
 
-    // console.log('cohortDetails: ', cohortDetails)
     const editCohort = ( ) => {
-        console.log('trying to edit cohort');
         setOpenEditModal(true);
-        console.log('current cohort details ', cohortDetails);
         setDetails({
             id: cohortDetails?.data?.id || "",
             programId: cohortDetails?.data?.programId || "",
@@ -62,8 +56,6 @@ const CohortDetails = () => {
             startDate: cohortDetails?.data?.startDate || "",
             expectedEndDate: cohortDetails?.data?.expectedEndDate || "",
         })
-        console.log('openEditMODAL', openEditModal)
-        console.log('details', details)
     }
 
     const deleteCohort = ( ) => {

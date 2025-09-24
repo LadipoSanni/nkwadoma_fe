@@ -8,9 +8,6 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import loadingLoop from "@iconify/icons-line-md/loading-loop";
 import { Icon } from "@iconify/react";
-// import { MdDeleteOutline } from 'react-icons/md';
-// import { MdOutlineEdit } from 'react-icons/md';
-// import { Input } from '@/components/ui/input';
 import ToastPopUp from "@/reuseable/notification/ToastPopUp";
 import { useEditCohortMutation } from "@/service/admin/cohort_query";
 import { useQueryClient } from "@tanstack/react-query";
@@ -124,12 +121,6 @@ const EditCohortForm = ({ setIsOpen, cohortDetail }: idProps) => {
     expectedEndDate: Yup.date()
       .required("End date is required")
       .nullable()
-      // .when('startDate', (startDate, schema) => {
-
-      //   return startDate
-      //     ? schema.min(startDate, 'End date must be after start date')
-      //     : schema;
-      // })
       .when("startDate", (startDate, schema) => {
         return startDate
           ? schema
