@@ -10,20 +10,52 @@ import {useAppSelector} from "@/redux/store";
 import {useViewCohortDetailsQuery} from "@/service/admin/cohort_query";
 import {LoaneeInCohortView} from "@/features/cohort/cohort-details/LoaneeInCohortView/Index";
 import GraduatedLoanee from "@/features/cohort/details/GraduatedLoanee";
+import EditCohortForm from "@/components/cohort/EditCohortForm";
+import {Cross2Icon} from "@radix-ui/react-icons";
+import TableModal from "@/reuseable/modals/TableModal";
 
 const CohortDetails = () => {
     const router = useRouter();
     const cohortId = useAppSelector(store => store?.cohort?.setCohortId)
-    const selectedCohortInOrganization = useAppSelector(store => store?.cohort?.selectedCohortInOrganization)
-
     const selectedCohortInOrganizationType = useAppSelector(store => store?.cohort?.selectedCohortInOrganizationType)
 
     const {data: cohortDetails} = useViewCohortDetailsQuery({
         cohortId: cohortId
     }, {refetchOnMountOrArgChange: true});
-    // console.log('cohortDetails: ', cohortDetails)
-    const editCohort = ( ) => {
 
+    const [openEditModal, setOpenEditModal] = React.useState(false);
+
+    const [details, setDetails] = React.useState({
+        id: "",
+        programId: "",
+        organizationId: "",
+        cohortDescription: "",
+        name: "",
+        activationStatus: "",
+        cohortStatus: "",
+        tuitionAmount: 0,
+        totalCohortFee: 0,
+        imageUrl: "",
+        startDate: "",
+        expectedEndDate: "",
+    })
+
+    const editCohort = ( ) => {
+        setOpenEditModal(true);
+        setDetails({
+            id: cohortDetails?.data?.id || "",
+            programId: cohortDetails?.data?.programId || "",
+            organizationId: cohortDetails?.data?.organizationId || "",
+            cohortDescription: cohortDetails?.data?.cohortDescription || "",
+            name: cohortDetails?.data?.name || "",
+            activationStatus: cohortDetails?.data?.activationStatus || "",
+            cohortStatus: cohortDetails?.data?.cohortStatus || "",
+            tuitionAmount: cohortDetails?.data?.tuitionAmount || "",
+            totalCohortFee: cohortDetails?.data?.totalCohortFee || "",
+            imageUrl: cohortDetails?.data?.imageUrl || "",
+            startDate: cohortDetails?.data?.startDate || "",
+            expectedEndDate: cohortDetails?.data?.expectedEndDate || "",
+        })
     }
 
     const deleteCohort = ( ) => {
@@ -59,7 +91,7 @@ const CohortDetails = () => {
                 <span id={'cohortName'}
                       data-testid={'cohortName'}
                       className={` text-[28px] break-all mr-2  text-black `}
-                >{selectedCohortInOrganization?.name}</span>
+                >{cohortDetails?.data?.name}</span>
                 <CircleThreeDot
                     id={'editAndDeleteCohort'}
                     dotDisplay={'vertical'}
@@ -67,6 +99,20 @@ const CohortDetails = () => {
                     dropDownItems={dropD}
                 />
             </div>
+            <TableModal
+                isOpen={openEditModal}
+                closeModal={() => {
+                    setOpenEditModal(false)
+                }}
+                closeOnOverlayClick={true}
+                headerTitle='Edit Cohort'
+                className='pb-1'
+                icon={Cross2Icon}
+
+            >
+                <EditCohortForm setIsOpen={()=>{setOpenEditModal(false)}} cohortDetail={details}/>
+
+            </TableModal>
             <UnderlineTab defaultTab={'details'} tabTriggers={tabTriggers} tabValue={tab}/>
 
         </div>
