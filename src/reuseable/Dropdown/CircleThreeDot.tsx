@@ -45,7 +45,7 @@ const CircleThreeDot = ({id, dotDisplay,isDisabled,dropDownItems}:IProps) => {
                             id={item.id}
                             data-testid={item.id}
                             key={item.id+ i}
-                            onClick={() => item?.handleClick}
+                            onClick={item?.handleClick}
                             className={`${inter.className} ${item.sx} text-[14px] text-[#212221] w-full hover:text-[#142854] hover:bg-[#D9EAFF] `}
                         >
 

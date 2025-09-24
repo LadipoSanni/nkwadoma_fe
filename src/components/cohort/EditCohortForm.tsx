@@ -14,7 +14,7 @@ import { Icon } from "@iconify/react";
 import ToastPopUp from "@/reuseable/notification/ToastPopUp";
 import { useEditCohortMutation } from "@/service/admin/cohort_query";
 import { useQueryClient } from "@tanstack/react-query";
-import FileUploadTwo from "@/reuseable/Input/FileUploadTwo";
+// import FileUploadTwo from "@/reuseable/Input/FileUploadTwo";
 import QuillFieldEditor from "@/reuseable/textArea/Quill-field";
 import DatePicker from "@/reuseable/date/DatePicker";
 
@@ -67,13 +67,13 @@ const EditCohortForm = ({ setIsOpen, cohortDetail }: idProps) => {
     }
   };
 
-  const handleDrop = (event: React.DragEvent<HTMLDivElement>) => {
-    event.preventDefault();
-  };
-
-  const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
-    event.preventDefault();
-  };
+  // const handleDrop = (event: React.DragEvent<HTMLDivElement>) => {
+  //   event.preventDefault();
+  // };
+  //
+  // const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
+  //   event.preventDefault();
+  // };
 
   const validationSchema = Yup.object().shape({
     name: Yup.string()
@@ -207,9 +207,7 @@ const EditCohortForm = ({ setIsOpen, cohortDetail }: idProps) => {
                   name="name"
                   className="w-full p-3 border rounded focus:outline-none mt-2"
                   placeholder="Enter cohort name"
-                  // onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                  //   setFieldValue("name", e.target.value.replace(/\s+/g, ""))
-                  // }
+
                 />
 
                 {errors.name && touched.name && (
@@ -224,22 +222,7 @@ const EditCohortForm = ({ setIsOpen, cohortDetail }: idProps) => {
 
               <div className="grid md:grid-cols-2 gap-4">
                 <div className="">
-                  {/* <Label htmlFor="startDate">Start date</Label> */}
-                  {/* <DatePickerInput
-                    selectedDate={parseISO(values.startDate ?? "")}
-                    onDateChange={(date) =>
-                      setFieldValue("startDate", format(date, "yyyy-MM-dd"))
-                    }
-                    className="p-6 mt-2"
-                    //  disabledDate={
-                    //   (date) => date && date.getTime() < new Date().setHours(0, 0, 0, 0)
-                    // }
-                    disabledDate={(date) =>
-                      date &&
-                      (date.getTime() < new Date().setHours(0, 0, 0, 0) ||
-                        date >= parseISO(values.expectedEndDate ?? ""))
-                    }
-                  /> */}
+
                    <DatePicker
                   date={values.startDate ? parseISO(values.startDate) : undefined}
                   setDate={(date) => {
@@ -296,15 +279,6 @@ const EditCohortForm = ({ setIsOpen, cohortDetail }: idProps) => {
               </div>
               <div>
                 <Label htmlFor="cohortDescription">Cohort description</Label>
-                {/* <Field
-                 as="textarea"
-                id="editCohortDescription"
-                name="cohortDescription"
-                className="w-full p-3 border rounded focus:outline-none mt-2 resize-none "
-                placeholder="Enter cohort description"
-                rows={4}
-                maxLength={maxChars}
-                /> */}
                 <QuillFieldEditor
                   name="cohortDescription"
                   errorMessage="Cohort description must be 2500 characters or less"
@@ -320,17 +294,17 @@ const EditCohortForm = ({ setIsOpen, cohortDetail }: idProps) => {
                   />
                 )}
               </div>
-              <div>
-                <Label htmlFor="cohortImage">Cohort Image (Optional)</Label>
-                <FileUploadTwo
-                  handleDrop={handleDrop}
-                  handleDragOver={handleDragOver}
-                  setUploadedImageUrl={(url: string | null) =>
-                    setFieldValue("imageUrl", url)
-                  }
-                  initialImageUrl={values.imageUrl}
-                />
-              </div>
+              {/*<div>*/}
+              {/*  <Label htmlFor="cohortImage">Cohort Image (Optional)</Label>*/}
+              {/*  <FileUploadTwo*/}
+              {/*    handleDrop={handleDrop}*/}
+              {/*    handleDragOver={handleDragOver}*/}
+              {/*    setUploadedImageUrl={(url: string | null) =>*/}
+              {/*      setFieldValue("imageUrl", url)*/}
+              {/*    }*/}
+              {/*    initialImageUrl={values.imageUrl}*/}
+              {/*  />*/}
+              {/*</div>*/}
             </div>
             <div className="md:flex gap-4 justify-end mt-2 mb-4 md:mb-0 ">
                 <Button
