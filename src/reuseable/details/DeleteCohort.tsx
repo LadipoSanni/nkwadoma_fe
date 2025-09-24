@@ -7,37 +7,36 @@ import Isloading from "../display/Isloading";
 
 interface deleteCohortProps {
     id?: string ;
-    setIsOpen?: (e: boolean | undefined) => void,
+    setIsOpen?: (e: boolean | string | undefined) => void,
     headerTitle: string,
     title: string,
     handleDelete?: (id: string) => void;
     handleMultipleDelete?: (id: string[]) => void;
     isLoading?: boolean
-    errorDeleted?: string;
+    errorDeleting?: string;
     ids?: string[];
-    image?: string
-
+    image?: string;
+   
 }
 
 
- const DeleteCohort: React.FC<deleteCohortProps> = ({setIsOpen, headerTitle, title,handleDelete,id,isLoading,ids,handleMultipleDelete,image}) => {
+ const DeleteCohort: React.FC<deleteCohortProps> = ({setIsOpen, headerTitle, title,handleDelete,id,isLoading,ids,handleMultipleDelete,image, errorDeleting}) => {
  
 
     const handleCanCelCohort = () => {
         if (setIsOpen) {
             setIsOpen(false)
-            
         }
     }
 
     const handleDeleteCohort = async () => {
         if(handleDelete){
             handleDelete(id ?? "");
-            if (setIsOpen) setIsOpen(false); 
+            // if (setIsOpen) setIsOpen(false); 
         }else {
              if(handleMultipleDelete){
-             handleMultipleDelete(ids ?? [])
-             if (setIsOpen) setIsOpen(false); 
+                handleMultipleDelete(ids ?? [])
+            //  if (setIsOpen) setIsOpen(false); 
              }
         }
      
@@ -73,7 +72,9 @@ interface deleteCohortProps {
                             }
                             </Button>
             </div>
-           
+             <div className="text-red-500 text-sm text-center relative bottom-2">
+                {errorDeleting}
+             </div>
         </div>
     )
 }

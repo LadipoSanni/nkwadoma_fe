@@ -16,18 +16,34 @@ import Image from 'next/image';
 import { inter } from '@/app/fonts';
 import DeleteModal from '@/reuseable/modals/Delete-modal';
 import  DeleteLoanProduct  from '@/reuseable/details/DeleteCohort';
+import { useDeleteLoanProductMutation } from '@/service/admin/loan_product';
+import {useToast} from "@/hooks/use-toast"
 
 interface props {
     children: React.ReactNode;
 }
 
+
+interface ApiError {
+  status: number;
+  data: {
+      message: string;
+  };
+}
+
 function LoanProductDetailsLayout({children}:props) {
     const loanProductName = useAppSelector(state => (state?.loanProduct?.loanProductName))
+    const loanProductId = useAppSelector(state => (state?.loanProduct?.loanProductId))
     const totalNumberOfLoaneesInLoanProduct = useAppSelector(state => (state?.loanProduct?.totalNumberOfLoaneess))
     const [modalIsOpen,setIsModalOpen] = useState(false)
     const [isDeleteModal, setIsDeleteModal] = useState(false)
     const [modalType,setModalType] = useState("")
+    const [error, setError] = useState("")
     const router = useRouter()
+    const [deleteLoanProduct,{isLoading}] = useDeleteLoanProductMutation()
+
+
+    const {toast} = useToast()
 
     const handleBackButtonClick=()=> {
         router.push("/loan-product")
@@ -66,6 +82,29 @@ function LoanProductDetailsLayout({children}:props) {
    }
     
     }
+
+   const handleDelete = async (id: string) => {
+      const param = {
+        loanProductId: loanProductId || id
+      }
+      try {
+         const result= await deleteLoanProduct(param).unwrap()
+         if(result){
+           toast({
+            description: result?.message,
+            status: "success",
+            duration: 1500
+           })
+           setError("")
+           setIsDeleteModal(false)
+           router.push('/loan-product')
+         }
+        
+      } catch (error) {
+        const err = error as ApiError;
+        setError(err?.data?.message)
+      }
+   }
 
   return (
     <div>
@@ -130,16 +169,25 @@ function LoanProductDetailsLayout({children}:props) {
             closeOnOverlayClick={true}
              width='auto'
             icon={Cross2Icon}
-            closeModal={() => setIsDeleteModal(false)}
+            closeModal={() => {
+              setIsDeleteModal(false)
+              setError("")
+            }
+            }
            >
             <DeleteLoanProduct
-            setIsOpen={() => setIsDeleteModal(false)}
+            setIsOpen={() =>{ 
+              setIsDeleteModal(false)
+              setError("")
+            }}
             headerTitle='loan product'
             title='loan product'
-            id=""
-            handleDelete={() => {}}
-           
+            id={loanProductId}
+            handleDelete={handleDelete}
+            isLoading={isLoading}
+            errorDeleting={error}
             />
+
 
            </DeleteModal>
           </div>

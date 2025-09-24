@@ -103,7 +103,7 @@ const ProgramView = () => {
         },
         { refetchOnMountOrArgChange: true }
     );
-    const [deleteItem] = useDeleteProgramMutation();
+    const [deleteItem,{isLoading: isDeleteLoading}] = useDeleteProgramMutation();
     const { data: searchResults, isFetching: isSearchFetching, error: searchError } = useSearchProgramQuery(searchTerm, { skip: !searchTerm});
     const { data: program, isLoading: loading, refetch } = useGetProgramByIdQuery(
         { id: programId },
@@ -323,26 +323,27 @@ const ProgramView = () => {
             const deletePro = await deleteItem({id}).unwrap();
             if (deletePro) {
                 setProgramView((prevData) => prevData.filter((item) => item.id !== id))
-                setTimeout(() => {
+                // setTimeout(() => {
+                    setDeleteProgram("")
+                    setIsDeleteOpen(false)
                     toast({
-                        description: "Program deleted successfully",
+                        description: deletePro?.message,
                         status: "success",
+                        duration: 1000
                     })
-                }, 600);
-            } else {
-                setDeleteProgram("Failed to delete program")
-
-            }
+                }
+                // , 600);
+            
 
         } catch (error) {
             const err = error as ApiError;
             setDeleteProgram(err?.data?.message || "Program with loanee cannot be deleted")
-            setTimeout(() => {
-                toast({
-                    description: deleteProgram || "Program with loanee cannot be deleted",
-                    status: "error",
-                })
-            }, 600);
+            // setTimeout(() => {
+            //     toast({
+            //         description: deleteProgram || "Program with loanee cannot be deleted",
+            //         status: "error",
+            //     })
+            // }, 600);
         }
     }
 
@@ -547,17 +548,23 @@ const ProgramView = () => {
                 <DeleteModal
                     isOpen={isDeleteOpen}
                     closeOnOverlayClick={true}
-                    closeModal={() => setIsDeleteOpen(false)}
+                    closeModal={() => {
+                        setIsDeleteOpen(false)
+                        setDeleteProgram("")
+                    }}
                     icon={Cross2Icon}
                     width='auto'
                 >
                     <DeleteProgram
-                        setIsOpen={() => setIsDeleteOpen(false)}
+                        setIsOpen={() =>{ setIsDeleteOpen(false)
+                            setDeleteProgram("")
+                                        }}
                         headerTitle='Program'
                         title='program'
                         handleDelete={handleDeleteAProgram}
                         id={programId}
-                        errorDeleted={deleteProgram}
+                        errorDeleting={deleteProgram}
+                        isLoading={isDeleteLoading}
                     />
                 </DeleteModal>
             </div>
