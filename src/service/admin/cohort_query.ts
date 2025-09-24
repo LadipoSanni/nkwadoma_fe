@@ -35,7 +35,7 @@ export const cohortApi = createApi({
                 url: `/delete/${id}`,
                 method: "DELETE",
             }),
-            invalidatesTags: ({id}) => [{type: 'cohort', id}],
+            // invalidatesTags: ({id}) => [{type: 'cohort', id}],
         }),
 
         referLoanee: builder.mutation({

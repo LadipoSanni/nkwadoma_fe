@@ -7,24 +7,31 @@ import {ThreeDotTriggerDropDownItemsProps} from "@/types/Component.type";
 import UnderlineTab from "@/components/UnderlineTab";
 import DetailsComponent from "@/features/cohort/details/DetailsComponent";
 import {useAppSelector} from "@/redux/store";
-import {useViewCohortDetailsQuery} from "@/service/admin/cohort_query";
+import {useDeleteCohortMutation, useViewCohortDetailsQuery} from "@/service/admin/cohort_query";
 import {LoaneeInCohortView} from "@/features/cohort/cohort-details/LoaneeInCohortView/Index";
 import GraduatedLoanee from "@/features/cohort/details/GraduatedLoanee";
 import EditCohortForm from "@/components/cohort/EditCohortForm";
 import {Cross2Icon} from "@radix-ui/react-icons";
 import TableModal from "@/reuseable/modals/TableModal";
+import {useToast} from "@/hooks/use-toast";
+import DeleteModal from "@/reuseable/modals/Delete-modal";
+import DeleteCohort from "@/reuseable/details/DeleteCohort";
+
+
+
 
 const CohortDetails = () => {
     const router = useRouter();
     const cohortId = useAppSelector(store => store?.cohort?.setCohortId)
     const selectedCohortInOrganizationType = useAppSelector(store => store?.cohort?.selectedCohortInOrganizationType)
-
+    const [deleteItem,{isLoading:isDeleteLoading}] = useDeleteCohortMutation()
     const {data: cohortDetails} = useViewCohortDetailsQuery({
         cohortId: cohortId
     }, {refetchOnMountOrArgChange: true});
+    const {toast} = useToast()
 
     const [openEditModal, setOpenEditModal] = React.useState(false);
-
+    const [openDeleteModal, setOpenDeleteModal] = React.useState(false);
     const [details, setDetails] = React.useState({
         id: "",
         programId: "",
@@ -58,13 +65,34 @@ const CohortDetails = () => {
         })
     }
 
-    const deleteCohort = ( ) => {
+
+
+
+    const handleDelete = async (id: string) => {
+        try{
+             await deleteItem({id}).unwrap();
+            setOpenDeleteModal(false)
+            toast({
+                description: 'Cohort deleted successfully',
+                status: "error",
+            })
+        }catch (e) {
+            setOpenDeleteModal(false)
+            toast({
+              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+             // @ts-expect-error
+                description: e?.data?.message,
+                status: "error",
+            })
+        }
 
     }
 
+
+
     const dropD: ThreeDotTriggerDropDownItemsProps[] = [
         {id: 'editCohortDropDownItem', name: 'Edit cohort', handleClick: editCohort, sx: ``},
-        {id: 'deleteCohortDropDownItem', name: 'Delete cohort', handleClick: deleteCohort, sx: ``},
+        {id: 'deleteCohortDropDownItem', name: 'Delete cohort', handleClick: ()=> {setOpenDeleteModal(true)}, sx: ``},
 
     ]
 
@@ -111,8 +139,28 @@ const CohortDetails = () => {
 
             >
                 <EditCohortForm setIsOpen={()=>{setOpenEditModal(false)}} cohortDetail={details}/>
-
             </TableModal>
+            <DeleteModal
+                isOpen={openDeleteModal}
+                closeModal={() => {
+                    setOpenDeleteModal(false)
+                    // setDeleteProgram("")
+                }}
+                closeOnOverlayClick={true}
+                icon={Cross2Icon}
+                width='auto'
+            >
+                <DeleteCohort
+                    setIsOpen={()=> {
+                        setOpenDeleteModal(false)
+                    }}
+                    headerTitle='Cohort'
+                    title='cohort'
+                    handleDelete={handleDelete}
+                    id={cohortId}
+                    isLoading={isDeleteLoading}
+                />
+            </DeleteModal>
             <UnderlineTab defaultTab={'details'} tabTriggers={tabTriggers} tabValue={tab}/>
 
         </div>

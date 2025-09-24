@@ -10,7 +10,7 @@ interface deleteCohortProps {
     setIsOpen?: (e: boolean | string | undefined) => void,
     headerTitle: string,
     title: string,
-    handleDelete?: (id: string) => void;
+    handleDelete?: (id: string) => void | Promise<void>;
     handleMultipleDelete?: (id: string[]) => void;
     isLoading?: boolean
     errorDeleting?: string;
