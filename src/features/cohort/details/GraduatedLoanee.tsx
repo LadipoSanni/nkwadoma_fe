@@ -77,7 +77,7 @@ const GraduatedLoanee = () => {
                 condition={true}
                 staticHeader={"Financier"}
                 staticColunm={"name"}
-                sx='cursor-pointer'
+                sx='cursor-default'
                 hasNextPage={false}
                 pageNumber={page}
                 setPageNumber={setPageNumber}
