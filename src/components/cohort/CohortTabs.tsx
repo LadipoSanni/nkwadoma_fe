@@ -13,7 +13,6 @@ import EditCohortForm from './EditCohortForm'
 import { inter } from '@/app/fonts'
 import DeleteCohort  from '@/reuseable/details/DeleteCohort'
 import { setItemSessionStorage } from '@/utils/storage';
-// import { useViewCohortDetailsQuery } from '@/service/admin/cohort_query'
 import { useGetCohortDetailsQuery } from '@/service/admin/cohort_query'
 import SearchEmptyState from '@/reuseable/emptyStates/SearchEmptyState'
 import { MdSearch } from 'react-icons/md'
@@ -55,17 +54,27 @@ interface cohortList {
   totalPages: number;
   pageNumber: number
   handlePageChange:  (value: React.SetStateAction<number>, tabType?: string) => void;
-  isTyping?: boolean
+  isTyping?: boolean;
+  isDeleteOpen?: boolean;
+  setIsDeleteOpen: (value: boolean) => void;
+  isDeleteLoading?: boolean
+  setDeleteProgram: (value: string) => void
 }
 
 
-const CohortTabs = ({listOfCohorts = [],handleDelete,isLoading,errorDeleted,searchTerm,userRole,currentTab,hasNextPage,totalPages,handlePageChange,pageNumber,isTyping}:cohortList) => {
+const CohortTabs = (
+             {listOfCohorts = [],handleDelete,
+              isLoading,errorDeleted,
+              searchTerm,userRole,currentTab,
+              hasNextPage,totalPages,
+              handlePageChange,pageNumber,
+              isTyping,isDeleteOpen= false,
+              setIsDeleteOpen,isDeleteLoading,
+              setDeleteProgram}:cohortList)  => {
   const [cohortId, setCohortId] =  React.useState("")
   const [isOpen, setIsOpen] = React.useState(false);
  const organizationTabStatus = useAppSelector(store => store?.organization?.organizationDetailTabStatus)
-  const [isDeleteOpen, setIsDeleteOpen] = React.useState(false);
     // const cohortTab = useAppSelector(state => state?.cohort?.cohortStatusTab)
-
     const [details, setDetails] = React.useState({
     id: "",
     programId: "",
@@ -322,18 +331,25 @@ useEffect(() => {
            }
         <DeleteModal
         isOpen={isDeleteOpen}
-        closeModal={() => setIsDeleteOpen(false)}
+        closeModal={() => {
+          setIsDeleteOpen(false)
+          setDeleteProgram("")
+        }}
         closeOnOverlayClick={true}
         icon={Cross2Icon}
         width='auto'
         >
         <DeleteCohort 
-        setIsOpen={()=> setIsDeleteOpen(false)} 
+        setIsOpen={()=> {
+          setIsDeleteOpen(false)
+          setDeleteProgram("")
+        }} 
         headerTitle='Cohort' 
         title='cohort'
         handleDelete={handleDelete}
         id={cohortId}
-        errorDeleted={errorDeleted}
+        errorDeleting={errorDeleted}
+        isLoading={isDeleteLoading}
         />
         </DeleteModal>
 

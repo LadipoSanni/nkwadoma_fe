@@ -98,6 +98,7 @@ const CohortView = () => {
     const [hasNextPage, setNextPage] = useState(true);
     const [pageNumber, setPageNumber] = useState(0);
     const [isOpen, setIsOpen] = React.useState(false);
+    const [isDeleteOpen, setIsDeleteOpen] = React.useState(false);
     const [page] = useState(0)
     const size = 10;
     const {toast} = useToast()
@@ -147,11 +148,13 @@ const CohortView = () => {
         pageNumber: currentTabState.pageNumber,
     }, {skip: !debouncedSearchTerm});
 
+    
     const {data: programDatas, isLoading: programIsloading, isFetching} = useGetAllProgramsQuery({
         ...(user_role === "PORTFOLIO_MANAGER" && organizationId
             ? {organizationId}
             : {}), pageSize: size, pageNumber: pageNumber
     }, {skip: !isCreateModalOpen, refetchOnMountOrArgChange: true,})
+
     const {
         data: cohortsByProgram,
         refetch,
@@ -162,7 +165,8 @@ const CohortView = () => {
         pageSize: 300,
         pageNumber: page
     }, {refetchOnMountOrArgChange: true, skip: !programId});
-    const [deleteItem] = useDeleteCohortMutation()
+
+    const [deleteItem,{isLoading:isDeleteLoading}] = useDeleteCohortMutation()
 
 
     const handleModalOpen = () => {
@@ -303,10 +307,11 @@ const CohortView = () => {
                 setOrganisationCohort((prevData) => prevData.filter((item) => item.id !== id))
                 setTimeout(() => {
                     toast({
-                        description: "Cohort deleted successfully",
+                        description: deleteCohort?.message,
                         status: "success",
                     })
                 }, 600);
+                setIsDeleteOpen(false)
             } else {
                 setDeleteProgram("Failed to delete program")
 
@@ -315,12 +320,6 @@ const CohortView = () => {
         } catch (error) {
             const err = error as ApiError;
             setDeleteProgram(err?.data?.message || "Cohort with loanee cannot be deleted")
-            setTimeout(() => {
-                toast({
-                    description: deleteProgram || "Cohort with loanee cannot be deleted",
-                    status: "error",
-                })
-            }, 600);
         }
     }
 
@@ -533,6 +532,10 @@ const CohortView = () => {
                     totalPages={currentTabState.totalPages}
                     isTyping={isTyping}
                     searchTerm={debouncedSearchTerm}
+                    setIsDeleteOpen={setIsDeleteOpen}
+                    isDeleteOpen={isDeleteOpen}
+                    isDeleteLoading= {isDeleteLoading}
+                    setDeleteProgram={setDeleteProgram}
                 />
 
             </div>

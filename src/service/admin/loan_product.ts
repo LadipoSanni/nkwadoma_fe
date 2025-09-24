@@ -70,6 +70,16 @@ export const loanProductApi = createApi({
             query: ({ loanProductId, name, pageSize = 10, pageNumber = 0 }) =>
                 `/loanee/loan-product/search/loanees/${loanProductId}?name=${name}&pageSize=${pageSize}&pageNumber=${pageNumber}`,
         }),
+        deleteLoanProduct: builder.mutation({
+            query: (param: {
+                loanProductId: string,
+            }) => ({
+                url: '/loan/loan-product/delete',
+                method: 'DELETE',
+                params: param,
+            })
+        }),
+
     }),
 })
 export const {
@@ -79,5 +89,6 @@ export const {
     useGetLoanProductDetailsByIdQuery,
     useGetAllLoaneeInALoanProductQuery,
     useSearchLoaneesInALoanProductQuery,
+    useDeleteLoanProductMutation
 } = loanProductApi;
 
