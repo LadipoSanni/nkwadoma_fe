@@ -40,7 +40,7 @@ const LoanProductPage = () => {
      const [debouncedSearchTerm, isTyping] = useDebounce(searchTerm, 1000);
 
     const size = 10;
-    const { data, isLoading,isFetching } = useViewAllLoanProductQuery({ pageSize: size, pageNumber:pageNumber });
+    const { data, isLoading,isFetching} = useViewAllLoanProductQuery({ pageSize: size, pageNumber:pageNumber },{refetchOnMountOrArgChange: true});
     const { data: searchResult, isLoading: isSearchLoading, isFetching: isfetching } = useSearchLoanProductQuery(
         { loanProductName: debouncedSearchTerm, pageSize: size, pageNumber:seachPageNumber },
         { skip: !debouncedSearchTerm }

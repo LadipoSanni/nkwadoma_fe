@@ -224,13 +224,16 @@ function NotificationLayout({children}: Props) {
                     }
                     setSelectAll(false)
                     setSelectedRows(new Set());
+                    setIsDeleteOpen(false)
                     refetch()
                     setTimeout(() => {
                       toast({
-                        description: deleteNotifications?.data?.message || `${selectedRows.size === 1? "Notification deleted successfully" : "Notifications deleted successfully"} `,
+                        description: deleteNotifications?.message || `${selectedRows.size === 1? "Notification deleted successfully" : "Notifications deleted successfully"} `,
                         status: "success",
+                        duration: 1000
                     })
                     })
+                
                     router.push("/notifications/notification")
                   } else 
                    if(deleteNotifications){
@@ -246,10 +249,12 @@ function NotificationLayout({children}: Props) {
                     }
                     setSelectAll(false)
                     setSelectedRows(new Set());
+                    setIsDeleteOpen(false)
                     setTimeout(() => {
                       toast({
                         description: deleteNotifications?.data?.message || `${selectedRows.size === 1? "Notification deleted successfully" : "Notifications deleted successfully"} `,
                         status: "success",
+                        duration: 1000
                     })
                     })
                     router.push("/notifications/notification")
@@ -260,6 +265,7 @@ function NotificationLayout({children}: Props) {
                   toast({
                     description: err?.data?.message || "Error deleting notification",
                     status: "error",
+                    duration: 1000
                 })
                 }
             }
