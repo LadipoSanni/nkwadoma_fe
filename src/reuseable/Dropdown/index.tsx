@@ -3,6 +3,7 @@ import {Menubar, MenubarContent, MenubarItem, MenubarMenu, MenubarTrigger} from 
 import {inter} from "@/app/fonts";
 import {ThreeDotTriggerDropDownItemsProps} from "@/types/Component.type";
 import {MdKeyboardArrowDown, MdKeyboardArrowUp} from "react-icons/md";
+import {Button} from "@/components/ui/button";
 
 interface IProps {
     id: string;
@@ -15,7 +16,7 @@ interface IProps {
 }
 
 const DropDownWithActionButton = ({id,isDisabled,trigger,dropDownItems}:IProps) => {
-    const [isIconUp, setIsIconUp] = useState(true)
+    const [isIconUp, setIsIconUp] = useState(false)
     return (
         <div
             id={id}
@@ -24,7 +25,7 @@ const DropDownWithActionButton = ({id,isDisabled,trigger,dropDownItems}:IProps) 
         >
             <Menubar  className={'w-fit mt-auto mb-auto h-fit'}>
                 <MenubarMenu >
-                    <MenubarTrigger onClick={() => {setIsIconUp(!isIconUp)}} id={'trigger'} data-testid={'trigger'} disabled={isDisabled} className={` bg-[#F9F9F9] w-fit h-fit py-1.5 aspect-square px-1.5 md:py-2 md:px-2 lg:py-2 lg:px-2 mt-auto mb-auto   rounded-full `} >
+                    <MenubarTrigger onClick={() => {setIsIconUp(!isIconUp)}} id={'trigger'} data-testid={'trigger'} disabled={isDisabled} className={` hover:bg-[#F9F9F9] hover:rounded-md flex gap-2  w-fit h-fit py-1.5  px-1.5 lg:py-2 lg:px-2 mt-auto mb-auto    `} >
                         {trigger}
                         {isIconUp ?
                             <MdKeyboardArrowUp/>
@@ -39,12 +40,19 @@ const DropDownWithActionButton = ({id,isDisabled,trigger,dropDownItems}:IProps) 
                                 data-testid={item.id}
                                 key={item.id+ i}
                                 onClick={() => item?.handleClick}
-                                className={`${inter.className} ${item.sx} text-[14px] text-[#212221] w-full hover:text-[#142854] hover:bg-[#D9EAFF] `}
+                                className={`${inter.className} ${item.sx} text-[14px] text-[#212221] w-full hover:text-[#142854] hover:bg-[#E1EEFF] `}
                             >
 
                                 {item?.name}
                             </MenubarItem>
                         ))}
+                        <div
+                            className={`w-full max-h-fit py-2 flex justify-end border-t border-t-[#D7D7D7]  `}
+                        >
+                            <Button
+                                className={` text-white bg-[#D7D7D7]  `}
+                            >Save</Button>
+                        </div>
                     </MenubarContent>
                 </MenubarMenu>
             </Menubar>
