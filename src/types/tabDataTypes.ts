@@ -82,6 +82,7 @@ export const loaneeIncohortTab = [
 export const requestTab = [
     {name: "Staff", value:"/requests/staff"},
     {name: "Organization", value:"/requests/organization"},
+    {name: "Financier", value:"/requests/financier"},
 ]
 
 export const organizationDetailTab =  [
@@ -89,8 +90,8 @@ export const organizationDetailTab =  [
     {name: "Staff", value:"/organizations/organizations-details/admins"}]
 
 export const createLoanProductSteps = [
-        { id: 'step-one', title: 'Step 1' },
-        { id: 'step-two', title: 'Step 2' },
+        { id: 'step-one', title: 'Loan product' },
+        { id: 'step-two', title: 'Loan partnership' },
         
       ];
 

@@ -16,6 +16,7 @@ import { useDebounce } from '@/hooks/useDebounce';
 import {capitalizeFirstLetters} from "@/utils/GlobalMethods";
 import { getUserDetailsFromStorage } from "@/components/topBar/action";
 import styles from "./index.module.css"
+import { StatusBadge } from '@/reuseable/display/Status-badge';
 
 interface TableRowData {
     [key: string]: string | number | null | React.ReactNode;
@@ -116,7 +117,7 @@ function Staff() {
           title: "Status",  
           sortable: true, 
           id: "activationStatus", 
-          selector: (row: TableRowData) => <span className={`${row.activationStatus === "ACTIVE"? "bg-[#E6F2EA] text-[#045620] " :row.activationStatus === "INVITED"? "bg-[#FEF6E8] text-[#045620] w-20" :  "bg-[#FBE9E9] text-[#971B17]"} rounded-lg  px-2 `}>{capitalizeFirstLetters(row.activationStatus?.toString())}</span> 
+          selector: (row: TableRowData) =><StatusBadge status={row.activationStatus?.toString()} className='truncate'/> 
         },
         { 
           title: "Invited",  
@@ -149,7 +150,7 @@ function Staff() {
           title: "Status",  
           sortable: true, 
           id: "activationStatus", 
-          selector: (row: TableRowData) => <span className={`${row.activationStatus === "ACTIVE"? "bg-[#E6F2EA] text-[#045620] " :row.activationStatus === "INVITED"? "bg-[#FEF6E8] text-[#045620] w-20" :  "bg-[#FBE9E9] text-[#971B17]"} rounded-lg  px-2 `}>{capitalizeFirstLetters(row.activationStatus?.toString())}</span> 
+          selector: (row: TableRowData) => <StatusBadge status={row.activationStatus?.toString()} className='truncate' /> 
         },
         { 
           title: "Invited",  

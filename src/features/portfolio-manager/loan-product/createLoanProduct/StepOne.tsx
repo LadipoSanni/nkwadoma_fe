@@ -282,8 +282,9 @@ function StepOne() {
         <div className='grid grid-cols-1 gap-y-1'>
         <h1 className='text-[18px] font-normal'>
             {
-                isEdit? "Update loan product" : "Create loan product"
+                isEdit? "Update loan product" : "Loan product"
             }
+           
             </h1>
         <p className='text-[14px] font-normal'>Provide details of your loan product</p>
        </div>
@@ -752,12 +753,12 @@ function StepOne() {
                                         />
                                     )}
                                 </div>
-                                <div className="mt-6 p-4 bg-gray-100 rounded-md">
+                                {/* <div className="mt-6 p-4 bg-gray-100 rounded-md">
   <h3 className="text-sm font-medium mb-2">Form Values (Debug):</h3>
   <pre className="text-xs bg-white p-3 rounded border overflow-auto max-h-40">
     {JSON.stringify(values, null, 2)}
   </pre>
-</div>
+</div> */}
                                 </div>
                             <div className={`md:flex justify-between pt-5 gap-3 pb-5 lg:pr-12 `}>
                                   <div>
