@@ -118,7 +118,7 @@ export  interface navbarItemsProps {
 export interface ThreeDotTriggerDropDownItemsProps{
     id: string,
     name: string,
-    handleClick: ()=> void,
+    handleClick: ()=> void | Promise<void> ,
     sx?: string,
 }
 
