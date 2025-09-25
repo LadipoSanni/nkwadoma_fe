@@ -173,7 +173,7 @@ export const LoaneeInCohortView = ({cohortFee}: props) => {
 
     const graduatedTableHeader = [
         {title: "Name", sortable: true, id: "firstName", selector: (row: viewAllLoanees) => capitalizeFirstLetters(row?.userIdentity?.firstName) + " " + capitalizeFirstLetters(row?.userIdentity?.lastName)},
-        {title: "Employment status", sortable: true, id: "employmentStatus", selector: (row: viewAllLoanees) => <DropDownWithActionButton  selectedItem={selectedLoaneeEmploymentStatus} setSelectItem={handleSelectedItem} buttonText={'Save'} handleButtonClick={changeLoaneeStatusToEmployed} id={`ggg`} trigger={capitalizeFirstLetters(row?.employmentStatus)} dropDownItems={updateLoaneeEmploymentStatusItems} isDisabled={false} />},
+        {title: "Employment status", sortable: true, id: "employmentStatus", selector: (row: viewAllLoanees) => <DropDownWithActionButton  selectedItem={selectedLoaneeEmploymentStatus} setSelectItem={handleSelectedItem} buttonText={'Save'} handleButtonClick={changeLoaneeStatusToEmployed} id={`id+`+ row?.id} trigger={capitalizeFirstLetters(row?.employmentStatus)} dropDownItems={updateLoaneeEmploymentStatusItems} isDisabled={false} />},
         {title: "Amount requested", sortable: true, id: "AmountRequested", selector: (row: viewAllLoanees) => formatAmount((row?.loaneeLoanDetail as loaneeLoanDetail )?.amountRequested)},
         {title: "Amount repaid", sortable: true, id: "AmountRepaid", selector:(row: viewAllLoanees) => formatAmount((row?.loaneeLoanDetail as loaneeLoanDetail )?.amountRepaid)},
     ]
