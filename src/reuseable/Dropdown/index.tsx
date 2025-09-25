@@ -1,7 +1,6 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState } from 'react';
 import {Menubar, MenubarContent, MenubarItem, MenubarMenu, MenubarTrigger} from "@/components/ui/menubar";
 import {inter} from "@/app/fonts";
-import {ThreeDotTriggerDropDownItemsProps} from "@/types/Component.type";
 import {MdKeyboardArrowDown, MdKeyboardArrowUp} from "react-icons/md";
 import {Button} from "@/components/ui/button";
 
@@ -9,14 +8,27 @@ interface IProps {
     id: string;
     trigger: string,
     isDisabled: boolean;
-    dropDownItems: ThreeDotTriggerDropDownItemsProps[];
+    dropDownItems: {id:string, name:string}[];
+    setSelectItem: (item: string ) => void;
+    buttonText: string;
+    handleButtonClick: () => void | Promise<void>;
+    selectedItem: string;
+    itemId?: string;
+    setItemId?: (item: string ) => void;
 
 
 
 }
 
-const DropDownWithActionButton = ({id,isDisabled,trigger,dropDownItems}:IProps) => {
+const DropDownWithActionButton = ({id,isDisabled,trigger,itemId,setItemId,setSelectItem,selectedItem,dropDownItems, buttonText, handleButtonClick}:IProps) => {
     const [isIconUp, setIsIconUp] = useState(false)
+
+    useEffect(() => {
+        if (itemId && setItemId){
+            setItemId(itemId)
+        }
+    }, [itemId, setItemId])
+
     return (
         <div
             id={id}
@@ -35,24 +47,28 @@ const DropDownWithActionButton = ({id,isDisabled,trigger,dropDownItems}:IProps) 
                     </MenubarTrigger>
                     <MenubarContent  className={``}>
                         {dropDownItems?.map((item, i) => (
-                            <MenubarItem
+                            <div
                                 id={item.id}
                                 data-testid={item.id}
                                 key={item.id+ i}
-                                onClick={() => item?.handleClick}
-                                className={`${inter.className} ${item.sx} text-[14px] text-[#212221] w-full hover:text-[#142854] hover:bg-[#E1EEFF] `}
+                                onClick={() => {setSelectItem(item.name)}}
+                                className={`${inter.className}  text-[14px] text-[#212221] ${selectedItem  === item.name ? 'text-[#142854] bg-[#E1EEFF] ' : ''} w-full h-fit py-2 hover:text-[#142854] hover:bg-[#E1EEFF] `}
                             >
 
                                 {item?.name}
-                            </MenubarItem>
+                            </div>
                         ))}
-                        <div
-                            className={`w-full max-h-fit py-2 flex justify-end border-t border-t-[#D7D7D7]  `}
+                        <MenubarItem
+                            className={`w-full max-h-fit py-2 flex hover:bg-white justify-end border-t border-t-[#D7D7D7]  `}
                         >
                             <Button
-                                className={` text-white bg-[#D7D7D7]  `}
-                            >Save</Button>
-                        </div>
+                                disabled={!selectedItem}
+                                onClick={handleButtonClick}
+                                className={` text-white ${!selectedItem ? `bg-[#D7D7D7] ` : ` bg-meedlBlue `}   `}
+                            >
+                                {buttonText}
+                            </Button>
+                        </MenubarItem>
                     </MenubarContent>
                 </MenubarMenu>
             </Menubar>

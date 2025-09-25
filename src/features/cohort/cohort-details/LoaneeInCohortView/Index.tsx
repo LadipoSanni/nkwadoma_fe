@@ -8,14 +8,14 @@ import {formatAmount} from "@/utils/Format";
 import {useState} from "react";
 import {
     useReferLoaneeToACohortMutation,
-    useSearchForLoaneeInACohortQuery,
+    useSearchForLoaneeInACohortQuery, useUpdateLoaneeEmploymentStatusMutation,
     useViewAllLoaneeQuery
 } from "@/service/admin/cohort_query";
 import TableModal from "@/reuseable/modals/TableModal";
 import {Cross2Icon} from "@radix-ui/react-icons";
 import AddTraineeForm from "@/components/cohort/AddTraineeForm";
 import {useToast} from "@/hooks/use-toast";
-import {cohortLoaneeResponse, ThreeDotTriggerDropDownItemsProps} from "@/types/Component.type";
+import {cohortLoaneeResponse} from "@/types/Component.type";
 import Isloading from "@/reuseable/display/Isloading";
 import SearchEmptyState from "@/reuseable/emptyStates/SearchEmptyState";
 import { useAppSelector } from '@/redux/store';
@@ -41,6 +41,7 @@ interface viewAllLoanee {
     loaneeLoanDetails: loaneeLoanDetail;
     loaneeStatus: string;
     employmentStatus: string;
+    id: string;
 }
 
 interface TableRowData {
@@ -74,8 +75,9 @@ export const LoaneeInCohortView = ({cohortFee}: props) => {
     const [hasNextPage,setNextPage] = useState(false)
     const status = isReferred === "Not referred"? "ADDED" : "REFERRED"
     const selectedCohortInOrganizationType = useAppSelector(store => store?.cohort?.selectedCohortInOrganizationType)
-
+    const [selectedLoaneeEmploymentStatus, setSelectedLoaneeEmploymentStatus] = React.useState('')
     const [debouncedSearchTerm, isTyping] = useDebounce(loaneeName, 1000);
+    const [selectedLoaneeId, setSelectedLoaneeId] = React.useState('')
     const statuss = selectedCohortInOrganizationType === 'GRADUATED' ?  {
             cohortId: cohortId,
             pageSize: size,
@@ -109,18 +111,36 @@ export const LoaneeInCohortView = ({cohortFee}: props) => {
 
 
     const [refer, {isLoading: isLoadingRefer}] = useReferLoaneeToACohortMutation()
+    const [updateU, ]= useUpdateLoaneeEmploymentStatusMutation()
 
     const handleSelectedRow = (rows: Set<string>) => {
         setSelectedRows(rows)
     }
 
-    const changeLoaneeStatusToEmployed = () => {
-
+    const changeLoaneeStatusToEmployed = async () => {
+        const data = {
+            cohortId: cohortId,
+            employmentStatus:selectedLoaneeEmploymentStatus?.toUpperCase(),
+            loaneeId: selectedLoaneeId,
+        }
+        try {
+            const response = await updateU(data).unwrap()
+            toast({
+                description: response?.message,
+                status: "success",
+            })
+        } catch (err) {
+            const error = err as ApiError;
+            toast({
+                description: error?.data?.message,
+                status: "error",
+            })
+        }
     }
 
-    const updateLoaneeEmploymentStatus: ThreeDotTriggerDropDownItemsProps[] = [
-        {id: 'employed', name: 'Employed', handleClick: changeLoaneeStatusToEmployed},
-        {id: 'unemployed', name: 'Unemployed', handleClick: changeLoaneeStatusToEmployed},
+    const updateLoaneeEmploymentStatus = [
+        {id: 'employed', name: 'Employed'},
+        {id: 'unemployed', name: 'Unemployed'},
 
     ]
 
@@ -136,6 +156,16 @@ export const LoaneeInCohortView = ({cohortFee}: props) => {
         }
     },[debouncedSearchTerm,searchResults,data])
 
+    const handleSelectedItem = (item: string) => {
+        if (item === selectedLoaneeEmploymentStatus){
+            setSelectedLoaneeEmploymentStatus('')
+        }else {
+            setSelectedLoaneeEmploymentStatus(item)
+        }
+    }
+    const setLoaneeId = (id: string) => {
+        setSelectedLoaneeId(id)
+    }
     const loanProduct = [
         {title: "Loanee", sortable: true, id: "firstName", selector: (row: viewAllLoanees) => capitalizeFirstLetters(row.userIdentity?.firstName) + " " + capitalizeFirstLetters(row.userIdentity?.lastName)},
         {title: "Initial deposit", sortable: true, id: "InitialDeposit", selector: (row: viewAllLoanees) => formatAmount((row.loaneeLoanDetail as loaneeLoanDetail)?.initialDeposit)},
@@ -145,7 +175,7 @@ export const LoaneeInCohortView = ({cohortFee}: props) => {
 
     const tableHeaders = [
         {title: "Name", sortable: true, id: "firstName", selector: (row: viewAllLoanees) => capitalizeFirstLetters(row?.userIdentity?.firstName) + " " + capitalizeFirstLetters(row?.userIdentity?.lastName)},
-        {title: "Employment status", sortable: true, id: "employmentStatus", selector: (row: viewAllLoanees) => <DropDownWithActionButton id={``} trigger={capitalizeFirstLetters(row?.employmentStatus)} dropDownItems={updateLoaneeEmploymentStatus} isDisabled={false} />},
+        {title: "Employment status", sortable: true, id: "employmentStatus", selector: (row: viewAllLoanees) => <DropDownWithActionButton setItemId={setLoaneeId} itemId={row?.id}  selectedItem={selectedLoaneeEmploymentStatus} setSelectItem={handleSelectedItem} buttonText={'Save'} handleButtonClick={changeLoaneeStatusToEmployed} id={``} trigger={capitalizeFirstLetters(row?.employmentStatus)} dropDownItems={updateLoaneeEmploymentStatus} isDisabled={false} />},
         {title: "Amount requested", sortable: true, id: "AmountRequested", selector: (row: viewAllLoanees) => formatAmount((row?.loaneeLoanDetail as loaneeLoanDetail )?.amountRequested)},
         {title: "Amount repaid", sortable: true, id: "AmountRepaid", selector:(row: viewAllLoanees) => formatAmount((row?.loaneeLoanDetail as loaneeLoanDetail )?.amountRepaid)},
     ]
