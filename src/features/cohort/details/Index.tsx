@@ -103,7 +103,7 @@ const CohortDetails = () => {
     ]
     const tab:  {name: string; displayValue: React.ReactNode}[] = [
         {name: 'details',  displayValue: <DetailsComponent/>},
-        {name: 'loanee',  displayValue: selectedCohortInOrganizationType === 'GRADUATED' ? <GraduatedLoanee/> : <LoaneeInCohortView cohortFee={cohortDetails?.data?.tuitionAmount}/>
+        {name: 'loanee',  displayValue: <LoaneeInCohortView cohortFee={cohortDetails?.data?.tuitionAmount}/>
         },
 
     ]

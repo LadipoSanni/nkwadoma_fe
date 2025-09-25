@@ -15,13 +15,14 @@ import TableModal from "@/reuseable/modals/TableModal";
 import {Cross2Icon} from "@radix-ui/react-icons";
 import AddTraineeForm from "@/components/cohort/AddTraineeForm";
 import {useToast} from "@/hooks/use-toast";
-import {cohortLoaneeResponse} from "@/types/Component.type";
+import {cohortLoaneeResponse, ThreeDotTriggerDropDownItemsProps} from "@/types/Component.type";
 import Isloading from "@/reuseable/display/Isloading";
 import SearchEmptyState from "@/reuseable/emptyStates/SearchEmptyState";
 import { useAppSelector } from '@/redux/store';
 import CheckBoxTable from '@/reuseable/table/Checkbox-table';
 import { useDebounce } from '@/hooks/useDebounce';
 import {capitalizeFirstLetters} from "@/utils/GlobalMethods";
+import DropDownWithActionButton from "@/reuseable/Dropdown";
 
 interface userIdentity {
     firstName: string;
@@ -32,12 +33,14 @@ interface loaneeLoanDetail {
     initialDeposit: number;
     amountRequested: number;
     amountReceived: number;
+    amountRepaid: string;
 }
 
 interface viewAllLoanee {
     userIdentity: userIdentity;
     loaneeLoanDetails: loaneeLoanDetail;
     loaneeStatus: string;
+    employmentStatus: string;
 }
 
 interface TableRowData {
@@ -70,23 +73,38 @@ export const LoaneeInCohortView = ({cohortFee}: props) => {
     const [totalPage,setTotalPage] = useState(0)
     const [hasNextPage,setNextPage] = useState(false)
     const status = isReferred === "Not referred"? "ADDED" : "REFERRED"
+    const selectedCohortInOrganizationType = useAppSelector(store => store?.cohort?.selectedCohortInOrganizationType)
 
     const [debouncedSearchTerm, isTyping] = useDebounce(loaneeName, 1000);
+    const statuss = selectedCohortInOrganizationType === 'GRADUATED' ?  {
+            cohortId: cohortId,
+            pageSize: size,
+            pageNumber: page
+        } : {
+            cohortId: cohortId,
+            status,
+            pageSize: size,
+            pageNumber: page
+        }
 
-    const {data,isLoading: loaneeIsloading,isFetching} = useViewAllLoaneeQuery({
-        cohortId: cohortId,
-        status: status,
-        pageSize: size,
-        pageNumber: page
-    })
+    const {data,isLoading: loaneeIsloading,isFetching} = useViewAllLoaneeQuery(statuss)
 
-    const {data: searchResults, isLoading: isLoading,isFetching:isfetching} = useSearchForLoaneeInACohortQuery({
+    const searchProps = selectedCohortInOrganizationType === 'GRADUATED' ?
+        {
             loaneeName: debouncedSearchTerm,
+            cohortId: cohortId,
+            pageSize: size,
+            pageNumber: page
+        }
+        :
+        {  loaneeName: debouncedSearchTerm,
             cohortId: cohortId,
             status: status,
             pageSize: size,
             pageNumber: page
-        },
+        };
+
+    const {data: searchResults, isLoading: isLoading,isFetching:isfetching} = useSearchForLoaneeInACohortQuery(searchProps,
         {skip: !debouncedSearchTerm || !cohortId})
 
 
@@ -95,6 +113,16 @@ export const LoaneeInCohortView = ({cohortFee}: props) => {
     const handleSelectedRow = (rows: Set<string>) => {
         setSelectedRows(rows)
     }
+
+    const changeLoaneeStatusToEmployed = () => {
+
+    }
+
+    const updateLoaneeEmploymentStatus: ThreeDotTriggerDropDownItemsProps[] = [
+        {id: 'employed', name: 'Employed', handleClick: changeLoaneeStatusToEmployed},
+        {id: 'unemployed', name: 'Unemployed', handleClick: changeLoaneeStatusToEmployed},
+
+    ]
 
     useEffect(()=> {
         if (debouncedSearchTerm && searchResults && searchResults?.data) {
@@ -114,6 +142,14 @@ export const LoaneeInCohortView = ({cohortFee}: props) => {
         {title: "Amount requested", sortable: true, id: "AmountRequested", selector: (row: viewAllLoanees) => formatAmount((row.loaneeLoanDetail as loaneeLoanDetail)?.amountRequested)},
         {title: "Amount received", sortable: true, id: "AmountReceived", selector:(row: viewAllLoanees) => formatAmount((row.loaneeLoanDetail as loaneeLoanDetail)?.amountReceived)},
     ]
+
+    const tableHeaders = [
+        {title: "Name", sortable: true, id: "firstName", selector: (row: viewAllLoanees) => capitalizeFirstLetters(row?.userIdentity?.firstName) + " " + capitalizeFirstLetters(row?.userIdentity?.lastName)},
+        {title: "Employment status", sortable: true, id: "employmentStatus", selector: (row: viewAllLoanees) => <DropDownWithActionButton id={``} trigger={capitalizeFirstLetters(row?.employmentStatus)} dropDownItems={updateLoaneeEmploymentStatus} isDisabled={false} />},
+        {title: "Amount requested", sortable: true, id: "AmountRequested", selector: (row: viewAllLoanees) => formatAmount((row?.loaneeLoanDetail as loaneeLoanDetail )?.amountRequested)},
+        {title: "Amount repaid", sortable: true, id: "AmountRepaid", selector:(row: viewAllLoanees) => formatAmount((row?.loaneeLoanDetail as loaneeLoanDetail )?.amountRepaid)},
+    ]
+    const tableHeader = selectedCohortInOrganizationType === 'GRADUATED' ? tableHeaders : loanProduct;
 
     const items = ["Not referred","Referred"]
 
@@ -176,7 +212,7 @@ export const LoaneeInCohortView = ({cohortFee}: props) => {
                                 />
                             </div>
                         </div>
-                        <div className='w-32 md:pt-2 pt-2' id={`selectId`}>
+                        <div className={`'w-32  ${selectedCohortInOrganizationType === 'GRADUATED' ? 'hidden md:hidden lg:hidden' : '' } md:pt-2 pt-2`} id={`selectId`}>
                             <CustomSelect onChange={handleSelected}
                                           selectContent={items}
                                           placeHolder={"Not referred"}
@@ -185,7 +221,7 @@ export const LoaneeInCohortView = ({cohortFee}: props) => {
                         </div>
                     </div>
 
-                    <div className={`flex md:flex-row flex-col gap-4 md:items-center`}
+                    <div className={`flex ${selectedCohortInOrganizationType === 'GRADUATED' ? 'hidden md:hidden lg:hidden' : '' } md:flex-row flex-col gap-4 md:items-center`}
                          id={`ReferAndTraineeDiv`}>
                         <div className={`md:block hidden`} id={`largerScreenReferButton`}>
                             <Button
@@ -219,7 +255,6 @@ export const LoaneeInCohortView = ({cohortFee}: props) => {
 
                             </Button>
                         </div>
-
                     </div>
                 </div>
 
@@ -228,7 +263,7 @@ export const LoaneeInCohortView = ({cohortFee}: props) => {
                   <div>
                     <CheckBoxTable
                         tableData={getTableData()}
-                        tableHeader={loanProduct}
+                        tableHeader={tableHeader}
                         handleRowClick={()=> {}}
                         staticHeader="Loanee"
                         staticColunm="firstName"
@@ -237,7 +272,7 @@ export const LoaneeInCohortView = ({cohortFee}: props) => {
                         tableCellStyle="h-12"
                         isLoading={isLoading || loaneeIsloading || isFetching || isfetching}
                         condition={true}
-                        tableHeight={35}
+                        tableHeight={45}
                         hasNextPage={hasNextPage}
                         pageNumber={page}
                         setPageNumber={setPageNumber}

@@ -1,5 +1,5 @@
-import React, {useState} from 'react';
-import {MdOutlineBusinessCenter, MdSearch} from "react-icons/md";
+import React, {useEffect, useState} from 'react';
+import {MdOutlineBusinessCenter, MdSearch,MdOutlinePeopleAlt} from "react-icons/md";
 import {Input} from "@/components/ui/input";
 import {capitalizeFirstLetters} from "@/utils/GlobalMethods";
 import {formatAmount} from "@/utils/Format";
@@ -7,10 +7,21 @@ import { loanRequestDatas} from "@/utils/LoanRequestMockData/cohortProduct";
 import Table from '@/reuseable/table/Table';
 import {ThreeDotTriggerDropDownItemsProps} from "@/types/Component.type";
 import DropDownWithActionButton from '@/reuseable/Dropdown/index';
-
+import {useAppSelector} from "@/redux/store";
+import {useDebounce} from "@/hooks/useDebounce";
+import {useViewAllLoaneeQuery} from "@/service/admin/cohort_query";
+// react-icons/md/MdOutlinePeopleAlt
+interface userIdentity {
+    firstName: string,
+    lastName: string,
+}
+interface loaneeLoanDetails {
+    amountRequested: string;
+    amountRepaid: string;
+}
 interface viewAllLoanees {
-    // userIdentity: userIdentity;
-    // loaneeLoanDetails: loaneeLoanDetail;
+    userIdentity: userIdentity;
+    loaneeLoanDetail: loaneeLoanDetails;
     loaneeStatus: string;
     firstName: string;
     lastName: string;
@@ -27,7 +38,32 @@ const GraduatedLoanee = () => {
     const [loaneeName, setLoaneeName] = React.useState("");
 
     const [page,setPageNumber] = useState(0);
-    const [totalPage] = useState(0)
+    const cohortId =  useAppSelector(store=> store?.cohort?.setCohortId)
+    const size = 10;
+    const [totalPage,setTotalPage] = useState(0)
+    const [hasNextPage,setNextPage] = useState(false)
+
+    const [debouncedSearchTerm, isTyping] = useDebounce(loaneeName, 1000);
+
+    const {data,isLoading,isFetching} = useViewAllLoaneeQuery({
+        cohortId: cohortId,
+        pageSize: size,
+        pageNumber: page
+    })
+    console.log('data; ', data)
+
+
+    useEffect(()=> {
+        // if (debouncedSearchTerm && searchResults && searchResults?.data) {
+        //     setNextPage(searchResults?.data?.hasNextPage)
+        //     setTotalPage(searchResults?.data?.totalPages)
+        //     setPageNumber(searchResults?.data?.pageNumber)
+        // }else if(!debouncedSearchTerm && data &&  data?.data) {
+            setNextPage(data?.data?.hasNextPage)
+            setTotalPage(data?.data?.totalPages)
+            setPageNumber(data?.data?.pageNumber)
+        // }
+    },[data])
 
     const changeLoaneeStatusToEmployed = () => {
 
@@ -40,10 +76,10 @@ const GraduatedLoanee = () => {
     ]
 
     const tableHeader = [
-        {title: "Name", sortable: true, id: "firstName", selector: (row: viewAllLoanees) => capitalizeFirstLetters(row?.firstName) + " " + capitalizeFirstLetters(row?.lastName)},
+        {title: "Name", sortable: true, id: "firstName", selector: (row: viewAllLoanees) => capitalizeFirstLetters(row?.userIdentity?.firstName) + " " + capitalizeFirstLetters(row?.userIdentity?.lastName)},
         {title: "Employment status", sortable: true, id: "employmentStatus", selector: (row: viewAllLoanees) => <DropDownWithActionButton id={``} trigger={row?.employmentStatus} dropDownItems={updateLoaneeEmploymentStatus} isDisabled={false} />},
-        {title: "Amount requested", sortable: true, id: "AmountRequested", selector: (row: viewAllLoanees) => formatAmount(row?.amountRequested)},
-        {title: "Amount repaid", sortable: true, id: "AmountRepaid", selector:(row: viewAllLoanees) => formatAmount(row?.amountRepaid)},
+        {title: "Amount requested", sortable: true, id: "AmountRequested", selector: (row: viewAllLoanees) => formatAmount(row?.loaneeLoanDetail?.amountRequested)},
+        {title: "Amount repaid", sortable: true, id: "AmountRepaid", selector:(row: viewAllLoanees) => formatAmount(row?.loaneeLoanDetail?.amountRepaid)},
     ]
     const handleRowClick = (row: TableRowData) => {
         console.log('roe: ', row)
@@ -65,25 +101,27 @@ const GraduatedLoanee = () => {
                 />
             </div>
             <Table
-                tableData={loanRequestDatas}
+                tableData={data?.data?.body}
 
                 //eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-expect-error
                 tableHeader={tableHeader}
+                //eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-expect-error
                 handleRowClick={handleRowClick}
                 tableHeight={45}
-                icon={MdOutlineBusinessCenter }
-                sideBarTabName='financier'
+                icon={MdOutlinePeopleAlt }
+                sideBarTabName='Loanee'
                 condition={true}
-                staticHeader={"Financier"}
+                staticHeader={"Name"}
                 staticColunm={"name"}
                 sx='cursor-default'
-                hasNextPage={false}
+                hasNextPage={hasNextPage}
                 pageNumber={page}
                 setPageNumber={setPageNumber}
                 totalPages={totalPage}
-                isLoading={false}
-                // isLoading={isLoading || searchIsLoading || isFetching || isSearchFetching}
+                // isLoading={searchIsLoading || isSearchFetching }
+                isLoading={isLoading  || isFetching }
                 tableCellStyle={'h-12'}
             />
         </div>
