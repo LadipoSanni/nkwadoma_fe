@@ -163,9 +163,7 @@ export const LoaneeInCohortView = ({cohortFee}: props) => {
             setSelectedLoaneeEmploymentStatus(item)
         }
     }
-    const setLoaneeId = (id: string) => {
-        setSelectedLoaneeId(id)
-    }
+
     const loanProduct = [
         {title: "Loanee", sortable: true, id: "firstName", selector: (row: viewAllLoanees) => capitalizeFirstLetters(row.userIdentity?.firstName) + " " + capitalizeFirstLetters(row.userIdentity?.lastName)},
         {title: "Initial deposit", sortable: true, id: "InitialDeposit", selector: (row: viewAllLoanees) => formatAmount((row.loaneeLoanDetail as loaneeLoanDetail)?.initialDeposit)},
@@ -175,7 +173,7 @@ export const LoaneeInCohortView = ({cohortFee}: props) => {
 
     const tableHeaders = [
         {title: "Name", sortable: true, id: "firstName", selector: (row: viewAllLoanees) => capitalizeFirstLetters(row?.userIdentity?.firstName) + " " + capitalizeFirstLetters(row?.userIdentity?.lastName)},
-        {title: "Employment status", sortable: true, id: "employmentStatus", selector: (row: viewAllLoanees) => <DropDownWithActionButton setItemId={setLoaneeId} itemId={row?.id}  selectedItem={selectedLoaneeEmploymentStatus} setSelectItem={handleSelectedItem} buttonText={'Save'} handleButtonClick={changeLoaneeStatusToEmployed} id={``} trigger={capitalizeFirstLetters(row?.employmentStatus)} dropDownItems={updateLoaneeEmploymentStatus} isDisabled={false} />},
+        {title: "Employment status", sortable: true, id: "employmentStatus", selector: (row: viewAllLoanees) => <DropDownWithActionButton  selectedItem={selectedLoaneeEmploymentStatus} setSelectItem={handleSelectedItem} buttonText={'Save'} handleButtonClick={changeLoaneeStatusToEmployed} id={`ggg`} trigger={capitalizeFirstLetters(row?.employmentStatus)} dropDownItems={updateLoaneeEmploymentStatus} isDisabled={false} />},
         {title: "Amount requested", sortable: true, id: "AmountRequested", selector: (row: viewAllLoanees) => formatAmount((row?.loaneeLoanDetail as loaneeLoanDetail )?.amountRequested)},
         {title: "Amount repaid", sortable: true, id: "AmountRepaid", selector:(row: viewAllLoanees) => formatAmount((row?.loaneeLoanDetail as loaneeLoanDetail )?.amountRepaid)},
     ]
@@ -189,6 +187,7 @@ export const LoaneeInCohortView = ({cohortFee}: props) => {
         return data?.data?.body;
     }
 
+
     const handleSelected = (value: string) => {
         setIsReferred(value);
     }
@@ -196,6 +195,10 @@ export const LoaneeInCohortView = ({cohortFee}: props) => {
         setAddLoanee(true)
     }
     const {toast} = useToast()
+    const handleRR = (row: TableRowData) => {
+        setSelectedLoaneeId(String(row?.id))
+
+    }
 
 
     const handleRefer = async () => {
@@ -294,7 +297,7 @@ export const LoaneeInCohortView = ({cohortFee}: props) => {
                     <CheckBoxTable
                         tableData={getTableData()}
                         tableHeader={tableHeader}
-                        handleRowClick={()=> {}}
+                        handleRowClick={handleRR}
                         staticHeader="Loanee"
                         staticColunm="firstName"
                         icon={MdOutlinePerson}

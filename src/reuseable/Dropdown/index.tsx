@@ -13,21 +13,13 @@ interface IProps {
     buttonText: string;
     handleButtonClick: () => void | Promise<void>;
     selectedItem: string;
-    itemId?: string;
-    setItemId?: (item: string ) => void;
-
 
 
 }
 
-const DropDownWithActionButton = ({id,isDisabled,trigger,itemId,setItemId,setSelectItem,selectedItem,dropDownItems, buttonText, handleButtonClick}:IProps) => {
+const DropDownWithActionButton = ({id,isDisabled,trigger,setSelectItem,selectedItem,dropDownItems, buttonText, handleButtonClick}:IProps) => {
     const [isIconUp, setIsIconUp] = useState(false)
 
-    useEffect(() => {
-        if (itemId && setItemId){
-            setItemId(itemId)
-        }
-    }, [itemId, setItemId])
 
     return (
         <div
