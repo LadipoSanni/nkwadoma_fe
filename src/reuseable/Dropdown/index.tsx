@@ -1,4 +1,5 @@
-import React, {useEffect, useState } from 'react';
+'use client'
+import React, { useState } from 'react';
 import {Menubar, MenubarContent, MenubarItem, MenubarMenu, MenubarTrigger} from "@/components/ui/menubar";
 import {inter} from "@/app/fonts";
 import {MdKeyboardArrowDown, MdKeyboardArrowUp} from "react-icons/md";
@@ -39,7 +40,7 @@ const DropDownWithActionButton = ({id,isDisabled,trigger,setSelectItem,selectedI
                     </MenubarTrigger>
                     <MenubarContent  className={``}>
                         {dropDownItems?.map((item, i) => (
-                            <div
+                            <button
                                 id={item.id}
                                 data-testid={item.id}
                                 key={item.id+ i}
@@ -48,15 +49,15 @@ const DropDownWithActionButton = ({id,isDisabled,trigger,setSelectItem,selectedI
                             >
 
                                 {item?.name}
-                            </div>
+                            </button>
                         ))}
                         <MenubarItem
-                            className={`w-full max-h-fit py-2 flex hover:bg-white justify-end border-t border-t-[#D7D7D7]  `}
+                            className={`w-full max-h-fit py-2 flex focus:bg-white hover:bg-white justify-end border-t border-t-[#D7D7D7]  `}
                         >
                             <Button
-                                disabled={!selectedItem}
+                                disabled={!selectedItem || selectedItem === trigger}
                                 onClick={handleButtonClick}
-                                className={` text-white ${!selectedItem ? `bg-[#D7D7D7] ` : ` bg-meedlBlue `}   `}
+                                className={` text-white ${!selectedItem || selectedItem === trigger ? `bg-[#D7D7D7] ` : ` bg-meedlBlue `}   `}
                             >
                                 {buttonText}
                             </Button>

@@ -138,7 +138,7 @@ export const LoaneeInCohortView = ({cohortFee}: props) => {
         }
     }
 
-    const updateLoaneeEmploymentStatus = [
+    const updateLoaneeEmploymentStatusItems = [
         {id: 'employed', name: 'Employed'},
         {id: 'unemployed', name: 'Unemployed'},
 
@@ -164,20 +164,20 @@ export const LoaneeInCohortView = ({cohortFee}: props) => {
         }
     }
 
-    const loanProduct = [
+    const currentAndIncomingTableHeader = [
         {title: "Loanee", sortable: true, id: "firstName", selector: (row: viewAllLoanees) => capitalizeFirstLetters(row.userIdentity?.firstName) + " " + capitalizeFirstLetters(row.userIdentity?.lastName)},
         {title: "Initial deposit", sortable: true, id: "InitialDeposit", selector: (row: viewAllLoanees) => formatAmount((row.loaneeLoanDetail as loaneeLoanDetail)?.initialDeposit)},
         {title: "Amount requested", sortable: true, id: "AmountRequested", selector: (row: viewAllLoanees) => formatAmount((row.loaneeLoanDetail as loaneeLoanDetail)?.amountRequested)},
         {title: "Amount received", sortable: true, id: "AmountReceived", selector:(row: viewAllLoanees) => formatAmount((row.loaneeLoanDetail as loaneeLoanDetail)?.amountReceived)},
     ]
 
-    const tableHeaders = [
+    const graduatedTableHeader = [
         {title: "Name", sortable: true, id: "firstName", selector: (row: viewAllLoanees) => capitalizeFirstLetters(row?.userIdentity?.firstName) + " " + capitalizeFirstLetters(row?.userIdentity?.lastName)},
-        {title: "Employment status", sortable: true, id: "employmentStatus", selector: (row: viewAllLoanees) => <DropDownWithActionButton  selectedItem={selectedLoaneeEmploymentStatus} setSelectItem={handleSelectedItem} buttonText={'Save'} handleButtonClick={changeLoaneeStatusToEmployed} id={`ggg`} trigger={capitalizeFirstLetters(row?.employmentStatus)} dropDownItems={updateLoaneeEmploymentStatus} isDisabled={false} />},
+        {title: "Employment status", sortable: true, id: "employmentStatus", selector: (row: viewAllLoanees) => <DropDownWithActionButton  selectedItem={selectedLoaneeEmploymentStatus} setSelectItem={handleSelectedItem} buttonText={'Save'} handleButtonClick={changeLoaneeStatusToEmployed} id={`ggg`} trigger={capitalizeFirstLetters(row?.employmentStatus)} dropDownItems={updateLoaneeEmploymentStatusItems} isDisabled={false} />},
         {title: "Amount requested", sortable: true, id: "AmountRequested", selector: (row: viewAllLoanees) => formatAmount((row?.loaneeLoanDetail as loaneeLoanDetail )?.amountRequested)},
         {title: "Amount repaid", sortable: true, id: "AmountRepaid", selector:(row: viewAllLoanees) => formatAmount((row?.loaneeLoanDetail as loaneeLoanDetail )?.amountRepaid)},
     ]
-    const tableHeader = selectedCohortInOrganizationType === 'GRADUATED' ? tableHeaders : loanProduct;
+    const tableHeader = selectedCohortInOrganizationType === 'GRADUATED' ? graduatedTableHeader : currentAndIncomingTableHeader;
 
     const items = ["Not referred","Referred"]
 
@@ -195,7 +195,7 @@ export const LoaneeInCohortView = ({cohortFee}: props) => {
         setAddLoanee(true)
     }
     const {toast} = useToast()
-    const handleRR = (row: TableRowData) => {
+    const handleRowClick = (row: TableRowData) => {
         setSelectedLoaneeId(String(row?.id))
 
     }
@@ -297,7 +297,7 @@ export const LoaneeInCohortView = ({cohortFee}: props) => {
                     <CheckBoxTable
                         tableData={getTableData()}
                         tableHeader={tableHeader}
-                        handleRowClick={handleRR}
+                        handleRowClick={handleRowClick}
                         staticHeader="Loanee"
                         staticColunm="firstName"
                         icon={MdOutlinePerson}
