@@ -7,7 +7,7 @@ import {Label} from '@/components/ui/label';
 import {Button} from '@/components/ui/button';
 import React, { useState,useEffect} from "react";
 import CurrencySelectInput from "@/reuseable/Input/CurrencySelectInput";
-import {useCreateLoanProductMutation} from "@/service/admin/loan_product";
+import {useCreateLoanProductMutation,useUpdateLoanProductMutation} from "@/service/admin/loan_product";
 import Isloading from "@/reuseable/display/Isloading";
 import 'react-quill-new/dist/quill.snow.css'
 import PdfAndDocFileUpload from "@/reuseable/Input/Pdf&docx-fileupload";
@@ -46,7 +46,9 @@ function StepTwo() {
       const [selectCurrency, setSelectCurrency] = useState("NGN");
     const [error, setError] = useState('');
      const [createLoanProduct, {isLoading}] = useCreateLoanProductMutation();
+     const [updateLoanProduct, {isLoading:isUpdateLoading}] =useUpdateLoanProductMutation()
      const {toast} = useToast();
+
       const isFormValid = (values: typeof initialFormValue) => {
         
         if (values.vendor.length === 0) return true;
@@ -191,10 +193,10 @@ function StepTwo() {
         );
         setFieldValue("vendor", updatedVendor);
     };
-
-
+    
     const handleSubmit = async (values: typeof initialFormValue) => {
         const formData = {
+           id: stepOneLoanProductField?.id,
            name: stepOneLoanProductField?.productName,
            investmentVehicleId: stepOneLoanProductField?.investmentVehicleId,
            loanProductSize: stepOneLoanProductField?.loanProductSize,
@@ -213,6 +215,18 @@ function StepTwo() {
         }
 
          try {
+            if(stepOneLoanProductField?.id) {
+              const update = await updateLoanProduct(formData).unwrap();
+              if (update) {
+                  toast({
+                      description: update.message,
+                      status: "success",
+                      duration: 2000
+                  });  
+                  store.dispatch(clearLoanProductField())
+                  router.push("/loan-product/loan-product-details")
+          }
+            }else {
             const create = await createLoanProduct(formData).unwrap();
             if (create) {
                 toast({
@@ -223,6 +237,7 @@ function StepTwo() {
                 store.dispatch(clearLoanProductField())
                 router.push("/loan-product")
         }
+      }
         } catch (err) {
             const error = err as ApiError;
             setError(error ? error?.data?.message : "Error occurred");
@@ -644,7 +659,7 @@ function StepTwo() {
                                         type={"submit"}
                                         disabled={!isFormValid(values)}
                                     >
-                                        {isLoading ? (<Isloading/>) : (
+                                        {isLoading || isUpdateLoading ? (<Isloading/>) : (
                                            "Create"
                                         )}
                                     </Button>

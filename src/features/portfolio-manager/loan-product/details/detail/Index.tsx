@@ -8,7 +8,7 @@ import BasicDetailTab from "@/reuseable/details/BasicDetailTab";
 import BasicDetail from "@/reuseable/details/BasicDetail";
 import ViewDocument from "@/reuseable/details/ViewDocument";
 import { capitalizeFirstLetters } from "@/utils/GlobalMethods";
-import { setLoanProductField,setLoanProductFieldStepTwo,setTotalNumberOfLoanees} from "@/redux/slice/loan-product/Loan-product";
+import { setLoanProductField,setLoanProductFieldStepTwo,setTotalNumberOfLoanees,setLoanProductName } from "@/redux/slice/loan-product/Loan-product";
 import { setFundProductAvailableAmount } from "@/redux/slice/loan/selected-loan";
 import {useGetInvestmentVehicleDetailQuery} from '@/service/admin/fund_query';
 
@@ -16,9 +16,9 @@ const Details = () => {
 
     const loanProductId = useAppSelector(state => (state?.loanProduct?.loanProductId))
 
-    const {data: loanProduct, isLoading: loading} = useGetLoanProductDetailsByIdQuery({loanProductId: loanProductId})
+    const {data: loanProduct, isLoading: loading} = useGetLoanProductDetailsByIdQuery({loanProductId: loanProductId},{refetchOnMountOrArgChange: true})
 
-    const {data} = useGetInvestmentVehicleDetailQuery({id: loanProduct?.data?.investmentVehicleId }, {skip: !loanProduct?.data?.investmentVehicleId });   
+    const {data} = useGetInvestmentVehicleDetailQuery({id: loanProduct?.data?.investmentVehicleId }, {skip: !loanProduct?.data?.investmentVehicleId ,refetchOnMountOrArgChange: !loanProduct?.data?.investmentVehicleId? false : true});   
 
     const getVendorByProductType = (vendors: string, productType: string) => {
         if (!vendors || !Array.isArray(vendors)) return 'Not provided';
@@ -55,6 +55,7 @@ const Details = () => {
          store.dispatch(setLoanProductFieldStepTwo(basicDetails))
          store.dispatch(setTotalNumberOfLoanees(loanProduct?.data?.totalNumberOfLoanee))
          store.dispatch(setFundProductAvailableAmount(data?.data?.totalAvailableAmount))
+         store.dispatch(setLoanProductName(loanProduct?.data?.name))
       },[loanProduct,data])
 
 
