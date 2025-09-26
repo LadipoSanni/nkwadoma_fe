@@ -212,7 +212,7 @@ function AddTraineeForm({setIsOpen, tuitionFee,cohortId }: Props) {
                                         msOverflowStyle: 'none',
 
                                     }}
-                                    className=" md:max-h-[67.5vh] overflow-y-auto  grid grid-cols-1 gap-y-4  px-2">
+                                    className=" md:max-h-[67.5vh]  overflow-y-auto  grid grid-cols-1 gap-y-4  px-2">
                                     <div>
                                         <Label htmlFor="firstName">First name</Label>
                                         <Field
@@ -321,93 +321,104 @@ function AddTraineeForm({setIsOpen, tuitionFee,cohortId }: Props) {
                                 </div>
                             </div>
                         ) : (
-                            <div className={`py-5 ${inter.className}`}>
-                                <div className={`grid `}>
-                                    <span>Cohort breakdown</span>
-                                    <div className={` w-full h-fit bg-[#F9F9F9] rounded-md grid py-2 px-2  `}>
-                                        <span>Total loan amount (Initial deposit - Cohort breakdown) </span>
-                                        {/*<span>{formatAmount(totalItemAmount)}</span>*/}
-                                        <TotalInput prefix={'₦'} total={totalItemAmount}
-                                                    componentId={'totalInputOnAddLoaneeModalComponent'}/>
-                                    </div>
+                            <div className={`py- ${inter.className}`}>
+                                <span className={` text-[24px] text-black    `}>Cohort breakdown</span>
+                                <div className={` w-full h-fit bg-[#F9F9F9] rounded-md grid py-2 px-2  `}>
+                                    <span>Total loan amount (Initial deposit - Cohort breakdown) </span>
+                                    <TotalInput prefix={'₦'} total={totalItemAmount}
+                                                componentId={'totalInputOnAddLoaneeModalComponent'}/>
                                 </div>
-                               <div
-                                   style={{
-                                       scrollbarWidth: 'none',
-                                       msOverflowStyle: 'none',
 
-                                   }}
-                                   className=" md:max-h-[50vh] overflow-y-auto  grid grid-cols-1 gap-y-4  px-2"
-                               >
-                                   <span>Tuition</span>
-                                   <div className="flex items-center gap-2 ">
-                                       <CurrencySelectInput
-                                           readOnly={true}
-                                           className={`bg-grey105 text-black300`}
-                                           selectedcurrency={selectCurrency}
-                                           setSelectedCurrency={setSelectCurrency}
-                                       />
+                                <div
+                                    style={{
+                                        scrollbarWidth: 'none',
+                                        msOverflowStyle: 'none',
 
-                                       <div className={`flex w-full flex-row items-center justify-between mb-2`}>
-                                           <Field
-                                               id="detail-"
-                                               name="detail-"
-                                               type="text"
-                                               defaultValue={tuitionFee?.toLocaleString() || ''}
-                                               readOnly
-                                               className="w-full p-3 h-[3.2rem] border rounded bg-grey105 focus:outline-none"
-                                           />
-                                       </div>
-                                   </div>
-                                   {cohortBreakDown?.map((detail: cohortBreakDown, index: number) => (
-                                       <div key={"breakDown" + index} className={` grid md:grid gap-0`}>
-                                           <Label htmlFor={`detail-${index}`}>{detail.itemName}</Label>
-                                           <div className="w-full  grid gap-1">
-                                               <div className={`grid  md:grid md:gap-0 pb-4 md:h-fit h-fit w-full gap-1`}>
-                                                   <div className={`flex gap-2 w-full `}>
-                                                       <CurrencySelectInput
-                                                           selectedcurrency={detail.currency}
-                                                           setSelectedCurrency={setSelectCurrency}
-                                                       />
-                                                       <div
-                                                           className={`flex w-full flex-row items-center justify-between mb-2 text-black300`}>
-                                                           <NumericFormat
-                                                               id={`detail-${index}`}
-                                                               name={`detail-${index}`}
-                                                               type="text"
-                                                               thousandSeparator=","
-                                                               decimalScale={2}
-                                                               fixedDecimalScale={true}
-                                                               value={detail?.itemAmount?.toLocaleString() || ''}
-                                                               placeholder={`${detail?.itemAmount || ''}`}
-                                                               className="w-full p-3 h-[3.2rem] border rounded focus:outline-none"
-                                                               onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                                                                   const rawValue = e.target.value.replace(/,/g, '');
-                                                                   if (!isNaN(Number(rawValue))) {
-                                                                       editCohortBreakDown(
-                                                                           {target: {value: rawValue}} as React.ChangeEvent<HTMLInputElement>,
-                                                                           index,
-                                                                       );
-                                                                   }
-                                                               }}
-                                                           />
-                                                       </div>
-                                                       <MdOutlineDelete id={`deleteItemButton${index}`}
-                                                                        className={'text-blue200 mt-auto mb-auto  h-6 w-6 cursor-pointer'}
-                                                                        onClick={()=> {deleteItem(index, Number(detail.itemAmount))}}
-                                                       />
-                                                   </div>
-                                                   {amountError?.index === index && <div
-                                                       className={`text-error500 place-self-start  text-sm text-center`}>{amountError?.error}</div>}
-                                               </div>
+                                    }}
+                                    className={` max-h-[45vh] h-[45vh] overflow-y-scroll   `}
+                                >
+                                    <div className={`w-full grid  bg-red-200  `}>
+                                        <div className={`bg-blue-200 `}>
+                                            <label className={`w-[30%] bg-purple-200 `}>Item</label>
+                                            <label className={`w-[70%] bg-amber-200`}>Amount</label>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div className={`flex gap-3 `}>
+                                            <div className={` mt-auto mb-auto bg-[#F9F9F9] border border-[#D7D7D7] rounded-md w-[40%] h-fit p-3  text-black  `}>
+                                                Tuition
+                                            </div>
+                                            <div className={`flex w-full gap-2 flex-row items-center justify-between mb-2`}>
+                                                {/*<CurrencySelectInput*/}
+                                                {/*    readOnly={true}*/}
+                                                {/*    className={`bg-grey105 h-fit p-3  text-black300`}*/}
+                                                {/*    selectedcurrency={selectCurrency}*/}
+                                                {/*    setSelectedCurrency={setSelectCurrency}*/}
+                                                {/*/>*/}
+                                                <div className={` mt-auto mb-auto bg-[#F9F9F9]  border border-[#D7D7D7] rounded-md w-[6rem] h-fit p-3  text-black  `}>
+                                                    NGN
+                                                </div>
 
-                                           </div>
-                                       </div>
-                                   ))}
-                               </div>
+                                                <Field
+                                                    id="detail-"
+                                                    name="detail-"
+                                                    type="text"
+                                                    defaultValue={tuitionFee?.toLocaleString() || ''}
+                                                    readOnly
+                                                    className="w-full p-3  h-[3.2rem] border rounded bg-grey105 focus:outline-none"
+                                                />
+                                            </div>
+                                        </div>
+                                        {cohortBreakDown?.map((detail: cohortBreakDown, index: number) => (
+                                            <div className={`flex gap-3 `}>
+                                                <div className={` mt-auto mb-auto bg-[#F9F9F9] border border-[#D7D7D7] rounded-md w-[40%] h-fit p-3  text-black  `}>
+                                                    {detail.itemName}
+                                                </div>
+                                                <div className={`flex w-full gap-2 flex-row items-center justify-between mb-2`}>
+                                                    {/*<CurrencySelectInput*/}
+                                                    {/*    readOnly={true}*/}
+                                                    {/*    className={`bg-grey105 h-fit p-3  text-black300`}*/}
+                                                    {/*    selectedcurrency={selectCurrency}*/}
+                                                    {/*    setSelectedCurrency={setSelectCurrency}*/}
+                                                    {/*/>*/}
+                                                    <div className={` mt-auto mb-auto bg-[#F9F9F9]  border border-[#D7D7D7] rounded-md w-[6rem] h-fit p-3  text-black  `}>
+                                                        NGN
+                                                    </div>
+
+                                                    <NumericFormat
+                                                        id={`detail-${index}`}
+                                                        name={`detail-${index}`}
+                                                        type="text"
+                                                        thousandSeparator=","
+                                                        decimalScale={2}
+                                                        fixedDecimalScale={true}
+                                                        value={detail?.itemAmount?.toLocaleString() || ''}
+                                                        placeholder={`${detail?.itemAmount || ''}`}
+                                                        className="w-full p-3 h-[3.2rem] border rounded focus:outline-none"
+                                                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                                                            const rawValue = e.target.value.replace(/,/g, '');
+                                                            if (!isNaN(Number(rawValue))) {
+                                                                editCohortBreakDown(
+                                                                    {target: {value: rawValue}} as React.ChangeEvent<HTMLInputElement>,
+                                                                    index,
+                                                                );
+                                                            }
+                                                        }}
+                                                    />
+                                                    <MdOutlineDelete id={`deleteItemButton${index}`}
+                                                                     className={'text-blue200 mt-auto mb-auto  h-6 w-6 cursor-pointer'}
+                                                                     onClick={()=> {deleteItem(index, Number(detail.itemAmount))}}
+                                                    />
+                                                </div>
+                                            </div>
+                                        ))}
+
+                                    </div>
+
+                                </div>
 
                                 <div className='w-full border-[#D7D7D7] border-[0.6px]'></div>
-                                <div className="md:flex gap-4 justify-end mt-2 md:mb-0 mb-3">
+                                <div className="md:flex gap-4 justify-end mt-2 md:mb-0 py-3 ">
                                     <Button
                                         variant="outline"
                                         type="reset"
