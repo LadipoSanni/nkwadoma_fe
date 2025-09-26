@@ -1,3 +1,4 @@
+'use client'
 import React, {useEffect} from 'react';
 import { Tabs , TabsContent, TabsList, TabsTrigger} from './ui/tabs';
 import {setUnderlineTabCurrentTab} from "@/redux/slice/layout/adminLayout";
@@ -12,8 +13,10 @@ const UnderlineTab = ({tabTriggers, tabValue, defaultTab}: Props) => {
 
     const currentTab = useAppSelector(state => state.adminLayout.underlineTabCurrentTab);
     useEffect(() => {
-        store.dispatch(setUnderlineTabCurrentTab(defaultTab))
-    }, [defaultTab]);
+        if (!currentTab) {
+            store.dispatch(setUnderlineTabCurrentTab(defaultTab));
+        }
+    }, [defaultTab, currentTab]);
 
     const handleTabChange = (val: string) => {
         store.dispatch(setUnderlineTabCurrentTab(val))
@@ -21,7 +24,7 @@ const UnderlineTab = ({tabTriggers, tabValue, defaultTab}: Props) => {
 
     return (
         <div>
-            <Tabs defaultValue={currentTab} onValueChange={handleTabChange} className="relative mr-auto w-full">
+            <Tabs defaultValue={currentTab || defaultTab} onValueChange={handleTabChange} className="relative mr-auto w-full">
                 <TabsList className="w-full justify-start rounded-none border-b bg-transparent p-0">
                     {tabTriggers.map((item, i) => (
                         <TabsTrigger
