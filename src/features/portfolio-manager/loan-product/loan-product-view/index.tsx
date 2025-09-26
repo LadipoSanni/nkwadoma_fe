@@ -20,6 +20,7 @@ import { resetAll,clearSaveCreateInvestmentField} from '@/redux/slice/vehicle/ve
 import { setLoanProductId,setLoanProductName } from "@/redux/slice/loan-product/Loan-product";
 import styles from "../index.module.css"
 import { resetFundProductAvailableAmount } from "@/redux/slice/loan/selected-loan";
+import { capitalizeFirstLetters } from "@/utils/GlobalMethods";
 
 interface TableRowData {
     [key: string]: string | number | null | React.ReactNode;
@@ -91,13 +92,13 @@ const LoanProductPage = () => {
             title: 'Loan product',
             sortable: true,
             id: 'name',
-            selector: (row: TableRowData) => row.name
+            selector: (row: TableRowData) => capitalizeFirstLetters(row.name as string)
         },
         {
             title: 'Fund product',
             sortable: true,
             id: 'investmentVehicleName',
-            selector: (row: TableRowData) => row.investmentVehicleName ?? "fund product"
+            selector: (row: TableRowData) => capitalizeFirstLetters(row.investmentVehicleName as string)
         },
         {
             title: 'Interest rate (%)',

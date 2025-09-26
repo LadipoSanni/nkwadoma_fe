@@ -18,6 +18,7 @@ interface SelectedLoanState {
     cohortLoaneeId: string;
     companySelectedTab: number;
     selectedGeneralTab: number;
+    searchLoan: string
 }
 
 const initialState: SelectedLoanState = {
@@ -34,6 +35,7 @@ const initialState: SelectedLoanState = {
     cohortLoaneeId: '',
     companySelectedTab: 0,
     selectedGeneralTab: 0,
+    searchLoan: ""
 };
 
 export const selectedLoanSlice = createSlice({
@@ -87,14 +89,16 @@ export const selectedLoanSlice = createSlice({
         resetFundProductAvailableAmount: (state) => {
             state.fundProductAvailableAmount = 0
         },
-       
+        setSearchLoan: (state, action: PayloadAction<string>) => {
+            state.searchLoan = action.payload;
+        },
     },
 });
 
 export const { setCurrentTab,setCohortLoaneeId , setClickedLoanId, setClickedOrganization,
     setLoanReferralId, setClickedDisbursedLoanIdNumber, setDisbursedLoanIdNumber, setClickedLoanProductId,
     setFundProductAvailableAmount,setCurrentTabStatus,resetTab,setcurrentTabRoute,
-    setSelectedCompanyTab,setSelectedGeneralTab,resetFundProductAvailableAmount
+    setSelectedCompanyTab,setSelectedGeneralTab,resetFundProductAvailableAmount,setSearchLoan
 } = selectedLoanSlice.actions;
 
 export default selectedLoanSlice.reducer;

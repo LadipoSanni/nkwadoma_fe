@@ -1,5 +1,5 @@
 "use client"
-import React from "react";
+import React,{useEffect,useState} from "react";
 import {Icon} from "@iconify/react";
 import {MdOutlinePeople} from "react-icons/md";
 import Table from '@/reuseable/table/Table';
@@ -14,6 +14,8 @@ import {setClickedDisbursedLoanIdNumber} from "@/redux/slice/loan/selected-loan"
 import SkeletonForTable from "@/reuseable/Skeleton-loading-state/Skeleton-for-table";
 import TableEmptyState from "@/reuseable/emptyStates/TableEmptyState";
 import {capitalizeFirstLetters} from "@/utils/GlobalMethods";
+import { useSearchLoanDisbursalQuery } from '@/service/admin/loan/loan-request-api';
+import { useDebounce } from '@/hooks/useDebounce';
 
 interface TableRowData {
     [key: string]: string | number | null | React.ReactNode;
@@ -22,7 +24,14 @@ interface TableRowData {
 function Index() {
     const router = useRouter();
      const [pageNumber, setPageNumber] = React.useState(0);
+     const [pageSearchNumber,setPageSearchNumber] = useState(0)
+    const [hasNextPage,setNextPage] = useState(false)
+    const [totalPage,setTotalPage] = useState(0)
+   
     const clickedOrganizationId = useAppSelector(state => state.selectedLoan?.clickedOrganization)
+    const searchTerm = useAppSelector(state => state?.selectedLoan?.searchLoan)
+
+    const [debouncedSearchTerm, isTyping] = useDebounce(searchTerm, 1000);
 
     const request = {
         pageSize: 10,
@@ -30,10 +39,44 @@ function Index() {
         organizationId: clickedOrganizationId?.id ? clickedOrganizationId?.id?.toString() : '',
     }
 
+    const searchParam = {
+        name:debouncedSearchTerm,
+        pageSize:10,
+        pageNumber:pageSearchNumber,
+      
+    }
+
+    const searchParamWithOrg = {
+        name:debouncedSearchTerm,
+        pageSize:10,
+        pageNumber:pageSearchNumber,
+        organizationId: clickedOrganizationId?.id,
+    }
+
+
     const {data, isLoading, isFetching } = useViewAllLoanDisbursalQuery(request,{refetchOnMountOrArgChange: true})
 
 
+    const {data: searchResult,isLoading: isSearchLoading,isFetching:isSearchFetching} = useSearchLoanDisbursalQuery(clickedOrganizationId?.id? searchParamWithOrg : searchParam,{skip: !debouncedSearchTerm})
 
+    const getTableData = () => {
+        if (!data?.data?.body) return [];
+        if (debouncedSearchTerm) return searchResult?.data?.body || [];
+        return data?.data?.body;
+    }
+
+     useEffect(() => {
+            if (debouncedSearchTerm && searchResult && searchResult?.data) {
+                setNextPage(searchResult?.data?.hasNextPage)
+                setTotalPage(searchResult?.data?.totalPages)
+                setPageSearchNumber(searchResult?.data?.pageNumber)
+            }else if (!debouncedSearchTerm && data && data.data){
+                setNextPage(data?.data?.hasNextPage)
+                setTotalPage(data?.data?.totalPages)
+                setPageSearchNumber(data?.data?.pageNumber)
+            }
+        },[data,searchResult,debouncedSearchTerm])
+    
 
 
     const loanDisbursalHeader = [
@@ -99,24 +142,24 @@ function Index() {
                 (
                     <div className={``}>
                         <Table
-                            tableData={data?.data?.body}
-                            isLoading={isLoading || isFetching }
+                            tableData={getTableData()}
+                            isLoading={isLoading || isFetching || isSearchFetching || isSearchLoading}
                             handleRowClick={handleRowClick}
                             tableHeader={loanDisbursalHeader}
-                            tableHeight={data?.data?.body?.length < 10 ? 58 : undefined}
+                            tableHeight={data?.data?.body?.length < 10 ? 60:searchTerm &&  searchResult?.data?.body?.length < 10 ? 60 : undefined}
                             sx='cursor-pointer'
                             staticColunm='firstName'
                             staticHeader='Loanee'
                             showKirkBabel={false}
                             icon={MdOutlinePeople}
-                            sideBarTabName='Loans'
-                            optionalFilterName='graduate'
+                            sideBarTabName='Disbursed loans'
                             condition={true}
-                            totalPages={data?.data?.totalPages}
-                            hasNextPage={data?.data?.hasNextPage}
-                            pageNumber={pageNumber}
-                            setPageNumber={setPageNumber}
-                             tableCellStyle="h-12"
+                            totalPages={totalPage}
+                            hasNextPage={hasNextPage}
+                            pageNumber={searchTerm !== ""? pageSearchNumber : pageNumber}
+                            setPageNumber={searchTerm !== ""? setPageSearchNumber :  setPageNumber}
+                            tableCellStyle="h-12"
+                            searchEmptyState={!isTyping && debouncedSearchTerm?.length > 0 && searchResult?.data?.body?.length < 1 }
                         />
                     </div>
                 )
