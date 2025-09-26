@@ -83,7 +83,7 @@ export const loanRequestApi = createApi({
         searchLoanRequest: builder.query({
             query: (data:Objdata) => ({
                 url: `/loan/search/loan-request`,
-                method: 'POST',
+                method: 'GET',
                 params: data
             }),
         }),

@@ -16,8 +16,8 @@ import React from "react";
 import {GearIcon} from "@radix-ui/react-icons";
 import {LuLogOut} from "react-icons/lu";
 import { useAppSelector } from "@/redux/store";
-import {MEEDL_ADMINS_ROLES, MEEDL_ROLES} from "@/types/roles";
-import {MeedlAdminSettingsTabs, settingTabs} from "@/types/tabDataTypes";
+import {MEEDL_ADMINS_ROLES, MEEDL_ROLES,SUPER_MEEDL_ADMINS_AND_PORTFOLIO_MANAGER_ROLES} from "@/types/roles";
+import {MeedlAdminSettingsTabs, settingTabs,superAdminAndPortfolioManagerSettingsTabs} from "@/types/tabDataTypes";
 
 
 const currentTextLiterals = `text-meedlBlue md:text-meedlBlue`;
@@ -191,7 +191,10 @@ export const getCoperateFinancierSuperAdminSideBarItems = (currentNavItem: strin
 export const getUserSettingTabContent = (userRole: string) => {
     if (MEEDL_ROLES?.includes(userRole)) {
         return settingTabs;
-    }else if(MEEDL_ADMINS_ROLES?.includes(userRole)) {
+    }else if(SUPER_MEEDL_ADMINS_AND_PORTFOLIO_MANAGER_ROLES?.includes(userRole)) {
+        return superAdminAndPortfolioManagerSettingsTabs;
+    }
+    else if(MEEDL_ADMINS_ROLES?.includes(userRole)) {
         return MeedlAdminSettingsTabs;
     }else {
         return []
