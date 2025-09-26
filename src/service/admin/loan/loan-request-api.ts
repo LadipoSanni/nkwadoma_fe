@@ -1,6 +1,14 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 import { customFetchBaseQuery } from "@/service/customFetchBaseQuery";
 
+interface Objdata  {
+    name: string,
+    pageSize:number, 
+     pageNumber: number,
+     organizationId?: string  | number | undefined,
+     programId?: string
+    }
+
 export const loanRequestApi = createApi({
     reducerPath: 'loanRequestApi',
     baseQuery: customFetchBaseQuery,
@@ -50,8 +58,35 @@ export const loanRequestApi = createApi({
             })
         }),
 
-
-
+       searchLoanReferral: builder.query({
+            query: (param:Objdata
+            ) => ({
+                url: `/loan/search/loan-referrals`,
+                method: 'GET',
+                params: param
+            }),
+        }),
+        searchLoanDisbursal: builder.query({
+            query: (data:Objdata) => ({
+                url: `/loan/search/loan-disbursal`,
+                method: 'GET',
+                params: data
+            }),
+        }),
+        searchLoanOffer: builder.query({
+            query: (data:Objdata) => ({
+                url: `/loan/search/loanoffer`,
+                method: 'GET',
+                params: data
+            }),
+        }),
+        searchLoanRequest: builder.query({
+            query: (data:Objdata) => ({
+                url: `/loan/search/loan-request`,
+                method: 'POST',
+                params: data
+            }),
+        }),
     })
 });
 
@@ -62,4 +97,8 @@ export const {
     useViewAllLoanReferralQuery,
     useWithdrawLoanOfferMutation,
     useViewLoanScheduleQuery,
+    useSearchLoanDisbursalQuery,
+    useSearchLoanOfferQuery,
+    useSearchLoanReferralQuery,
+    useSearchLoanRequestQuery
 } = loanRequestApi;

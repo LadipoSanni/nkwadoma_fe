@@ -660,7 +660,7 @@ function StepTwo() {
                                         disabled={!isFormValid(values)}
                                     >
                                         {isLoading || isUpdateLoading ? (<Isloading/>) : (
-                                           "Create"
+                                          isEdit? "Update" : "Create"
                                         )}
                                     </Button>
                                     </div>
