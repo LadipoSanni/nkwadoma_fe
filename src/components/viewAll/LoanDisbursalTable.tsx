@@ -36,7 +36,13 @@ function Index() {
     const request = {
         pageSize: 10,
         pageNumber: pageNumber,
-        organizationId: clickedOrganizationId?.id ? clickedOrganizationId?.id?.toString() : '',
+       
+    }
+
+    const viewAllPropswWithId = {
+        pageSize:10,
+        pageNumber:pageNumber,
+        organizationId: clickedOrganizationId?.id ,
     }
 
     const searchParam = {
@@ -54,7 +60,7 @@ function Index() {
     }
 
 
-    const {data, isLoading, isFetching } = useViewAllLoanDisbursalQuery(request,{refetchOnMountOrArgChange: true})
+    const {data, isLoading, isFetching } = useViewAllLoanDisbursalQuery(clickedOrganizationId?.id? viewAllPropswWithId : request,{refetchOnMountOrArgChange: true})
 
 
     const {data: searchResult,isLoading: isSearchLoading,isFetching:isSearchFetching} = useSearchLoanDisbursalQuery(clickedOrganizationId?.id? searchParamWithOrg : searchParam,{skip: !debouncedSearchTerm})
