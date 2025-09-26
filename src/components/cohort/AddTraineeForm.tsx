@@ -16,7 +16,6 @@ import { NumericFormat } from 'react-number-format';
 import CustomInputField from "@/reuseable/Input/CustomNumberFormat";
 import {MdOutlineDelete} from "react-icons/md";
 import CenterMultistep from "@/reuseable/multiStep-component/Center-multistep";
-import { formatAmount } from '@/utils/Format';
 
 interface Props {
     tuitionFee?: string;

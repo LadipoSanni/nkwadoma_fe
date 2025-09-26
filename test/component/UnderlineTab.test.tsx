@@ -1,5 +1,14 @@
 import { render, screen, fireEvent } from "@testing-library/react";
 import UnderlineTab from "@/components/UnderlineTab";
+import { Providers } from "@/app/provider";
+
+jest.mock("next/navigation", () => {
+    return {
+        useRouter: () => jest.fn(),
+        usePathname: () => "/mock-path",
+        useSearchParams: () => new URLSearchParams(),
+    };
+});
 
 describe("UnderlineTab", () => {
     const tabTriggers = [
@@ -13,14 +22,22 @@ describe("UnderlineTab", () => {
     ];
 
     it("renders all tab triggers", () => {
-        render(<UnderlineTab tabTriggers={tabTriggers} tabValue={tabValue} defaultTab="one" />);
+        render(
+            <Providers>
+                <UnderlineTab tabTriggers={tabTriggers} tabValue={tabValue} defaultTab="one" />
+            </Providers>
+        );
 
         expect(screen.getByTestId("tab1")).toBeInTheDocument();
         expect(screen.getByTestId("tab2")).toBeInTheDocument();
     });
 
     it("renders default tab content", () => {
-        render(<UnderlineTab tabTriggers={tabTriggers} tabValue={tabValue} defaultTab="one" />);
+        render(
+            <Providers>
+                <UnderlineTab tabTriggers={tabTriggers} tabValue={tabValue} defaultTab="one" />
+            </Providers>
+        );
 
         expect(screen.getByTestId("displayone")).toHaveTextContent("Content One");
         expect(screen.queryByTestId("displaytwo")).not.toBeVisible(); // not active yet
@@ -36,7 +53,11 @@ describe("UnderlineTab", () => {
     // });
 
     it("applies active styles when tab is selected", () => {
-        render(<UnderlineTab tabTriggers={tabTriggers} tabValue={tabValue} defaultTab="one" />);
+        render(
+            <Providers>
+                <UnderlineTab tabTriggers={tabTriggers} tabValue={tabValue} defaultTab="one" />
+            </Providers>
+        );
 
         const tabOne = screen.getByTestId("tab1");
         expect(tabOne).toHaveClass("data-[state=active]:text-[#142854]");
