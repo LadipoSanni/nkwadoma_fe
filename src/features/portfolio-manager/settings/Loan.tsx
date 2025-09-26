@@ -1,5 +1,5 @@
 'use client'
-import React, {useEffect, useState} from "react";
+import React, { useState} from "react";
 import * as Yup from "yup";
 import {ErrorMessage, Field, Form, Formik} from "formik";
 import {inter} from "@/app/fonts"
@@ -21,7 +21,8 @@ function Loan() {
     });
 
     const handleSubmit = async (values: typeof initialFormValue) => {
-    };
+          console.debug(values)
+    };  
 
   return (
     <div className={`${inter.className} px-5 md:px-60 lg:px-96 mt-20 `}>
@@ -45,7 +46,7 @@ function Loan() {
                 validateOnBlur={true} 
             >
                 {
-                    ({errors, isValid, touched, setFieldValue, values, setFieldTouched}) => {
+                    ({errors, isValid, touched, setFieldValue}) => {
                         
                         return (
                         <Form >
