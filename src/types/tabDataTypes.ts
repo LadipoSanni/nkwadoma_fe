@@ -16,6 +16,15 @@ export const MeedlAdminSettingsTabs = [
     { name: "Roles & Permissions", value: "/settings/roles-&-permissions" },
 ]
 
+export const superAdminAndPortfolioManagerSettingsTabs = [
+    { name: "General", value:"/settings/general" },
+    { name: "Company", value: "/settings/company" },
+    { name: "Loan", value: "/settings/loan"},
+    { name: "Team", value: "/settings/team" },
+    { name: "Roles & Permissions", value: "/settings/roles-&-permissions" },
+]
+
+
 export const settingTabs = [
     { name: "General", value:"/settings/general" },
 ]
