@@ -17,7 +17,7 @@ import { useToast } from "@/hooks/use-toast";
 import TotalInput from "@/reuseable/display/TotalInput";
 import CustomQuillField from "../textArea/Custom-quill-field";
 import DatePickerInput from "@/reuseable/Input/DatePickerInput";
-import FileUpload from "../Input/FileUploadTwo";
+// import FileUpload from "../Input/FileUploadTwo";
 
 
 interface createCohortProps {
@@ -192,13 +192,13 @@ const CreateCohort: React.FC<createCohortProps> = ({ setIsOpen }) => {
     }else { setError("Description must be 2500 characters or less"); }
   };
 
-  const handleDrop = (event: React.DragEvent<HTMLDivElement>) => {
-    event.preventDefault();
-  };
-
-  const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
-    event.preventDefault();
-  };
+  // const handleDrop = (event: React.DragEvent<HTMLDivElement>) => {
+  //   event.preventDefault();
+  // };
+  //
+  // const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
+  //   event.preventDefault();
+  // };
 
   const handleSelectClick = () => {
     setLoanBreakdowns([ loanBreakdowns[0],
@@ -286,13 +286,13 @@ const CreateCohort: React.FC<createCohortProps> = ({ setIsOpen }) => {
                   />
 
               {descriptionError && ( <div className="text-red-500 text-sm">{descriptionError}</div> )}
-              <FileUpload
-                handleDrop={handleDrop}
-                handleDragOver={handleDragOver}
-                 setUploadedImageUrl={setUploadedUrl}
-                labelName="Cohort image (optional)"
-                initialImageUrl={imageUrl? imageUrl : undefined}
-              />
+              {/*<FileUpload*/}
+              {/*  handleDrop={handleDrop}*/}
+              {/*  handleDragOver={handleDragOver}*/}
+              {/*   setUploadedImageUrl={setUploadedUrl}*/}
+              {/*  labelName="Cohort image (optional)"*/}
+              {/*  initialImageUrl={imageUrl? imageUrl : undefined}*/}
+              {/*/>*/}
               <FormButtons
                 isButtonDisabled={isButtonDisabled}
                 setIsFormSubmitted={setIsFormSubmitted}
