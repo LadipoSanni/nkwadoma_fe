@@ -41,7 +41,7 @@ const UnderlineTab = ({tabTriggers, tabValue, defaultTab}: Props) => {
                         key={value.name + index}
                         data-testid={'display'+ value.name}
                         id={'display'+ value.name}
-                        className={` md:max-h-[60vh] lg:max-h-[60vh] w-full   `}
+                        className={` md:max-h-[60vh] lg:max-h-[60vh] w-full mb-6   `}
                         value={value.name}>
                         {value.displayValue}
 
