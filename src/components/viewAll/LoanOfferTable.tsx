@@ -19,6 +19,15 @@ interface TableRowData {
     [key: string]: string | number | null | React.ReactNode;
 }
 
+interface QueryParams {
+    pageSize: number;
+    pageNumber: number;
+    organizationId?: string | number;
+}
+
+interface SearchParams extends QueryParams {
+    name: string;
+}
 
 const Index = () => {
     const [pageNumber, setPageNumber] = React.useState(0);
@@ -30,29 +39,29 @@ const Index = () => {
      const searchTerm = useAppSelector(state => state?.selectedLoan?.searchLoan)
      const [debouncedSearchTerm, isTyping] = useDebounce(searchTerm, 1000);
 
-    const request ={
-        pageSize: 10,
-        pageNumber:pageNumber,
-        organizationId: clickedOrganization?.id || "",
-    }
+     const getQueryParams = (isSearch: boolean = false): QueryParams | SearchParams => {
+        const baseParams: QueryParams = {
+            pageSize: 10,
+            pageNumber: isSearch ? pageSearchNumber : pageNumber,
+            ...(clickedOrganization?.id && { organizationId: clickedOrganization.id })
+        };
+        
+        if (isSearch) {
+            return {
+                ...baseParams,
+                name: debouncedSearchTerm || "" 
+            } as SearchParams;
+        }
+        
+        return baseParams;
+    };
 
-    const searchParam = {
-        name:debouncedSearchTerm,
-        pageSize:10,
-        pageNumber:pageSearchNumber,
-      
-    }
+    const { data, isLoading, isFetching} = useViewAllLoanOfferQuery(getQueryParams(),{refetchOnMountOrArgChange: true})
 
-    const searchParamWithOrg = {
-        name:debouncedSearchTerm,
-        pageSize:10,
-        pageNumber:pageSearchNumber,
-        organizationId: clickedOrganization?.id,
-    }
-
-    const { data, isLoading, isFetching} = useViewAllLoanOfferQuery(request,{refetchOnMountOrArgChange: true})
-
-    const {data: searchResult,isLoading: isSearchLoading,isFetching:isSearchFetching} = useSearchLoanOfferQuery(clickedOrganization?.id? searchParamWithOrg : searchParam,{skip: !debouncedSearchTerm})
+    const { data: searchResult, isLoading: isSearchLoading, isFetching: isSearchFetching } = useSearchLoanOfferQuery(
+        getQueryParams(true)  as SearchParams, 
+        { skip: !debouncedSearchTerm }
+    );
 
     const getTableData = () => {
         if (!data?.data?.body) return [];
