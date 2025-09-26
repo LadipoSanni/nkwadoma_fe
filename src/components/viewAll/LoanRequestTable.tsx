@@ -1,16 +1,15 @@
 "use client"
-import React from "react";
-import {Icon} from "@iconify/react";
+import React,{useEffect,useState} from "react";
+// import {Icon} from "@iconify/react";
 import {MdOutlinePeople} from "react-icons/md";
 import Table from '@/reuseable/table/Table';
 import {useRouter} from "next/navigation";
-import {useViewAllLoanRequestQuery} from "@/service/admin/loan/loan-request-api";
+import {useViewAllLoanRequestQuery,useSearchLoanRequestQuery} from "@/service/admin/loan/loan-request-api";
 import {formatAmount} from "@/utils/Format";
 import dayjs from "dayjs";
 import {capitalizeFirstLetters} from "@/utils/GlobalMethods";
-import SkeletonForTable from "@/reuseable/Skeleton-loading-state/Skeleton-for-table";
 import { useAppSelector} from "@/redux/store";
-import TableEmptyState from "@/reuseable/emptyStates/TableEmptyState";
+import { useDebounce } from '@/hooks/useDebounce';
 
 interface userIdentity {
     firstName?: string;
@@ -38,6 +37,11 @@ const Index = () => {
       
     const router = useRouter();
     const clickedOrganization = useAppSelector(state => state.selectedLoan.clickedOrganization);
+    const searchTerm = useAppSelector(state => state?.selectedLoan?.searchLoan)
+    const [pageSearchNumber,setPageSearchNumber] = useState(0)
+    const [hasNextPage,setNextPage] = useState(false)
+    const [totalPage,setTotalPage] = useState(0)
+     const [debouncedSearchTerm, isTyping] = useDebounce(searchTerm, 1000);
 
     const request ={
         pageSize: 10,
@@ -45,9 +49,42 @@ const Index = () => {
         organizationId: clickedOrganization?.id || '',
     }
 
+    const searchParam = {
+        name:debouncedSearchTerm,
+        pageSize:10,
+        pageNumber:pageSearchNumber,
+      
+    }
+
+    const searchParamWithOrg = {
+        name:debouncedSearchTerm,
+        pageSize:10,
+        pageNumber:pageSearchNumber,
+        organizationId: clickedOrganization?.id,
+    }
+
 
     const { data, isLoading,isFetching} = useViewAllLoanRequestQuery(request,{refetchOnMountOrArgChange: true})
 
+    const {data: searchResult,isLoading: isSearchLoading,isFetching:isSearchFetching} = useSearchLoanRequestQuery(clickedOrganization?.id? searchParamWithOrg : searchParam,{skip: !debouncedSearchTerm})
+
+    const getTableData = () => {
+        if (!data?.data?.body) return [];
+        if (debouncedSearchTerm) return searchResult?.data?.body || [];
+        return data?.data?.body;
+    }
+
+     useEffect(() => {
+            if (debouncedSearchTerm && searchResult && searchResult?.data) {
+                setNextPage(searchResult?.data?.hasNextPage)
+                setTotalPage(searchResult?.data?.totalPages)
+                setPageSearchNumber(searchResult?.data?.pageNumber)
+            }else if (!debouncedSearchTerm && data && data.data){
+                setNextPage(data?.data?.hasNextPage)
+                setTotalPage(data?.data?.totalPages)
+                setPageSearchNumber(data?.data?.pageNumber)
+            }
+        },[data,searchResult,debouncedSearchTerm])
 
     const loanRequestHeader = [
         { title: 'Loanee', sortable: true, id: 'firstName', selector: (row: viewAllLoanees) =>capitalizeFirstLetters(row.userIdentity?.firstName?.toString()) + " " + capitalizeFirstLetters(row.userIdentity?.lastName?.toString()) },
@@ -73,25 +110,11 @@ const Index = () => {
         <div data-testid={'mainDivContainer'} id={`mainDivContainer`}
             //  className={`grid md:px-3 md:overflow-hidden   place-items-center w-full md:w-full md:h-full md:grid md:place-items-center  h-full `}
         >
-            {isLoading  ? (
-                    <div className={`w-full h-fit pb-5 md:w-full md:h-fit`}>
-                        <SkeletonForTable />
-                    </div>
-                ) : data?.data?.body?.length === 0 || !data ?
-                    (
-                        <TableEmptyState name={"loan request"}   icon={
-                            <Icon
-                                icon="material-symbols:money-bag-outline"
-                                height="2.5rem"
-                                width="2.5rem"
-                            />
-                        } condition={true} descriptionId={clickedOrganization?.id ? 'There are no loan requests in this organization yet': `There are no loan requests available yet`}/>
-                     ) :
-               (
+           
                     <div className={` pr-2 md:pr-0`}>
                         <Table
-                            tableData={ data?.data?.body}
-                            isLoading={isLoading || isFetching}
+                            tableData={getTableData()}
+                            isLoading={isLoading || isFetching || isSearchFetching || isSearchLoading}
                             handleRowClick={handleRowClick}
                             tableHeader={loanRequestHeader}
                             tableHeight={54}
@@ -100,16 +123,15 @@ const Index = () => {
                             staticHeader='Loanee'
                             showKirkBabel={false}
                             icon={MdOutlinePeople}
-                            sideBarTabName='Cohort'
-                            totalPages={data?.data?.totalPages}
-                            hasNextPage={data?.data?.hasNextPage}
-                            pageNumber={pageNumber}
-                            setPageNumber={setPageNumber}
+                            sideBarTabName='Loan request'
+                            totalPages={totalPage}
+                            hasNextPage={hasNextPage}
+                            pageNumber={searchTerm !== ""? pageSearchNumber : pageNumber}
+                            setPageNumber={searchTerm !== ""? setPageSearchNumber :  setPageNumber}
                             condition={true}
+                            searchEmptyState={!isTyping && debouncedSearchTerm?.length > 0 && searchResult?.data?.body?.length < 1 }
                         />
                     </div>
-               )
-            }
         </div>
     );
 }

@@ -1,20 +1,19 @@
 "use client"
-import React, {ReactNode, useEffect} from "react";
+import React, {ReactNode, useEffect,useState} from "react";
 import {MdOutlinePeople} from "react-icons/md";
 import Table from '@/reuseable/table/Table';
 import {useRouter} from "next/navigation";
 import {formatAmount} from "@/utils/Format";
 import dayjs from "dayjs";
 import {capitalizeFirstLetters} from "@/utils/GlobalMethods";
-import SkeletonForTable from "@/reuseable/Skeleton-loading-state/Skeleton-for-table";
 import {useAppSelector} from "@/redux/store";
 import { useViewAllLoanOfferQuery } from "@/service/admin/loan/loan-offer-api";
-import TableEmptyState from "@/reuseable/emptyStates/TableEmptyState";
-import {Icon} from "@iconify/react";
 import { resetNotification } from '@/redux/slice/notification/notification';
 import { store } from "@/redux/store";
 import {inter} from "@/app/fonts";
 import {setLoanOfferId} from "@/redux/slice/create/createLoanOfferSlice";
+import { useSearchLoanOfferQuery } from '@/service/admin/loan/loan-request-api';
+import { useDebounce } from '@/hooks/useDebounce';
 
 interface TableRowData {
     [key: string]: string | number | null | React.ReactNode;
@@ -23,14 +22,55 @@ interface TableRowData {
 
 const Index = () => {
     const [pageNumber, setPageNumber] = React.useState(0);
-    const router = useRouter();
-    const clickedOrganization = useAppSelector(state => state.selectedLoan.clickedOrganization);
+     const [pageSearchNumber,setPageSearchNumber] = useState(0)
+     const [hasNextPage,setNextPage] = useState(false)
+     const [totalPage,setTotalPage] = useState(0)
+     const router = useRouter();
+     const clickedOrganization = useAppSelector(state => state.selectedLoan.clickedOrganization);
+     const searchTerm = useAppSelector(state => state?.selectedLoan?.searchLoan)
+     const [debouncedSearchTerm, isTyping] = useDebounce(searchTerm, 1000);
+
     const request ={
         pageSize: 10,
         pageNumber:pageNumber,
         organizationId: clickedOrganization?.id || "",
     }
+
+    const searchParam = {
+        name:debouncedSearchTerm,
+        pageSize:10,
+        pageNumber:pageSearchNumber,
+      
+    }
+
+    const searchParamWithOrg = {
+        name:debouncedSearchTerm,
+        pageSize:10,
+        pageNumber:pageSearchNumber,
+        organizationId: clickedOrganization?.id,
+    }
+
     const { data, isLoading, isFetching} = useViewAllLoanOfferQuery(request,{refetchOnMountOrArgChange: true})
+
+    const {data: searchResult,isLoading: isSearchLoading,isFetching:isSearchFetching} = useSearchLoanOfferQuery(clickedOrganization?.id? searchParamWithOrg : searchParam,{skip: !debouncedSearchTerm})
+
+    const getTableData = () => {
+        if (!data?.data?.body) return [];
+        if (debouncedSearchTerm) return searchResult?.data?.body || [];
+        return data?.data?.body;
+    }
+
+    useEffect(() => {
+            if (debouncedSearchTerm && searchResult && searchResult?.data) {
+                setNextPage(searchResult?.data?.hasNextPage)
+                setTotalPage(searchResult?.data?.totalPages)
+                setPageSearchNumber(searchResult?.data?.pageNumber)
+            }else if (!debouncedSearchTerm && data && data.data){
+                setNextPage(data?.data?.hasNextPage)
+                setTotalPage(data?.data?.totalPages)
+                setPageSearchNumber(data?.data?.pageNumber)
+            }
+        },[data,searchResult,debouncedSearchTerm])
 
     useEffect(()=> {
        store.dispatch(resetNotification()) 
@@ -79,45 +119,30 @@ const Index = () => {
     return (
         <div data-testid={'mainDivContainer'} id={`mainDivContainer`}
         >
-            {isLoading  ? (
-                <div className={`w-full h-fit pb-5 md:w-full md:h-fit`}>
-                    <SkeletonForTable />
-                </div>
-            ) :data?.data?.body?.length === 0 || !data  ?
-                (
-                    <TableEmptyState name={"loan offer"}   icon={
-                        <Icon
-                            icon="material-symbols:money-bag-outline"
-                            height="2.5rem"
-                            width="2.5rem"
-                        />
-                    } condition={true} descriptionId={clickedOrganization?.id ? 'There are no loan offers in this organization yet': `There are no loan offers available yet` }/>
-                ) :
-                (
+            
                     <div className={` `}>
 
                         <Table
-                            tableData={data?.data?.body}
-                            isLoading={isLoading || isFetching}
+                            tableData={getTableData()}
+                            tableHeight={data?.data?.body?.length < 10 ? 60:searchTerm &&  searchResult?.data?.body?.length < 10 ? 60 : undefined}
+                            isLoading={isLoading || isFetching || isSearchFetching || isSearchLoading}
                             handleRowClick={handleRowClick}
                             tableHeader={loanOfferHeader}
-                            tableHeight={data?.data?.body?.length < 10 ? 58 : undefined}
                             sx='cursor-pointer'
                             staticColunm='firstName'
                             staticHeader='Loanee'
                             showKirkBabel={false}
                             icon={MdOutlinePeople}
-                            sideBarTabName='Cohort'
-                            pageNumber={pageNumber}
-                            setPageNumber={setPageNumber}
-                            totalPages={data?.data?.totalPages}
-                            hasNextPage={data?.data?.hasNextPage}
+                            sideBarTabName='Loan offer'
+                            pageNumber={searchTerm !== ""? pageSearchNumber : pageNumber}
+                            setPageNumber={searchTerm !== ""? setPageSearchNumber :  setPageNumber}
+                            totalPages={totalPage}
+                            hasNextPage={hasNextPage}
                             condition={true}
-                             tableCellStyle="h-12"
+                            tableCellStyle="h-12"
+                            searchEmptyState={!isTyping && debouncedSearchTerm?.length > 0 && searchResult?.data?.body?.length < 1 }
                         />
                     </div>
-                )
-            }
         </div>
     );
 }

@@ -1,11 +1,10 @@
 "use client"
 import React,{useState} from 'react';
-import {Input} from '@/components/ui/input'
+import SearchInput from "@/reuseable/Input/SearchInput";
 import OrganizationNameAndChangeButton from "@/components/selected-loan/OrganizationNameAndChangeButton";
-import {MdSearch} from "react-icons/md";
 import ProductFilter from '../loan/selected-loan/loan-request/Product-filter';
-import {inter} from "@/app/fonts";
-
+import { setSearchLoan } from '@/redux/slice/loan/selected-loan';
+import { store,useAppSelector } from '@/redux/store';
 
 export const initialFormValue = {
     selectedProgram:""
@@ -13,12 +12,14 @@ export const initialFormValue = {
 
 const OrganizationAndFilter = () => {
     const [selectProgram, setSelectProgram] = useState('')
-
+    const searchTerm = useAppSelector(state => state?.selectedLoan?.searchLoan)
     const handleSubmit = async (values:{selectedProgram: string}) => {
         console.log('Form submited', values)
         // setIsDropdown(false)
     
       }
+
+
 
       const handleSelectProgram = (programType: string) => {
         setSelectProgram(programType)
@@ -55,15 +56,15 @@ const OrganizationAndFilter = () => {
                 className={` gap-1  mb-3 md:mb-0 md:pr-0 h-fit md:w-fit md:h-fit md:flex md:gap-3`}
             >
                 <div className='relative mb-3'>
-                    <span className="absolute inset-y-0 left-0 flex items-center pl-3">
+                    {/* <span className="absolute inset-y-0 left-0 flex items-center pl-3">
                        <MdSearch className="h-6 w-6 text-[#efefef]"/>
-                    </span>
-                    <Input
-                        disabled={true}
+                    </span> */}
+                    <SearchInput
                         id='searchLoan'
                         placeholder='Search'
-                        // text-[#475467]
-                        className={`w-full lg:w-80 text-sm text-[#efefef] ${inter.className} rounded-md h-11 md:h-9 focus-visible:ring-0 shadow-none  border-solid border border-neutral650 `}
+                        style='h-[2.4rem]'
+                       value={searchTerm}
+                       onChange={(e)=> store.dispatch(setSearchLoan(e.target.value))}
                     />
                 </div> 
                 <div>

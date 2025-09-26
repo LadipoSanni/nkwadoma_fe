@@ -9,7 +9,6 @@ import DetailsComponent from "@/features/cohort/details/DetailsComponent";
 import {useAppSelector} from "@/redux/store";
 import {useDeleteCohortMutation, useViewCohortDetailsQuery} from "@/service/admin/cohort_query";
 import {LoaneeInCohortView} from "@/features/cohort/cohort-details/LoaneeInCohortView/Index";
-import GraduatedLoanee from "@/features/cohort/details/GraduatedLoanee";
 import EditCohortForm from "@/components/cohort/EditCohortForm";
 import {Cross2Icon} from "@radix-ui/react-icons";
 import TableModal from "@/reuseable/modals/TableModal";
@@ -23,7 +22,7 @@ import DeleteCohort from "@/reuseable/details/DeleteCohort";
 const CohortDetails = () => {
     const router = useRouter();
     const cohortId = useAppSelector(store => store?.cohort?.setCohortId)
-    const selectedCohortInOrganizationType = useAppSelector(store => store?.cohort?.selectedCohortInOrganizationType)
+    // const selectedCohortInOrganizationType = useAppSelector(store => store?.cohort?.selectedCohortInOrganizationType)
     const [deleteItem,{isLoading:isDeleteLoading}] = useDeleteCohortMutation()
     const {data: cohortDetails} = useViewCohortDetailsQuery({
         cohortId: cohortId
@@ -103,7 +102,7 @@ const CohortDetails = () => {
     ]
     const tab:  {name: string; displayValue: React.ReactNode}[] = [
         {name: 'details',  displayValue: <DetailsComponent/>},
-        {name: 'loanee',  displayValue: selectedCohortInOrganizationType === 'GRADUATED' ? <GraduatedLoanee/> : <LoaneeInCohortView cohortFee={cohortDetails?.data?.tuitionAmount}/>
+        {name: 'loanee',  displayValue: <LoaneeInCohortView cohortFee={cohortDetails?.data?.tuitionAmount}/>
         },
 
     ]

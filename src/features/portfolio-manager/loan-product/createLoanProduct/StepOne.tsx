@@ -55,7 +55,7 @@ function StepOne() {
             pageSize: 10,
             pageNumber: fundPageNumber,
             investmentVehicleStatus: "PUBLISHED",
-        });
+        },{refetchOnMountOrArgChange: true});
        
     useEffect(() => {
         setLocalFundAvailableAmount(fundProductAvailableAmount);
@@ -142,7 +142,8 @@ function StepOne() {
         loanProductMandate: values?.loanProductMandate,
         loanProductTermsAndCondition: values?.loanProductTermsAndCondition,
         sponsors: values?.sponsors,
-        fundProduct: selectedFund
+        fundProduct: selectedFund,
+        id: loanProductField?.id
         }
         store.dispatch(setLoanProductField(createLoanProductData))
     }
@@ -296,6 +297,12 @@ function StepOne() {
                 validateOnMount={true}
                 validateOnChange={true}
                 validateOnBlur={true} 
+                initialTouched={ {
+                        loanProductSize: !!loanProductField?.loanProductSize,
+                        minimumRepaymentAmount: !!loanProductField?.minimumRepaymentAmount,
+                        obligorLimit: !!loanProductField?.obligorLimit,
+                
+                }}
             >
                 {
                     ({errors, isValid, touched, setFieldValue, values, setFieldTouched}) => {
