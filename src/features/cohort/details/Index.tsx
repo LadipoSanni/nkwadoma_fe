@@ -117,7 +117,7 @@ const CohortDetails = () => {
             <div className={` mt-4 mb-4 flex justify-between w-full `}>
                 <span id={'cohortName'}
                       data-testid={'cohortName'}
-                      className={` text-[28px] break-all mr-2  text-black `}
+                      className={` text-[28px] max-h-[10vh] overflow-y-scroll  break-all mr-2  text-black `}
                 >{cohortDetails?.data?.name}</span>
                 <CircleThreeDot
                     id={'editAndDeleteCohort'}

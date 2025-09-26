@@ -15,6 +15,7 @@ import { NumericFormat } from 'react-number-format';
 // import { useToast } from '@/hooks/use-toast';
 import CustomInputField from "@/reuseable/Input/CustomNumberFormat";
 import {MdOutlineDelete} from "react-icons/md";
+import CenterMultistep from "@/reuseable/multiStep-component/Center-multistep";
 
 interface Props {
     tuitionFee?: string;
@@ -31,7 +32,6 @@ type cohortBreakDown = {
 }
 
 function AddTraineeForm({setIsOpen, tuitionFee,cohortId }: Props) {
-    // const COHORTID = getItemSessionStorage("cohortId");
     const [step, setStep] = useState(1);
     const [selectCurrency, setSelectCurrency] = useState('NGN');
     const { data } = useGetCohortLoanBreakDownQuery(cohortId);
@@ -198,102 +198,110 @@ function AddTraineeForm({setIsOpen, tuitionFee,cohortId }: Props) {
                 validateOnMount
             >
                 {({ errors, isValid, touched, setFieldValue }) => (
-                    <Form className={`${inter.className} md:max-h-[67.5vh] overflow-y-auto`}
-                    style={{
-                        scrollbarWidth: 'none',
-                        msOverflowStyle: 'none',
+                    <Form className={`${inter.className} `}
 
-                    }}
                     >
+                       <div>
+                           <CenterMultistep currentStep={step} totalSteps={2} />
+                       </div>
                         {step === 1 ? (
-                            <div className="grid grid-cols-1 gap-y-4  px-2">
-                                <div>
-                                    <Label htmlFor="firstName">First name</Label>
-                                    <Field
-                                        id="firstName"
-                                        name="firstName"
-                                        className="w-full p-3 border rounded focus:outline-none mt-2"
-                                        placeholder="Enter first name"
-                                        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                                            setFieldValue('firstName', e.target.value.replace(/[^A-Za-z]/g, ''))
-                                        }
-                                    />
-                                    {errors.firstName && touched.firstName && (
-                                        <ErrorMessage name="firstName" component="div" className="text-red-500 text-sm" />
-                                    )}
-                                </div>
-                                <div>
-                                    <Label htmlFor="lastName">Last name</Label>
-                                    <Field
-                                        id="lastName"
-                                        name="lastName"
-                                        className="w-full p-3 border rounded focus:outline-none mt-2"
-                                        placeholder="Enter last name"
-                                        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                                            setFieldValue("lastName", e.target.value.replace(/[^A-Za-z]/g, ''))
-                                        }
-                                    />
-                                    {errors.lastName && touched.lastName && (
-                                        <ErrorMessage name="lastName" component="div" className="text-red-500 text-sm" />
-                                    )}
-                                </div>
-                                <div>
-                                    <Label htmlFor="emailAddress">Email address</Label>
-                                    <Field
-                                        id="emailAddress"
-                                        name="emailAddress"
-                                        className="w-full p-3 border rounded focus:outline-none mt-2"
-                                        placeholder="Enter email address"
-                                        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                                            setFieldValue("emailAddress", e.target.value.replace(/\s+/g, ''))
-                                        }
-                                    />
-                                    {errors.emailAddress && touched.emailAddress && (
-                                        <ErrorMessage name="emailAddress" component="div" className="text-red-500 text-sm" />
-                                    )}
-                                </div>
-                                <div>
-                                    <Label htmlFor="initialDeposit">Initial Deposit</Label>
-                                    <div className='flex gap-3 items-center '>
-                                        <CurrencySelectInput
-                                            selectedcurrency={selectCurrency}
-                                            setSelectedCurrency={setSelectCurrency}
-                                        />
-                                        <div className='w-full '>
-                                            <Field
-                                                id="initialDeposit"
-                                                name="initialDeposit"
-                                                type="number"
-                                                placeholder="Enter Initial Deposit"
-                                                component={CustomInputField}
-                                                className="w-full p-3 h-[3.2rem] border rounded focus:outline-none"
-                                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                                                    const value = e.target.value;
-                                                    setInitialDepositAmount(value)
-                                                    if (/^\d*$/.test(value)) {
-                                                        if (Number(e.target.value) < Number(totalItemAmount) || Number(e.target.value) === Number(totalItemAmount)) {
-                                                            setInitialDepositError('')
-                                                            setInitialDepositAmount(value)
-                                                            void setFieldValue("initialDeposit", e.target.value);
-                                                        }else {
-                                                            void setFieldValue("initialDeposit", '');
-                                                            setInitialDepositError("initialDeposit can not be greater than cohort amount");
+                            <div>
+                                <div
+                                    style={{
+                                        scrollbarWidth: 'none',
+                                        msOverflowStyle: 'none',
 
-                                                        }
-                                                    }
-                                                }}
+                                    }}
+                                    className=" md:max-h-[67.5vh] overflow-y-auto  grid grid-cols-1 gap-y-4  px-2">
+                                    <div>
+                                        <Label htmlFor="firstName">First name</Label>
+                                        <Field
+                                            id="firstName"
+                                            name="firstName"
+                                            className="w-full p-3 border rounded focus:outline-none mt-2"
+                                            placeholder="Enter first name"
+                                            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                                                setFieldValue('firstName', e.target.value.replace(/[^A-Za-z]/g, ''))
+                                            }
+                                        />
+                                        {errors.firstName && touched.firstName && (
+                                            <ErrorMessage name="firstName" component="div" className="text-red-500 text-sm" />
+                                        )}
+                                    </div>
+                                    <div>
+                                        <Label htmlFor="lastName">Last name</Label>
+                                        <Field
+                                            id="lastName"
+                                            name="lastName"
+                                            className="w-full p-3 border rounded focus:outline-none mt-2"
+                                            placeholder="Enter last name"
+                                            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                                                setFieldValue("lastName", e.target.value.replace(/[^A-Za-z]/g, ''))
+                                            }
+                                        />
+                                        {errors.lastName && touched.lastName && (
+                                            <ErrorMessage name="lastName" component="div" className="text-red-500 text-sm" />
+                                        )}
+                                    </div>
+                                    <div>
+                                        <Label htmlFor="emailAddress">Email address</Label>
+                                        <Field
+                                            id="emailAddress"
+                                            name="emailAddress"
+                                            className="w-full p-3 border rounded focus:outline-none mt-2"
+                                            placeholder="Enter email address"
+                                            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                                                setFieldValue("emailAddress", e.target.value.replace(/\s+/g, ''))
+                                            }
+                                        />
+                                        {errors.emailAddress && touched.emailAddress && (
+                                            <ErrorMessage name="emailAddress" component="div" className="text-red-500 text-sm" />
+                                        )}
+                                    </div>
+                                    <div>
+                                        <Label htmlFor="initialDeposit">Initial Deposit</Label>
+                                        <div className='flex gap-3 items-center '>
+                                            <CurrencySelectInput
+                                                selectedcurrency={selectCurrency}
+                                                setSelectedCurrency={setSelectCurrency}
                                             />
+                                            <div className='w-full '>
+                                                <Field
+                                                    id="initialDeposit"
+                                                    name="initialDeposit"
+                                                    type="number"
+                                                    placeholder="Enter Initial Deposit"
+                                                    component={CustomInputField}
+                                                    className="w-full p-3 h-[3.2rem] border rounded focus:outline-none"
+                                                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                                                        const value = e.target.value;
+                                                        setInitialDepositAmount(value)
+                                                        if (/^\d*$/.test(value)) {
+                                                            if (Number(e.target.value) < Number(totalItemAmount) || Number(e.target.value) === Number(totalItemAmount)) {
+                                                                setInitialDepositError('')
+                                                                setInitialDepositAmount(value)
+                                                                void setFieldValue("initialDeposit", e.target.value);
+                                                            }else {
+                                                                void setFieldValue("initialDeposit", '');
+                                                                setInitialDepositError("initialDeposit can not be greater than cohort amount");
+
+                                                            }
+                                                        }
+                                                    }}
+                                                />
+                                            </div>
                                         </div>
                                     </div>
+                                    <div className='relative bottom-6 ml-[90px]'>
+                                        {errors.initialDeposit && touched.initialDeposit && (
+                                            <ErrorMessage name="initialDeposit" component="div" className="text-red-500 text-sm" />
+                                        )}
+                                        {initialDepositError.length > 1 &&
+                                            <span className="text-red-500 text-sm" >{initialDepositError}</span>}
+                                    </div>
                                 </div>
-                                <div className='relative bottom-6 ml-[90px]'>
-                                    {errors.initialDeposit && touched.initialDeposit && (
-                                        <ErrorMessage name="initialDeposit" component="div" className="text-red-500 text-sm" />
-                                    )}
-                                    {initialDepositError.length > 1 &&
-                                        <span className="text-red-500 text-sm" >{initialDepositError}</span>}
-                                </div>
-                                <div className="md:flex gap-4 justify-end mt-2 md:mb-0 mb-3">
+                                <div className='w-full border-[#D7D7D7] border-[0.6px]'></div>
+                                <div className="md:flex q gap-4 justify-end mt-2 md:mb-0 mb-3">
                                     <Button
                                         variant="outline"
                                         type="reset"
@@ -314,81 +322,96 @@ function AddTraineeForm({setIsOpen, tuitionFee,cohortId }: Props) {
                             </div>
                         ) : (
                             <div className={`py-5 ${inter.className}`}>
-                                <span>Tuition</span>
-                                <div className="flex items-center gap-2 ">
-                                    <CurrencySelectInput
-                                        readOnly={true}
-                                        className={`bg-grey105 text-black300`}
-                                        selectedcurrency={selectCurrency}
-                                        setSelectedCurrency={setSelectCurrency}
-                                    />
-
-                                    <div className={`flex w-full flex-row items-center justify-between mb-2`}>
-                                        <Field
-                                            id="detail-"
-                                            name="detail-"
-                                            type="text"
-                                            defaultValue={tuitionFee?.toLocaleString() || ''}
-                                            readOnly
-                                            className="w-full p-3 h-[3.2rem] border rounded bg-grey105 focus:outline-none"
-                                        />
+                                <div className={`grid `}>
+                                    <span>Cohort breakdown</span>
+                                    <div className={` w-full h-fit bg-[#F9F9F9] rounded-md grid py-2 px-2  `}>
+                                        <span>Total loan amount (Initial deposit - Cohort breakdown) </span>
+                                        {/*<span>{formatAmount(totalItemAmount)}</span>*/}
+                                        <TotalInput prefix={'₦'} total={totalItemAmount}
+                                                    componentId={'totalInputOnAddLoaneeModalComponent'}/>
                                     </div>
                                 </div>
-                                {cohortBreakDown?.map((detail: cohortBreakDown, index: number) => (
-                                    <div key={"breakDown" + index} className={` grid md:grid gap-0`}>
-                                        <Label htmlFor={`detail-${index}`}>{detail.itemName}</Label>
-                                        <div className="w-full  grid gap-1">
-                                            <div className={`grid  md:grid md:gap-0 pb-4 md:h-fit h-fit w-full gap-1`}>
-                                                <div className={`flex gap-2 w-full `}>
-                                                    <CurrencySelectInput
-                                                        selectedcurrency={detail.currency}
-                                                        setSelectedCurrency={setSelectCurrency}
-                                                    />
-                                                    <div
-                                                        className={`flex w-full flex-row items-center justify-between mb-2 text-black300`}>
-                                                        <NumericFormat
-                                                            id={`detail-${index}`}
-                                                            name={`detail-${index}`}
-                                                            type="text"
-                                                            thousandSeparator=","
-                                                            decimalScale={2}
-                                                            fixedDecimalScale={true}
-                                                            value={detail?.itemAmount?.toLocaleString() || ''}
-                                                            placeholder={`${detail?.itemAmount || ''}`}
-                                                            className="w-full p-3 h-[3.2rem] border rounded focus:outline-none"
-                                                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                                                                const rawValue = e.target.value.replace(/,/g, '');
-                                                                if (!isNaN(Number(rawValue))) {
-                                                                    editCohortBreakDown(
-                                                                        {target: {value: rawValue}} as React.ChangeEvent<HTMLInputElement>,
-                                                                        index,
-                                                                    );
-                                                                }
-                                                            }}
-                                                        />
-                                                    </div>
-                                                    <MdOutlineDelete id={`deleteItemButton${index}`}
-                                                                     className={'text-blue200 mt-auto mb-auto  h-6 w-6 cursor-pointer'}
-                                                                     onClick={()=> {deleteItem(index, Number(detail.itemAmount))}}
-                                                    />
-                                                </div>
-                                                {amountError?.index === index && <div
-                                                    className={`text-error500 place-self-start  text-sm text-center`}>{amountError?.error}</div>}
-                                            </div>
+                               <div
+                                   style={{
+                                       scrollbarWidth: 'none',
+                                       msOverflowStyle: 'none',
 
-                                        </div>
-                                    </div>
-                                ))}
-                                <div id={'totalInputOnAddLoaneeModal'} data-testid={'totalInputOnAddLoaneeModal'}>
-                                    <div className={`text-[#6A696D]`}>initial deposit is deducted from total</div>
-                                    <TotalInput prefix={'₦'} total={totalItemAmount}
-                                                componentId={'totalInputOnAddLoaneeModalComponent'}/>
-                                </div>
+                                   }}
+                                   className=" md:max-h-[50vh] overflow-y-auto  grid grid-cols-1 gap-y-4  px-2"
+                               >
+                                   <span>Tuition</span>
+                                   <div className="flex items-center gap-2 ">
+                                       <CurrencySelectInput
+                                           readOnly={true}
+                                           className={`bg-grey105 text-black300`}
+                                           selectedcurrency={selectCurrency}
+                                           setSelectedCurrency={setSelectCurrency}
+                                       />
+
+                                       <div className={`flex w-full flex-row items-center justify-between mb-2`}>
+                                           <Field
+                                               id="detail-"
+                                               name="detail-"
+                                               type="text"
+                                               defaultValue={tuitionFee?.toLocaleString() || ''}
+                                               readOnly
+                                               className="w-full p-3 h-[3.2rem] border rounded bg-grey105 focus:outline-none"
+                                           />
+                                       </div>
+                                   </div>
+                                   {cohortBreakDown?.map((detail: cohortBreakDown, index: number) => (
+                                       <div key={"breakDown" + index} className={` grid md:grid gap-0`}>
+                                           <Label htmlFor={`detail-${index}`}>{detail.itemName}</Label>
+                                           <div className="w-full  grid gap-1">
+                                               <div className={`grid  md:grid md:gap-0 pb-4 md:h-fit h-fit w-full gap-1`}>
+                                                   <div className={`flex gap-2 w-full `}>
+                                                       <CurrencySelectInput
+                                                           selectedcurrency={detail.currency}
+                                                           setSelectedCurrency={setSelectCurrency}
+                                                       />
+                                                       <div
+                                                           className={`flex w-full flex-row items-center justify-between mb-2 text-black300`}>
+                                                           <NumericFormat
+                                                               id={`detail-${index}`}
+                                                               name={`detail-${index}`}
+                                                               type="text"
+                                                               thousandSeparator=","
+                                                               decimalScale={2}
+                                                               fixedDecimalScale={true}
+                                                               value={detail?.itemAmount?.toLocaleString() || ''}
+                                                               placeholder={`${detail?.itemAmount || ''}`}
+                                                               className="w-full p-3 h-[3.2rem] border rounded focus:outline-none"
+                                                               onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                                                                   const rawValue = e.target.value.replace(/,/g, '');
+                                                                   if (!isNaN(Number(rawValue))) {
+                                                                       editCohortBreakDown(
+                                                                           {target: {value: rawValue}} as React.ChangeEvent<HTMLInputElement>,
+                                                                           index,
+                                                                       );
+                                                                   }
+                                                               }}
+                                                           />
+                                                       </div>
+                                                       <MdOutlineDelete id={`deleteItemButton${index}`}
+                                                                        className={'text-blue200 mt-auto mb-auto  h-6 w-6 cursor-pointer'}
+                                                                        onClick={()=> {deleteItem(index, Number(detail.itemAmount))}}
+                                                       />
+                                                   </div>
+                                                   {amountError?.index === index && <div
+                                                       className={`text-error500 place-self-start  text-sm text-center`}>{amountError?.error}</div>}
+                                               </div>
+
+                                           </div>
+                                       </div>
+                                   ))}
+                               </div>
+
+                                <div className='w-full border-[#D7D7D7] border-[0.6px]'></div>
                                 <div className="md:flex gap-4 justify-end mt-2 md:mb-0 mb-3">
                                     <Button
                                         variant="outline"
                                         type="reset"
-                                        className="w-full md:w-36 h-[57px] mb-4"
+                                        className="w-fit h-fit px-6 py-4 "
                                         onClick={handleBack}
                                     >
                                         Back
@@ -401,7 +424,7 @@ function AddTraineeForm({setIsOpen, tuitionFee,cohortId }: Props) {
                                         :
                                         <Button
                                             variant="secondary"
-                                            className="w-full md:w-36 h-[57px]  cursor-pointer"
+                                            className="w-fit h-fit px-6 py-4  cursor-pointer"
                                             type="submit"
                                         >
                                             {isLoadingAddLoanee ? (

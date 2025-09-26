@@ -1,5 +1,8 @@
-import React from 'react';
+'use client'
+import React, {useEffect} from 'react';
 import { Tabs , TabsContent, TabsList, TabsTrigger} from './ui/tabs';
+import {setUnderlineTabCurrentTab} from "@/redux/slice/layout/adminLayout";
+import {store, useAppSelector} from '@/redux/store';
 
 interface Props {
     tabTriggers: {name: string; id: string,value: string}[];
@@ -7,9 +10,21 @@ interface Props {
     defaultTab: string;
 }
 const UnderlineTab = ({tabTriggers, tabValue, defaultTab}: Props) => {
+
+    const currentTab = useAppSelector(state => state.adminLayout.underlineTabCurrentTab);
+    useEffect(() => {
+        if (!currentTab) {
+            store.dispatch(setUnderlineTabCurrentTab(defaultTab));
+        }
+    }, [defaultTab, currentTab]);
+
+    const handleTabChange = (val: string) => {
+        store.dispatch(setUnderlineTabCurrentTab(val))
+    };
+
     return (
         <div>
-            <Tabs defaultValue={defaultTab} className="relative mr-auto w-full">
+            <Tabs defaultValue={currentTab || defaultTab} onValueChange={handleTabChange} className="relative mr-auto w-full">
                 <TabsList className="w-full justify-start rounded-none border-b bg-transparent p-0">
                     {tabTriggers.map((item, i) => (
                         <TabsTrigger
@@ -29,7 +44,7 @@ const UnderlineTab = ({tabTriggers, tabValue, defaultTab}: Props) => {
                         key={value.name + index}
                         data-testid={'display'+ value.name}
                         id={'display'+ value.name}
-                        className={` md:max-h-[60vh] lg:max-h-[60vh] w-full   `}
+                        className={` md:max-h-[60vh] lg:max-h-[60vh] w-full mb-6   `}
                         value={value.name}>
                         {value.displayValue}
 
