@@ -1,4 +1,5 @@
-import React, {useEffect, useState } from 'react';
+'use client'
+import React, { useState } from 'react';
 import {Menubar, MenubarContent, MenubarItem, MenubarMenu, MenubarTrigger} from "@/components/ui/menubar";
 import {inter} from "@/app/fonts";
 import {MdKeyboardArrowDown, MdKeyboardArrowUp} from "react-icons/md";
@@ -13,21 +14,13 @@ interface IProps {
     buttonText: string;
     handleButtonClick: () => void | Promise<void>;
     selectedItem: string;
-    itemId?: string;
-    setItemId?: (item: string ) => void;
-
 
 
 }
 
-const DropDownWithActionButton = ({id,isDisabled,trigger,itemId,setItemId,setSelectItem,selectedItem,dropDownItems, buttonText, handleButtonClick}:IProps) => {
+const DropDownWithActionButton = ({id,isDisabled,trigger,setSelectItem,selectedItem,dropDownItems, buttonText, handleButtonClick}:IProps) => {
     const [isIconUp, setIsIconUp] = useState(false)
 
-    useEffect(() => {
-        if (itemId && setItemId){
-            setItemId(itemId)
-        }
-    }, [itemId, setItemId])
 
     return (
         <div
@@ -47,7 +40,7 @@ const DropDownWithActionButton = ({id,isDisabled,trigger,itemId,setItemId,setSel
                     </MenubarTrigger>
                     <MenubarContent  className={``}>
                         {dropDownItems?.map((item, i) => (
-                            <div
+                            <button
                                 id={item.id}
                                 data-testid={item.id}
                                 key={item.id+ i}
@@ -56,15 +49,15 @@ const DropDownWithActionButton = ({id,isDisabled,trigger,itemId,setItemId,setSel
                             >
 
                                 {item?.name}
-                            </div>
+                            </button>
                         ))}
                         <MenubarItem
-                            className={`w-full max-h-fit py-2 flex hover:bg-white justify-end border-t border-t-[#D7D7D7]  `}
+                            className={`w-full max-h-fit py-2 flex focus:bg-white hover:bg-white justify-end border-t border-t-[#D7D7D7]  `}
                         >
                             <Button
-                                disabled={!selectedItem}
+                                disabled={!selectedItem || selectedItem === trigger}
                                 onClick={handleButtonClick}
-                                className={` text-white ${!selectedItem ? `bg-[#D7D7D7] ` : ` bg-meedlBlue `}   `}
+                                className={` text-white ${!selectedItem || selectedItem === trigger ? `bg-[#D7D7D7] ` : ` bg-meedlBlue `}   `}
                             >
                                 {buttonText}
                             </Button>
