@@ -10,14 +10,11 @@ import {inter, inter500} from '@/app/fonts';
 import CurrencySelectInput from '@/reuseable/Input/CurrencySelectInput';
 import ToastPopUp from '@/reuseable/notification/ToastPopUp';
 import { useAddLoaneeToCohortMutation, useGetCohortLoanBreakDownQuery } from "@/service/admin/cohort_query";
-// import { getItemSessionStorage } from "@/utils/storage";
 import TotalInput from "@/reuseable/display/TotalInput";
 import { NumericFormat } from 'react-number-format';
-// import { useToast } from '@/hooks/use-toast';
 import CustomInputField from "@/reuseable/Input/CustomNumberFormat";
 import {MdOutlineDelete} from "react-icons/md";
 import CenterMultistep from "@/reuseable/multiStep-component/Center-multistep";
-import DropdownFilter from "@/reuseable/Dropdown/DropdownFilter";
 import StringDropdown from "@/reuseable/Dropdown/DropdownSelect";
 
 interface Props {
@@ -61,8 +58,6 @@ function AddTraineeForm({setIsOpen, tuitionFee,cohortId }: Props) {
         }
     }, [data, tuitionFee, initialDepositAmount]);
 
-    console.log('total: ', totalItemAmount);
-    console.log('tuition:', tuitionFee)
 
     const validationSchemaStep1 = Yup.object().shape({
         firstName: Yup.string()
@@ -105,13 +100,8 @@ function AddTraineeForm({setIsOpen, tuitionFee,cohortId }: Props) {
     };
 
     const calculateTotal = (tuitionFee?: string) => {
-        // const total = items.reduce((sum, item) => sum + parseFloat(item.itemAmount || '0'), 0);
-        // const totalWithTuition = total + (tuitionFee ? parseFloat(tuitionFee) : 0);
-        console.log('before calculating total')
-        console.log('tuition fee; ', tuitionFee)
-        console.log('initial deposit: ', initialDepositAmount)
+
         const totalWithInitialDepositDeducted  = (tuitionFee ? parseFloat(tuitionFee) : 0) - (initialDepositAmount ? parseFloat(initialDepositAmount) : 0);
-        console.log('totalWithInitialDepositDeducted: ', totalWithInitialDepositDeducted)
         setTotalItemAmount(totalWithInitialDepositDeducted);
     };
 
@@ -153,7 +143,6 @@ function AddTraineeForm({setIsOpen, tuitionFee,cohortId }: Props) {
         }
     };
 
-    console.log('selected ', selectedCohortItem);
 
 
     const editCohortBreakDown = (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
@@ -167,7 +156,7 @@ function AddTraineeForm({setIsOpen, tuitionFee,cohortId }: Props) {
             );
             setCohortBreakDown(updatedData);
             setSelectedCohortItem(updatedData)
-            calculateTotal(updatedData, tuitionFee);
+            calculateTotal( tuitionFee);
             setAmountError({error:'', index:0})
             setDisableAddLoaneeButton(false)
 
@@ -179,30 +168,20 @@ function AddTraineeForm({setIsOpen, tuitionFee,cohortId }: Props) {
             setAmountError({error:'amount can not be greater than cohort amount', index})
         }
     };
-    const deductInitialDepositFromTotal = (items: cohortBreakDown[] ) => {
-        const total = items.reduce((sum, item) => sum + parseFloat(item.itemAmount || '0'), 0);
-        const totalWithTuition = total + (tuitionFee ? parseFloat(tuitionFee) : 0);
-        const totalWithInitialDepositDeducted  = totalWithTuition - (initialDepositAmount ? parseFloat(initialDepositAmount) : 0);
-        setTotalItemAmount(totalWithInitialDepositDeducted);
-    }
 
 
-    const deductFromTotal = (items: cohortBreakDown[],itemAmount: number ) => {
-        const total = items.reduce((sum, item) => sum + parseFloat(item.itemAmount || '0'), 0);
-        const totalWithTuition = total + (tuitionFee ? parseFloat(tuitionFee) : 0);
-        const totalWithInitialDepositDeducted  = totalWithTuition - (initialDepositAmount ? parseFloat(initialDepositAmount) : 0);
-        const deductedAmount = totalWithInitialDepositDeducted - itemAmount
+
+    const deductFromTotal = (itemAmount: number ) => {
+        const deductedAmount = totalItemAmount - itemAmount
         setTotalItemAmount(deductedAmount);
     }
 
 
-    const deleteItem = (itemIndex: number, itemAmount: number) => {
-        deductFromTotal(cohortBreakDown, itemAmount);
-        const updatedData = selectedCohortItem.filter((cohort, index) => index !== itemIndex)
-        // setCohortBreakDown(updatedData);
-        console.log('updatedData', updatedData);
-        console.log('cohortBreakDown[itemIndex]?.itemName',cohortBreakDown[itemIndex]?.itemName)
-        setNames((prevState) => [...prevState,cohortBreakDown[itemIndex]?.itemName ] )
+    const deleteItem = (itemLoanBreakDownId: string, itemAmount: number) => {
+        deductFromTotal( itemAmount);
+        const updatedData = selectedCohortItem.filter((cohort) => cohort?.loanBreakdownId !== itemLoanBreakDownId)
+        const removedItemName = cohortBreakDown.find(item => item.loanBreakdownId === itemLoanBreakDownId)?.itemName ?? '';
+        setNames((prevState) => [...prevState,removedItemName] )
         setSelectedCohortItem(updatedData)
     }
 
@@ -223,24 +202,20 @@ function AddTraineeForm({setIsOpen, tuitionFee,cohortId }: Props) {
 
 
     const handleSelect = (value: string) => {
-        console.log("Selected:", value);
        const currentItemArray =  cohortBreakDown?.filter(item => item?.itemName === value);
-        console.log('currentItem ', currentItemArray);
-        console.log('names ', names)
         const currentItem = currentItemArray?.at(0) ? currentItemArray?.at(0 ) : {    currency: '',
             itemAmount: '',
             itemName: '',
             loanBreakdownId: ''};
         const totalWithInitialDepositDeducted  = totalItemAmount + ( currentItem?.itemAmount ? parseFloat(currentItem?.itemAmount) : 0);
+
+        //eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-expect-error
         setSelectedCohortItem(prev => [...prev, currentItem]);
         setNames(prevNames => prevNames.filter(name => name !== value));
         setTotalItemAmount(totalWithInitialDepositDeducted);
-        console.log('names afrter: ', names)
-        console.log('selectedc', selectedCohortItem)
 
     };
-    console.log("Selected:", selectedCohortItem);
-    console.log('names: ', names)
 
     return (
         <div id="addTraineeForm">
@@ -390,10 +365,10 @@ function AddTraineeForm({setIsOpen, tuitionFee,cohortId }: Props) {
                                     }}
                                     className={` max-h-[45vh] h-[45vh] overflow-y-scroll   `}
                                 >
-                                    <div className={`w-full grid  bg-red-200  `}>
-                                        <div className={`bg-blue-200 grid grid-cols-2 `}>
-                                            <label className={`w-[30%] text-[14px] h-fitpy-2   ${inter500.className} bg-purple-200 `}>Item</label>
-                                            <label className={`w-[70%] text-[14px] h-fit py-2  ${inter500.className} bg-amber-200`}>Amount</label>
+                                    <div className={`w-full grid   `}>
+                                        <div className={` flex  w-full  `}>
+                                            <div className={`w-1/3 text-[14px] h-fit py-2   ${inter500.className}  `}>Item</div>
+                                            <div className={`w-2/3 text-[14px] h-fit py-2  ${inter500.className} `}>Amount</div>
                                         </div>
                                     </div>
                                     <div>
@@ -457,9 +432,9 @@ function AddTraineeForm({setIsOpen, tuitionFee,cohortId }: Props) {
                                         <div className={` grid gap-3 `}>
                                             {selectedCohortItem?.map((detail: cohortBreakDown, index: number) => (
                                                 <div key={'item'+ index}>
-                                                    <div  className={`flex gap-3 `}>
+                                                    <div  className={`flex gap-3  `}>
 
-                                                        <div className={` text-[14px] ${inter.className}  mt-auto mb-auto  w-[40%] h-fit text-black  `}>
+                                                        <div className={` text-[14px] ${inter.className}  mt-auto mb-auto  w-[40%]  h-full text-black  `}>
                                                             <StringDropdown
                                                                 label={detail?.itemName}
                                                                 items={names}
@@ -493,7 +468,7 @@ function AddTraineeForm({setIsOpen, tuitionFee,cohortId }: Props) {
                                                             />
                                                             <MdOutlineDelete id={`deleteItemButton${index}`}
                                                                              className={'text-blue200 mt-auto mb-auto  h-6 w-6 cursor-pointer'}
-                                                                             onClick={()=> {deleteItem(index, Number(detail.itemAmount))}}
+                                                                             onClick={()=> {deleteItem(detail?.loanBreakdownId, Number(detail.itemAmount))}}
                                                             />
                                                         </div>
                                                     </div>
