@@ -19,13 +19,14 @@ import { useViewFinanciersByInvestmentmentVehicleQuery } from '@/service/admin/f
 import {useRouter } from 'next/navigation';
 import { setLoanProductField,markStepCompleted } from "@/redux/slice/loan-product/Loan-product";
 import { formatPlaceName } from "@/utils/GlobalMethods";
-import { useViewObligorLimitQuery} from "@/service/admin/overview";
+// import { useViewObligorLimitQuery} from "@/service/admin/overview";
 
 interface viewAllProps {
     id: string;
     name: string;
     size?: number;
     totalAvailableAmount?: number;
+    rate?: number
   }
 
   interface SponsorsObj{
@@ -48,10 +49,10 @@ function StepOne() {
     const [financiers,setFinanciers] = useState<viewAllProps[]>([]);
     const [showSponsorError, setShowSponsorError] = useState(false);
     const [localFundAvailableAmount, setLocalFundAvailableAmount] = useState(fundProductAvailableAmount);
-     const {data:oblgorLimitData,refetch:refetchObligorLimit} = useViewObligorLimitQuery({})
+    //  const {data:oblgorLimitData,refetch:refetchObligorLimit} = useViewObligorLimitQuery({})
     const isEdit = useAppSelector(state => state?.loanProduct?.isEdit)
     const router = useRouter();
-    const generalOblgorLimitData = oblgorLimitData?.data
+    // const generalOblgorLimitData = oblgorLimitData?.data
 
     
     const { data: investmentVehicleData, isFetching, isLoading: isFundLoading } =
@@ -63,8 +64,7 @@ function StepOne() {
        
     useEffect(() => {
         setLocalFundAvailableAmount(fundProductAvailableAmount);
-        refetchObligorLimit()
-    }, [fundProductAvailableAmount,refetchObligorLimit]);
+    }, [fundProductAvailableAmount]);
     
     const param = {
             pageNumber: financierPageNumber,
@@ -194,7 +194,7 @@ function StepOne() {
                 value => !value || Number(value) <= 1e15)
             .test(
               `is-greater-than-fund`,
-              `Amount can't be greater than fund product ${formatAmount(localFundAvailableAmount)}`,
+              `Amount can't be greater than investment vehicle ${formatAmount(localFundAvailableAmount)}`,
               function(value) {
                 if (!value || localFundAvailableAmount === null || localFundAvailableAmount === undefined) return true;
                 
@@ -215,17 +215,17 @@ function StepOne() {
                 function (value) {
                     const {loanProductSize} = this.parent;
                     return parseFloat(value) <= parseFloat(loanProductSize);
-                })
-            .test('is-less-than-platform-limit', 
-                    generalOblgorLimitData 
-                        ? `Obligor limit can't exceed platform limit of ${formatAmount(generalOblgorLimitData)}`
-                        : 'Obligor limit exceeds platform limits',
-                    function (value) {
-                        if (!generalOblgorLimitData || !value) return true;
-                        const numericValue = parseFloat(value);
-                        const platformLimit = generalOblgorLimitData;
-                        return numericValue <= platformLimit;
-             }),
+                }),
+            // .test('is-less-than-platform-limit', 
+            //         generalOblgorLimitData 
+            //             ? `Obligor limit can't exceed platform limit of ${formatAmount(generalOblgorLimitData)}`
+            //             : 'Obligor limit exceeds platform limits',
+            //         function (value) {
+            //             if (!generalOblgorLimitData || !value) return true;
+            //             const numericValue = parseFloat(value);
+            //             const platformLimit = generalOblgorLimitData;
+            //             return numericValue <= platformLimit;
+            //  }),
         minimumRepaymentAmount: Yup.string()
             .trim()
             .required("Amount is required")
@@ -335,7 +335,11 @@ function StepOne() {
                             );
                             if (selectedVehicle && selectedVehicle.totalAvailableAmount !== undefined) {
                                 const availableAmount = selectedVehicle.totalAvailableAmount;
+                                const interestRate = selectedVehicle.rate
                                 setLocalFundAvailableAmount(availableAmount);
+                                if (interestRate) {
+                                    setFieldValue("costOfFunds", interestRate.toString());
+                                }
                                 store.dispatch(setFundProductAvailableAmount(availableAmount));
                             }
                         };
@@ -381,7 +385,7 @@ function StepOne() {
                             }
                         </div>
                         <div>
-                         <Label htmlFor="FundProduct">Fund product</Label>
+                         <Label htmlFor="FundProduct">Investment vehicle</Label>
                          <SelectWithAmount
                                       selectedProgram={selectedFund}
                                       setSelectedProgram={setSelectedFund}
@@ -392,7 +396,7 @@ function StepOne() {
                                       onChange={() => {
                                         setFieldValue("loanProductSize", "");
                                       }}
-                                    placeholder='Select fund'
+                                    placeholder='Select investment vehicle'
                                     isLoading={isFundLoading}
                                     infinityScroll={{
                                         hasMore:hasNextfundPage,
@@ -638,6 +642,7 @@ function StepOne() {
                                                         className="w-full p-3 border-none rounded-r focus:outline-none text-sm"
                                                         placeholder="0"
                                                         step="0.01"
+                                                        readOnly={true}
                                                         onWheel={(e: React.WheelEvent<HTMLInputElement>) => e.currentTarget.blur()}
                                                         onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                                                             const value = e.target.value;
@@ -647,14 +652,14 @@ function StepOne() {
                                                         }}
                                                     />
                                                 </div>
-                                                {errors.costOfFunds && touched.costOfFunds && (
+                                                {/* {errors.costOfFunds && touched.costOfFunds && (
                                                     <ErrorMessage
                                                         name="costOfFunds"
                                                         id='costOfFundsId'
                                                         component="div"
                                                         className="text-red-500 text-sm mt-1"
                                                     />
-                                                )}
+                                                )} */}
                                             </div>
                                         </div>
                                     
