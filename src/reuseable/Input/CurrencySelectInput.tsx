@@ -29,7 +29,7 @@ function CurrencySelectInput({ selectedcurrency, setSelectedCurrency, className,
                 disabled={readOnly}
             >
                 <SelectTrigger
-                    className={` ${className} md:w-0 min-w-20 h-[3rem] border focus:ring-0 focus:outline-none text-sm shadow-none flex justify-between ${
+                    className={` ${className  ? className : 'h-[3rem]'} md:w-0 min-w-20  border focus:ring-0 focus:outline-none text-sm shadow-none flex justify-between ${
                         readOnly ? 'cursor-not-allowed bg-grey105 text-black300' : ''
                     } `}
                     role="button"
