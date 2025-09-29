@@ -16,6 +16,8 @@ export const loanRequestApi = createApi({
     endpoints: (builder) => ({
         viewAllLoanRequest: builder.query({
             query: (data: {
+                organizationId?:  string | number;
+                programId?: string;
                 pageNumber?: number;
                 pageSize?: number;
             }) => ({
@@ -39,7 +41,7 @@ export const loanRequestApi = createApi({
             })
         }),
         viewAllLoanReferral: builder.query({
-            query: (data: {pageSize:number, pageNumber: number,organizationId?: string  | number}) => ({
+            query: (data: {pageSize:number, pageNumber: number,organizationId?: string  | number,programId?: string}) => ({
                 url: `/loan/view/loan-referrals`,
                 method: 'GET',
                 params: data
