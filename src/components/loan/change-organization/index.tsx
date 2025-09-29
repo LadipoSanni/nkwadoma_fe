@@ -88,7 +88,7 @@ const ChangeInstitutionModal = () => {
       }
       setHasMore(searchResults.data.body.length === pageSize);
     }
-  }, [searchResults, page, isSearching,organizations]);
+  }, [searchResults, page, isSearching]);
 
   useEffect(() => {
     if (!isSearching && data?.data?.body) {
@@ -102,7 +102,7 @@ const ChangeInstitutionModal = () => {
       }
       setHasMore(data.data.body.length === pageSize);
     }
-  }, [data, page, isSearching,organizations]);
+  }, [data, page, isSearching]);
 
   const fetchMoreData = useCallback(() => {
     if ((!isFetching && !isSearchFetching) && hasMore) {
