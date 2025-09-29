@@ -1,6 +1,5 @@
 "use client"
 import React,{useEffect,useState} from "react";
-// import {Icon} from "@iconify/react";
 import {MdOutlinePeople} from "react-icons/md";
 import Table from '@/reuseable/table/Table';
 import {useRouter} from "next/navigation";
@@ -8,8 +7,7 @@ import {useViewAllLoanRequestQuery,useSearchLoanRequestQuery} from "@/service/ad
 import {formatAmount} from "@/utils/Format";
 import dayjs from "dayjs";
 import {capitalizeFirstLetters} from "@/utils/GlobalMethods";
-import { useAppSelector} from "@/redux/store";
-import { useDebounce } from '@/hooks/useDebounce';
+import { useLoanParams } from "./useLoanParams";
 
 interface userIdentity {
     firstName?: string;
@@ -33,58 +31,41 @@ interface viewAllLoanee {
 type viewAllLoanees = viewAllLoanee & TableRowData;
 
 const Index = () => {
-     const [pageNumber, setPageNumber] = React.useState(0);
-      
     const router = useRouter();
-    const clickedOrganization = useAppSelector(state => state.selectedLoan.clickedOrganization);
-    const searchTerm = useAppSelector(state => state?.selectedLoan?.searchLoan)
-    const [pageSearchNumber,setPageSearchNumber] = useState(0)
     const [hasNextPage,setNextPage] = useState(false)
     const [totalPage,setTotalPage] = useState(0)
-     const [debouncedSearchTerm, isTyping] = useDebounce(searchTerm, 1000);
-
-    const request ={
-        pageSize: 10,
-        pageNumber:pageNumber,
-        organizationId: clickedOrganization?.id || '',
-    }
-
-    const searchParam = {
-        name:debouncedSearchTerm,
-        pageSize:10,
-        pageNumber:pageSearchNumber,
-      
-    }
-
-    const searchParamWithOrg = {
-        name:debouncedSearchTerm,
-        pageSize:10,
-        pageNumber:pageSearchNumber,
-        organizationId: clickedOrganization?.id,
-    }
 
 
-    const { data, isLoading,isFetching} = useViewAllLoanRequestQuery(request,{refetchOnMountOrArgChange: true})
+     const { 
+             params, 
+             searchParams, 
+             setPageNumber, 
+             setPageSearchNumber, 
+             hasSearchTerm 
+         } = useLoanParams();
 
-    const {data: searchResult,isLoading: isSearchLoading,isFetching:isSearchFetching} = useSearchLoanRequestQuery(clickedOrganization?.id? searchParamWithOrg : searchParam,{skip: !debouncedSearchTerm})
+
+    const { data, isLoading,isFetching} = useViewAllLoanRequestQuery(params,{refetchOnMountOrArgChange: true})
+
+    const {data: searchResult,isLoading: isSearchLoading,isFetching:isSearchFetching} = useSearchLoanRequestQuery( searchParams,{skip: !hasSearchTerm })
 
     const getTableData = () => {
         if (!data?.data?.body) return [];
-        if (debouncedSearchTerm) return searchResult?.data?.body || [];
+        if ( hasSearchTerm ) return searchResult?.data?.body || [];
         return data?.data?.body;
     }
 
      useEffect(() => {
-            if (debouncedSearchTerm && searchResult && searchResult?.data) {
+            if ( hasSearchTerm  && searchResult && searchResult?.data) {
                 setNextPage(searchResult?.data?.hasNextPage)
                 setTotalPage(searchResult?.data?.totalPages)
                 setPageSearchNumber(searchResult?.data?.pageNumber)
-            }else if (!debouncedSearchTerm && data && data.data){
+            }else if (! hasSearchTerm  && data && data.data){
                 setNextPage(data?.data?.hasNextPage)
                 setTotalPage(data?.data?.totalPages)
-                setPageSearchNumber(data?.data?.pageNumber)
+                setPageNumber(data?.data?.pageNumber)
             }
-        },[data,searchResult,debouncedSearchTerm])
+        },[data,searchResult,setPageNumber,setPageSearchNumber,hasSearchTerm])
 
     const loanRequestHeader = [
         { title: 'Loanee', sortable: true, id: 'firstName', selector: (row: viewAllLoanees) =>capitalizeFirstLetters(row.userIdentity?.firstName?.toString()) + " " + capitalizeFirstLetters(row.userIdentity?.lastName?.toString()) },
@@ -117,7 +98,7 @@ const Index = () => {
                             isLoading={isLoading || isFetching || isSearchFetching || isSearchLoading}
                             handleRowClick={handleRowClick}
                             tableHeader={loanRequestHeader}
-                            tableHeight={54}
+                            tableHeight={data?.data?.body?.length < 10 ? 60:hasSearchTerm &&  searchResult?.data?.body?.length < 10 ? 60 : undefined}
                             sx='cursor-pointer'
                             staticColunm='firstName'
                             staticHeader='Loanee'
@@ -126,10 +107,10 @@ const Index = () => {
                             sideBarTabName='Loan request'
                             totalPages={totalPage}
                             hasNextPage={hasNextPage}
-                            pageNumber={searchTerm !== ""? pageSearchNumber : pageNumber}
-                            setPageNumber={searchTerm !== ""? setPageSearchNumber :  setPageNumber}
+                            pageNumber={hasSearchTerm ? searchParams.pageNumber : params.pageNumber}
+                            setPageNumber={hasSearchTerm ? setPageSearchNumber : setPageNumber}
                             condition={true}
-                            searchEmptyState={!isTyping && debouncedSearchTerm?.length > 0 && searchResult?.data?.body?.length < 1 }
+                            searchEmptyState={hasSearchTerm && searchResult?.data?.body?.length < 1}
                         />
                     </div>
         </div>
