@@ -139,7 +139,7 @@ const EditCohortForm = ({ setIsOpen, cohortDetail }: idProps) => {
     cohortDescription: Yup.string()
       .trim()
       .required("Cohort Description is required")
-      .max(1500, "Cohort description must be 1500 characters or less"),
+      .max(2500, "Cohort description must be 2500 characters or less"),
   });
 
   const toastPopUp = ToastPopUp({
@@ -181,7 +181,12 @@ const EditCohortForm = ({ setIsOpen, cohortDetail }: idProps) => {
         onSubmit={handleSubmit}
         validationSchema={validationSchema}
       >
-        {({ values, errors, isValid, touched, setFieldValue }) => (
+        {({ values, errors, isValid, touched, setFieldValue }) => 
+     { 
+      // console.log("Form errors:", errors);
+      // console.log("Is valid:", isValid);
+      // console.log("Name value:", values.name);
+      return (
           <Form className={`${inter.className}`}>
             <div className="grid grid-cols-1 gap-y-4  md:max-h-[55vh] max-h-[55vh] overflow-y-auto"
              style={{
@@ -243,12 +248,12 @@ const EditCohortForm = ({ setIsOpen, cohortDetail }: idProps) => {
                   <DatePickerInput
                     selectedDate={parseISO(values.expectedEndDate ?? "")}
                    onDateChange={(date) => {
-                                   if (date) {
-                                     const formattedDate = format(date, "yyyy-MM-dd");
-                                     setFieldValue("startDate", formattedDate); 
-                                   } else {
-                                     setFieldValue("startDate", ""); 
-                                   }
+                    if (date) {
+                      const formattedDate = format(date, "yyyy-MM-dd");
+                      setFieldValue("expectedEndDate", formattedDate); 
+                  } else {
+                      setFieldValue("expectedEndDate", ""); 
+                  }
                                  }}
                     className="p-6 mt-2"
                     disabled={true}
@@ -351,154 +356,10 @@ const EditCohortForm = ({ setIsOpen, cohortDetail }: idProps) => {
             }
           </Form>
         )}
+        }
       </Formik>
     </div>
   );
 };
 
 export default EditCohortForm;
-
-//   const [image, setImage] = useState(initialFormValue.cohortImage);
-// const [uploadedFile, setUploadedFile] = useState<File | null>(null);
-
-{
-  /* <div className='mt-2'>
-
-                      <div className='relative border border-solid h-24 rounded flex items-center justify-between px-4'>
-                      {image? ( <div   className='flex items-center'> <img  data-testid="image" src={image} alt="Cohort" className="w-24 h-16 object-cover rounded-md" />
-                       <span className="ml-4 text-sm text-gray-600">
-                       {uploadedFile ? uploadedFile.name : "Existing Image"}
-                     </span> </div>
-                    ) : (<div></div>)}
-                      <div className='flex relative'>
-                         {
-                    image? ( 
-                    <Button
-                         type='button'
-                         className='border-none shadow-none relative '
-                         onClick={handleImageDelete}
-                         aria-label="delete"
-                         >
-                          <div className='bg-greyBase200 w-8 flex justify-center items-center rounded-full h-8'>
-                          < MdDeleteOutline size={22} className='text-blue200 ' />
-                          </div>
-                         
-                         </Button> ) : (
-                          <div>
- 
-                         </div>
-                         )
-                        }
-                        <div >
-                          <Label htmlFor='imageUpload'>
-                         
-                          <div className='bg-greyBase200 w-8 flex justify-center items-center rounded-full h-8 cursor-pointer'>
-                          < MdOutlineEdit size={22} className='text-blue200 ' />
-                          </div>
-                         
-                        
-                          </Label>
-                          <Input
-                              id="imageUpload"
-                              type="file"
-                              accept="image/*"
-                              name="cohortImage"
-                              className="hidden"
-                              ref={fileInputRef}
-                              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                                handleImageUpload(e); 
-                                if (e.target.files && e.target.files[0]) {
-                                  setUploadedFile(e.target.files[0]); 
-                                  setFieldValue('cohortImage', e.target.files[0].name); 
-                                }
-                              }}
-                            />
-
-                        </div>
-                        </div>
-                      </div>
-                  
-                </div> */
-}
-
-//   const supportedTypes = [
-//     "image/svg+xml",
-//     "image/png",
-//     "image/jpg",
-//     "image/jpeg",
-//     "image/gif",
-//     "image/webp",
-//     "image/bmp",
-//     "image/tiff",
-//     "image/x-icon",
-//     "image/heif",
-//     "image/heic"
-//   ];
-
-// const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-//   // setUploadError(false);
-//   if (e.target.files && e.target.files[0]) {
-//     const file = e.target.files[0];
-
-//     if (supportedTypes.includes(file.type)) {
-//       // setUploadError(false);
-//       // setIsImageUploaded(true);
-//       setUploadedFile(file);
-//       setImage(URL.createObjectURL(file));
-
-//       setTimeout(() => {
-//         // setUploading(false);
-//         // setShowSuccessMessage(true);
-//         // setIsImageUploaded(true);
-//       }, 2000);
-//   } else {
-//       // setUploadError(true);
-//       return;
-
-//   }
-
-//   }
-
-// };
-
-// const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
-//   e.preventDefault();
-//   setUploadError(false);
-//   const file = e.dataTransfer.files[0];
-//   if (supportedTypes.includes(file.type)) {
-//     setUploadedFile(file);
-//     setImage(URL.createObjectURL(file));
-//     setUploading(true);
-
-//     setTimeout(() => {
-//       setUploadError(false);
-//       setUploading(false);
-//       setShowSuccessMessage(true);
-//       setIsImageUploaded(true);
-//     }, 2000);
-//   } else {
-//     setUploadError(true);
-//   }
-// }
-
-// const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
-//   e.preventDefault();
-// };
-
-//   const handleImageDelete = () => {
-//     setImage('')
-//     setUploadedFile(null);
-//     // setIsImageUploaded(false);
-//     // setShowSuccessMessage(false);
-//     // setUploadError(false);
-//     if (fileInputRef.current) {
-//       fileInputRef.current.value = '';
-//   };
-
-// }
-
-//  const handleReset = (resetForm: () => void) => {
-//   resetForm();
-//   setImage(initialFormValue.cohortImage);
-//   setUploadedFile(null);
-// };
