@@ -13,7 +13,7 @@ import {
 } from "@/service/admin/cohort_query";
 import TableModal from "@/reuseable/modals/TableModal";
 import {Cross2Icon} from "@radix-ui/react-icons";
-import AddTraineeForm from "@/components/cohort/AddTraineeForm";
+import AddTraineeForm, {cohortBreakDown} from "@/components/cohort/AddTraineeForm";
 import {useToast} from "@/hooks/use-toast";
 import {cohortLoaneeResponse} from "@/types/Component.type";
 import Isloading from "@/reuseable/display/Isloading";
@@ -78,6 +78,12 @@ export const LoaneeInCohortView = ({cohortFee}: props) => {
     const [selectedLoaneeEmploymentStatus, setSelectedLoaneeEmploymentStatus] = React.useState('')
     const [debouncedSearchTerm, isTyping] = useDebounce(loaneeName, 1000);
     const [selectedLoaneeId, setSelectedLoaneeId] = React.useState('')
+    const [loaneeModalText, setLoaneeModalText] = useState('Add Loanee')
+    const [isEdit, setIsEdit] = useState(false)
+    const [editLoaneeBasicDetails, setEditLoaneeBasicDetails] = React.useState<{loaneeFirstName: string, loaneeLastName: string, loaneeEmail: string, loaneeInitialDeposit: string}>()
+    const [editLoaneeBreakDown, setEditLoaneeBreakDown] = React.useState<cohortBreakDown[]>()
+    const [selectedEditLoaneeId, setSelectedEditLoaneeId] = useState<string>('');
+
     const statuss = selectedCohortInOrganizationType === 'GRADUATED' ?  {
             cohortId: cohortId,
             pageSize: size,
@@ -193,12 +199,25 @@ export const LoaneeInCohortView = ({cohortFee}: props) => {
     }
     const handleAddLoane = () => {
         setAddLoanee(true)
+        setIsEdit(false)
+        setLoaneeModalText('Add Loanee')
     }
     const {toast} = useToast()
     const handleRowClick = (row: TableRowData) => {
         setSelectedLoaneeId(String(row?.id))
 
     }
+
+
+    const dropDownOption = [
+
+        {
+            name: "Edit Loanee details",
+            id: "1"
+        },
+
+
+    ]
 
 
     const handleRefer = async () => {
@@ -224,8 +243,33 @@ export const LoaneeInCohortView = ({cohortFee}: props) => {
 
     }
 
+    interface rowData {
+        [key: string]: string | number | null | React.ReactNode | object;
+    }
 
-    return (
+    const handleDropdownClick = async (id:string,row: rowData) => {
+        if (id === '1'){
+            setLoaneeModalText('Edit Loanee ')
+            //eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-expect-error
+            setSelectedEditLoaneeId(row?.id)
+            //eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-expect-error
+            const selectedLoaneebreakDown: cohortBreakDown[] = row?.loaneeLoanDetail?.loanBreakdown
+
+            setEditLoaneeBreakDown(selectedLoaneebreakDown)
+            //eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-expect-error
+            const selectedLoaneeDetails = {loaneeFirstName:row?.userIdentity?.firstName, loaneeLastName: row?.userIdentity?.lastName, loaneeEmail: row?.userIdentity?.email, loaneeInitialDeposit: row?.loaneeLoanDetail?.initialDeposit}
+            setEditLoaneeBasicDetails(selectedLoaneeDetails)
+            setAddLoanee(true)
+            setIsEdit(true)
+
+        }
+    }
+
+
+        return (
         <main>
             <div className={`pb-4`} id={`searchReferAddTraineeAndTable`}>
                 <div className={`flex md:flex-row flex-col md:justify-between`}
@@ -308,6 +352,9 @@ export const LoaneeInCohortView = ({cohortFee}: props) => {
                         tableHeight={45}
                         hasNextPage={hasNextPage}
                         pageNumber={page}
+                        kirkBabDropdownOption={dropDownOption}
+                        showKirkBabel={true}
+                        handleDropDownClick={handleDropdownClick}
                         setPageNumber={setPageNumber}
                         totalPages={totalPage}
                         enableButton={() =>setEnableButton(true) }
@@ -330,10 +377,10 @@ export const LoaneeInCohortView = ({cohortFee}: props) => {
                     closeModal={() => setAddLoanee(false)}
                     closeOnOverlayClick={true}
                     icon={Cross2Icon}
-                    headerTitle={`Add loanee`}
+                    headerTitle={loaneeModalText}
                     width="30%"
                 >
-                    <AddTraineeForm  tuitionFee={cohortFee} setIsOpen={() => setAddLoanee(false)} cohortId={cohortId}/>
+                    <AddTraineeForm loaneeId={selectedEditLoaneeId} loaneeLoanBreakDown={editLoaneeBreakDown} isEdit={isEdit} loaneeBasicDetails={editLoaneeBasicDetails} tuitionFee={cohortFee} setIsOpen={() => setAddLoanee(false)} cohortId={cohortId}/>
                 </TableModal>
 
             </div>

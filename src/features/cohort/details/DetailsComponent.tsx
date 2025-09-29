@@ -24,7 +24,7 @@ const DetailsComponent = () => {
         {name: 'Total amount disbursed', value: cohortDetails?.data?.amountReceived , valueType: 'currency', id: 'totalAmount'},
         {name: 'Total amount repaid', value: cohortDetails?.data?.totalAmountRepaid , valueType: 'currency', id: 'totalRepaid'},
         {name: 'Total amount outstanding', value: cohortDetails?.data?.amountOutstanding , valueType: 'currency', id: 'totalOutstanding'},
-        {name: 'Average starting salary', value: '' , valueType: 'currency', id: 'averageStartingSalary'},
+        {name: 'Average starting salary', value: cohortDetails?.data?.averageStartingSalary , valueType: 'currency', id: 'averageStartingSalary'},
         {name: 'Tuition amount', value: cohortDetails?.data?.tuitionAmount , valueType: 'currency', id: 'tuitionAmount'},
   ]
 
@@ -70,6 +70,7 @@ const DetailsComponent = () => {
                 <div className={` md:grid ${cohortBreakDown?.data?.length === 1 ? 'md:grid-cols-1' :  'md:grid-cols-2 '} md:gap-4  `}>
                     {cohortBreakDown?.data?.map((item: CohortItems , i: number) => (
                         <Details
+                            isLoading={isLoading || isFetching}
                             key={'index'+i}
                             id={item.loanBreakdownId} name={item.itemName} valueType='currency'
                             value={item.itemAmount}
@@ -80,6 +81,7 @@ const DetailsComponent = () => {
                 <div className={` md:grid md:grid-cols-2 md:gap-4  `}>
                     {cohort2?.map((item, i) => (
                         <Details
+                            isLoading={isLoading || isFetching}
                             key={'index'+i}
                             id={item.id} name={item.name} valueType={item.valueType}
                             value={item.value}

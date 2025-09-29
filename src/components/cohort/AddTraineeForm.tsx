@@ -9,7 +9,7 @@ import { Icon } from '@iconify/react';
 import {inter, inter500} from '@/app/fonts';
 import CurrencySelectInput from '@/reuseable/Input/CurrencySelectInput';
 import ToastPopUp from '@/reuseable/notification/ToastPopUp';
-import { useAddLoaneeToCohortMutation, useGetCohortLoanBreakDownQuery } from "@/service/admin/cohort_query";
+import { useAddLoaneeToCohortMutation, useGetCohortLoanBreakDownQuery, useEditAddLoaneeToCohortMutation } from "@/service/admin/cohort_query";
 import TotalInput from "@/reuseable/display/TotalInput";
 import { NumericFormat } from 'react-number-format';
 import CustomInputField from "@/reuseable/Input/CustomNumberFormat";
@@ -20,10 +20,14 @@ import StringDropdown from "@/reuseable/Dropdown/DropdownSelect";
 interface Props {
     tuitionFee?: string;
     setIsOpen?: (e: boolean | undefined) => void;
-    cohortId?: string
+    cohortId?: string;
+    isEdit?:boolean;
+    loaneeBasicDetails?: {loaneeFirstName: string, loaneeLastName: string, loaneeEmail: string, loaneeInitialDeposit: string}
+    loaneeLoanBreakDown?: cohortBreakDown[],
+    loaneeId?: string,
 }
 
-type cohortBreakDown = {
+export type cohortBreakDown = {
     currency: string;
     itemAmount: string;
     itemName: string;
@@ -31,7 +35,7 @@ type cohortBreakDown = {
     isloading?:(value: boolean) => boolean;
 }
 
-function AddTraineeForm({setIsOpen, tuitionFee,cohortId }: Props) {
+function AddTraineeForm({setIsOpen, tuitionFee,cohortId, isEdit,loaneeBasicDetails, loaneeLoanBreakDown, loaneeId }: Props) {
     const [step, setStep] = useState(1);
     const [selectCurrency, setSelectCurrency] = useState('NGN');
     const { data } = useGetCohortLoanBreakDownQuery(cohortId);
@@ -45,8 +49,8 @@ function AddTraineeForm({setIsOpen, tuitionFee,cohortId }: Props) {
     const [initialDepositError, setInitialDepositError] = useState('')
 
     const [addLoaneeToCohort, {isLoading: isLoadingAddLoanee}] = useAddLoaneeToCohortMutation();
+    const [editLoaneeInACohort,{isLoading: isLoadingEditLoanee}] = useEditAddLoaneeToCohortMutation()
     const [selectedCohortItem, setSelectedCohortItem] = useState<cohortBreakDown[]>([]);
-
 
     const [names, setNames] = useState<string[]>([])
     useEffect(() => {
@@ -57,6 +61,14 @@ function AddTraineeForm({setIsOpen, tuitionFee,cohortId }: Props) {
             dropDownItem(data.data)
         }
     }, [data, tuitionFee, initialDepositAmount]);
+    useEffect(() => {
+        if (isEdit && loaneeLoanBreakDown){
+            setSelectedCohortItem(loaneeLoanBreakDown)
+        }else{
+            setSelectedCohortItem([])
+        }
+
+    }, [isEdit, loaneeLoanBreakDown]);
 
 
     const validationSchemaStep1 = Yup.object().shape({
@@ -81,10 +93,10 @@ function AddTraineeForm({setIsOpen, tuitionFee,cohortId }: Props) {
     });
 
     const initialFormValue = {
-        firstName: '',
-        lastName: '',
-        emailAddress: '',
-        initialDeposit: ''
+        firstName: loaneeBasicDetails && isEdit ? loaneeBasicDetails?.loaneeFirstName : '',
+        lastName: loaneeBasicDetails && isEdit ? loaneeBasicDetails?.loaneeLastName : '',
+        emailAddress: loaneeBasicDetails  && isEdit  ? loaneeBasicDetails?.loaneeEmail : '',
+        initialDeposit: loaneeBasicDetails && isEdit ? loaneeBasicDetails?.loaneeInitialDeposit : ''
     };
     // const {toast} = useToast();
 
@@ -112,8 +124,7 @@ function AddTraineeForm({setIsOpen, tuitionFee,cohortId }: Props) {
         setStep(2);
     };
 
-
-    const handleFinalSubmit = async (values: typeof initialFormValue) => {
+    const handleAddLoanee = async (values: typeof initialFormValue) => {
         const input = {
             cohortId: cohortId,
             userIdentity: {
@@ -123,7 +134,7 @@ function AddTraineeForm({setIsOpen, tuitionFee,cohortId }: Props) {
             },
             loaneeLoanDetail: {
                 initialDeposit: values.initialDeposit,
-                loanBreakdown: cohortBreakDown
+                loanBreakdown: selectedCohortItem
             }
         };
         try {
@@ -142,7 +153,47 @@ function AddTraineeForm({setIsOpen, tuitionFee,cohortId }: Props) {
 
         }
     };
+    const handleEditLoanee = async (values: typeof initialFormValue) => {
+        const newArray = selectedCohortItem.map(({ loanBreakdownId, ...rest }) => ({
+            ...rest,
+            loaneeLoanBreakdownId: loanBreakdownId,
+        }));
+        const input = {
+            cohortId: cohortId,
+            loaneeId: loaneeId,
+            firstName: values.firstName,
+            lastName: values.lastName,
+            email:values.emailAddress,
+            initialDeposit: values.initialDeposit,
+            loanBreakdown:  newArray
 
+        };
+        try {
+            await editLoaneeInACohort(input).unwrap();
+            toastPopUp.showToast();
+            handleCloseModal();
+            setErrorMessage(null);
+        } catch (error) {
+            //eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-expect-error
+            setErrorMessage(error?.data?.message || "An unexpected error occurred.");
+            // toast({
+            //     status: 'error',
+            //     description: errorMessage,
+            // })
+
+        }
+    };
+
+
+
+    const handleFinalSubmit = async (values: typeof initialFormValue) => {
+       if (isEdit){
+          await handleEditLoanee(values)
+       }else{
+          await handleAddLoanee(values)
+       }
+    };
 
 
     const editCohortBreakDown = (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
@@ -483,7 +534,7 @@ function AddTraineeForm({setIsOpen, tuitionFee,cohortId }: Props) {
                                 </div>
 
                                 <div className='w-full border-[#D7D7D7] border-[0.6px]'></div>
-                                <div className="md:flex gap-4 justify-end mt-2 md:mb-0 py-3 ">
+                                <div className="md:flex  md:gap-4 md:justify-end gap-4 justify-end mt-2 md:mb-0 py-3 ">
                                     <Button
                                         variant="outline"
                                         type="reset"
@@ -495,7 +546,7 @@ function AddTraineeForm({setIsOpen, tuitionFee,cohortId }: Props) {
                                     {disableAddLoaneeButton ?
                                         <Button
                                             className={`w-full md:w-36 h-[57px] hover:bg-[#D0D5DD] bg-[#D0D5DD] `}>
-                                            Add
+                                            Confirm
                                         </Button>
                                         :
                                         <Button
@@ -503,7 +554,7 @@ function AddTraineeForm({setIsOpen, tuitionFee,cohortId }: Props) {
                                             className="w-fit h-fit px-6 py-4  cursor-pointer"
                                             type="submit"
                                         >
-                                            {isLoadingAddLoanee ? (
+                                            {isLoadingAddLoanee || isLoadingEditLoanee ? (
                                                 <div id="loadingLoopIconDiv" className="flex items-center justify-center">
                                                     <Icon
                                                         id="Icon"
@@ -518,7 +569,7 @@ function AddTraineeForm({setIsOpen, tuitionFee,cohortId }: Props) {
                                                     />
                                                 </div>
                                             ) : (
-                                                'Add'
+                                                'Confirm'
                                             )}
                                         </Button>
                                     }
