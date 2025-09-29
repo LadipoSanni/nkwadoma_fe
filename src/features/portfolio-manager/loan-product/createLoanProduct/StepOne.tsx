@@ -19,6 +19,7 @@ import { useViewFinanciersByInvestmentmentVehicleQuery } from '@/service/admin/f
 import {useRouter } from 'next/navigation';
 import { setLoanProductField,markStepCompleted } from "@/redux/slice/loan-product/Loan-product";
 import { formatPlaceName } from "@/utils/GlobalMethods";
+import { useViewObligorLimitQuery} from "@/service/admin/overview";
 
 interface viewAllProps {
     id: string;
@@ -47,8 +48,11 @@ function StepOne() {
     const [financiers,setFinanciers] = useState<viewAllProps[]>([]);
     const [showSponsorError, setShowSponsorError] = useState(false);
     const [localFundAvailableAmount, setLocalFundAvailableAmount] = useState(fundProductAvailableAmount);
+     const {data:oblgorLimitData,refetch:refetchObligorLimit} = useViewObligorLimitQuery({})
     const isEdit = useAppSelector(state => state?.loanProduct?.isEdit)
     const router = useRouter();
+    const generalOblgorLimitData = oblgorLimitData?.data
+
     
     const { data: investmentVehicleData, isFetching, isLoading: isFundLoading } =
         useGetInvestmentVehiclesByTypeAndStatusAndFundRaisingQuery({
@@ -59,7 +63,8 @@ function StepOne() {
        
     useEffect(() => {
         setLocalFundAvailableAmount(fundProductAvailableAmount);
-    }, [fundProductAvailableAmount]);
+        refetchObligorLimit()
+    }, [fundProductAvailableAmount,refetchObligorLimit]);
     
     const param = {
             pageNumber: financierPageNumber,
@@ -210,7 +215,17 @@ function StepOne() {
                 function (value) {
                     const {loanProductSize} = this.parent;
                     return parseFloat(value) <= parseFloat(loanProductSize);
-                }),
+                })
+            .test('is-less-than-platform-limit', 
+                    generalOblgorLimitData 
+                        ? `Obligor limit can't exceed platform limit of ${formatAmount(generalOblgorLimitData)}`
+                        : 'Obligor limit exceeds platform limits',
+                    function (value) {
+                        if (!generalOblgorLimitData || !value) return true;
+                        const numericValue = parseFloat(value);
+                        const platformLimit = generalOblgorLimitData;
+                        return numericValue <= platformLimit;
+             }),
         minimumRepaymentAmount: Yup.string()
             .trim()
             .required("Amount is required")

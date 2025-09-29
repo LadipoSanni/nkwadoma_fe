@@ -4,7 +4,7 @@ import {customFetchBaseQuery} from "@/service/customFetchBaseQuery";
 export const portfolioOverviewApi = createApi({
     reducerPath: 'portfolioOverviewApi',
     baseQuery: customFetchBaseQuery,
-    tagTypes: ['loanee','upload-repayment'],
+    tagTypes: ['loanee','upload-repayment','loan'],
     endpoints: (builder)=> ({
         viewMeedlPortfolio: builder.query({
            query: () => ({
@@ -32,8 +32,29 @@ export const portfolioOverviewApi = createApi({
                 method: 'GET'
             }),
             providesTags: ['loanee','upload-repayment']
-        })
+        }),
+        setUpObligorLimit: builder.mutation({
+            query: (param:{obligorLoanLimit: number}) => ({
+                url: `/meedl/obligor/limit/set-up`,
+                method: 'POST',
+                params:param
+            }),
+            invalidatesTags: ['loan']
+         }),
+         viewObligorLimit: builder.query({
+            query: () => ({
+                url: `/meedl/obligor/limit`,
+                method: 'GET',
+            }),
+            providesTags: ['loan']
+         }),
     })
 
 })
-export const {useViewMeedlPortfolioQuery, useGetRepaymentHistoryYearRangeQuery, useSearchAllRepaymentHistoryQuery,useViewAllRepaymentHistoryQuery} = portfolioOverviewApi;
+export const {useViewMeedlPortfolioQuery, 
+    useGetRepaymentHistoryYearRangeQuery,
+     useSearchAllRepaymentHistoryQuery,
+     useViewAllRepaymentHistoryQuery,
+     useViewObligorLimitQuery,
+     useSetUpObligorLimitMutation
+    } = portfolioOverviewApi;

@@ -9,19 +9,57 @@ import 'react-quill-new/dist/quill.snow.css'
 import CurrencySelectInput from "@/reuseable/Input/CurrencySelectInput";
 import CustomInputField from "@/reuseable/Input/CustomNumberFormat";
 import { validateNumber} from "@/utils/Format";
+import { useViewObligorLimitQuery,useSetUpObligorLimitMutation } from "@/service/admin/overview";
+import Isloading from "@/reuseable/display/Isloading";
+import {useToast} from "@/hooks/use-toast";
+import {Skeleton} from '@/components/ui/skeleton'
+
+interface ApiError {
+    status: number;
+    data: {
+        message: string;
+    };
+}
 
 function Loan() {
     const [selectCurrency, setSelectCurrency] = useState('NGN');
+    const [setUpObligorLimit,{isLoading}] = useSetUpObligorLimitMutation()
+    const [error, setError] = useState('');
+     const {toast} = useToast();
+    const {data,isLoading:isViewLoading,refetch} = useViewObligorLimitQuery({})
+    
     const initialFormValue = {
-                obligorLimit: ""
+                obligorLimit: data?.data && data.data > 0 ? data.data.toString() : ""
              }
 
-    const validationSchema = Yup.object().shape({
-        obligorLimit: Yup.string().required("Obligor limit is required"),
-    });
+
+const validationSchema = Yup.object().shape({
+                obligorLimit: Yup.number()
+                    .required("Obligor limit is required")
+                    .min(1, "Obligor limit must be greater than 0")
+            });
 
     const handleSubmit = async (values: typeof initialFormValue) => {
-          console.debug(values)
+         const param = {
+            obligorLoanLimit: parseFloat(values?.obligorLimit || "0")
+         }
+         try {
+            const result = await setUpObligorLimit(param).unwrap()
+            if(result){
+                refetch()
+                setError(''); 
+                toast({
+                    description: result.message,
+                    status: "success",
+                    duration: 1500
+             });  
+            }
+            
+         } catch (err) {
+            const error = err as ApiError;
+            setError(error ? error?.data?.message : "Error occurred");
+         }
+         
     };  
 
   return (
@@ -44,9 +82,20 @@ function Loan() {
                 validateOnMount={true}
                 validateOnChange={true}
                 validateOnBlur={true} 
+                enableReinitialize={true}
             >
                 {
-                    ({errors, isValid, touched, setFieldValue}) => {
+                    ({errors, isValid, touched, setFieldValue,setFieldTouched, dirty }) => {
+
+                        const handleFieldChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+                            validateNumber("obligorLimit", setFieldValue)(e);
+                        };
+
+                        const handleFieldFocus = () => {
+                            setFieldTouched("obligorLimit", true, false);
+                        };
+
+                        const shouldDisableButton = !isValid || !dirty;
                         
                         return (
                         <Form >
@@ -59,14 +108,22 @@ function Loan() {
                                                     setSelectedCurrency={setSelectCurrency}
                                                     className={`h-12`}/>
                         </div>
-                        <Field
+                      {  
+                    isViewLoading? 
+                    <div className="w-full relative bottom-1 border border-solid rounded-md h-[3rem] pr-10 pl-2 py-4 flex items-center">      
+                    <Skeleton className="h-8 w-full bg-[#F6F6F6]"/>
+                     </div> 
+                    :   
+                     <Field
                       id="obligorLimitId"
                       name="obligorLimit"
-                      type="text"
+                      type="number"
                       component={CustomInputField}
                        className="w-full p-3  h-[3.2rem]  border rounded focus:outline-none mb-2 "
-                      onChange={validateNumber("obligorLimit", setFieldValue)}
+                       onChange={handleFieldChange} 
+                     onFocus={handleFieldFocus}
                     />
+                    }
                          </div>
                           <div className="relative bottom-1">
                             {errors.obligorLimit && touched.obligorLimit && (
@@ -80,23 +137,26 @@ function Loan() {
 
                         <div className="mt-3">
                          <Button
-                        className={`h-11 w-full ${!isValid ? 'bg-[#D7D7D7] hover:bg-[#D7D7D7] text-meedlWhite cursor-not-allowed ' : 'bg-meedlBlue text-meedlWhite cursor-pointer'}`}
+                        className={`h-11 w-full ${shouldDisableButton? 'bg-[#D7D7D7] hover:bg-[#D7D7D7] text-meedlWhite cursor-not-allowed ' : 'bg-meedlBlue text-meedlWhite cursor-pointer'}`}
                         variant={"secondary"}
                         type={"submit"}
-                        disabled={!isValid}
+                        disabled={shouldDisableButton}
                     >
-                           Confirm
+                          { isLoading? <Isloading/> : "Confirm"}
                     </Button>
                         </div>
-
+                        {error && (
+                                    <div className="text-red-500 text-sm mt-2 text-center">
+                                        {error}
+                                    </div>
+                         )}
                         </div>   
                         </Form>
                     )}
                 }
             </Formik>
        </div>
-       </div>
-        
+       </div>     
     </div>
   )
 }
