@@ -167,6 +167,14 @@ export const cohortApi = createApi({
             }),
             invalidatesTags: ['cohort'],
         }),
+        editAddLoaneeToCohort: builder.mutation({
+            query: (data) => ({
+                url: `/loanee/edit/detail`,
+                method: 'POST',
+                body: data
+            }),
+            invalidatesTags: ['cohort'],
+        }),
         getAllCohortByAParticularProgram: builder.query({
             query: (param: {
                 programId?:string;
@@ -219,6 +227,7 @@ export const cohortApi = createApi({
 
 export const {
     useAddLoaneeToCohortMutation,
+    useEditAddLoaneeToCohortMutation,
     useGetCohortLoanBreakDownQuery,
     useReferLoaneeToACohortMutation,
     useCreateCohortMutation,

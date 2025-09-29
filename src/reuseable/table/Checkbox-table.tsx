@@ -457,6 +457,9 @@ function CheckBoxTable<T extends TableRowData>({
                         </SelectContent>
                       </Select>
                     </TableHead>
+                    {showKirkBabel && (
+                        <TableHead className="bg-[#F0F2F4] h-12 hover:bg-[#F0F2F4]"></TableHead>
+                    )}
                   </TableRow>
                 </TableHeader>
                 <TableBody id="dynamicTableBodyMobile" className="w-full">
@@ -507,6 +510,47 @@ function CheckBoxTable<T extends TableRowData>({
                           )}
                         </div>
                       </TableCell>
+                      {showKirkBabel && (
+                          <TableCell
+                              className={`w-0 ${
+                                  isLastPage ? "border-b border-solid" : ""
+                              }`}
+                          >
+                            <Menubar>
+                              <MenubarMenu>
+                                <MenubarTrigger
+                                    asChild
+                                    className="border-none shadow-none cursor-pointer hover:bg-b"
+                                >
+                                  <Button className="border-none shadow-none" id="kirkBabButton">
+                                    <DotsVerticalIcon className="w-5 h-6 text-grey500 font-extrabold" />
+                                  </Button>
+                                </MenubarTrigger>
+                                <MenubarContent className="bg-white shadow-md rounded-md mr-11 relative bottom-6 min-w-[8rem] mt-3">
+                                  {kirkBabDropdownOption?.map(
+                                      (option, index) => (
+                                          <MenubarItem
+                                              id={`${index}optionItem`}
+                                              key={index}
+                                              className={`cursor-pointer mt-2 pr-8 ${
+                                                  option.id === "3"
+                                                      ? "text-error500 focus:text-error500"
+                                                      : ""
+                                              }`}
+                                              onClick={() =>
+                                                  handleDropDownClick &&
+                                                  handleDropDownClick(option.id, row)
+                                              }
+                                          >
+                                            {option.name}
+                                          </MenubarItem>
+                                      )
+                                  )}
+                                </MenubarContent>
+                              </MenubarMenu>
+                            </Menubar>
+                          </TableCell>
+                      )}
                     </TableRow>
                   ))}
                 </TableBody>
