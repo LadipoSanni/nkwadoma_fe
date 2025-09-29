@@ -230,16 +230,18 @@ function AddTraineeForm({setIsOpen, tuitionFee,cohortId, isEdit,loaneeBasicDetai
             const updatedData = cohortBreakDown.map((item, i) =>
                 i === index ? { ...item, itemAmount: value } : item
             );
-            setCohortBreakDown(updatedData);
+            // setCohortBreakDown(updatedData);
             setSelectedCohortItem(updatedData)
-            calculateTotal( tuitionFee);
+            // calculateTotal( tuitionFee);
+            deductFromTotal(userInput);
             setAmountError({error:'', index:0})
             setDisableAddLoaneeButton(false)
 
         }else {
             const current = cohortBreakDown
             setDisableAddLoaneeButton(true)
-            setCohortBreakDown(current);
+            // setCohortBreakDown(current);
+
             setSelectedCohortItem(current)
             setAmountError({error:'amount can not be greater than cohort amount', index})
         }
