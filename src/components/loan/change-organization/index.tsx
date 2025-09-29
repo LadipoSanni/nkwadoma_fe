@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import styles from "./index.module.css";
 import { store, useAppSelector } from "@/redux/store";
-import { setClickedOrganization } from "@/redux/slice/loan/selected-loan";
+import { setClickedOrganization,resetProgramId,resetProgramName } from "@/redux/slice/loan/selected-loan";
 import Image from "next/image";
 import { useSearchOrganisationByNameQuery, useViewOrganizationsQuery } from "@/service/admin/organization";
 import ConfirmOrgButton from "@/reuseable/buttons/filter/LoaneeButton";
@@ -18,6 +18,7 @@ import { ChangeOrganization } from "@/types/loan/loan-request.type";
 import { useDebounce } from '@/hooks/useDebounce';
 import InfiniteScroll from "react-infinite-scroll-component";
 import TruncatedTextWithTooltip from "@/reuseable/tool-tip/Truncated-textWith-tooltip";
+
 
 interface SaveClickedId {
   id: string | number;
@@ -87,7 +88,7 @@ const ChangeInstitutionModal = () => {
       }
       setHasMore(searchResults.data.body.length === pageSize);
     }
-  }, [searchResults, page, isSearching]);
+  }, [searchResults, page, isSearching,organizations]);
 
   useEffect(() => {
     if (!isSearching && data?.data?.body) {
@@ -101,7 +102,7 @@ const ChangeInstitutionModal = () => {
       }
       setHasMore(data.data.body.length === pageSize);
     }
-  }, [data, page, isSearching]);
+  }, [data, page, isSearching,organizations]);
 
   const fetchMoreData = useCallback(() => {
     if ((!isFetching && !isSearchFetching) && hasMore) {
@@ -110,6 +111,8 @@ const ChangeInstitutionModal = () => {
   }, [isFetching, isSearchFetching, hasMore]);
 
   const handleClick = (id: string | number, name?: string, logoImage?: string) => {
+    const isSelectingNewOrganization = id !== current;
+
     if (id === current) {
       setCurrent('');
       setDisabled(true);
@@ -118,6 +121,11 @@ const ChangeInstitutionModal = () => {
       setDisabled(false);
     }
     setSaveClickedId({ id, name: name || '', logoImage: logoImage || '' });
+
+    if (isSelectingNewOrganization) {
+      store.dispatch(resetProgramId());
+      store.dispatch(resetProgramName());
+  }
   };
 
   const getLoanCounts = (org: ChangeOrganization) => {
@@ -154,6 +162,8 @@ const ChangeInstitutionModal = () => {
 
   const handleCancel = () => {
     store.dispatch(setClickedOrganization({ id: '', name: '', logoImage: '' }));
+    store.dispatch(resetProgramId())
+    store.dispatch(resetProgramName())
   };
 
   const getInitials = (name: string): string => {
@@ -168,7 +178,7 @@ const ChangeInstitutionModal = () => {
   const showLoading =
     isInitialLoad ||
     (isLoading && organizations.length === 0) ||
-    (isSearching && isSearchFetching); // ✅ FIXED
+    (isSearching && isSearchFetching); 
 
   const showEmptyState = !isSearching && organizations.length === 0 && !isLoading && !isInitialLoad && !isTyping;
   const showSearchEmptyState = isSearching && organizations.length === 0 && !isSearchLoading && currentResultsTerm === debouncedSearchTerm && !isInitialLoad;

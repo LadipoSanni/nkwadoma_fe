@@ -21,6 +21,19 @@ import * as Yup from "yup";
 import { ChevronDownIcon, ChevronUpIcon } from "@radix-ui/react-icons";
 import loadingLoop from "@iconify/icons-line-md/loading-loop";
 import { Icon } from "@iconify/react";
+import InfiniteScroll from "react-infinite-scroll-component";
+import { InfiniteScrollProps } from '@/types/Component.type';
+import SkeletonForLoanOrg from '@/reuseable/Skeleton-loading-state/Skeleton-for-loan-organizations'
+import GeneralEmptyState from '@/reuseable/emptyStates/General-emptystate'
+import {Book} from 'lucide-react';
+import { resetProgramName } from "@/redux/slice/loan/selected-loan";
+import { store } from "@/redux/store";
+
+interface viewAllProgramProps  {
+  id?: string;
+  name: string;
+
+}
 
 interface filterProps {
   filterName: string;
@@ -33,8 +46,11 @@ interface filterProps {
   selectedValue: string;
   handleSelectedValue: (value: string) => void;
   placeHolder: string;
-  valueListData: string[];
+  valueListData: viewAllProgramProps[];
   disabled?: boolean;
+  infinityScroll?: InfiniteScrollProps;
+  isLoading?: boolean;
+  isProgramLoading?: boolean
 }
 
 function ProductFilter({
@@ -48,9 +64,12 @@ function ProductFilter({
   placeHolder,
   valueListData,
     disabled,
+    isLoading,
+    isProgramLoading,
+    infinityScroll
 }: filterProps) {
   const [isDropdown, setIsDropdown] = useState(false);
-  const [isLoading] = useState(false);
+
 
   const toggleDropdown = useCallback(() => {
     setIsDropdown((prev) => !prev);
@@ -60,6 +79,13 @@ function ProductFilter({
     [valueName]: Yup.string().required("Program is required"),
   });
 
+  const getButtonDisplayText = () => {
+    if (selectedValue) {
+      return selectedValue; 
+    }
+    return filterName; 
+  };
+
   return (
     <div className={`z-10 ${inter.className}`}>
       <DropdownMenu onOpenChange={toggleDropdown}>
@@ -68,7 +94,7 @@ function ProductFilter({
             variant={"default"}
             className={`w-full  ${ disabled ? `text-[#b8b8bc]` : `text-black` }  bg-neutral100 h-11 md:h-11 border-1  hover:bg-neutral100 ring-1 ring-neutral650 focus-visible:ring-neutral650 shadow-none`}
           >
-            {filterName}
+             {getButtonDisplayText()}
             <span className="ml-4">
               {isDropdown ? (
                 <ChevronUpIcon className="h-4 w-5 font-semibold" />
@@ -113,17 +139,47 @@ function ProductFilter({
                     </div>
                   </SelectTrigger>
                   <SelectContent className="border-none border-[#FAFBFC] text-[#404653]  text-sm z-50 mt-3 max-h-64">
-                    <SelectGroup>
-                      {valueListData.map((value) => (
+                    {
+                       isProgramLoading ? (<div>
+                        <SkeletonForLoanOrg/>
+                       </div>) : valueListData.length === 0 ? (<div>
+                        <div className='relative bottom-6'>
+                            <GeneralEmptyState
+                                icon={Book}
+                                iconSize='1.6rem'
+                                iconContainerClass='w-[30px] h-[30px]'
+                                message={<div className='relative bottom-2'>
+                                    <p>No program available</p>
+                                </div>}
+                            />
+                        </div>
+                       </div>) : (
+                        <div>
+                       { infinityScroll && ( <InfiniteScroll
+                         dataLength={valueListData.length}
+                         next={infinityScroll.loadMore}
+                         hasMore={infinityScroll.hasMore}
+                         loader={infinityScroll.loader ? <SkeletonForLoanOrg /> : null}
+                        height="30.5vh"
+                         className="w-full"
+                        >
+                         <SelectGroup>
+                      {valueListData.map((value, index) => (
                         <SelectItem
-                          key={value}
-                          value={value}
+                          key={value.id}
+                          id={`${value}-${index}`}
+                          value={value.name}
                           className="hover:bg-blue-200"
                         >
-                          {value}
+                          {value.name}
                         </SelectItem>
                       ))}
                     </SelectGroup>
+
+                        </InfiniteScroll> )}
+
+                       </div>)
+                    }
                   </SelectContent>
                 </Select>
                 <div className="flex justify-between items-center pt-1">
@@ -135,6 +191,7 @@ function ProductFilter({
                     onClick={() => {
                       resetForm();
                       handleSelectedValue("");
+                      store.dispatch(resetProgramName())
                     }}
                   >
                     Reset

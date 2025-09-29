@@ -18,7 +18,8 @@ export const loanDisbursalApi = createApi({
             query: (data: {
                 pageSize?: number;
                 pageNumber?: number;
-                organizationId?: string;
+                organizationId?: string | number;
+                programId?: string
             }) => ({
                 url: `/loan/view-all-disbursal`,
                 method: 'GET',

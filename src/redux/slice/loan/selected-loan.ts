@@ -18,7 +18,9 @@ interface SelectedLoanState {
     cohortLoaneeId: string;
     companySelectedTab: number;
     selectedGeneralTab: number;
-    searchLoan: string
+    searchLoan: string;
+    programId: string;
+    programName: string
 }
 
 const initialState: SelectedLoanState = {
@@ -35,7 +37,9 @@ const initialState: SelectedLoanState = {
     cohortLoaneeId: '',
     companySelectedTab: 0,
     selectedGeneralTab: 0,
-    searchLoan: ""
+    searchLoan: "",
+    programId:"",
+    programName: ""
 };
 
 export const selectedLoanSlice = createSlice({
@@ -48,6 +52,12 @@ export const selectedLoanSlice = createSlice({
         setLoanReferralId: (state, action: PayloadAction<string>) => {
           state.loanReferralId = action.payload;
         },
+        setProgramId: (state, action: PayloadAction<string>) => {
+            state.programId = action.payload;
+          },
+          resetProgramId: (state) => {
+            state.programId = ""
+          },
         setClickedOrganization: (state, action: PayloadAction<{ id: string | number; name: string; logoImage: string }>) => {
             state.clickedOrganization = action.payload;
         },
@@ -92,13 +102,20 @@ export const selectedLoanSlice = createSlice({
         setSearchLoan: (state, action: PayloadAction<string>) => {
             state.searchLoan = action.payload;
         },
+        setProgramName: (state, action: PayloadAction<string>) => {
+            state.programName = action.payload;
+          },
+        resetProgramName: (state) => {
+            state.programName = ""
+          },
     },
 });
 
 export const { setCurrentTab,setCohortLoaneeId , setClickedLoanId, setClickedOrganization,
     setLoanReferralId, setClickedDisbursedLoanIdNumber, setDisbursedLoanIdNumber, setClickedLoanProductId,
     setFundProductAvailableAmount,setCurrentTabStatus,resetTab,setcurrentTabRoute,
-    setSelectedCompanyTab,setSelectedGeneralTab,resetFundProductAvailableAmount,setSearchLoan
+    setSelectedCompanyTab,setSelectedGeneralTab,resetFundProductAvailableAmount,setSearchLoan,
+    resetProgramId,setProgramId,setProgramName,resetProgramName
 } = selectedLoanSlice.actions;
 
 export default selectedLoanSlice.reducer;

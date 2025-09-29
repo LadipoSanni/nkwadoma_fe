@@ -12,6 +12,7 @@ export const loanOfferApi = createApi({
                 pageNumber?: number;
                 pageSize?: number;
                 organizationId?:string | number;
+                programId?: string
             }) => ({
                 url: `/loan/loanOffer/all`,
                 method: 'GET',

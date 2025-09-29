@@ -1,48 +1,90 @@
 "use client"
-import React,{useState} from 'react';
+import React,{useState,useEffect} from 'react';
 import SearchInput from "@/reuseable/Input/SearchInput";
 import OrganizationNameAndChangeButton from "@/components/selected-loan/OrganizationNameAndChangeButton";
 import ProductFilter from '../loan/selected-loan/loan-request/Product-filter';
-import { setSearchLoan } from '@/redux/slice/loan/selected-loan';
+import { setSearchLoan,setProgramId,setProgramName,resetProgramName,resetProgramId} from '@/redux/slice/loan/selected-loan';
 import { store,useAppSelector } from '@/redux/store';
+import {useGetAllProgramsQuery} from '@/service/admin/program_query'
 
 export const initialFormValue = {
     selectedProgram:""
   }
 
+  interface viewAllProgramProps  {
+    id?: string;
+    name: string;
+
+}
+
 const OrganizationAndFilter = () => {
     const [selectProgram, setSelectProgram] = useState('')
     const searchTerm = useAppSelector(state => state?.selectedLoan?.searchLoan)
-    const handleSubmit = async (values:{selectedProgram: string}) => {
-        console.log('Form submited', values)
-        // setIsDropdown(false)
-    
+    const programSelected = useAppSelector(state => state?.selectedLoan?.programName)
+    const clickedOrganization = useAppSelector(state => state.selectedLoan.clickedOrganization);
+    const [pageNumber, setPageNumber] = useState(0);
+    const [listOfPrograms, setListOfPrograms] = useState<viewAllProgramProps[]>([])
+     const [hasNextPage, setNextPage] = useState(true);
+    const {data,isLoading,isFetching} = useGetAllProgramsQuery({organizationId:clickedOrganization?.id?.toString(), pageSize:10, pageNumber: pageNumber},{skip: !clickedOrganization?.id})
+    const [pendingProgramId, setPendingProgramId] = useState('');
+
+
+    const resetFilter = () => {
+        setSelectProgram('');
+        setPendingProgramId('');
+        setPageNumber(0);
+        setListOfPrograms([]);
+        store.dispatch(resetProgramId());
+        store.dispatch(resetProgramName())
+    };
+
+    const handleSubmit = async () => {
+       store.dispatch(setProgramId(pendingProgramId))
       }
 
+      useEffect(() => {
+        if(data && data?.data){
+           const sortedPrograms = [...data?.data?.body].sort((a, b) =>
+            a?.name?.localeCompare(b?.name)
+        );
+
+        setListOfPrograms((prev) => {
+            if (pageNumber === 0) {
+                return sortedPrograms;
+            }
+            const newPrograms = sortedPrograms.filter(
+                (newProgram: viewAllProgramProps) => !prev.some((prev) => prev?.id === newProgram?.id)
+            );
+            return [...prev, ...newPrograms]?.sort((a, b) => a?.name?.localeCompare(b?.name));
+        });
+
+        setNextPage(data?.data?.hasNextPage);
+         
+        }
+      },[data,pageNumber])
+
+      const loadMore = () => {
+        if (!isFetching && hasNextPage) {
+            setPageNumber((prevPage) => prevPage + 1);
+        }
+    };
+
+    useEffect(() => {
+        if (!clickedOrganization?.id) {
+            resetFilter();
+        }
+    }, [clickedOrganization?.id]);
 
 
-      const handleSelectProgram = (programType: string) => {
+    const handleSelectProgram = (programType: string) => {
         setSelectProgram(programType)
-   }
+        const selectedProgram = listOfPrograms.find(program => program.name === programType);
+        if (selectedProgram) {
+            setPendingProgramId(selectedProgram.id || '');
+            store.dispatch(setProgramName(selectedProgram.name || selectProgram))
+        }
+    }
  
-
-      const dataList = [
-        "Software Engineer",
-        "Product Manager",
-        "UX Designer",
-        "QA Engineer",
-        "Full Stack Developer",
-        "Data Scientist",
-        "Machine Learning Engineer",
-        "Data Analyst",
-        "Business Analyst",
-        "Project Manager",
-        "UX/UI Designer",
-      ]
-
-
-  
-
 
     return (
         <div className='md:px-3 pr-3 md:pr-0'>
@@ -56,9 +98,6 @@ const OrganizationAndFilter = () => {
                 className={` gap-1  mb-3 md:mb-0 md:pr-0 h-fit md:w-fit md:h-fit md:flex md:gap-3`}
             >
                 <div className='relative mb-3'>
-                    {/* <span className="absolute inset-y-0 left-0 flex items-center pl-3">
-                       <MdSearch className="h-6 w-6 text-[#efefef]"/>
-                    </span> */}
                     <SearchInput
                         id='searchLoan'
                         placeholder='Search'
@@ -69,16 +108,22 @@ const OrganizationAndFilter = () => {
                 </div> 
                 <div>
                     <ProductFilter
-                        disabled={true}
+                    disabled={!clickedOrganization?.id? true : false}
                     filterName='Program'
                     dropDownFilterName='Program'
                     initialFormValue={initialFormValue}
                     placeHolder='Select Program'
                     handleFilterSubmit={handleSubmit}
                     valueName='selectedProgram'
-                    valueListData={dataList}
-                    selectedValue={selectProgram}
+                    valueListData={listOfPrograms}
+                    selectedValue={programSelected}
                     handleSelectedValue={handleSelectProgram}
+                    isProgramLoading={isLoading}
+                    infinityScroll={{
+                        hasMore: hasNextPage,
+                        loadMore:loadMore,
+                        loader: isFetching
+                    }}
                     />
                 </div>
             </div>
