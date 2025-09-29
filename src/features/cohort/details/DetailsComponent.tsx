@@ -90,7 +90,7 @@ const DetailsComponent = () => {
                 </div>
             </div>
             <div
-                className={` ${styles.container} overflow-x-hidden md:max-w-[35%] grid  md:w-[35%] pt-3 pl-3  md:border-l md:border-l-[#ECECEC] md:h-[60vh] `}
+                className={` ${styles.container} overflow-x-hidden md:max-w-[35%] grid gap-3  md:w-[35%] pt-3 pl-3  md:border-l md:border-l-[#ECECEC] md:h-[60vh] `}
             >
                 {cohortS?.map((item, i) => (
                     <div

@@ -115,10 +115,16 @@ const CohortDetails = () => {
         >
             <BackButton id={'backToViewAllCohort'} handleClick={() => router.push('/cohort')} text={'Back'} textColor={'#142854'} iconBeforeLetters={true} />
             <div className={` mt-4 mb-4 flex justify-between w-full `}>
-                <span id={'cohortName'}
+                <div
+                    style={{
+                        scrollbarWidth: 'none',
+                        msOverflowStyle: 'none',
+
+                    }}
+                    id={'cohortName'}
                       data-testid={'cohortName'}
                       className={` text-[28px] max-h-[10vh] overflow-y-scroll  break-all mr-2  text-black `}
-                >{cohortDetails?.data?.name}</span>
+                >{cohortDetails?.data?.name}</div>
                 <CircleThreeDot
                     id={'editAndDeleteCohort'}
                     dotDisplay={'vertical'}
