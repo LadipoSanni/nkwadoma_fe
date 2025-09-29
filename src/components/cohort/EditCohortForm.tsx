@@ -139,7 +139,7 @@ const EditCohortForm = ({ setIsOpen, cohortDetail }: idProps) => {
     cohortDescription: Yup.string()
       .trim()
       .required("Cohort Description is required")
-      .max(1500, "Cohort description must be 1500 characters or less"),
+      .max(2500, "Cohort description must be 2500 characters or less"),
   });
 
   const toastPopUp = ToastPopUp({
@@ -181,7 +181,12 @@ const EditCohortForm = ({ setIsOpen, cohortDetail }: idProps) => {
         onSubmit={handleSubmit}
         validationSchema={validationSchema}
       >
-        {({ values, errors, isValid, touched, setFieldValue }) => (
+        {({ values, errors, isValid, touched, setFieldValue }) => 
+     { 
+      // console.log("Form errors:", errors);
+      // console.log("Is valid:", isValid);
+      // console.log("Name value:", values.name);
+      return (
           <Form className={`${inter.className}`}>
             <div className="grid grid-cols-1 gap-y-4  md:max-h-[55vh] max-h-[55vh] overflow-y-auto"
              style={{
@@ -243,12 +248,12 @@ const EditCohortForm = ({ setIsOpen, cohortDetail }: idProps) => {
                   <DatePickerInput
                     selectedDate={parseISO(values.expectedEndDate ?? "")}
                    onDateChange={(date) => {
-                                   if (date) {
-                                     const formattedDate = format(date, "yyyy-MM-dd");
-                                     setFieldValue("startDate", formattedDate); 
-                                   } else {
-                                     setFieldValue("startDate", ""); 
-                                   }
+                    if (date) {
+                      const formattedDate = format(date, "yyyy-MM-dd");
+                      setFieldValue("expectedEndDate", formattedDate); 
+                  } else {
+                      setFieldValue("expectedEndDate", ""); 
+                  }
                                  }}
                     className="p-6 mt-2"
                     disabled={true}
@@ -351,11 +356,10 @@ const EditCohortForm = ({ setIsOpen, cohortDetail }: idProps) => {
             }
           </Form>
         )}
+        }
       </Formik>
     </div>
   );
 };
 
 export default EditCohortForm;
-
-

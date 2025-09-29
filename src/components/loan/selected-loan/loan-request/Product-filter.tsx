@@ -26,7 +26,7 @@ import { InfiniteScrollProps } from '@/types/Component.type';
 import SkeletonForLoanOrg from '@/reuseable/Skeleton-loading-state/Skeleton-for-loan-organizations'
 import GeneralEmptyState from '@/reuseable/emptyStates/General-emptystate'
 import {Book} from 'lucide-react';
-import { resetProgramName } from "@/redux/slice/loan/selected-loan";
+import { resetProgramName,resetProgramId } from "@/redux/slice/loan/selected-loan";
 import { store } from "@/redux/store";
 
 interface viewAllProgramProps  {
@@ -192,6 +192,7 @@ function ProductFilter({
                       resetForm();
                       handleSelectedValue("");
                       store.dispatch(resetProgramName())
+                      store.dispatch(resetProgramId())
                     }}
                   >
                     Reset
