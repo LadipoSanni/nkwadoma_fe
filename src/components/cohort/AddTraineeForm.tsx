@@ -51,24 +51,39 @@ function AddTraineeForm({setIsOpen, tuitionFee,cohortId, isEdit,loaneeBasicDetai
     const [addLoaneeToCohort, {isLoading: isLoadingAddLoanee}] = useAddLoaneeToCohortMutation();
     const [editLoaneeInACohort,{isLoading: isLoadingEditLoanee}] = useEditAddLoaneeToCohortMutation()
     const [selectedCohortItem, setSelectedCohortItem] = useState<cohortBreakDown[]>([]);
-
     const [names, setNames] = useState<string[]>([])
+
     useEffect(() => {
         if (data?.data) {
             setCohortBreakDown(data?.data);
-            calculateTotal( tuitionFee);
-            // deductInitialDepositFromTotal(data.data)
             dropDownItem(data.data)
         }
     }, [data, tuitionFee, initialDepositAmount]);
+
+
     useEffect(() => {
         if (isEdit && loaneeLoanBreakDown){
             setSelectedCohortItem(loaneeLoanBreakDown)
+            calculateTotalForEditingLoane(loaneeLoanBreakDown, tuitionFee)
+            setNamessOnEdit()
         }else{
+            calculateTotal( tuitionFee);
             setSelectedCohortItem([])
         }
 
-    }, [isEdit, loaneeLoanBreakDown]);
+    }, [isEdit, loaneeLoanBreakDown, initialDepositAmount]);
+
+    console.log('totalItemAmount: ', totalItemAmount)
+    const setNamessOnEdit = () => {
+        if(loaneeLoanBreakDown){
+            const unselectedItemNames = cohortBreakDown
+                .filter(item => !loaneeLoanBreakDown.some(sel => sel.itemName === item.itemName))
+                .map(item => item.itemName);
+            console.log('unselectedItemNames: ', unselectedItemNames)
+            setNames(unselectedItemNames)
+
+        }
+    }
 
 
     const validationSchemaStep1 = Yup.object().shape({
@@ -112,12 +127,22 @@ function AddTraineeForm({setIsOpen, tuitionFee,cohortId, isEdit,loaneeBasicDetai
     };
 
     const calculateTotal = (tuitionFee?: string) => {
-
+        console.log('tution fee: ', tuitionFee, 'initialDepositAmount: ', initialDepositAmount)
         const totalWithInitialDepositDeducted  = (tuitionFee ? parseFloat(tuitionFee) : 0) - (initialDepositAmount ? parseFloat(initialDepositAmount) : 0);
+        console.log('init deducted: ', totalWithInitialDepositDeducted)
         setTotalItemAmount(totalWithInitialDepositDeducted);
     };
 
 
+    const calculateTotalForEditingLoane = (loaneeAddedItems: cohortBreakDown[], tuitionFee?: string) => {
+        console.log('loanee itwems: ', loaneeAddedItems)
+        const totalItems = loaneeAddedItems.reduce((sum, item) => sum + parseFloat(item.itemAmount || '0'), 0);
+        console.log('items total: ', totalItems)
+        const total = totalItemAmount + totalItems;
+        const totalWithInitialDepositDeducted = total - (tuitionFee ? parseFloat(tuitionFee) : 0);
+        setTotalItemAmount(totalWithInitialDepositDeducted);
+
+    }
 
     const handleSubmitStep1 = (values: typeof initialFormValue) => {
         setInitialDepositAmount(values.initialDeposit)
@@ -403,7 +428,7 @@ function AddTraineeForm({setIsOpen, tuitionFee,cohortId, isEdit,loaneeBasicDetai
                             <div className={`py- ${inter.className}`}>
                                 <span className={` text-[24px] text-black    `}>Cohort breakdown</span>
                                 <div className={` w-full h-fit bg-[#F9F9F9] rounded-md grid py-2 px-2  `}>
-                                    <span>Total loan amount (Initial deposit - Cohort breakdown) </span>
+                                    <span>Total loan amount (  Cohort breakdown - Initial deposit ) </span>
                                     <TotalInput prefix={'₦'} total={totalItemAmount}
                                                 componentId={'totalInputOnAddLoaneeModalComponent'}/>
                                 </div>
