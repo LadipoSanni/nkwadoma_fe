@@ -22,7 +22,7 @@ import DeleteCohort from "@/reuseable/details/DeleteCohort";
 const CohortDetails = () => {
     const router = useRouter();
     const cohortId = useAppSelector(store => store?.cohort?.setCohortId)
-    // const selectedCohortInOrganizationType = useAppSelector(store => store?.cohort?.selectedCohortInOrganizationType)
+    const selectedCohortInOrganizationType = useAppSelector(store => store?.cohort?.selectedCohortInOrganizationType)
     const [deleteItem,{isLoading:isDeleteLoading}] = useDeleteCohortMutation()
     const {data: cohortDetails} = useViewCohortDetailsQuery({
         cohortId: cohortId
@@ -125,12 +125,12 @@ const CohortDetails = () => {
                       data-testid={'cohortName'}
                       className={` text-[28px] max-h-[10vh] overflow-y-scroll  break-all mr-2  text-black `}
                 >{cohortDetails?.data?.name}</div>
-                <CircleThreeDot
+                {selectedCohortInOrganizationType !== 'GRADUATED' && <CircleThreeDot
                     id={'editAndDeleteCohort'}
                     dotDisplay={'vertical'}
                     isDisabled={false}
                     dropDownItems={dropD}
-                />
+                />}
             </div>
             <TableModal
                 isOpen={openEditModal}
