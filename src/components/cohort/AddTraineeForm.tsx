@@ -67,13 +67,12 @@ function AddTraineeForm({setIsOpen, tuitionFee,cohortId, isEdit,loaneeBasicDetai
             calculateTotalForEditingLoane(loaneeLoanBreakDown, tuitionFee)
             setNamessOnEdit()
         }else{
-            calculateTotal( tuitionFee);
+            calculateTotalForAddingLoanee( tuitionFee);
             setSelectedCohortItem([])
         }
 
     }, [isEdit, loaneeLoanBreakDown, initialDepositAmount]);
 
-    console.log('totalItemAmount: ', totalItemAmount)
     const setNamessOnEdit = () => {
         if(loaneeLoanBreakDown){
             const unselectedItemNames = cohortBreakDown
@@ -126,21 +125,24 @@ function AddTraineeForm({setIsOpen, tuitionFee,cohortId, isEdit,loaneeBasicDetai
         }
     };
 
-    const calculateTotal = (tuitionFee?: string) => {
-        console.log('tution fee: ', tuitionFee, 'initialDepositAmount: ', initialDepositAmount)
+    const calculateTotalForAddingLoanee = (tuitionFee?: string) => {
         const totalWithInitialDepositDeducted  = (tuitionFee ? parseFloat(tuitionFee) : 0) - (initialDepositAmount ? parseFloat(initialDepositAmount) : 0);
-        console.log('init deducted: ', totalWithInitialDepositDeducted)
         setTotalItemAmount(totalWithInitialDepositDeducted);
     };
 
 
     const calculateTotalForEditingLoane = (loaneeAddedItems: cohortBreakDown[], tuitionFee?: string) => {
-        console.log('loanee itwems: ', loaneeAddedItems)
         const totalItems = loaneeAddedItems.reduce((sum, item) => sum + parseFloat(item.itemAmount || '0'), 0);
-        console.log('items total: ', totalItems)
-        const total = totalItemAmount + totalItems;
-        const totalWithInitialDepositDeducted = total - (tuitionFee ? parseFloat(tuitionFee) : 0);
+        const total = totalItems + (tuitionFee ? parseFloat(tuitionFee) : 0);
+        const totalWithInitialDepositDeducted = total - (initialDepositAmount ? parseFloat(initialDepositAmount) : 0);
         setTotalItemAmount(totalWithInitialDepositDeducted);
+
+    }
+
+    const calculateTotal = (loaneeAddedItems: cohortBreakDown[]) => {
+        const totalItems = loaneeAddedItems.reduce((sum, item) => sum + parseFloat(item.itemAmount || '0'), 0);
+        const total = totalItems + totalItemAmount;
+        setTotalItemAmount(total);
 
     }
 
@@ -227,13 +229,22 @@ function AddTraineeForm({setIsOpen, tuitionFee,cohortId, isEdit,loaneeBasicDetai
 
         if (userInput < itemAmountFromCohort || userInput  === itemAmountFromCohort) {
             const { value } = e.target;
-            const updatedData = cohortBreakDown.map((item, i) =>
+            const updatedData = selectedCohortItem.map((item, i) =>
                 i === index ? { ...item, itemAmount: value } : item
             );
             // setCohortBreakDown(updatedData);
             setSelectedCohortItem(updatedData)
             // calculateTotal( tuitionFee);
-            deductFromTotal(userInput);
+            // deductFromTotal(userInput);co
+            if (userInput  < itemAmountFromCohort){
+                console.log('current ',totalItemAmount , 'itemAmountFromCohort', itemAmountFromCohort)
+                const deducta = totalItemAmount - itemAmountFromCohort;
+                console.log('deducta =totalItemAmount - itemAmountFromCohort ', deducta, 'userInput', userInput)
+                const ad = totalItemAmount - userInput
+                console.log('deducta + userInput , ', ad, 'userInput', userInput)
+                setTotalItemAmount(ad)
+
+            }
             setAmountError({error:'', index:0})
             setDisableAddLoaneeButton(false)
 
@@ -255,12 +266,19 @@ function AddTraineeForm({setIsOpen, tuitionFee,cohortId, isEdit,loaneeBasicDetai
     }
 
 
-    const deleteItem = (itemLoanBreakDownId: string, itemAmount: number) => {
+    const deleteItem = ( itemAmount: number,itemLoanBreakDownId?: string,itemName?: string) => {
         deductFromTotal( itemAmount);
         const updatedData = selectedCohortItem.filter((cohort) => cohort?.loanBreakdownId !== itemLoanBreakDownId)
-        const removedItemName = cohortBreakDown.find(item => item.loanBreakdownId === itemLoanBreakDownId)?.itemName ?? '';
-        setNames((prevState) => [...prevState,removedItemName] )
         setSelectedCohortItem(updatedData)
+        console.log('itemLoanBreakDownId : ', itemLoanBreakDownId , 'cohortBreakDown ', cohortBreakDown)
+        let removedItemName = ''
+        if (isEdit && itemName){
+            removedItemName = cohortBreakDown.find(item => item.itemName === itemName)?.itemName ?? '';
+        }else {
+            removedItemName = cohortBreakDown.find(item => item.loanBreakdownId === itemLoanBreakDownId)?.itemName ?? '';
+        }
+        console.log('removedItemName', removedItemName);
+        setNames((prevState) => [...prevState,removedItemName] )
     }
 
     const handleBack = () => {
@@ -294,6 +312,8 @@ function AddTraineeForm({setIsOpen, tuitionFee,cohortId, isEdit,loaneeBasicDetai
         setTotalItemAmount(totalWithInitialDepositDeducted);
 
     };
+    console.log('totalItemAmount: ', totalItemAmount)
+
 
     return (
         <div id="addTraineeForm">
@@ -546,7 +566,7 @@ function AddTraineeForm({setIsOpen, tuitionFee,cohortId, isEdit,loaneeBasicDetai
                                                             />
                                                             <MdOutlineDelete id={`deleteItemButton${index}`}
                                                                              className={'text-blue200 mt-auto mb-auto  h-6 w-6 cursor-pointer'}
-                                                                             onClick={()=> {deleteItem(detail?.loanBreakdownId, Number(detail.itemAmount))}}
+                                                                             onClick={()=> {deleteItem( Number(detail.itemAmount), detail?.loanBreakdownId,detail?.itemName)}}
                                                             />
                                                         </div>
                                                     </div>
