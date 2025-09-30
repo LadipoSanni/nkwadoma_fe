@@ -108,7 +108,7 @@ const ProgramCohortDetails= ()=> {
       store.dispatch(setcohortId(String(row.id)))
       store.dispatch(setcohortOrProgramRoute("program"))
         store.dispatch(setCurrentNavbarItem('Cohort'))
-      router.push('/cohort/cohort-details')
+      router.push('/cohort/details')
     }
 
     const ProgramHeader = [ 

@@ -28,7 +28,7 @@ const DropDownWithActionButton = ({id,isDisabled,trigger,setSelectItem,selectedI
             data-testid={id}
             className={``}
         >
-            <Menubar  className={'w-fit mt-auto mb-auto h-fit'}>
+            <Menubar   className={'w-fit mt-auto mb-auto h-fit'}>
                 <MenubarMenu >
                     <MenubarTrigger onClick={() => {setIsIconUp(!isIconUp)}} id={'trigger'} data-testid={'trigger'} disabled={isDisabled} className={` hover:bg-[#F9F9F9] hover:rounded-md flex gap-2  w-fit h-fit py-1.5  px-1.5 lg:py-2 lg:px-2 mt-auto mb-auto    `} >
                         {trigger}
@@ -45,7 +45,7 @@ const DropDownWithActionButton = ({id,isDisabled,trigger,setSelectItem,selectedI
                                 data-testid={item.id}
                                 key={item.id+ i}
                                 onClick={() => {setSelectItem(item.name)}}
-                                className={`${inter.className}  text-[14px] text-[#212221] ${selectedItem  === item.name ? 'text-[#142854] bg-[#E1EEFF] ' : ''} w-full h-fit py-2 hover:text-[#142854] hover:bg-[#E1EEFF] `}
+                                className={`${inter.className}  text-[14px] text-[#212221]  w-full h-fit py-2  hover:text-[#142854] hover:bg-[#E1EEFF] `}
                             >
 
                                 {item?.name}
@@ -55,9 +55,12 @@ const DropDownWithActionButton = ({id,isDisabled,trigger,setSelectItem,selectedI
                             className={`w-full max-h-fit py-2 flex focus:bg-white hover:bg-white justify-end border-t border-t-[#D7D7D7]  `}
                         >
                             <Button
-                                disabled={!selectedItem || selectedItem === trigger}
-                                onClick={handleButtonClick}
-                                className={` text-white ${!selectedItem || selectedItem === trigger ? `bg-[#D7D7D7] ` : ` bg-meedlBlue `}   `}
+                                disabled={!selectedItem }
+                                onClick={() => {
+                                    setIsIconUp(false)
+                                    handleButtonClick()
+                                }}
+                                className={` text-white ${!selectedItem  ? `bg-[#D7D7D7] ` : ` bg-meedlBlue `}   `}
                             >
                                 {buttonText}
                             </Button>

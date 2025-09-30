@@ -179,7 +179,7 @@ export const LoaneeInCohortView = ({cohortFee}: props) => {
 
     const graduatedTableHeader = [
         {title: "Name", sortable: true, id: "firstName", selector: (row: viewAllLoanees) => capitalizeFirstLetters(row?.userIdentity?.firstName) + " " + capitalizeFirstLetters(row?.userIdentity?.lastName)},
-        {title: "Employment status", sortable: true, id: "employmentStatus", selector: (row: viewAllLoanees) => <DropDownWithActionButton  selectedItem={selectedLoaneeEmploymentStatus} setSelectItem={handleSelectedItem} buttonText={'Save'} handleButtonClick={changeLoaneeStatusToEmployed} id={`id+`+ row?.id} trigger={capitalizeFirstLetters(row?.employmentStatus)} dropDownItems={updateLoaneeEmploymentStatusItems} isDisabled={false} />},
+        {title: "Employment status", sortable: true, id: "employmentStatus", selector: (row: viewAllLoanees) => <div className={`  flex justify-center md:justify-start `}><DropDownWithActionButton  selectedItem={selectedLoaneeEmploymentStatus} setSelectItem={handleSelectedItem} buttonText={'Save'} handleButtonClick={changeLoaneeStatusToEmployed} id={`id+`+ row?.id} trigger={capitalizeFirstLetters(row?.employmentStatus)} dropDownItems={updateLoaneeEmploymentStatusItems} isDisabled={false} /></div>},
         {title: "Amount requested", sortable: true, id: "AmountRequested", selector: (row: viewAllLoanees) => formatAmount((row?.loaneeLoanDetail as loaneeLoanDetail )?.amountRequested)},
         {title: "Amount repaid", sortable: true, id: "AmountRepaid", selector:(row: viewAllLoanees) => formatAmount((row?.loaneeLoanDetail as loaneeLoanDetail )?.amountRepaid)},
     ]
@@ -274,8 +274,8 @@ export const LoaneeInCohortView = ({cohortFee}: props) => {
             <div className={`pb-4`} id={`searchReferAddTraineeAndTable`}>
                 <div className={`flex md:flex-row flex-col md:justify-between`}
                      id={`searchReferAndAddTrainee`}>
-                    <div className={`flex md:flex-row gap-4 md:items-center items-center`} id={`searchId`}>
-                        <div className="max-w-md flex-1 mx-auto" id={`searchInput`}>
+                    <div className={`  flex md:flex-row gap-4 md:items-start justify-start`} id={`searchId`}>
+                        <div className="max-w-md flex-1  self-start " id={`searchInput`}>
                             <div className="relative" id={`searchDiv`}>
                                 <div
                                     className="absolute inset-y-0 start-0 w-full flex items-center ps-3 pointer-events-none"
@@ -289,13 +289,14 @@ export const LoaneeInCohortView = ({cohortFee}: props) => {
                                 />
                             </div>
                         </div>
-                        <div className={`'w-32  ${selectedCohortInOrganizationType === 'GRADUATED' ? 'hidden md:hidden lg:hidden' : '' } md:pt-2 pt-2`} id={`selectId`}>
+                        {/*<div className={`'w-32  ${selectedCohortInOrganizationType === 'GRADUATED' ? 'hidden md:hidden lg:hidden' : 'h-fit mt-0' } h-fit bg-red-300 `} id={`selectId`}>*/}
                             <CustomSelect onChange={handleSelected}
                                           selectContent={items}
                                           placeHolder={"Not referred"}
-                                          className={` w-full text-black  bg-neutral100 h-12 border-1 focus-visible:outline-0 focus-visible:ring-0 shadow-none hover:bg-neutral100 ring-1 ring-neutral650`}
+                                          id={'selectId'}
+                                          className={` w-full text-black w-32  ${selectedCohortInOrganizationType === 'GRADUATED' ? 'hidden md:hidden lg:hidden' : 'h-fit mt-0' } bg-neutral100 h-12 border-1 focus-visible:outline-0 focus-visible:ring-0 shadow-none hover:bg-neutral100 ring-1 ring-neutral650`}
                                           />
-                        </div>
+                        {/*</div>*/}
                     </div>
 
                     <div className={`flex ${selectedCohortInOrganizationType === 'GRADUATED' ? 'hidden md:hidden lg:hidden' : '' } md:flex-row flex-col gap-4 md:items-center`}

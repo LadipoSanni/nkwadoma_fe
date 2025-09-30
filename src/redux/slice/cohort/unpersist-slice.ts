@@ -3,7 +3,13 @@ import {cohortBreakDown} from "@/types/Component.type";
 
 
 interface cohortBreakDownState {
-    cohortBreakDownContainer: cohortBreakDown[];
+    cohortBreakDownContainer: cohortBreakDown[] | [];
+    loaneeBasicDetails:{
+        loaneeFirstName: string,
+        loaneeLastName: string,
+        loaneeEmail: string,
+        loaneeInitialDeposit: string,
+    }
 }
 
 const initialState: cohortBreakDownState = {
@@ -14,7 +20,14 @@ const initialState: cohortBreakDownState = {
             itemName: "",
             loanBreakdownId: '',
         }
-    ]
+    ],
+    loaneeBasicDetails:{
+        loaneeFirstName: '',
+        loaneeLastName: '',
+        loaneeEmail: '',
+        loaneeInitialDeposit: '',
+    }
+
 };
 
 
@@ -22,13 +35,21 @@ export const cohortBreakDownSlice = createSlice({
     name: "cohortBreakDownSlice",
     initialState,
     reducers: {
-        setCohortBreakDownContainer: (state, action: PayloadAction<cohortBreakDown[]>)=>{
+        setCohortBreakDownContainer: (state, action: PayloadAction<cohortBreakDown[] | []>)=>{
             state.cohortBreakDownContainer = action.payload;
+        },
+        setLoaneeBasicDetails:(state, action: PayloadAction<{
+            loaneeFirstName: string,
+            loaneeLastName: string,
+            loaneeEmail: string,
+            loaneeInitialDeposit: string,
+        }>)=>{
+            state.loaneeBasicDetails = action.payload;
         }
     },
 });
 
 
-export const { setCohortBreakDownContainer } = cohortBreakDownSlice.actions;
+export const { setCohortBreakDownContainer, setLoaneeBasicDetails, } = cohortBreakDownSlice.actions;
 
 export default cohortBreakDownSlice.reducer;

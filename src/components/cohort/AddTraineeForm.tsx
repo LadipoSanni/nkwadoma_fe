@@ -16,6 +16,8 @@ import CustomInputField from "@/reuseable/Input/CustomNumberFormat";
 import {MdOutlineDelete} from "react-icons/md";
 import CenterMultistep from "@/reuseable/multiStep-component/Center-multistep";
 import StringDropdown from "@/reuseable/Dropdown/DropdownSelect";
+import {store, useAppSelector} from '@/redux/store';
+import {setCohortBreakDownContainer, setLoaneeBasicDetails} from "@/redux/slice/cohort/unpersist-slice";
 
 interface Props {
     tuitionFee?: string;
@@ -51,24 +53,42 @@ function AddTraineeForm({setIsOpen, tuitionFee,cohortId, isEdit,loaneeBasicDetai
     const [addLoaneeToCohort, {isLoading: isLoadingAddLoanee}] = useAddLoaneeToCohortMutation();
     const [editLoaneeInACohort,{isLoading: isLoadingEditLoanee}] = useEditAddLoaneeToCohortMutation()
     const [selectedCohortItem, setSelectedCohortItem] = useState<cohortBreakDown[]>([]);
-
     const [names, setNames] = useState<string[]>([])
+    const storeLoaneeBasicDetails = useAppSelector((state) => state.cohortBreakDownSlice.loaneeBasicDetails);
+    // const storeLoaneeLoaneeDetails = useAppSelector((state) => state.cohortBreakDownSlice.cohortBreakDownContainer);
+
+
     useEffect(() => {
         if (data?.data) {
             setCohortBreakDown(data?.data);
-            calculateTotal( tuitionFee);
-            // deductInitialDepositFromTotal(data.data)
             dropDownItem(data.data)
         }
     }, [data, tuitionFee, initialDepositAmount]);
+
+
     useEffect(() => {
         if (isEdit && loaneeLoanBreakDown){
             setSelectedCohortItem(loaneeLoanBreakDown)
+            calculateTotalForEditingLoane(loaneeLoanBreakDown, tuitionFee)
+            setNamessOnEdit()
         }else{
+            calculateTotalForAddingLoanee( tuitionFee);
             setSelectedCohortItem([])
         }
 
-    }, [isEdit, loaneeLoanBreakDown]);
+    }, [isEdit, loaneeLoanBreakDown, initialDepositAmount]);
+
+
+
+    const setNamessOnEdit = () => {
+        if(loaneeLoanBreakDown){
+            const unselectedItemNames = cohortBreakDown
+                .filter(item => !loaneeLoanBreakDown.some(sel => sel.itemName === item.itemName))
+                .map(item => item.itemName);
+            setNames(unselectedItemNames)
+
+        }
+    }
 
 
     const validationSchemaStep1 = Yup.object().shape({
@@ -92,11 +112,25 @@ function AddTraineeForm({setIsOpen, tuitionFee,cohortId, isEdit,loaneeBasicDetai
 
     });
 
+    useEffect(() => {
+        if (loaneeBasicDetails && isEdit && loaneeLoanBreakDown){
+            store.dispatch(setLoaneeBasicDetails(loaneeBasicDetails))
+            store.dispatch(setCohortBreakDownContainer(loaneeLoanBreakDown))
+        }else{
+            store.dispatch(setLoaneeBasicDetails({
+                loaneeFirstName: '',
+                loaneeLastName: '',
+                loaneeEmail: '',
+                loaneeInitialDeposit: '',
+            }))
+            store.dispatch(setCohortBreakDownContainer([]))
+        }
+    }, []);
     const initialFormValue = {
-        firstName: loaneeBasicDetails && isEdit ? loaneeBasicDetails?.loaneeFirstName : '',
-        lastName: loaneeBasicDetails && isEdit ? loaneeBasicDetails?.loaneeLastName : '',
-        emailAddress: loaneeBasicDetails  && isEdit  ? loaneeBasicDetails?.loaneeEmail : '',
-        initialDeposit: loaneeBasicDetails && isEdit ? loaneeBasicDetails?.loaneeInitialDeposit : ''
+        firstName: storeLoaneeBasicDetails?.loaneeFirstName ,
+        lastName: storeLoaneeBasicDetails?.loaneeLastName,
+        emailAddress: storeLoaneeBasicDetails?.loaneeEmail ,
+        initialDeposit: storeLoaneeBasicDetails?.loaneeInitialDeposit
     };
     // const {toast} = useToast();
 
@@ -111,13 +145,32 @@ function AddTraineeForm({setIsOpen, tuitionFee,cohortId, isEdit,loaneeBasicDetai
         }
     };
 
-    const calculateTotal = (tuitionFee?: string) => {
-
+    const calculateTotalForAddingLoanee = (tuitionFee?: string) => {
         const totalWithInitialDepositDeducted  = (tuitionFee ? parseFloat(tuitionFee) : 0) - (initialDepositAmount ? parseFloat(initialDepositAmount) : 0);
         setTotalItemAmount(totalWithInitialDepositDeducted);
     };
 
 
+    const calculateTotalForEditingLoane = (loaneeAddedItems: cohortBreakDown[], tuitionFee?: string) => {
+        const totalItems = loaneeAddedItems.reduce((sum, item) => sum + parseFloat(item.itemAmount || '0'), 0);
+        const total = totalItems + (tuitionFee ? parseFloat(tuitionFee) : 0);
+        const totalWithInitialDepositDeducted = total - (initialDepositAmount ? parseFloat(initialDepositAmount) : 0);
+        setTotalItemAmount(totalWithInitialDepositDeducted);
+
+    }
+
+    // const calculateTotal = (loaneeAddedItems: cohortBreakDown[]) => {
+    //     const totalItems = loaneeAddedItems.reduce((sum, item) => sum + parseFloat(item.itemAmount || '0'), 0);
+    //     const total = totalItems + totalItemAmount;
+    //     setTotalItemAmount(total);
+    //
+    // }
+    const calculateTotal = (items: cohortBreakDown[], tuitionFee?: string) => {
+        const total = items.reduce((sum, item) => sum + parseFloat(item.itemAmount || '0'), 0);
+        const totalWithTuition = total + (tuitionFee ? parseFloat(tuitionFee) : 0);
+        const totalWithInitialDepositDeducted  = totalWithTuition - (initialDepositAmount ? parseFloat(initialDepositAmount) : 0);
+        setTotalItemAmount(totalWithInitialDepositDeducted);
+    };
 
     const handleSubmitStep1 = (values: typeof initialFormValue) => {
         setInitialDepositAmount(values.initialDeposit)
@@ -202,19 +255,21 @@ function AddTraineeForm({setIsOpen, tuitionFee,cohortId, isEdit,loaneeBasicDetai
 
         if (userInput < itemAmountFromCohort || userInput  === itemAmountFromCohort) {
             const { value } = e.target;
-            const updatedData = cohortBreakDown.map((item, i) =>
+            const updatedData = selectedCohortItem.map((item, i) =>
                 i === index ? { ...item, itemAmount: value } : item
             );
-            setCohortBreakDown(updatedData);
+            // setCohortBreakDown(updatedData);
             setSelectedCohortItem(updatedData)
-            calculateTotal( tuitionFee);
+            calculateTotal(updatedData, tuitionFee);
+            // deductFromTotal(userInput);co
             setAmountError({error:'', index:0})
             setDisableAddLoaneeButton(false)
 
         }else {
             const current = cohortBreakDown
             setDisableAddLoaneeButton(true)
-            setCohortBreakDown(current);
+            // setCohortBreakDown(current);
+
             setSelectedCohortItem(current)
             setAmountError({error:'amount can not be greater than cohort amount', index})
         }
@@ -228,12 +283,17 @@ function AddTraineeForm({setIsOpen, tuitionFee,cohortId, isEdit,loaneeBasicDetai
     }
 
 
-    const deleteItem = (itemLoanBreakDownId: string, itemAmount: number) => {
+    const deleteItem = ( itemAmount: number,itemLoanBreakDownId?: string,itemName?: string) => {
         deductFromTotal( itemAmount);
         const updatedData = selectedCohortItem.filter((cohort) => cohort?.loanBreakdownId !== itemLoanBreakDownId)
-        const removedItemName = cohortBreakDown.find(item => item.loanBreakdownId === itemLoanBreakDownId)?.itemName ?? '';
-        setNames((prevState) => [...prevState,removedItemName] )
         setSelectedCohortItem(updatedData)
+        let removedItemName = ''
+        if (isEdit && itemName){
+            removedItemName = cohortBreakDown.find(item => item.itemName === itemName)?.itemName ?? '';
+        }else {
+            removedItemName = cohortBreakDown.find(item => item.loanBreakdownId === itemLoanBreakDownId)?.itemName ?? '';
+        }
+        setNames((prevState) => [...prevState,removedItemName] )
     }
 
     const handleBack = () => {
@@ -267,6 +327,7 @@ function AddTraineeForm({setIsOpen, tuitionFee,cohortId, isEdit,loaneeBasicDetai
         setTotalItemAmount(totalWithInitialDepositDeducted);
 
     };
+
 
     return (
         <div id="addTraineeForm">
@@ -403,7 +464,7 @@ function AddTraineeForm({setIsOpen, tuitionFee,cohortId, isEdit,loaneeBasicDetai
                             <div className={`py- ${inter.className}`}>
                                 <span className={` text-[24px] text-black    `}>Cohort breakdown</span>
                                 <div className={` w-full h-fit bg-[#F9F9F9] rounded-md grid py-2 px-2  `}>
-                                    <span>Total loan amount (Initial deposit - Cohort breakdown) </span>
+                                    <span>Total loan amount (  Cohort breakdown - Initial deposit ) </span>
                                     <TotalInput prefix={'₦'} total={totalItemAmount}
                                                 componentId={'totalInputOnAddLoaneeModalComponent'}/>
                                 </div>
@@ -519,7 +580,7 @@ function AddTraineeForm({setIsOpen, tuitionFee,cohortId, isEdit,loaneeBasicDetai
                                                             />
                                                             <MdOutlineDelete id={`deleteItemButton${index}`}
                                                                              className={'text-blue200 mt-auto mb-auto  h-6 w-6 cursor-pointer'}
-                                                                             onClick={()=> {deleteItem(detail?.loanBreakdownId, Number(detail.itemAmount))}}
+                                                                             onClick={()=> {deleteItem( Number(detail.itemAmount), detail?.loanBreakdownId,detail?.itemName)}}
                                                             />
                                                         </div>
                                                     </div>
