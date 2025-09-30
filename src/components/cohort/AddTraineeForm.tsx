@@ -55,7 +55,7 @@ function AddTraineeForm({setIsOpen, tuitionFee,cohortId, isEdit,loaneeBasicDetai
     const [selectedCohortItem, setSelectedCohortItem] = useState<cohortBreakDown[]>([]);
     const [names, setNames] = useState<string[]>([])
     const storeLoaneeBasicDetails = useAppSelector((state) => state.cohortBreakDownSlice.loaneeBasicDetails);
-    const storeLoaneeLoaneeDetails = useAppSelector((state) => state.cohortBreakDownSlice.cohortBreakDownContainer);
+    // const storeLoaneeLoaneeDetails = useAppSelector((state) => state.cohortBreakDownSlice.cohortBreakDownContainer);
 
 
     useEffect(() => {
@@ -118,8 +118,8 @@ function AddTraineeForm({setIsOpen, tuitionFee,cohortId, isEdit,loaneeBasicDetai
             store.dispatch(setCohortBreakDownContainer(loaneeLoanBreakDown))
         }else{
             store.dispatch(setLoaneeBasicDetails({
-                firstName: '',
-                lastName: '',
+                loaneeFirstName: '',
+                loaneeLastName: '',
                 loaneeEmail: '',
                 loaneeInitialDeposit: '',
             }))
