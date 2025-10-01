@@ -10,7 +10,7 @@ interface IProps {
     trigger: string,
     isDisabled: boolean;
     dropDownItems: {id:string, name:string}[];
-    setSelectItem: (item: string ) => void;
+    setSelectItem: (item: string, id?:string ) => void;
     buttonText: string;
     handleButtonClick: () => void | Promise<void>;
     selectedItem: string;
@@ -45,7 +45,7 @@ const DropDownWithActionButton = ({id,isDisabled,trigger,setSelectItem,selectedI
                                 data-testid={item.id}
                                 key={item.id+ i}
                                 onClick={() => {setSelectItem(item.name)}}
-                                className={`${inter.className}  text-[14px] text-[#212221]  w-full h-fit py-2  hover:text-[#142854] hover:bg-[#E1EEFF] `}
+                                className={`${inter.className}  text-[14px] text-[#212221]  w-full h-fit py-2 ${selectedItem === `` ? `` : ``}  hover:text-[#142854] hover:bg-[#E1EEFF] `}
                             >
 
                                 {item?.name}

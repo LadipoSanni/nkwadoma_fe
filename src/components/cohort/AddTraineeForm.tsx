@@ -16,8 +16,6 @@ import CustomInputField from "@/reuseable/Input/CustomNumberFormat";
 import {MdOutlineDelete} from "react-icons/md";
 import CenterMultistep from "@/reuseable/multiStep-component/Center-multistep";
 import StringDropdown from "@/reuseable/Dropdown/DropdownSelect";
-import {store, useAppSelector} from '@/redux/store';
-import {setCohortBreakDownContainer, setLoaneeBasicDetails} from "@/redux/slice/cohort/unpersist-slice";
 
 interface Props {
     tuitionFee?: string;
@@ -54,9 +52,6 @@ function AddTraineeForm({setIsOpen, tuitionFee,cohortId, isEdit,loaneeBasicDetai
     const [editLoaneeInACohort,{isLoading: isLoadingEditLoanee}] = useEditAddLoaneeToCohortMutation()
     const [selectedCohortItem, setSelectedCohortItem] = useState<cohortBreakDown[]>([]);
     const [names, setNames] = useState<string[]>([])
-    const storeLoaneeBasicDetails = useAppSelector((state) => state.cohortBreakDownSlice.loaneeBasicDetails);
-    // const storeLoaneeLoaneeDetails = useAppSelector((state) => state.cohortBreakDownSlice.cohortBreakDownContainer);
-
 
     useEffect(() => {
         if (data?.data) {
@@ -112,25 +107,11 @@ function AddTraineeForm({setIsOpen, tuitionFee,cohortId, isEdit,loaneeBasicDetai
 
     });
 
-    useEffect(() => {
-        if (loaneeBasicDetails && isEdit && loaneeLoanBreakDown){
-            store.dispatch(setLoaneeBasicDetails(loaneeBasicDetails))
-            store.dispatch(setCohortBreakDownContainer(loaneeLoanBreakDown))
-        }else{
-            store.dispatch(setLoaneeBasicDetails({
-                loaneeFirstName: '',
-                loaneeLastName: '',
-                loaneeEmail: '',
-                loaneeInitialDeposit: '',
-            }))
-            store.dispatch(setCohortBreakDownContainer([]))
-        }
-    }, []);
     const initialFormValue = {
-        firstName: storeLoaneeBasicDetails?.loaneeFirstName ,
-        lastName: storeLoaneeBasicDetails?.loaneeLastName,
-        emailAddress: storeLoaneeBasicDetails?.loaneeEmail ,
-        initialDeposit: storeLoaneeBasicDetails?.loaneeInitialDeposit
+        firstName: loaneeBasicDetails && isEdit ? loaneeBasicDetails?.loaneeFirstName : '',
+        lastName: loaneeBasicDetails && isEdit ? loaneeBasicDetails?.loaneeLastName : '',
+        emailAddress: loaneeBasicDetails  && isEdit  ? loaneeBasicDetails?.loaneeEmail : '',
+        initialDeposit: loaneeBasicDetails && isEdit ? loaneeBasicDetails?.loaneeInitialDeposit : ''
     };
     // const {toast} = useToast();
 
