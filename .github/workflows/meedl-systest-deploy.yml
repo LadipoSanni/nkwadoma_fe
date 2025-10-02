@@ -3,7 +3,7 @@ name: 🚀 Meedl Systest Deployment
 on:
   push:
     branches:
-      - test-fe-mdl-image
+      - dev
 
 env:
   AWS_REGION: us-east-1
