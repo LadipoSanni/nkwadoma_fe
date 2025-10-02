@@ -25,6 +25,7 @@ interface Props {
     loaneeBasicDetails?: {loaneeFirstName: string, loaneeLastName: string, loaneeEmail: string, loaneeInitialDeposit: string}
     loaneeLoanBreakDown?: cohortBreakDown[],
     loaneeId?: string,
+    modalText?: string;
 }
 
 export type cohortBreakDown = {
@@ -35,7 +36,7 @@ export type cohortBreakDown = {
     isloading?:(value: boolean) => boolean;
 }
 
-function AddTraineeForm({setIsOpen, tuitionFee,cohortId, isEdit,loaneeBasicDetails, loaneeLoanBreakDown, loaneeId }: Props) {
+function AddTraineeForm({setIsOpen, tuitionFee,cohortId, isEdit,loaneeBasicDetails, loaneeLoanBreakDown, loaneeId ,modalText }: Props) {
     const [step, setStep] = useState(1);
     const [selectCurrency, setSelectCurrency] = useState('NGN');
     const { data } = useGetCohortLoanBreakDownQuery(cohortId);
@@ -324,6 +325,7 @@ function AddTraineeForm({setIsOpen, tuitionFee,cohortId, isEdit,loaneeBasicDetai
                     >
                        <div>
                            <CenterMultistep currentStep={step} totalSteps={2} />
+                           {/*{step === 2 && <div className={` } text-[24px] text-black500  `}>Cohort breakdown</div>}*/}
                        </div>
                         {step === 1 ? (
                             <div>
@@ -452,6 +454,8 @@ function AddTraineeForm({setIsOpen, tuitionFee,cohortId, isEdit,loaneeBasicDetai
 
                                 <div
                                     style={{
+                                        overflowX: 'hidden',
+                                        overflowY: 'auto',
                                         scrollbarWidth: 'none',
                                         msOverflowStyle: 'none',
 
@@ -464,19 +468,51 @@ function AddTraineeForm({setIsOpen, tuitionFee,cohortId, isEdit,loaneeBasicDetai
                                             <div className={`w-2/3 text-[14px] h-fit py-2  ${inter500.className} `}>Amount</div>
                                         </div>
                                     </div>
-                                    <div>
-                                        <div className={`flex gap-3 `}>
-                                            <div className={` mt-auto mb-auto bg-[#F9F9F9] border border-[#D7D7D7] rounded-md w-[40%] h-fit p-3  text-black  `}>
-                                                Tuition
-                                            </div>
-                                            <div className={`flex w-full gap-2 flex-row items-center justify-between mb-2`}>
-                                                {/*<CurrencySelectInput*/}
-                                                {/*    readOnly={true}*/}
-                                                {/*    className={`bg-grey105 h-fit p-3  text-black300`}*/}
-                                                {/*    selectedcurrency={selectCurrency}*/}
-                                                {/*    setSelectedCurrency={setSelectCurrency}*/}
-                                                {/*/>*/}
-                                                <div className={` mt-auto mb-auto bg-[#F9F9F9]  border border-[#D7D7D7] rounded-md w-[6rem] h-fit p-3  text-black  `}>
+                                    <div
+                                        style={{
+                                            display: "grid",
+                                            gridTemplateColumns: "30% 70%",
+                                            gap: "1rem",
+                                        }}
+                                        className={` f `}
+                                    >
+                                        <div className={`bg-purple-200 grid gap-4 `}>
+                                             <div className={` mt-auto mb-auto bg-[#F9F9F9] border border-[#D7D7D7] rounded-md w-full  h-fit p-3  text-black  `}>
+                                                 Tuition
+                                             </div>
+
+                                            {selectedCohortItem?.length === 0 &&
+                                                <div  className={`flex gap-3 `}>
+                                                    <div className={` text-[14px] ${inter.className}  mt-auto mb-auto  w-full  h-fit text-black  `}>
+                                                        <StringDropdown
+                                                            label={'Select item'}
+                                                            items={names}
+                                                            onSelect={handleSelect}
+                                                        />
+                                                    </div>
+                                                </div>
+                                            }
+
+                                            {selectedCohortItem?.map((detail: cohortBreakDown, index: number) => (
+                                                <div key={'item'+ index}  className={` text-[14px] ${inter.className}  mt-auto mb-auto  w-full   h-full text-black  `}>
+                                                    <StringDropdown
+                                                        label={detail?.itemName}
+                                                        items={names}
+                                                        onSelect={handleSelect}
+                                                    />
+                                                </div>
+                                            ))}
+                                        </div>
+                                        <div className={`bg-red-200  grid gap-4   `}>
+                                            <div
+                                                // style={{
+                                                //     display: "grid",
+                                                //     gridTemplateColumns: "20% 80%",
+                                                //     gap: "0.5rem",
+                                                // }}
+                                                className={` w-full grid grid-cols-[20%_80%] gap-2    `}
+                                            >
+                                                <div className={` mt-auto mb-auto bg-[#F9F9F9]  border border-[#D7D7D7] rounded-md h-fit p-3  text-black  `}>
                                                     NGN
                                                 </div>
 
@@ -486,22 +522,19 @@ function AddTraineeForm({setIsOpen, tuitionFee,cohortId, isEdit,loaneeBasicDetai
                                                     type="text"
                                                     defaultValue={tuitionFee?.toLocaleString() || ''}
                                                     readOnly
-                                                    className="w-full p-3  h-[3.2rem] border rounded bg-grey105 focus:outline-none"
+                                                    className=" p-3 w-full h-[3.2rem] border rounded bg-grey105 focus:outline-none"
                                                 />
                                             </div>
-                                        </div>
-                                        {selectedCohortItem?.length === 0 &&
-                                            <div  className={`flex gap-3 `}>
-
-                                                <div className={` text-[14px] ${inter.className}  mt-auto mb-auto  w-[40%] h-fit text-black  `}>
-                                                    <StringDropdown
-                                                        label={'Select item'}
-                                                        items={names}
-                                                        onSelect={handleSelect}
-                                                    />
-                                                </div>
-                                                <div className={`flex w-full gap-2 flex-row items-center justify-between mb-2`}>
-                                                    <div className={` mt-auto mb-auto bg-white border border-[#D7D7D7] rounded-md w-[6rem] h-fit p-3  text-black  `}>
+                                            {selectedCohortItem?.length === 0 &&
+                                                <div
+                                                    // style={{
+                                                    //     display: "grid",
+                                                    //     gridTemplateColumns: "20% 80%",
+                                                    //     gap: "0.5rem",
+                                                    // }}
+                                                    className={` w-full  grid grid-cols-[20%_80%] gap-2  `}
+                                                >
+                                                    <div className={` mt-auto mb-auto bg-white border border-[#D7D7D7] rounded-md  h-fit p-3  text-black  `}>
                                                         NGN
                                                     </div>
 
@@ -517,60 +550,10 @@ function AddTraineeForm({setIsOpen, tuitionFee,cohortId, isEdit,loaneeBasicDetai
                                                         className="w-full p-3 h-[3.2rem] border rounded focus:outline-none"
 
                                                     />
-
                                                 </div>
-                                            </div>
-
-                                        }
-                                        <div className={` grid gap-3 `}>
-                                            {selectedCohortItem?.map((detail: cohortBreakDown, index: number) => (
-                                                <div key={'item'+ index}>
-                                                    <div  className={`flex gap-3  `}>
-
-                                                        <div className={` text-[14px] ${inter.className}  mt-auto mb-auto  w-[40%]  h-full text-black  `}>
-                                                            <StringDropdown
-                                                                label={detail?.itemName}
-                                                                items={names}
-                                                                onSelect={handleSelect}
-                                                            />
-                                                        </div>
-                                                        <div className={`flex w-full gap-2 flex-row items-center justify-between mb-2`}>
-                                                            <div className={` mt-auto mb-auto bg-white border border-[#D7D7D7] rounded-md w-[6rem] h-fit p-3  text-black  `}>
-                                                                NGN
-                                                            </div>
-
-                                                            <NumericFormat
-                                                                id={`detail-${index}`}
-                                                                name={`detail-${index}`}
-                                                                type="text"
-                                                                thousandSeparator=","
-                                                                decimalScale={2}
-                                                                fixedDecimalScale={true}
-                                                                value={detail?.itemAmount?.toLocaleString() || ''}
-                                                                placeholder={`${detail?.itemAmount || ''}`}
-                                                                className="w-full p-3 h-[3.2rem] border rounded focus:outline-none"
-                                                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                                                                    const rawValue = e.target.value.replace(/,/g, '');
-                                                                    if (!isNaN(Number(rawValue))) {
-                                                                        editCohortBreakDown(
-                                                                            {target: {value: rawValue}} as React.ChangeEvent<HTMLInputElement>,
-                                                                            index,
-                                                                        );
-                                                                    }
-                                                                }}
-                                                            />
-                                                            <MdOutlineDelete id={`deleteItemButton${index}`}
-                                                                             className={'text-blue200 mt-auto mb-auto  h-6 w-6 cursor-pointer'}
-                                                                             onClick={()=> {deleteItem( Number(detail.itemAmount), detail?.loanBreakdownId,detail?.itemName)}}
-                                                            />
-                                                        </div>
-                                                    </div>
-                                                    {amountError?.index === index && <div
-                                                        className={`text-error500 place-self-start  text-sm text-center`}>{amountError?.error}</div>}
-                                                </div>
-                                            ))}
-
+                                            }
                                         </div>
+
                                     </div>
 
                                 </div>
