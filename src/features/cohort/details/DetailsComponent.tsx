@@ -9,6 +9,8 @@ import dayjs from "dayjs";
 import {capitalizeFirstLetters} from "@/utils/GlobalMethods";
 import {CohortItems} from "@/types/loan/loan-request.type";
 
+import parse from "html-react-parser";
+
 
 const DetailsComponent = () => {
     const cohortId = useAppSelector(store => store?.cohort?.setCohortId)
@@ -19,6 +21,12 @@ const DetailsComponent = () => {
         cohortId: cohortId
     }, {refetchOnMountOrArgChange: true});
     const {data: cohortBreakDown} = useGetCohortDetailsBreakdownQuery({cohortId: cohortId}, {skip: !cohortId})
+
+    const sanitizeCohortDescription = (html: string) => {
+        return html
+            ?.replace(/<span class="ql-ui".*?<\/span>/g, "") // remove spans
+            ?.replace(/data-list="bullet"/g, ""); // remove data-list
+    };
 
     const cohort: {name: string, value: string, valueType: 'percentage'| 'digit'| 'currency' | 'tenor' | 'years', id:string}[] = [
         {name: 'Total amount disbursed', value: cohortDetails?.data?.amountReceived , valueType: 'currency', id: 'totalAmount'},
@@ -37,13 +45,19 @@ const DetailsComponent = () => {
     ]
 
     const cohortS = [
-        {title: 'Description', id: 'programDiscription', value: <p
-                id="cohort-description"
-                data-testid="cohort-description"
-                // style={{ height: "auto",    overflowY: "auto", minWidth: "300px", maxWidth: "100%",  fontSize:"14px" }}
-                className={`${inter500.className}  text-[#212221] text-[14px]  text-sm w-full`}
-                dangerouslySetInnerHTML={{__html: cohortDetails?.data?.cohortDescription}}
-            />},
+        {title: 'Description', id: 'programDiscription', value:
+            //     <div
+            //     id="cohort-description"
+            //     data-testid="cohort-description"
+            //     // style={{ height: "auto",    overflowY: "auto", minWidth: "300px", maxWidth: "100%",  fontSize:"14px" }}
+            //     className={`${inter500.className} prose prose-sm list-disc  text-[#212221] text-[14px] leading-relaxed whitespace-pre-line   text-sm w-full`}
+            //     dangerouslySetInnerHTML={{__html: sanitizeCohortDescription(cohortDetails?.data?.cohortDescription || "")}}
+            // />
+            <div>
+                {parse(cohortDetails?.data?.cohortDescription || "")}
+
+            </div>
+        },
         {title: 'Program', id:'programname', value: <span className={` text-meedlBlue bg-[#F3F8FF] rounded-full w-fit h-fit  max-w-[100%] px-4 py-2  `}>{cohortDetails?.data?.programName}</span>},
         {title: 'Status', id: 'status', value: <span className={`rounded-full bg-[#FEF6E8] h-fit w-fit px-2 py-2  text-[#66440A] text-[14px] `}>{capitalizeFirstLetters(cohortDetails?.data?.cohortStatus)}</span>},
         {title: 'Start date',id:'startDate', value: <span className={` ${inter500.className} text-[#212221] text-[14px] `}>{dayjs(cohortDetails?.data?.startDate?.toString()).format('MMM D, YYYY')}</span>},
@@ -78,7 +92,7 @@ const DetailsComponent = () => {
                     ))}
                 </div>
 
-                <div className={` md:grid md:grid-cols-2 md:gap-4  `}>
+                <div className={` md:grid md:grid-cols-2 md:gap-4  grid gap- `}>
                     {cohort2?.map((item, i) => (
                         <Details
                             isLoading={isLoading || isFetching}

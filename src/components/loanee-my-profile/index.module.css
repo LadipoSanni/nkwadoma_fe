@@ -6,6 +6,15 @@
     -ms-overflow-style: none;
     scrollbar-width: none;
 }
+.cohortdescription  {
+    list-style-type: disc;
+    margin-left: 1.5rem; /* indentation */
+    margin-bottom: 0.25rem;
+
+}
+
+
+
 
 .switchTabStyle{
 
