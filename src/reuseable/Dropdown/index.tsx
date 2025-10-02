@@ -3,7 +3,12 @@ import React, { useState } from 'react';
 import {inter} from "@/app/fonts";
 import {MdKeyboardArrowDown, MdKeyboardArrowUp} from "react-icons/md";
 import {Button} from "@/components/ui/button";
-import {Select, SelectTrigger, SelectContent,SelectItem,SelectGroup} from "@/components/ui/select";
+import {
+    DropdownMenu,
+    DropdownMenuTrigger,
+    DropdownMenuContent,
+    DropdownMenuItem,
+} from "@/components/ui/dropdown-menu"
 
 interface IProps {
     id: string;
@@ -27,37 +32,39 @@ const disableButton = selectedItem?.length === 0 || trigger === selectedItem;
         <div
             id={id}
             data-testid={id}
-            className={``}
         >
-            <Select
+            <DropdownMenu
                 onOpenChange={()=> {setIsIconUp(!isIconUp)}}
                 // className={'w-fit mt-auto mb-auto h-fit'}
             >
                 {/*<MenubarMenu >*/}
-                    <SelectTrigger
-                        id={'trigger'} data-testid={'trigger'} disabled={isDisabled} className={` hover:bg-[#F9F9F9] hover:rounded-md flex gap-2 border-none shadow-none   w-fit h-fit py-1.5  px-1.5 lg:py-2 lg:px-2 mt-auto mb-auto    `} >
+                    <DropdownMenuTrigger
+                        id={'trigger'} data-testid={'trigger'} disabled={isDisabled}
+                        className={` hover:bg-[#F9F9F9] hover:rounded-md flex gap-2 border-none shadow-none  w-fit  h-fit py-1.5  px-1.5 lg:py-2 lg:px-2 mt-auto mb-auto    `} >
                         {trigger}
                         {isIconUp ?
                             <MdKeyboardArrowUp/>
                             :
                             <MdKeyboardArrowDown/>
                         }
-                    </SelectTrigger>
-                    <SelectContent  className={``}>
-                        {dropDownItems?.map((item, i) => (
-                            <button
-                                id={item.id}
-                                data-testid={item.id}
-                                key={item.id+ i}
-                                onClick={() => {setSelectItem(item.name)}}
-                                className={`${inter.className} flex justify-start  text-[14px] text-[#212221]  w-full h-fit py-2 ${trigger === item.name && selectedItem === '' || selectedItem  === item.name  ? ` text-[#142854] bg-[#E1EEFF] ` : ``}  hover:text-[#142854] hover:bg-[#E1EEFF] `}
-                            >
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent  className={`    w-[25vh]  `}>
+                       <div className={` px-1 py-1  `}>
+                           {dropDownItems?.map((item, i) => (
+                               <button
+                                   id={item.id}
+                                   data-testid={item.id}
+                                   key={item.id+ i}
+                                   onClick={() => {setSelectItem(item.name)}}
+                                   className={`${inter.className} flex justify-start rounded-md   text-[14px] px-1  text-[#212221]  w-full h-fit py-2 ${trigger === item.name && selectedItem === '' || selectedItem  === item.name  ? ` text-[#142854] bg-[#E1EEFF] ` : ``}  hover:text-[#142854] hover:bg-[#E1EEFF] `}
+                               >
 
-                                {item?.name}
-                            </button>
-                        ))}
-                       <div className={` w-full max-h-fit py-2  focus:bg-white hover:bg-white flex  justify-end border-t border-t-[#D7D7D7]  `}>
-                           <SelectItem
+                                   {item?.name}
+                               </button>
+                           ))}
+                       </div>
+                       <div className={` w-full max-h-fit   focus:bg-white hover:bg-white flex  justify-end border-t border-t-[#D7D7D7]  `}>
+                           <DropdownMenuItem
                                onClick={handleButtonClick}
                                disabled={disableButton }
                            >
@@ -69,10 +76,10 @@ const disableButton = selectedItem?.length === 0 || trigger === selectedItem;
 
                                {buttonText}
                            </Button>
-                           </SelectItem>
+                           </DropdownMenuItem>
                        </div>
-                    </SelectContent>
-            </Select>
+                    </DropdownMenuContent>
+            </DropdownMenu>
 
         </div>
     );
