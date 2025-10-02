@@ -18,7 +18,7 @@ const Details = () => {
 
     const {data: loanProduct, isLoading: loading} = useGetLoanProductDetailsByIdQuery({loanProductId: loanProductId},{refetchOnMountOrArgChange: true})
 
-    const {data} = useGetInvestmentVehicleDetailQuery({id: loanProduct?.data?.investmentVehicleId }, {skip: !loanProduct?.data?.investmentVehicleId ,refetchOnMountOrArgChange: !loanProduct?.data?.investmentVehicleId? false : true});   
+    const {data} = useGetInvestmentVehicleDetailQuery({id: loanProduct?.data?.investmentVehicleId }, {skip: !loanProduct?.data?.investmentVehicleId ,refetchOnMountOrArgChange: !loanProduct?.data?.investmentVehicleId? false : true});
 
     const getVendorByProductType = (vendors: string, productType: string) => {
         if (!vendors || !Array.isArray(vendors)) return 'Not provided';

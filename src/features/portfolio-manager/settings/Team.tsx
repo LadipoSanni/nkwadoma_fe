@@ -163,7 +163,7 @@ function Team() {
                 title: "Status",  
                 sortable: true, 
                 id: "activationStatus", 
-                selector: (row: TableRowData) => <StatusBadge status={row.activationStatus?.toString()} className='truncate' />   
+                selector: (row: TableRowData) => <span className={`${row.activationStatus === "DECLINED"? " bg-[#FBE9E9] text-[#971B17] " :row.activationStatus === "INVITED"? "bg-[#FEF6E8] text-[#68442E] w-20" : row.activationStatus === "PENDING_APPROVAL"? "bg-[#E6F7EE] text-[#039855]" : "bg-[#E6F2EA] text-[#045620]"} rounded-lg  px-2 `}>{row.activationStatus === "PENDING_APPROVAL"? "Pending" : row.activationStatus === "ACTIVE"? "Active" : row.activationStatus === "DECLINED"? "Declined" : capitalizeFirstLetters(row.activationStatus?.toString())}</span>
               },
               { 
                 title: "Invited",  
