@@ -15,7 +15,7 @@ export const StatusBadge: React.FC<StatusBadgeProps> = ({ status, className = ""
             statusClassName += "bg-[#E6F2EA] text-[#045620]";
             break;
         case "INVITED":
-            statusClassName += "bg-[#FAEAFC] text-[#55145E] w-20";
+            statusClassName += "bg-[#F3F8FF] text-meedlBlue w-20";
             break;
         case "PENDING_APPROVAL":
             statusClassName += "bg-[#FEF6E8] text-[#68442E] w-20";
