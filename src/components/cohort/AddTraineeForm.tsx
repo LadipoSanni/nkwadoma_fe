@@ -36,7 +36,7 @@ export type cohortBreakDown = {
     isloading?:(value: boolean) => boolean;
 }
 
-function AddTraineeForm({setIsOpen, tuitionFee,cohortId, isEdit,loaneeBasicDetails, loaneeLoanBreakDown, loaneeId ,modalText }: Props) {
+function AddTraineeForm({setIsOpen, tuitionFee,cohortId, isEdit,loaneeBasicDetails, loaneeLoanBreakDown, loaneeId  }: Props) {
     const [step, setStep] = useState(1);
     const [selectCurrency, setSelectCurrency] = useState('NGN');
     const { data } = useGetCohortLoanBreakDownQuery(cohortId);
@@ -318,6 +318,9 @@ function AddTraineeForm({setIsOpen, tuitionFee,cohortId, isEdit,loaneeBasicDetai
 
             }
         }else{
+
+            //eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-expect-error
             setSelectedCohortItem(prev => {
                 return [...prev, currentItem];
             });
