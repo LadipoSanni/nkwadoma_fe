@@ -75,6 +75,7 @@ const CohortDetails = () => {
                 description: 'Cohort deleted successfully',
                 status: "error",
             })
+            router.push('/cohort')
         }catch (e) {
             setOpenDeleteModal(false)
             toast({

@@ -1,9 +1,14 @@
 'use client'
 import React, { useState } from 'react';
-import {Menubar, MenubarContent, MenubarItem, MenubarMenu, MenubarTrigger} from "@/components/ui/menubar";
 import {inter} from "@/app/fonts";
 import {MdKeyboardArrowDown, MdKeyboardArrowUp} from "react-icons/md";
 import {Button} from "@/components/ui/button";
+import {
+    DropdownMenu,
+    DropdownMenuTrigger,
+    DropdownMenuContent,
+    DropdownMenuItem,
+} from "@/components/ui/dropdown-menu"
 
 interface IProps {
     id: string;
@@ -21,53 +26,61 @@ interface IProps {
 const DropDownWithActionButton = ({id,isDisabled,trigger,setSelectItem,selectedItem,dropDownItems, buttonText, handleButtonClick}:IProps) => {
     const [isIconUp, setIsIconUp] = useState(false)
 
+const disableButton = selectedItem?.length === 0 || trigger === selectedItem;
 
     return (
         <div
             id={id}
             data-testid={id}
-            className={``}
         >
-            <Menubar   className={'w-fit mt-auto mb-auto h-fit'}>
-                <MenubarMenu >
-                    <MenubarTrigger onClick={() => {setIsIconUp(!isIconUp)}} id={'trigger'} data-testid={'trigger'} disabled={isDisabled} className={` hover:bg-[#F9F9F9] hover:rounded-md flex gap-2  w-fit h-fit py-1.5  px-1.5 lg:py-2 lg:px-2 mt-auto mb-auto    `} >
+            <DropdownMenu
+                onOpenChange={()=> {setIsIconUp(!isIconUp)}}
+                // className={'w-fit mt-auto mb-auto h-fit'}
+            >
+                {/*<MenubarMenu >*/}
+                    <DropdownMenuTrigger
+                        id={'trigger'} data-testid={'trigger'} disabled={isDisabled}
+                        className={` hover:bg-[#F9F9F9] hover:rounded-md flex gap-2 border-none shadow-none  w-fit  h-fit py-1.5  px-1.5 lg:py-2 lg:px-2 mt-auto mb-auto    `} >
                         {trigger}
                         {isIconUp ?
                             <MdKeyboardArrowUp/>
                             :
                             <MdKeyboardArrowDown/>
                         }
-                    </MenubarTrigger>
-                    <MenubarContent  className={``}>
-                        {dropDownItems?.map((item, i) => (
-                            <button
-                                id={item.id}
-                                data-testid={item.id}
-                                key={item.id+ i}
-                                onClick={() => {setSelectItem(item.name)}}
-                                className={`${inter.className}  text-[14px] text-[#212221]  w-full h-fit py-2 ${selectedItem === `` ? `` : ``}  hover:text-[#142854] hover:bg-[#E1EEFF] `}
-                            >
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent  className={`    w-[25vh]  `}>
+                       <div className={` px-1 py-1  `}>
+                           {dropDownItems?.map((item, i) => (
+                               <button
+                                   id={item.id}
+                                   data-testid={item.id}
+                                   key={item.id+ i}
+                                   onClick={() => {setSelectItem(item.name)}}
+                                   className={`${inter.className} flex justify-start rounded-md   text-[14px] px-1  text-[#212221]  w-full h-fit py-2 ${trigger === item.name && selectedItem === '' || selectedItem  === item.name  ? ` text-[#142854] bg-[#E1EEFF] ` : ``}  hover:text-[#142854] hover:bg-[#E1EEFF] `}
+                               >
 
-                                {item?.name}
-                            </button>
-                        ))}
-                        <MenubarItem
-                            className={`w-full max-h-fit py-2 flex focus:bg-white hover:bg-white justify-end border-t border-t-[#D7D7D7]  `}
-                        >
-                            <Button
-                                disabled={!selectedItem }
-                                onClick={() => {
-                                    setIsIconUp(false)
-                                    handleButtonClick()
-                                }}
-                                className={` text-white ${!selectedItem  ? `bg-[#D7D7D7] ` : ` bg-meedlBlue `}   `}
-                            >
-                                {buttonText}
-                            </Button>
-                        </MenubarItem>
-                    </MenubarContent>
-                </MenubarMenu>
-            </Menubar>
+                                   {item?.name}
+                               </button>
+                           ))}
+                       </div>
+                       <div className={` w-full max-h-fit   focus:bg-white hover:bg-white flex  justify-end border-t border-t-[#D7D7D7]  `}>
+                           <DropdownMenuItem
+                               onClick={handleButtonClick}
+                               disabled={disableButton }
+                           >
+                           <Button
+                               disabled={disableButton }
+                               onClick={handleButtonClick}
+                               className={`w-fit h-fit py-2 flex  ${disableButton  ? `bg-[#D7D7D7] hover:bg-[#D7D7D7] ` : ` bg-meedlBlue hover:bg-meedlBlue `}   `}
+                           >
+
+                               {buttonText}
+                           </Button>
+                           </DropdownMenuItem>
+                       </div>
+                    </DropdownMenuContent>
+            </DropdownMenu>
+
         </div>
     );
 };

@@ -381,7 +381,7 @@ export const LoaneeInCohortView = ({cohortFee}: props) => {
                     headerTitle={loaneeModalText}
                     width="30%"
                 >
-                    <AddTraineeForm loaneeId={selectedEditLoaneeId} loaneeLoanBreakDown={editLoaneeBreakDown} isEdit={isEdit} loaneeBasicDetails={editLoaneeBasicDetails} tuitionFee={cohortFee} setIsOpen={() => setAddLoanee(false)} cohortId={cohortId}/>
+                    <AddTraineeForm modalText={loaneeModalText} loaneeId={selectedEditLoaneeId} loaneeLoanBreakDown={editLoaneeBreakDown} isEdit={isEdit} loaneeBasicDetails={editLoaneeBasicDetails} tuitionFee={cohortFee} setIsOpen={() => setAddLoanee(false)} cohortId={cohortId}/>
                 </TableModal>
 
             </div>
