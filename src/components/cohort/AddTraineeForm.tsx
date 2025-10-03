@@ -228,6 +228,7 @@ function AddTraineeForm({setIsOpen, tuitionFee,cohortId, isEdit,loaneeBasicDetai
     const editCohortBreakDown = (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
         const itemAmountFromCohort = Number(item?.at(index)?.itemAmount)
         const userInput =  Number(e.target.value)
+        console.log('about to edit ')
 
         if (userInput < itemAmountFromCohort || userInput  === itemAmountFromCohort) {
             const { value } = e.target;
@@ -240,9 +241,9 @@ function AddTraineeForm({setIsOpen, tuitionFee,cohortId, isEdit,loaneeBasicDetai
             setDisableAddLoaneeButton(false)
 
         }else {
-            const current = cohortBreakDown
+            // const current = cohortBreakDown
             setDisableAddLoaneeButton(true)
-            setSelectedCohortItem(current)
+            // setSelectedCohortItem(current)
             setAmountError({error:'amount can not be greater than cohort amount', index})
         }
     };
