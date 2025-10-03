@@ -22,11 +22,6 @@ const DetailsComponent = () => {
     }, {refetchOnMountOrArgChange: true});
     const {data: cohortBreakDown} = useGetCohortDetailsBreakdownQuery({cohortId: cohortId}, {skip: !cohortId})
 
-    const sanitizeCohortDescription = (html: string) => {
-        return html
-            ?.replace(/<span class="ql-ui".*?<\/span>/g, "") // remove spans
-            ?.replace(/data-list="bullet"/g, ""); // remove data-list
-    };
 
     const cohort: {name: string, value: string, valueType: 'percentage'| 'digit'| 'currency' | 'tenor' | 'years', id:string}[] = [
         {name: 'Total amount disbursed', value: cohortDetails?.data?.amountReceived , valueType: 'currency', id: 'totalAmount'},

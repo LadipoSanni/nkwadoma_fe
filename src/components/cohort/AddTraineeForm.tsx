@@ -48,6 +48,7 @@ function AddTraineeForm({setIsOpen, tuitionFee,cohortId, isEdit,loaneeBasicDetai
     const item = data?.data
     const [disableAddLoaneeButton, setDisableAddLoaneeButton] = useState(false)
     const [initialDepositError, setInitialDepositError] = useState('')
+    const [currentSelectedItemAmount , setCurrentSelectedItemAmount] = useState("")
 
     const [addLoaneeToCohort, {isLoading: isLoadingAddLoanee}] = useAddLoaneeToCohortMutation();
     const [editLoaneeInACohort,{isLoading: isLoadingEditLoanee}] = useEditAddLoaneeToCohortMutation()
@@ -114,7 +115,6 @@ function AddTraineeForm({setIsOpen, tuitionFee,cohortId, isEdit,loaneeBasicDetai
         emailAddress: loaneeBasicDetails  && isEdit  ? loaneeBasicDetails?.loaneeEmail : '',
         initialDeposit: loaneeBasicDetails && isEdit ? loaneeBasicDetails?.loaneeInitialDeposit : ''
     };
-    // const {toast} = useToast();
 
     const toastPopUp = ToastPopUp({
         description: 'Cohort loanee successfully added.',
@@ -141,12 +141,6 @@ function AddTraineeForm({setIsOpen, tuitionFee,cohortId, isEdit,loaneeBasicDetai
 
     }
 
-    // const calculateTotal = (loaneeAddedItems: cohortBreakDown[]) => {
-    //     const totalItems = loaneeAddedItems.reduce((sum, item) => sum + parseFloat(item.itemAmount || '0'), 0);
-    //     const total = totalItems + totalItemAmount;
-    //     setTotalItemAmount(total);
-    //
-    // }
     const calculateTotal = (items: cohortBreakDown[], tuitionFee?: string) => {
         const total = items.reduce((sum, item) => sum + parseFloat(item.itemAmount || '0'), 0);
         const totalWithTuition = total + (tuitionFee ? parseFloat(tuitionFee) : 0);
@@ -240,18 +234,14 @@ function AddTraineeForm({setIsOpen, tuitionFee,cohortId, isEdit,loaneeBasicDetai
             const updatedData = selectedCohortItem.map((item, i) =>
                 i === index ? { ...item, itemAmount: value } : item
             );
-            // setCohortBreakDown(updatedData);
             setSelectedCohortItem(updatedData)
             calculateTotal(updatedData, tuitionFee);
-            // deductFromTotal(userInput);co
             setAmountError({error:'', index:0})
             setDisableAddLoaneeButton(false)
 
         }else {
             const current = cohortBreakDown
             setDisableAddLoaneeButton(true)
-            // setCohortBreakDown(current);
-
             setSelectedCohortItem(current)
             setAmountError({error:'amount can not be greater than cohort amount', index})
         }
@@ -299,16 +289,45 @@ function AddTraineeForm({setIsOpen, tuitionFee,cohortId, isEdit,loaneeBasicDetai
         const currentItem = currentItemArray?.at(0) ? currentItemArray?.at(0 ) : {    currency: '',
             itemAmount: '',
             itemName: '',
-            loanBreakdownId: ''};
-        const totalWithInitialDepositDeducted  = totalItemAmount + ( currentItem?.itemAmount ? parseFloat(currentItem?.itemAmount) : 0);
+            loanBreakdownId: '',
+        };
+        // setCurrentSelectedItemId(currentItem?.loanBreakdownId ? currentItem?.loanBreakdownId : '' )
+        if (currentSelectedItemAmount){
+            const updatedCurrentItem: cohortBreakDown = {
+                currency: currentItem?.currency ?? "",
+                itemAmount: currentSelectedItemAmount,
+                itemName: currentItem?.itemName ?? "",
+                loanBreakdownId: currentItem?.loanBreakdownId ?? "",
+            };
+            let index = 0;
+            setSelectedCohortItem(prev => {
+                const updated =  [...prev, updatedCurrentItem];
+                 index = updated.findIndex(
+                    item => item.loanBreakdownId === updatedCurrentItem.loanBreakdownId
+                );
+                return updated;
 
-        //eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-expect-error
-        setSelectedCohortItem(prev => [...prev, currentItem]);
+            });
+            if (parseFloat(currentSelectedItemAmount) < parseFloat(currentItem?.itemAmount ? currentItem?.itemAmount : '') || parseFloat(currentSelectedItemAmount) === parseFloat(currentItem?.itemAmount ? currentItem?.itemAmount : '') ){
+                    const totalWithInitialDepositDeducted  = totalItemAmount + ( currentSelectedItemAmount ? parseFloat(currentSelectedItemAmount) : 0);
+                    setTotalItemAmount(totalWithInitialDepositDeducted);
+                    setAmountError({error:'',index: 0 })
+            }else{
+                setAmountError({error:'amount can not be greater than cohort amount', index:index })
+
+            }
+        }else{
+            setSelectedCohortItem(prev => {
+                return [...prev, currentItem];
+            });
+            const totalWithInitialDepositDeducted  = totalItemAmount + ( currentItem?.itemAmount ? parseFloat(currentItem?.itemAmount) : 0);
+            setTotalItemAmount(totalWithInitialDepositDeducted);
+        }
+        setCurrentSelectedItemAmount("")
         setNames(prevNames => prevNames.filter(name => name !== value));
-        setTotalItemAmount(totalWithInitialDepositDeducted);
 
     };
+
 
 
     return (
@@ -469,14 +488,9 @@ function AddTraineeForm({setIsOpen, tuitionFee,cohortId, isEdit,loaneeBasicDetai
                                         </div>
                                     </div>
                                     <div
-                                        style={{
-                                            display: "grid",
-                                            gridTemplateColumns: "30% 70%",
-                                            gap: "1rem",
-                                        }}
-                                        className={` f `}
+                                        className={` w-full flex gap-4   `}
                                     >
-                                        <div className={`bg-purple-200 grid gap-4 `}>
+                                        <div className={` w-  grid gap-4 `}>
                                              <div className={` mt-auto mb-auto bg-[#F9F9F9] border border-[#D7D7D7] rounded-md w-full  h-fit p-3  text-black  `}>
                                                  Tuition
                                              </div>
@@ -503,14 +517,10 @@ function AddTraineeForm({setIsOpen, tuitionFee,cohortId, isEdit,loaneeBasicDetai
                                                 </div>
                                             ))}
                                         </div>
-                                        <div className={`bg-red-200  grid gap-4   `}>
+                                        <div className={` w-full  grid gap-4   `}>
+
                                             <div
-                                                // style={{
-                                                //     display: "grid",
-                                                //     gridTemplateColumns: "20% 80%",
-                                                //     gap: "0.5rem",
-                                                // }}
-                                                className={` w-full grid grid-cols-[20%_80%] gap-2    `}
+                                                className={`  flex gap-2  h-fit  `}
                                             >
                                                 <div className={` mt-auto mb-auto bg-[#F9F9F9]  border border-[#D7D7D7] rounded-md h-fit p-3  text-black  `}>
                                                     NGN
@@ -522,36 +532,81 @@ function AddTraineeForm({setIsOpen, tuitionFee,cohortId, isEdit,loaneeBasicDetai
                                                     type="text"
                                                     defaultValue={tuitionFee?.toLocaleString() || ''}
                                                     readOnly
-                                                    className=" p-3 w-full h-[3.2rem] border rounded bg-grey105 focus:outline-none"
+                                                    className=" p-3 w-[80%]  h-[3.2rem] border rounded bg-grey105 focus:outline-none"
                                                 />
+
                                             </div>
                                             {selectedCohortItem?.length === 0 &&
                                                 <div
-                                                    // style={{
-                                                    //     display: "grid",
-                                                    //     gridTemplateColumns: "20% 80%",
-                                                    //     gap: "0.5rem",
-                                                    // }}
-                                                    className={` w-full  grid grid-cols-[20%_80%] gap-2  `}
+
+                                                    className={` w-full h-fit  flex  gap-2  `}
                                                 >
                                                     <div className={` mt-auto mb-auto bg-white border border-[#D7D7D7] rounded-md  h-fit p-3  text-black  `}>
                                                         NGN
                                                     </div>
 
                                                     <NumericFormat
-                                                        id={`detail-`}
-                                                        name={`detail`}
+                                                        id={`detail-01`}
+                                                        name={`detail-01`}
                                                         type="text"
                                                         thousandSeparator=","
                                                         decimalScale={2}
                                                         fixedDecimalScale={true}
-                                                        value={ ''}
-                                                        placeholder={``}
-                                                        className="w-full p-3 h-[3.2rem] border rounded focus:outline-none"
-
+                                                        // value={detail?.itemAmount?.toLocaleString() || ''}
+                                                        // placeholder={`${detail?.itemAmount || ''}`}
+                                                        className=" w-[70%] p-3 h-[3.2rem] border rounded focus:outline-none"
+                                                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                                                            const rawValue = e.target.value.replace(/,/g, '');
+                                                            if (!isNaN(Number(rawValue))) {
+                                                                setCurrentSelectedItemAmount(rawValue)
+                                                            }
+                                                        }}
                                                     />
                                                 </div>
                                             }
+                                            {selectedCohortItem?.map((detail: cohortBreakDown, index: number) => (
+                                                <div
+                                                    key={'index' + index}
+                                                    className={`   grid  `}
+                                                >
+                                                    <div
+                                                        className={` w-full h-fit  flex  gap-2  `}
+                                                    >
+                                                        <div className={` mt-auto mb-auto bg-white border border-[#D7D7D7] rounded-md  h-fit p-3  text-black  `}>
+                                                            NGN
+                                                        </div>
+
+                                                        <NumericFormat
+                                                            id={`detail-${index}`}
+                                                            name={`detail-${index}`}
+                                                            type="text"
+                                                            thousandSeparator=","
+                                                            decimalScale={2}
+                                                            fixedDecimalScale={true}
+                                                            value={detail?.itemAmount?.toLocaleString() || ''}
+                                                            placeholder={`${detail?.itemAmount || ''}`}
+                                                            className=" w-[70%] p-3 h-[3.2rem] border rounded focus:outline-none"
+                                                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                                                                const rawValue = e.target.value.replace(/,/g, '');
+                                                                if (!isNaN(Number(rawValue))) {
+                                                                    editCohortBreakDown(
+                                                                        {target: {value: rawValue}} as React.ChangeEvent<HTMLInputElement>,
+                                                                        index,
+                                                                    );
+                                                                }
+                                                            }}
+                                                        />
+                                                        <MdOutlineDelete id={`deleteItemButton${index}}`}
+                                                                         className={'text-blue200 mt-auto mb-auto  h-6 w-4 cursor-pointer'}
+                                                                         onClick={()=> {deleteItem( Number(detail.itemAmount), detail?.loanBreakdownId,detail?.itemName)}}
+                                                        />
+
+                                                    </div>
+                                                    {amountError?.index === index && <div
+                                                        className={`text-error500 place-self-start  text-sm text-center`}>{amountError?.error}</div>}
+
+                                                </div>
+                                            ))}
                                         </div>
 
                                     </div>
