@@ -1,59 +1,216 @@
-name: 🚀 Meedl Systest Deployment
-
+name: 🚀 Meedl Blue-Green Systest Delivery and Deployment
 on:
   push:
     branches:
-      - dev
+      - systest
 
 env:
-  AWS_REGION: us-east-1
-  ECR_REPO_URI: 357586184453.dkr.ecr.us-east-1.amazonaws.com/meedl-frontend
-
+  BLUE_CONTAINER: meedl-frontend-systest-blue
+  GREEN_CONTAINER: meedl-frontend-systest-green
+  IMAGE_NAME: meedl-frontend-systest
+  BLUE_PORT: 3032
+  GREEN_PORT: 3033
+  CONTAINER_PORT: 3000
+  S3_BUCKET_NAME: ${{ secrets.S3_BUCKET_NAME }}
+  S3_ENV_FILE_PATH: nkwadoma/frontend/systest/nkwadomafrontend.env
+  AWS_REGION: eu-west-1
+  NGINX_CONFIG_PATH: /etc/nginx/sites-available/meedl.africa
+  IMAGE_RETENTION_COUNT: 5
 
 jobs:
-  build-and-push:
-    runs-on: ubuntu-latest
+  deploy:
+    runs-on: [self-hosted, nkwadoma-FE]
 
     steps:
-      # 1. Checkout code
-      - name: Checkout Repository
+      # ======================
+      # 1. INITIAL SETUP & CLEANUP
+      # ======================
+      - name: ✅ Checkout Repository
         uses: actions/checkout@v4
 
-      # 2. Configure AWS credentials
-      - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ env.AWS_REGION }}
-
-
-      - name: Login to Amazon ECR
-        uses: aws-actions/amazon-ecr-login@v2
-
-      # 6. Build and Push Docker Image with all env vars
-      - name: Build, Tag, and Push (Frontend)
+      - name: 🧹 Initial Docker Cleanup
         run: |
-          TIMESTAMP=$(date +%Y%m%d%H%M)
-          COMMIT_SHA=$(git rev-parse HEAD)
-      
-          # # Pass all .env variables into docker build args
-          # BUILD_ARGS=$(grep -v '^#' .env | xargs -I {} echo --build-arg {} | tr '\n' ' ')
-      
-          # Define image names
-          TIMESTAMP_TAG=${{ env.ECR_REPO_URI }}:${TIMESTAMP}
-          LATEST_TAG=${{ env.ECR_REPO_URI }}:latest
-          SHA_TAG=${{ env.ECR_REPO_URI }}:${GITHUB_SHA}
-      
-          # Build image with all tags
-          docker build $BUILD_ARGS -t $TIMESTAMP_TAG -t $LATEST_TAG -t $SHA_TAG .
-      
-          # Push all tags
+          echo "=== Initial Cleanup ==="
+          docker container prune -f
+          docker image prune -f
+          echo "✅ Initial cleanup completed"
+
+      - name: 📥 Download .env file from S3
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        run: |
+          echo "Downloading env file from s3://$S3_BUCKET_NAME/$S3_ENV_FILE_PATH"
+          aws s3 cp s3://$S3_BUCKET_NAME/$S3_ENV_FILE_PATH .env
+          echo "✅ Downloaded .env file"
+
+      # ======================
+      # 2. DETERMINE DEPLOYMENT TARGET
+      # ======================
+      - name: 🎯 Determine Deployment Target
+        id: deployment-target
+        run: |
+          if sudo grep -q "3032" $NGINX_CONFIG_PATH; then
+            echo "current=meedl-fdev-blue" >> $GITHUB_OUTPUT
+            echo "target=meedl-fdev-green" >> $GITHUB_OUTPUT
+            echo "target_port=3033" >> $GITHUB_OUTPUT
+          else
+            echo "current=meedl-fdev-green" >> $GITHUB_OUTPUT
+            echo "target=meedl-fdev-blue" >> $GITHUB_OUTPUT
+            echo "target_port=3032" >> $GITHUB_OUTPUT
+          fi
+          echo "Deploying to ${{ steps.deployment-target.outputs.target }} on port ${{ steps.deployment-target.outputs.target_port }}"
+
+      # ======================
+      # 3. BUILD,TAG, AND PUSH NEW IMAGE
+      # ======================
+      - name: 🐳 Build, Tag, and Push (Frontend)
+        id: build
+        run: |
+          set -euo pipefail
+          TIMESTAMP=$(date +%Y%m%d-%H%M%S)
+
+          # Pass all .env variables into docker build args
+          BUILD_ARGS=$(grep -v '^#' .env | xargs -I {} echo --build-arg {} | tr '\n' ' ')
+
+          # Define image tag with meedl-frontend prefix
+          TIMESTAMP_TAG=${{ env.ECR_REPO_URI }}:meedl-frontend-dev${TIMESTAMP}
+
+          echo "🔑 Re-authenticating to ECR..."
+          aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin ${{ env.ECR_REPO_URI }}
+
+          echo "🐳 Building image..."
+          docker build $BUILD_ARGS -t $TIMESTAMP_TAG .
+
+          echo "⬆️ Pushing image..."
           docker push $TIMESTAMP_TAG
-          docker push $LATEST_TAG
-          docker push $SHA_TAG
+
+          echo "✅ Successfully pushed: $TIMESTAMP_TAG"
+
+          # Save TIMESTAMP_TAG for deploy step
+          echo "timestamp_tag=$TIMESTAMP_TAG" >> $GITHUB_OUTPUT
+
+
+      # ======================
+      # 4. DEPLOY TO TARGET ENVIRONMENT
+      # ======================
+      - name: 🚀 Deploy to Target Environment
+        run: |
+          docker rm -f ${{ steps.deployment-target.outputs.target }} 2>/dev/null || echo "No existing ${{ steps.deployment-target.outputs.target }} container to remove"
+          
+          docker run -d \
+            --name ${{ steps.deployment-target.outputs.target }} \
+            -p ${{ steps.deployment-target.outputs.target_port }}:$CONTAINER_PORT \
+            --env-file .env \
+            $IMAGE_NAME:${{ steps.deployment-target.outputs.target }}
+
+          echo "✅ ${{ steps.deployment-target.outputs.target }} container started on port ${{ steps.deployment-target.outputs.target_port }}"
+
+      # ======================
+      # 5. HEALTH CHECK USING EXISTING API ENDPOINT
+      # ======================
+      - name: 🔍 Health Check New Container
+        id: health-check
+        run: |
+          echo "Waiting for ${{ steps.deployment-target.outputs.target }} container to be healthy..."
+          for i in {1..15}; do
+            # Using the existing /api/health endpoint - NO DOCKERFILE CHANGES NEEDED!
+            if curl -sf http://localhost:${{ steps.deployment-target.outputs.target_port }}/api/health | grep -q '"status":"UP"'; then
+              echo "✅ ${{ steps.deployment-target.outputs.target }} container is healthy!"
+              echo "status=healthy" >> $GITHUB_OUTPUT
+              exit 0
+            fi
+            
+            echo "⏳ Attempt $i/15: Container not healthy yet, retrying in 3s..."
+            sleep 3
+          done
+          
+          echo "❌ Health check failed - performing automatic cleanup"
+          docker rm -f ${{ steps.deployment-target.outputs.target }} 2>/dev/null || true
+          docker rmi $IMAGE_NAME:${{ steps.deployment-target.outputs.target }} 2>/dev/null || true
+          echo "status=failed" >> $GITHUB_OUTPUT
+          echo "::error::Health check failed! The previous version remains active."
+          exit 1
+
+      # ======================
+      # 6. UPDATE NGINX CONFIGURATION (ONLY IF HEALTHY)
+      # ======================
+      - name: 🔄 Update Nginx Configuration
+        if: steps.health-check.outputs.status == 'healthy'
+        run: |
+          
+          if [ "${{ steps.deployment-target.outputs.target }}" = "meedl-fdev-green" ]; then
+            sudo sed -i 's/localhost:3037/localhost:3036/g' $NGINX_CONFIG_PATH
+          else
+            sudo sed -i 's/localhost:3035/localhost:3034/g' $NGINX_CONFIG_PATH
+          fi
+          
+          sudo nginx -t
+          sudo systemctl reload nginx
+          
+          echo "✅ Nginx configuration updated"
+
+      # ======================
+      # 7. CLEANUP OLD DEPLOYMENT
+      # ======================
+      - name: 🧹 Cleanup Old Deployment
+        if: steps.health-check.outputs.status == 'healthy'
+        run: |
+          docker rm -f ${{ steps.deployment-target.outputs.current }} 2>/dev/null || echo "No existing container to remove"
+          docker rmi $IMAGE_NAME:${{ steps.deployment-target.outputs.current }} 2>/dev/null || echo "No image to remove"
+          echo "✅ Cleaned up old deployment"
+
+      # ======================
+      # 8. PRUNE OLD IMAGES & RESOURCES
+      # ======================
+      - name: 🗑️ Prune Old Docker Resources (Keep last 30 days)
+        if: steps.health-check.outputs.status == 'healthy'
+        run: |
+          echo "=== Pruning old Docker resources (keeping 30 days) ==="
       
-          echo "✅ Successfully pushed:"
-          echo "  - $TIMESTAMP_TAG"
-          echo "  - $LATEST_TAG"
-          echo "  - $SHA_TAG"
+          # Prune dangling images first (untagged ones)
+          docker image prune -f
+      
+          # Remove images older than 30 days for this repo
+          CUTOFF_DATE=$(date -d '30 days ago' +%s)
+          docker images $IMAGE_NAME --format "{{.ID}} {{.Repository}}:{{.Tag}} {{.CreatedAt}}" | while read -r id tag created; do
+            created_epoch=$(date -d "$created" +%s || true)
+            if [ "$created_epoch" -lt "$CUTOFF_DATE" ]; then
+              echo "🗑️ Removing old image: $tag (created $created)"
+              docker rmi -f "$id" || true
+            fi
+          done
+      
+          docker network prune -f
+      
+          echo "✅ Docker resource pruning completed"
+      
+          echo "=== Remaining images for $IMAGE_NAME ==="
+          docker images $IMAGE_NAME --format "table {{.Repository}}\t{{.Tag}}\t{{.CreatedAt}}"
+
+      # ======================
+      # 9. FINAL VERIFICATION
+      # ======================
+      - name: 🔍 Final Verification
+        if: success()
+        run: |
+          echo "=== Deployment Summary ==="
+          echo "Active deployment: ${{ steps.deployment-target.outputs.target }}"
+          echo "Active port: ${{ steps.deployment-target.outputs.target_port }}"
+          echo "Container status: $(docker inspect -f '{{.State.Status}}' ${{ steps.deployment-target.outputs.target }})"
+          echo "Health check response:"
+          curl -s http://localhost:${{ steps.deployment-target.outputs.target_port }}/api/health
+          echo -e "\n✅ Blue-green deployment completed successfully with zero downtime!"
+
+      # ======================
+      # 10. FAILURE HANDLING
+      # ======================
+      - name: 📋 Failure Summary
+        if: failure()
+        run: |
+          echo "=== Deployment Failed ==="
+          echo "Previous version remains active - no downtime occurred"
+          echo "Current active containers:"
+          docker ps -a --filter "name=meedl-frontend" --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}"
+          echo -e "\nNginx currently points to:"
+          sudo grep "proxy_pass" $NGINX_CONFIG_PATH
