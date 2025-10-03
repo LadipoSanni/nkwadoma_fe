@@ -66,7 +66,6 @@ const OrganizationNameAndChangeButton = () => {
                     <ChangeInstitutionModal />
                 </TableModal>
             }
-            {/*<ChangeInstitutionModal />*/}
         </div>
     );
 };

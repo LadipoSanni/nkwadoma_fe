@@ -163,7 +163,7 @@ function Team() {
                 title: "Status",  
                 sortable: true, 
                 id: "activationStatus", 
-                selector: (row: TableRowData) => <StatusBadge status={row.activationStatus?.toString()} className='truncate' />   
+                selector: (row: TableRowData) => <StatusBadge status={row.activationStatus?.toString()} className='truncate' />
               },
               { 
                 title: "Invited",  

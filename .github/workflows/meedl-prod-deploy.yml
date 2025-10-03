@@ -3,7 +3,7 @@ name: 🚀 Meedl Prod Deployment
 on:
   push:
     branches:
-      - prod
+      - main
 
 env:
   CONTAINER_NAME: meedl-frontend-prod
