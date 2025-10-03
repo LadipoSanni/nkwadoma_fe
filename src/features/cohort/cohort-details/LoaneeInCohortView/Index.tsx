@@ -212,7 +212,7 @@ export const LoaneeInCohortView = ({cohortFee}: props) => {
     const dropDownOption = [
 
         {
-            name: "Edit Loanee details",
+            name: "Edit Loanee Details",
             id: "1"
         },
 
