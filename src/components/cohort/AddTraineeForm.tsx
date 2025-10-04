@@ -485,15 +485,17 @@ function AddTraineeForm({setIsOpen, tuitionFee,cohortId, isEdit,loaneeBasicDetai
                                     }}
                                     className={` max-h-[45vh] h-[45vh] overflow-y-scroll   `}
                                 >
-                                    <div className={`w-full grid   `}>
-                                        <div className={` flex  w-full  `}>
-                                            <div className={`w-1/3 text-[14px] h-fit py-2   ${inter500.className}  `}>Item</div>
-                                            <div className={`w-2/3 text-[14px] h-fit py-2  ${inter500.className} `}>Amount</div>
-                                        </div>
-                                    </div>
+                                    {/*<div className={`w-full grid   `}>*/}
+                                    {/*    <div className={` flex  w-full  `}>*/}
+                                    {/*        <div className={` text-[14px] h-fit py-2   ${inter500.className}  `}>Item</div>*/}
+                                    {/*        <div className={` text-[14px] h-fit py-2  ${inter500.className} `}>Amount</div>*/}
+                                    {/*    </div>*/}
+                                    {/*</div>*/}
+                                    <div className={` text-[14px] h-fit py-2   ${inter500.className}  `}>Item</div>
                                     <div
                                         className={` w-full flex gap-4   `}
                                     >
+
                                         <div className={` w-  grid gap-4 `}>
                                              <div className={` mt-auto mb-auto bg-[#F9F9F9] border border-[#D7D7D7] rounded-md w-full  h-fit p-3  text-black  `}>
                                                  Tuition
@@ -522,7 +524,7 @@ function AddTraineeForm({setIsOpen, tuitionFee,cohortId, isEdit,loaneeBasicDetai
                                             ))}
                                         </div>
                                         <div className={` w-full  grid gap-4   `}>
-
+                                            <div className={` text-[14px] h-fit py-2  ${inter500.className} `}>Amount</div>
                                             <div
                                                 className={`  flex gap-2  h-fit  `}
                                             >
