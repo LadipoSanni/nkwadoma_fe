@@ -7,12 +7,30 @@ import {useAppSelector} from "@/redux/store";
 import {useGetAllLoaneeInALoanProductQuery, useSearchLoaneesInALoanProductQuery} from "@/service/admin/loan_product";
 import { useDebounce } from '@/hooks/useDebounce';
 import Table from '@/reuseable/table/Table';
-import { formatAmount,formatToTwoDecimals } from '@/utils/Format';
+import { formatAmount,formatToTwoDecimals,formatPercentage } from '@/utils/Format';
 import styles from "@/components/super-admin/staff/index.module.css"
+import Modal from '@/reuseable/modals/TableModal';
+import { Cross2Icon } from "@radix-ui/react-icons";
+import LoaneeModalDetail from './Loanee-modalDetail';
+import {capitalizeFirstLetters,getLoanStatusDisplay} from "@/utils/GlobalMethods";
 
 interface TableRowData {
     [key: string]: string | number | null | React.ReactNode ;
 }
+
+export interface LoanMetrics {
+    instituteName: string;
+    amountEarned: string; 
+    amountDisbursed: string; 
+    loaneeName: string;
+    loanOutstanding: string; 
+    performance: string;
+    interestEarned: string;
+    amountRepaid: string;
+
+}
+
+
 
 
 export function Loanees() {
@@ -24,6 +42,17 @@ export function Loanees() {
     const [totalPage,setTotalPage] = useState(0)
      const [hasNextPage,setNextPage] = useState(false)
      const [searchHasasNextPage,setSearchNextPage] = useState(false)
+     const [isOpen,setIsOpen] = useState(false)
+     const [loanMetrics, setLoanMetrics] = useState<LoanMetrics>({
+        instituteName: "",
+        amountEarned: "",
+        amountDisbursed: "",
+        loaneeName: "",
+        loanOutstanding: "",
+        performance: "",
+        interestEarned: "",
+        amountRepaid: ""
+    });
     const size = 10;
 
     const [debouncedSearchTerm, isTyping] = useDebounce(searchTerm, 1000);
@@ -40,6 +69,7 @@ export function Loanees() {
         pageSize: size,
         pageNumber: pageSearchNumber
     }, {skip: !debouncedSearchTerm|| !loanProductId})
+
 
     useEffect(() => {
         if(!debouncedSearchTerm){
@@ -69,20 +99,21 @@ export function Loanees() {
         setSearchTerm(event.target.value);
     };
 
-    const getLoanStatusDisplay = (row: string): string => {
-        if (!row) return "Non performing";
-        switch (row) {
-          case "NON_PERFORMING":
-            return "Non performing";
-          case "PERFORMING":
-            return "Performing";
-          case "IN_MORATORIUM":
-            return "In moratorium";
-          default:
-            return row; 
-        }
-      };
 
+      const handleRowClick = (row: TableRowData) => {
+        const fullName = capitalizeFirstLetters(row?.firstName?.toString())  + " " + capitalizeFirstLetters(row.lastName?.toString()) 
+        setLoanMetrics({
+            instituteName: row?.instituteName as string,
+            amountEarned: formatAmount(row?.amountEarned),
+            amountDisbursed: formatAmount(row?.amountDisbursed),
+            loaneeName: fullName,
+            loanOutstanding: formatAmount(row?.loanOutstanding),
+            performance: row?.performance as string,
+            interestEarned:formatPercentage(row?.interestEarned),
+            amountRepaid: formatAmount(row?.amountRepaid)
+        })
+         setIsOpen(true)
+     }
 
     const LoanProductLoaneeHeader = [
         {title: "Name", sortable: true, id: "name",
@@ -120,8 +151,7 @@ export function Loanees() {
                             tableHeight={ allLoanee?.data?.body?.length < 10 || searchResults?.data?.body?.length < 10 ? 60 : undefined}
                             icon={MdOutlinePerson}
                             sideBarTabName={"loanee"}
-                            handleRowClick={() => {
-                            }}
+                            handleRowClick={handleRowClick}
                             tableCellStyle={'h-12'}
                             condition={true}
                             isLoading={isLoading || allLoaneeIsLoading || isFetching || isfetching}
@@ -129,8 +159,25 @@ export function Loanees() {
                             pageNumber={searchTerm? pageSearchNumber : page}
                             setPageNumber={searchTerm? setSearchPageNumber : setPageNumber}
                             totalPages={totalPage}
+                            sx='cursor-pointer'
                         />}
                 </div>
+            </div>
+
+            <div>
+                <Modal
+                 isOpen={isOpen}
+                 closeModal={()=> setIsOpen(false)}
+                 className='pb-1'
+                closeOnOverlayClick={true}
+                icon={Cross2Icon}
+                 width='36%'
+                 styeleType='styleBodyTwo'
+                >
+         <LoaneeModalDetail
+          loanMetricsObject={loanMetrics}
+         />
+                </Modal>
             </div>
         </div>
     );

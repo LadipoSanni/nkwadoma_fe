@@ -322,6 +322,20 @@ const maxLength = condition === false ? 50 : 200;
     
     return cleanedValue;
 };
+
+export const getLoanStatusDisplay = (row: string): string => {
+    if (!row) return "Non performing";
+    switch (row) {
+      case "NON_PERFORMING":
+        return "Non performing";
+      case "PERFORMING":
+        return "Performing";
+      case "IN_MORATORIUM":
+        return "In moratorium";
+      default:
+        return row; 
+    }
+  };
   
   
   
