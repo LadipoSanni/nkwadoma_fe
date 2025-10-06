@@ -75,6 +75,7 @@ export const LoaneeInCohortView = ({cohortFee}: props) => {
     const [hasNextPage,setNextPage] = useState(false)
     const status = isReferred === "Not referred"? "ADDED" : "REFERRED"
     const selectedCohortInOrganizationType = useAppSelector(store => store?.cohort?.selectedCohortInOrganizationType)
+    const cohortBreakdownText = useAppSelector(store => store.cohortBreakDownSlice.cohortBreakdown);
     const [selectedLoaneeEmploymentStatus, setSelectedLoaneeEmploymentStatus] = React.useState('')
     const [debouncedSearchTerm, isTyping] = useDebounce(loaneeName, 1000);
     const [selectedLoaneeId, setSelectedLoaneeId] = React.useState('')
@@ -160,7 +161,11 @@ export const LoaneeInCohortView = ({cohortFee}: props) => {
             setTotalPage(data?.data?.totalPages)
             setPageNumber(data?.data?.pageNumber)
         }
-    },[debouncedSearchTerm,searchResults,data])
+
+        if(cohortBreakdownText){
+            setLoaneeModalText(cohortBreakdownText)
+        }
+    },[debouncedSearchTerm,searchResults,data, cohortBreakdownText])
 
     const handleSelectedItem = (item: string) => {
         if (item === selectedLoaneeEmploymentStatus){

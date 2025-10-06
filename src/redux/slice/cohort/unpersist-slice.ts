@@ -9,7 +9,8 @@ interface cohortBreakDownState {
         loaneeLastName: string,
         loaneeEmail: string,
         loaneeInitialDeposit: string,
-    }
+    },
+    cohortBreakdown: string,
 }
 
 const initialState: cohortBreakDownState = {
@@ -26,7 +27,8 @@ const initialState: cohortBreakDownState = {
         loaneeLastName: '',
         loaneeEmail: '',
         loaneeInitialDeposit: '',
-    }
+    },
+    cohortBreakdown: '',
 
 };
 
@@ -45,11 +47,14 @@ export const cohortBreakDownSlice = createSlice({
             loaneeInitialDeposit: string,
         }>)=>{
             state.loaneeBasicDetails = action.payload;
+        },
+        setCohortBreakdownText:(state, action: PayloadAction<string>) =>{
+            state.cohortBreakdown = action.payload;
         }
     },
 });
 
 
-export const { setCohortBreakDownContainer, setLoaneeBasicDetails, } = cohortBreakDownSlice.actions;
+export const { setCohortBreakDownContainer, setLoaneeBasicDetails,setCohortBreakdownText } = cohortBreakDownSlice.actions;
 
 export default cohortBreakDownSlice.reducer;
