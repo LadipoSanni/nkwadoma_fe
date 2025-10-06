@@ -485,44 +485,48 @@ function AddTraineeForm({setIsOpen, tuitionFee,cohortId, isEdit,loaneeBasicDetai
                                     }}
                                     className={` max-h-[45vh] h-[45vh] overflow-y-scroll   `}
                                 >
-                                    <div className={`w-full grid   `}>
-                                        <div className={` flex  w-full  `}>
-                                            <div className={`w-1/3 text-[14px] h-fit py-2   ${inter500.className}  `}>Item</div>
-                                            <div className={`w-2/3 text-[14px] h-fit py-2  ${inter500.className} `}>Amount</div>
-                                        </div>
-                                    </div>
+                                    {/*<div className={`w-full grid   `}>*/}
+                                    {/*    <div className={` flex  w-full  `}>*/}
+                                    {/*        <div className={` text-[14px] h-fit py-2   ${inter500.className}  `}>Item</div>*/}
+                                    {/*        <div className={` text-[14px] h-fit py-2  ${inter500.className} `}>Amount</div>*/}
+                                    {/*    </div>*/}
+                                    {/*</div>*/}
                                     <div
                                         className={` w-full flex gap-4   `}
                                     >
-                                        <div className={` w-  grid gap-4 `}>
-                                             <div className={` mt-auto mb-auto bg-[#F9F9F9] border border-[#D7D7D7] rounded-md w-full  h-fit p-3  text-black  `}>
-                                                 Tuition
-                                             </div>
+                                        <div>
+                                            <div className={` text-[14px] h-fit py-2   ${inter500.className}  `}>Item</div>
+                                            <div className={` w-  grid gap-4 `}>
+                                                <div className={` mt-auto mb-auto bg-[#F9F9F9] border border-[#D7D7D7] rounded-md w-full  h-fit p-3  text-black  `}>
+                                                    Tuition
+                                                </div>
 
-                                            {selectedCohortItem?.length === 0 &&
-                                                <div  className={`flex gap-3 `}>
-                                                    <div className={` text-[14px] ${inter.className}  mt-auto mb-auto  w-full  h-fit text-black  `}>
+                                                {selectedCohortItem?.length === 0 &&
+                                                    <div  className={`flex gap-3 `}>
+                                                        <div className={` text-[14px] ${inter.className}  mt-auto mb-auto  w-full  h-fit text-black  `}>
+                                                            <StringDropdown
+                                                                label={'Select item'}
+                                                                items={names}
+                                                                onSelect={handleSelect}
+                                                            />
+                                                        </div>
+                                                    </div>
+                                                }
+
+                                                {selectedCohortItem?.map((detail: cohortBreakDown, index: number) => (
+                                                    <div key={'item'+ index}  className={` text-[14px] ${inter.className}  mt-auto mb-auto  w-full   h-full text-black  `}>
                                                         <StringDropdown
-                                                            label={'Select item'}
+                                                            label={detail?.itemName}
                                                             items={names}
                                                             onSelect={handleSelect}
                                                         />
                                                     </div>
-                                                </div>
-                                            }
-
-                                            {selectedCohortItem?.map((detail: cohortBreakDown, index: number) => (
-                                                <div key={'item'+ index}  className={` text-[14px] ${inter.className}  mt-auto mb-auto  w-full   h-full text-black  `}>
-                                                    <StringDropdown
-                                                        label={detail?.itemName}
-                                                        items={names}
-                                                        onSelect={handleSelect}
-                                                    />
-                                                </div>
-                                            ))}
+                                                ))}
+                                            </div>
                                         </div>
-                                        <div className={` w-full  grid gap-4   `}>
 
+                                        <div className={` w-full  grid gap-4   `}>
+                                            <div className={` text-[14px] h-fit py-2  ${inter500.className} `}>Amount</div>
                                             <div
                                                 className={`  flex gap-2  h-fit  `}
                                             >

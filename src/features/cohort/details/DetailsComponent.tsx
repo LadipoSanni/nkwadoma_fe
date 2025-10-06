@@ -21,8 +21,10 @@ const DetailsComponent = () => {
         cohortId: cohortId
     }, {refetchOnMountOrArgChange: true});
     const {data: cohortBreakDown} = useGetCohortDetailsBreakdownQuery({cohortId: cohortId}, {skip: !cohortId})
+    const selectedCohortInOrganizationType = useAppSelector(store => store?.cohort?.selectedCohortInOrganizationType)
 
 
+    console.log('selectedCohortInOrganizationType: ', selectedCohortInOrganizationType )
     const cohort: {name: string, value: string, valueType: 'percentage'| 'digit'| 'currency' | 'tenor' | 'years', id:string}[] = [
         {name: 'Total amount disbursed', value: cohortDetails?.data?.amountReceived , valueType: 'currency', id: 'totalAmount'},
         {name: 'Total amount repaid', value: cohortDetails?.data?.totalAmountRepaid , valueType: 'currency', id: 'totalRepaid'},
@@ -54,7 +56,7 @@ const DetailsComponent = () => {
             </div>
         },
         {title: 'Program', id:'programname', value: <span className={` text-meedlBlue bg-[#F3F8FF] rounded-full w-fit h-fit  max-w-[100%] px-4 py-2  `}>{cohortDetails?.data?.programName}</span>},
-        {title: 'Status', id: 'status', value: <span className={`rounded-full bg-[#FEF6E8] h-fit w-fit px-2 py-2  text-[#66440A] text-[14px] `}>{capitalizeFirstLetters(cohortDetails?.data?.cohortStatus)}</span>},
+        {title: 'Status', id: 'status', value: <span className={`rounded-full ${selectedCohortInOrganizationType === 'GRADUATED' ? 'text-[#636363] bg-[#F6F6F6]  '  :selectedCohortInOrganizationType === 'INCOMING'  ? 'text-[#66440A] bg-[#FEF6E8] ' :" bg-[#E7F5EC] text-[#063F1A] "}   h-fit w-fit px-2 py-2   text-[14px] `}>{capitalizeFirstLetters(cohortDetails?.data?.cohortStatus)}</span>},
         {title: 'Start date',id:'startDate', value: <span className={` ${inter500.className} text-[#212221] text-[14px] `}>{dayjs(cohortDetails?.data?.startDate?.toString()).format('MMM D, YYYY')}</span>},
         {title: 'End  date',id:'endDate', value: <span className={` ${inter500.className} text-[#212221] text-[14px] `}>{dayjs(cohortDetails?.data?.expectedEndDate?.toString()).format('MMM D, YYYY')}</span>},
 

@@ -212,7 +212,7 @@ export const LoaneeInCohortView = ({cohortFee}: props) => {
     const dropDownOption = [
 
         {
-            name: "Edit Loanee details",
+            name: "Edit Loanee Details",
             id: "1"
         },
 
@@ -347,7 +347,6 @@ export const LoaneeInCohortView = ({cohortFee}: props) => {
                         staticColunm="firstName"
                         icon={MdOutlinePerson}
                         sideBarTabName="loanee"
-                        tableCellStyle="h-12"
                         isLoading={isLoading || loaneeIsloading || isFetching || isfetching}
                         condition={true}
                         tableHeight={45}
@@ -357,6 +356,7 @@ export const LoaneeInCohortView = ({cohortFee}: props) => {
                         showKirkBabel={true}
                         handleDropDownClick={handleDropdownClick}
                         setPageNumber={setPageNumber}
+                        tableCellStyle="h-12"
                         totalPages={totalPage}
                         enableButton={() =>setEnableButton(true) }
                         disabledButton={()=> setEnableButton(false) }
@@ -366,6 +366,7 @@ export const LoaneeInCohortView = ({cohortFee}: props) => {
                             : isReferred === "Not referred" 
                               ? true 
                               : false}
+                        searchEmptyState={false}
                     />
                   </div>
 
