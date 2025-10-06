@@ -26,8 +26,8 @@ interface viewAllFinancier {
     userIdentity: UserIdentity,
     requestedOn: string,
     invitedBy: string,
-    financierType: string
-
+    financierType: string,
+    email?: string
 }
 
 interface TableRowData {
@@ -164,10 +164,10 @@ function ViewAllRequestedFinancier() {
             selector: (row: headerRow) => capitalizeFirstLetters(row?.invitedBy?.toString())
           },
            { 
-             title: <div className='md:mr-20'>Email</div>,  
+             title: <div className='md:mr-24'>Email</div>,  
              sortable: true, 
              id: "email", 
-             selector: (row: headerRow) => row?.userIdentity?.email 
+             selector: (row: headerRow) => row?.email 
            },
         //    { 
         //     title: "Role",  

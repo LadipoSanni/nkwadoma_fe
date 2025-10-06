@@ -278,6 +278,15 @@ export const validateNumberLimit =
     }).format(num);
   };
 
+  export const formatPercentage = (value: TableRowData[keyof TableRowData]): string => {
+    if (value === null || value === undefined) return "0.00%";
+    
+    const numValue = typeof value === 'string' ? parseFloat(value) : value;
+    if (isNaN(numValue as number)) return "0.00%";
+    
+    return `${formatToTwoDecimals(numValue)}%`;
+};
+
 //   interface NestedData {
 //     body?: TableRowData[];
 // }

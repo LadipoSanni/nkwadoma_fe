@@ -5,20 +5,21 @@ import { ensureHttpsUrl } from "@/utils/GlobalMethods";
 
 interface listObject {
     label: string,
-    value: string
+    value: string | number | React.JSX.Element
 }
 
 interface Props {
    dataList: listObject[],
    isLoading: boolean,
    websiteAddress?: string,
+   className?: string
 }
 
-function BasicDetail({dataList,isLoading,websiteAddress}:Props) {
+function BasicDetail({dataList,isLoading,websiteAddress,className}:Props) {
   return (
     <div>
     { isLoading? <div><SkeletonForSidebar/></div> 
-       : <div className={`grid grid-cols-1 gap-y-5 mt-4  ${inter.className}`}>
+       : <div className={`grid grid-cols-1 gap-y-5 mt-4  ${inter.className} ${className}`}>
        {dataList?.map((item, index) => (
   <div 
     id={`data-item-${index}`} 
