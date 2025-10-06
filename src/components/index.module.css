@@ -1,0 +1,9 @@
+.quillContent ol {
+    list-style-type: decimal !important; /* force numbers */
+    padding-left: 1.5rem;
+    margin-left: 0;
+}
+
+.quillContent ol li {
+    margin-bottom: 0.5rem;
+}

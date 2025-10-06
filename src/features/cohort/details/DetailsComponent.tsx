@@ -8,6 +8,7 @@ import {useGetCohortDetailsBreakdownQuery, useViewCohortDetailsQuery} from "@/se
 import dayjs from "dayjs";
 import {capitalizeFirstLetters} from "@/utils/GlobalMethods";
 import {CohortItems} from "@/types/loan/loan-request.type";
+import QuillRenderer from '@/components/RenderDangerousHtml';
 
 // import parse from "html-react-parser";
 
@@ -52,7 +53,7 @@ const DetailsComponent = () => {
             // />
             <div>
                 {/*{parse(cohortDetails?.data?.cohortDescription || "")}*/}
-
+               <QuillRenderer html={cohortDetails?.data?.cohortDescription || ""}/>
             </div>
         },
         {title: 'Program', id:'programname', value: <span className={` text-meedlBlue bg-[#F3F8FF] rounded-full w-fit h-fit  max-w-[100%] px-4 py-2  `}>{cohortDetails?.data?.programName}</span>},
