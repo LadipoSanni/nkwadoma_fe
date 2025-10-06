@@ -10,14 +10,10 @@ import {capitalizeFirstLetters} from "@/utils/GlobalMethods";
 import {CohortItems} from "@/types/loan/loan-request.type";
 import QuillRenderer from '@/components/RenderDangerousHtml';
 
-// import parse from "html-react-parser";
 
 
 const DetailsComponent = () => {
     const cohortId = useAppSelector(store => store?.cohort?.setCohortId)
-    // const cohortOrProgramRoute = useAppSelector(store => store?.program?.cohortOrProgramRoute)
-
-    // const cohortsId = sessionStorage.getItem("cohortId") ?? undefined;
     const {data: cohortDetails, isLoading, isFetching } = useViewCohortDetailsQuery({
         cohortId: cohortId
     }, {refetchOnMountOrArgChange: true});
@@ -25,7 +21,6 @@ const DetailsComponent = () => {
     const selectedCohortInOrganizationType = useAppSelector(store => store?.cohort?.selectedCohortInOrganizationType)
 
 
-    console.log('selectedCohortInOrganizationType: ', selectedCohortInOrganizationType )
     const cohort: {name: string, value: string, valueType: 'percentage'| 'digit'| 'currency' | 'tenor' | 'years', id:string}[] = [
         {name: 'Total amount disbursed', value: cohortDetails?.data?.amountReceived , valueType: 'currency', id: 'totalAmount'},
         {name: 'Total amount repaid', value: cohortDetails?.data?.totalAmountRepaid , valueType: 'currency', id: 'totalRepaid'},
@@ -42,17 +37,9 @@ const DetailsComponent = () => {
         {name: 'Repayment rate', value: cohortDetails?.data?.repaymentRate , valueType: 'percentage', id: 'repaymentRate'},
     ]
 
-    const cohortS = [
+    const cohort3 = [
         {title: 'Description', id: 'programDiscription', value:
-            //     <div
-            //     id="cohort-description"
-            //     data-testid="cohort-description"
-            //     // style={{ height: "auto",    overflowY: "auto", minWidth: "300px", maxWidth: "100%",  fontSize:"14px" }}
-            //     className={`${inter500.className} prose prose-sm list-disc  text-[#212221] text-[14px] leading-relaxed whitespace-pre-line   text-sm w-full`}
-            //     dangerouslySetInnerHTML={{__html: sanitizeCohortDescription(cohortDetails?.data?.cohortDescription || "")}}
-            // />
             <div>
-                {/*{parse(cohortDetails?.data?.cohortDescription || "")}*/}
                <QuillRenderer html={cohortDetails?.data?.cohortDescription || ""}/>
             </div>
         },
@@ -90,7 +77,7 @@ const DetailsComponent = () => {
                     ))}
                 </div>
 
-                <div className={` md:grid md:grid-cols-2 md:gap-4  grid gap- `}>
+                {/*<div className={` md:grid md:grid-cols-2 md:gap-4  grid gap- `}>*/}
                     {cohort2?.map((item, i) => (
                         <Details
                             isLoading={isLoading || isFetching}
@@ -99,12 +86,12 @@ const DetailsComponent = () => {
                             value={item.value}
                         />
                     ))}
-                </div>
+                {/*</div>*/}
             </div>
             <div
                 className={` ${styles.container} overflow-x-hidden md:max-w-[35%] grid gap-3  md:w-[35%] pt-3 pl-3  md:border-l md:border-l-[#ECECEC] md:h-[60vh] `}
             >
-                {cohortS?.map((item, i) => (
+                {cohort3?.map((item, i) => (
                     <div
                         key={'index'+i}
                         className={` grid gap-3 h-fit  mb-2   `}
