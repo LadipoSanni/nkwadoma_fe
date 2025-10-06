@@ -9,7 +9,7 @@ import dayjs from "dayjs";
 import {capitalizeFirstLetters} from "@/utils/GlobalMethods";
 import {CohortItems} from "@/types/loan/loan-request.type";
 
-import parse from "html-react-parser";
+// import parse from "html-react-parser";
 
 
 const DetailsComponent = () => {
@@ -51,7 +51,7 @@ const DetailsComponent = () => {
             //     dangerouslySetInnerHTML={{__html: sanitizeCohortDescription(cohortDetails?.data?.cohortDescription || "")}}
             // />
             <div>
-                {parse(cohortDetails?.data?.cohortDescription || "")}
+                {/*{parse(cohortDetails?.data?.cohortDescription || "")}*/}
 
             </div>
         },
