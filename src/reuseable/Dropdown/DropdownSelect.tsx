@@ -15,15 +15,16 @@ interface StringDropdownProps {
     label?: string;
     items: string[];
     onSelect?: (value: string) => void;
+    height?: string;
 }
 
-const StringDropdown: React.FC<StringDropdownProps> = ({ label = "Select Item", items, onSelect }) => {
+const StringDropdown: React.FC<StringDropdownProps> = ({ label = "Select Item", items, onSelect , height}) => {
     const [open, setOpen] = React.useState(false);
 
     return (
         <DropdownMenu open={open} onOpenChange={setOpen}>
             <DropdownMenuTrigger asChild>
-                <Button variant="outline" className={`flex border ${inter.className} text-[#6A6B6A] border-[#D7D7D7] w-full  h-[3rem] items-center gap-1`}>
+                <Button variant="outline" className={`flex border ${inter.className} text-[#6A6B6A] border-[#D7D7D7] w-full ${height ? height : 'h-[3rem] '}  items-center gap-1`}>
                     {label}
                     <MdKeyboardArrowDown
                         className={`w-4 h-4 transition-transform duration-200 ${open ? "rotate-180" : "rotate-0"}`}
