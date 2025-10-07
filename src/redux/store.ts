@@ -53,7 +53,7 @@ export const store = configureStore({
             fundApi.middleware,
             loanOfferApi.middleware,
             loanDisbursalApi.middleware,
-            userApi.middleware,
+            // userApi.middleware,
             notificationApi.middleware,
             financierApi.middleware,
             financierOnboardingAndDashboardApi.middleware,
