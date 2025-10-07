@@ -308,7 +308,9 @@ function AddTraineeForm({setIsOpen, tuitionFee,cohortId, isEdit,loaneeBasicDetai
                     const totalWithInitialDepositDeducted  = totalItemAmount + ( currentSelectedItemAmount ? parseFloat(currentSelectedItemAmount) : 0);
                     setTotalItemAmount(totalWithInitialDepositDeducted);
                     setAmountError({error:'',index: 0 })
+                setDisableAddLoaneeButton(false)
             }else{
+                setDisableAddLoaneeButton(true)
                 setAmountError({error:'amount can not be greater than cohort amount', index:index })
 
             }
