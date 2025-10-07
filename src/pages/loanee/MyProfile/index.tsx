@@ -1,14 +1,14 @@
 'use client'
 import React from 'react';
 import LoaneeProfileHeader from "@/components/loanee-my-profile/loaneeProfileHeader";
-import LoaneeLoanDetails from '@/components/loanee-my-profile/LoaneeLoanDetails'
-import LoaneeBasicDetails from "@/components/loanee-my-profile/LoaneeBasicDetails";
+// import LoaneeLoanDetails from '@/components/loanee-my-profile/LoaneeLoanDetails'
+// import LoaneeBasicDetails from "@/components/loanee-my-profile/LoaneeBasicDetails";
 import { useViewLoanDetailsQuery} from '@/service/users/Loanee_query';
 import dynamic from "next/dynamic";
 import {useAppSelector} from "@/redux/store";
-import {ThreeDotTriggerDropDownItemsProps} from "@/types/Component.type";
-import DetailsComponent from "@/features/cohort/details/DetailsComponent";
-import {LoaneeInCohortView} from "@/features/cohort/cohort-details/LoaneeInCohortView";
+// import {ThreeDotTriggerDropDownItemsProps} from "@/types/Component.type";
+// import DetailsComponent from "@/features/cohort/details/DetailsComponent";
+// import {LoaneeInCohortView} from "@/features/cohort/cohort-details/LoaneeInCohortView";
 import UnderlineTab from "@/components/UnderlineTab";
 import ViewRepayment from "@/components/loanee-my-profile/ViewRepayment";
 
