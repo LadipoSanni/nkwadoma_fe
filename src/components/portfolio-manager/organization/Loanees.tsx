@@ -112,11 +112,11 @@ function LoaneesInACohort({buttonName,tabType,status,condition,uploadedStatus}: 
       const {data: searchResults, isLoading: isLoadingSearch, isFetching: isfetching} = useSearchForLoaneeInACohortQuery({
                  loaneeName: debouncedSearchTerm,
                  cohortId: notificationCohortId || cohortId,
-                 status: status,
                  pageSize: size,
                  pageNumber: page,
+                 status: status,
              },
-             {skip: !debouncedSearchTerm ||  !notificationCohortId || !cohortId})
+             {skip: !debouncedSearchTerm })
             
       useEffect(() => {
          if(debouncedSearchTerm && searchResults && searchResults?.data){

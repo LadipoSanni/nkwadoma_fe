@@ -27,7 +27,7 @@ import { useAppSelector } from '@/redux/store';
 import { setFinancierStatusTab } from '@/redux/slice/financier/financier';
 import { resetAll,clearSaveCreateInvestmentField} from '@/redux/slice/vehicle/vehicle';
 import { useDebounce } from '@/hooks/useDebounce';
-
+import { StatusBadge } from '@/reuseable/display/Status-badge';
 
 interface TableRowData {
     [key: string]: string | number | null | React.ReactNode;
@@ -79,11 +79,10 @@ const ViewFinanciers = () => {
         pageNumber: currentTabState.pageNumber,
         pageSize: 10,
         financierType: selectedFinancier.toUpperCase(),
-        activationStatus: tabType.toUpperCase(),
+        activationStatuses: tabType === "invited"? ["PENDING_APPROVAL","DECLINED","INVITED"] : ["ACTIVE"],
     }
 
-
-    const {data, isLoading, refetch,isFetching} = useGetAllActiveAndInvitedFinanciersQuery(param)
+    const {data, isLoading, refetch,isFetching} = useGetAllActiveAndInvitedFinanciersQuery(param,{refetchOnMountOrArgChange: true})
     const {data:searchData, isLoading: searchIsLoading,isFetching: isSearchFetching} = useSearchFinancierQuery({name:debouncedSearchTerm, pageNumber: currentTabState.pageNumber, pageSize: 10, financierType: selectedFinancier.toUpperCase(), activationStatus: tabType.toUpperCase()},{skip: !debouncedSearchTerm})
 
     useEffect(()=>{
@@ -131,6 +130,13 @@ const ViewFinanciers = () => {
 
     const handleReset = () => {
         setSelectedFinancier('');
+        setTabStates(prev => ({
+            ...prev,
+            [tabType]: {
+                ...prev[tabType],
+                pageNumber: 0
+            }
+        }));
         refetch();
     };
 
@@ -154,6 +160,13 @@ const ViewFinanciers = () => {
         </span>
             ) },
         { title: 'No. of investments', id: 'investments', selector: (row:viewAllfinancier) => row.investments || 0 },
+        ...(tabType === "invited" ? [
+            { 
+                title: 'Status', 
+                id: 'activationStatus', 
+               selector: (row: viewAllfinancier) =><StatusBadge status={row.activationStatus?.toString()} className='truncate'/> 
+            }
+        ] : []),
         { title: 'Amount invested', id: 'totalAmountInvested', selector: (row:viewAllfinancier) => formatAmount(row.totalAmountInvested) },
         { title: 'Amount earned', id: 'amountEarned', selector: (row:viewAllfinancier) => formatAmount(row.amountEarned) },
         { title: 'Payout', id: 'payout', selector: (row:viewAllfinancier) => formatAmount(row.payout) },
@@ -182,6 +195,13 @@ const ViewFinanciers = () => {
                                 handleReset();
                             } else {
                                 setSelectedFinancier(value);
+                                setTabStates(prev => ({
+                                    ...prev,
+                                    [tabType]: {
+                                        ...prev[tabType],
+                                        pageNumber: 0
+                                    }
+                                }));
                             }
                         }}
                         selectContent={["Individual", "Cooperate", "Reset"]}
