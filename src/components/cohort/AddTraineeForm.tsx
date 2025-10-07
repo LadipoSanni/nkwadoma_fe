@@ -308,7 +308,9 @@ function AddTraineeForm({setIsOpen, tuitionFee,cohortId, isEdit,loaneeBasicDetai
                     const totalWithInitialDepositDeducted  = totalItemAmount + ( currentSelectedItemAmount ? parseFloat(currentSelectedItemAmount) : 0);
                     setTotalItemAmount(totalWithInitialDepositDeducted);
                     setAmountError({error:'',index: 0 })
+                setDisableAddLoaneeButton(false)
             }else{
+                setDisableAddLoaneeButton(true)
                 setAmountError({error:'amount can not be greater than cohort amount', index:index })
 
             }
@@ -327,6 +329,11 @@ function AddTraineeForm({setIsOpen, tuitionFee,cohortId, isEdit,loaneeBasicDetai
         setOpenEmptyField(false)
 
     };
+
+    const handleAddButton = (e:React.MouseEvent<HTMLButtonElement>) => {
+        e?.preventDefault()
+        setOpenEmptyField(true)
+    }
 
 
 
@@ -612,9 +619,7 @@ function AddTraineeForm({setIsOpen, tuitionFee,cohortId, isEdit,loaneeBasicDetai
                                     </div>
                                     {names?.length !== 0 &&
                                     <button
-                                        onClick={() => {
-                                            setOpenEmptyField(true)
-                                        }}
+                                        onClick={(e) => {handleAddButton(e)}}
                                         className={` flex gap-2 text-[14px] ${inter.className} pt-2  text-meedlBlue  `}>
                                         <MdAdd className={` w-6 h-6  `}/>
                                         Add another
@@ -624,11 +629,11 @@ function AddTraineeForm({setIsOpen, tuitionFee,cohortId, isEdit,loaneeBasicDetai
                                 </div>
 
                                 <div className='w-full border-[#D7D7D7] border-[0.6px]'></div>
-                                <div className="md:flex  md:gap-4 md:justify-end gap-4 justify-end mt-2 md:mb-0 py-3 ">
+                                <div className="md:flex   md:gap-4 md:justify-end  grid gap-2 mt-2 md:mb-0 py-3 ">
                                     <Button
                                         variant="outline"
                                         type="reset"
-                                        className="w-fit h-fit px-6 py-4 "
+                                        className="md:w-fit w-full  h-fit px-6 py-4 "
                                         onClick={handleBack}
                                     >
                                         Back
@@ -641,7 +646,7 @@ function AddTraineeForm({setIsOpen, tuitionFee,cohortId, isEdit,loaneeBasicDetai
                                         :
                                         <Button
                                             variant="secondary"
-                                            className="w-fit h-fit px-6 py-4  cursor-pointer"
+                                            className="md:w-fit w-full h-fit px-6 py-4  cursor-pointer"
                                             type="submit"
                                         >
                                             {isLoadingAddLoanee || isLoadingEditLoanee ? (

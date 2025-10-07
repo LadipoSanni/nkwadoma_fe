@@ -132,7 +132,6 @@ useEffect(() => {
     },
 
   ]
-  // const loanee = listOfCohorts.map(data => data.numberOfLoanees)
 
   const dropDownOption = [
   
@@ -196,7 +195,7 @@ useEffect(() => {
         router.push('/organizations/loanees/uploaded')
        }else {
          store.dispatch(setcohortOrProgramRoute("cohort"))
-        router.push('/cohort/cohort-details')
+        router.push('/cohort/details')
        }
   }
     else if(id === "2") {
