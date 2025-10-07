@@ -66,7 +66,7 @@ function ViewAllRequestedFinancier() {
     const param = {
         pageNumber: currentTabState.pageNumber ?? 0,
         pageSize: 10,
-        activationStatus: requestTabStatusType === "pending"?'PENDING_APPROVAL' : 'DECLINED',
+        activationStatuses: requestTabStatusType === "pending"?['PENDING_APPROVAL'] : ['DECLINED'],
     }
 
 

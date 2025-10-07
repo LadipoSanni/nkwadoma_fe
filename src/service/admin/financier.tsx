@@ -77,7 +77,7 @@ export const financierApi = createApi({
             providesTags: ['financier']
         }),
         getAllActiveAndInvitedFinanciers: builder.query({
-            query: (param: {pageNumber: number, pageSize: number, financierType?: string, activationStatus?: string}) => ({
+            query: (param: {pageNumber: number, pageSize: number, financierType?: string, activationStatuses?: string[]}) => ({
                 url: "/financier/all/view",
                 method: 'GET',
                 params: param
