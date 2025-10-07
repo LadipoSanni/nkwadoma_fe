@@ -13,11 +13,17 @@ import { Circle } from "lucide-react"
 import Modal from "@/reuseable/modals/Modal";
 import {getItemSessionStorage} from "@/utils/storage";
 import {capitalizeFirstLetters, getFirstLetterOfWord} from "@/utils/GlobalMethods";
-import { Badge } from "@/components/ui/badge"
+// import { Badge } from "@/components/ui/badge"
 import { Skeleton } from "@/components/ui/skeleton"
 import BackButton from '../back-button';
 import {useRouter, useSearchParams} from "next/navigation";
 import { useAppSelector} from '@/redux/store';
+import {
+    Avatar,
+    AvatarFallback,
+    AvatarImage,
+} from "@/components/ui/avatar"
+
 
 interface Props {
     cohort: string,
@@ -70,8 +76,10 @@ const LoaneeProfileHeader = ({cohort ,userName,institutionName, program, isLoadi
         }
     }
 
+    const providedInstitutionName = institutionName ? getFirstLetterOfWord(institutionName) ? getFirstLetterOfWord(institutionName) : institutionName?.at(0)?.toUpperCase() : ''
+    const providedLoaneeName = userName ? getFirstLetterOfWord(userName) : '';
     return (
-       <div className={` ${userRole?.includes('ADMIN') ? ' ' :''} grid gap-3  h-fit   border-b border-b-grey-200 `} >
+       <div className={` ${userRole?.includes('ADMIN') ? ' ' :''} px-6 py-2  grid gap-4  h-fit    `} >
                <BackButton id={'backtoMyLoans'} sx={`  `} text={'Back'} handleClick={handleBack}
                         textColor={'meedlBlue'} iconBeforeLetters={true}/>
 
@@ -94,25 +102,17 @@ const LoaneeProfileHeader = ({cohort ,userName,institutionName, program, isLoadi
                <div
                    id={'cohortAndProgramInfo'}
                    data-testid={'cohortAndProgramInfo'}
-                   className={` w-fit h-full   flex gap-2`}
+                   className={` w-fit h-full   flex gap-4`}
                >
                        <div
                        id={'cohortImage'}
                        data-testid={'cohortImage'}
-                       // className={`h-[4rem] w-[4rem] mt-auto mb-auto rounded-full bg-[#F6F6F6] `}
+                       className={`h-[4rem] w-[4rem] grid place-content-center aspect-square mt-auto mb-auto rounded-full bg-[#F6F6F6] `}
                    >
-                       {userRole === 'LOANEE' ?
-                           <Badge className={`h-[70px] w-[70px] hover:bg-[#F6F6F6]    bg-[#F6F6F6] rounded-full `}>
-
-                               <p className={` w-fit h-fit mt-auto mb-auto mr-auto ml-auto ${cabinetGroteskBold.className} text-[#4D4E4D] md:text-[#4D4E4D] text-[24px] `}>{institutionName ? getFirstLetterOfWord(institutionName) ? getFirstLetterOfWord(institutionName) : institutionName?.at(0)?.toUpperCase() : ''}</p>
-                           </Badge>
-                           :
-
-                           <Badge id={'loaneeUserName'} variant={"secondary"}
-                                  className={`h-[70px] w-[70px] bg-[#E7F5EC] hover:bg-[#E7F5EC] ${cabinetGroteskBold.className} text-[#063F1A] md:text-[#063F1A]  text-[24px] rounded-full `}>
-                               <p className={` w-fit h-fit mt-auto mb-auto mr-auto ml-auto `}>{userName ? getFirstLetterOfWord(userName) : ''}</p>
-                           </Badge>
-                       }
+                           <Avatar>
+                               <AvatarImage src="" alt="@shadcn" />
+                               <AvatarFallback>{userRole === 'LOANEE' ?  providedInstitutionName :providedLoaneeName}</AvatarFallback>
+                           </Avatar>
                    </div>
                    <div className={` mt-auto mb-auto `}>
                        <div className={`   grid  gap-0 `}>
