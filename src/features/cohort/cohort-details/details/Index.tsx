@@ -12,15 +12,13 @@ import DeleteCohort from "@/reuseable/details/DeleteCohort";
 import EditCohortForm from "@/components/cohort/EditCohortForm";
 import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/components/ui/tabs";
 import {useGetCohortDetailsBreakdownQuery, useViewCohortDetailsQuery} from "@/service/admin/cohort_query";
-import {formatAmount} from '@/utils/Format'
+import {formatAmount,formatMonthInDate} from '@/utils/Format'
 import {LoaneeInCohortView} from "@/features/cohort/cohort-details/LoaneeInCohortView/Index";
-import { formatMonthInDate } from "@/utils/Format";
 import { capitalizeFirstLetters } from "@/utils/GlobalMethods";
 import SkeletonForDetailPage from "@/reuseable/Skeleton-loading-state/Skeleton-for-detailPage";
 import BackButton from "@/components/back-button";
-import { useAppSelector } from "@/redux/store";
+import { useAppSelector,store } from "@/redux/store";
 import {setcohortStatusTab} from '@/redux/slice/create/cohortSlice'
-import { store } from "@/redux/store";
 import { setCurrentNavbarItem } from "@/redux/slice/layout/adminLayout";
 import styles from "../../index.module.css"
 
@@ -37,7 +35,6 @@ const CohortDetails = () => {
     const cohortId = useAppSelector(store => store?.cohort?.setCohortId)
     const cohortOrProgramRoute = useAppSelector(store => store?.program?.cohortOrProgramRoute)
 
-    // const cohortsId = sessionStorage.getItem("cohortId") ?? undefined;
     const {data: cohortDetails, isLoading} = useViewCohortDetailsQuery({
         cohortId: cohortId
     }, {refetchOnMountOrArgChange: true});
