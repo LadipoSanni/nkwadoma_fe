@@ -115,6 +115,7 @@ function LoaneesInACohort({buttonName,tabType,status,condition,uploadedStatus}: 
                  pageSize: size,
                  pageNumber: page,
                  status: status,
+              uploadedStatus: uploadedStatus,
              },
              {skip: !debouncedSearchTerm })
             

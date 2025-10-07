@@ -205,7 +205,7 @@ function LoaneeCurrentInformation({initialFormValue,handleSubmit,nextOfCountryCo
                 <Field
                  name={"firstName"}
                  className="w-full p-3 border border-[#B6BCCA] rounded-md focus:outline-none mt-2 text-[14px] h-14 border-opacity-65"
-                   placeholder="Enter email address"
+                   placeholder="Enter first name"
                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                       const value = e.target.value;
                       const formattedValue = value.replace(/^[\s]+|[^A-Za-z\s!_-]/g, '');
@@ -229,7 +229,7 @@ function LoaneeCurrentInformation({initialFormValue,handleSubmit,nextOfCountryCo
                   <Field
                  name={"lastName"}
                  className="w-full p-3 border border-[#B6BCCA] rounded-md focus:outline-none mt-2 text-[14px] h-14 border-opacity-65"
-                   placeholder="Enter email address"
+                   placeholder="Enter last name"
                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                       const value = e.target.value;
                       const formattedValue = value.replace(/^[\s]+|[^A-Za-z\s!_-]/g, '');
