@@ -108,7 +108,7 @@ const LoaneeDetails = () => {
     ]
     const loaneeBioDataTab :  {name: string; displayValue: React.ReactNode} = {name: 'Bio details', displayValue: <div className={` md:max-h-[60vh]  grid gap-4 w-full  ${styles.container}`}>{loaneeBioDa()}</div>}
     const tab:  {name: string; displayValue: React.ReactNode}[] = [
-        {name: 'Details',  displayValue: <LoaneeLoanDetails data={data?.data} isLoading={false} />},
+        {name: 'Details',  displayValue: <LoaneeLoanDetails loaneeViewDetails={viewLoaneeLoanDetails?.data} data={data?.data} isLoading={false} />},
         {name: 'Repayment',  displayValue:<ViewRepayment/>},
         {name: 'Repayment schedule',  displayValue:<ViewRepaymentSchedule/>},
         ...(userRole !== "LOANEE" ? [loaneeBioDataTab] : []),

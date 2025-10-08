@@ -5,7 +5,7 @@ import {useViewLoanDetailsQuery} from "@/service/users/Loanee_query";
 import dynamic from "next/dynamic";
 import LoaneeProfileHeader from "@/components/loanee-my-profile/loaneeProfileHeader";
 import LoaneeBasicDetails from "@/components/loanee-my-profile/LoaneeBasicDetails";
-import LoaneeLoanDetails from "@/components/loanee-my-profile/LoaneeLoanDetails";
+// import LoaneeLoanDetails from "@/components/loanee-my-profile/LoaneeLoanDetails";
 
 const ViewAParticularLoan = dynamic(
     () => Promise.resolve(ViewAParticularLoanContent),
@@ -25,7 +25,7 @@ const ViewAParticularLoanContent = () => {
         >
             <LoaneeProfileHeader isLoading={isLoading || isFetching} institutionName={data?.data?.organizationName} cohort={data?.data?.cohortName} program={data?.data?.programName}/>
             <div className={`flex w-full  max-h-[50vh]  `}>
-                <LoaneeLoanDetails isLoading={isLoading || isFetching} data={data?.data}/>
+                {/*<LoaneeLoanDetails isLoading={isLoading || isFetching} data={data?.data}/>*/}
                 <LoaneeBasicDetails isLoading={isLoading || isFetching} data={data?.data}/>
             </div>
         </main>
