@@ -34,7 +34,7 @@ function TabSwitch({ children, tabData,triggerStyle, defaultTab,backClickName,ba
     };
 
     setActiveTab(window.location.pathname);
-
+    if (typeof window === "undefined") return;
     window.addEventListener('popstate', () => handleRouteChange(window.location.pathname));
 
     return () => {
