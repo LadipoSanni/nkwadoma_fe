@@ -330,7 +330,7 @@ function AddTraineeForm({setIsOpen, tuitionFee,cohortId, isEdit,loaneeBasicDetai
 
     };
 
-    const handleAddButton = (e:React.MouseEvent<HTMLButtonElement>) => {
+    const handleAddButton = (e:React.MouseEvent<HTMLDivElement, MouseEvent>) => {
         e?.preventDefault()
         setOpenEmptyField(true)
     }
