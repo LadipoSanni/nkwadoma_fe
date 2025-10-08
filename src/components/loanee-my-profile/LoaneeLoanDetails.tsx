@@ -1,21 +1,23 @@
 import React from 'react';
-import {inter, inter500} from '@/app/fonts'
+import { inter500} from '@/app/fonts'
 import Details from './Details';
 import styles from './index.module.css'
 // import BasicDetails from "@/components/loanee-my-profile/BasicDetails";
-import Document from "@/components/loanee-my-profile/Document";
+// import Document from "@/components/loanee-my-profile/Document";
 import {LoaneeDetails} from '@/types/loanee'
 // import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/components/ui/tabs";
-import LoaneeRepayment from "@/components/loanee-my-profile/loaneeRepayment";
+// import LoaneeRepayment from "@/components/loanee-my-profile/loaneeRepayment";
 import {getItemSessionStorage} from "@/utils/storage";
+import ViewDocument from "@/reuseable/details/ViewDocument";
 
 interface props {
     data: LoaneeDetails;
     isLoading?: boolean;
+    loaneeDocs?:  {label:string,value:string }[]
 
 }
 
-const LoaneeLoanDetails = ({data, isLoading}:props ) => {
+const LoaneeLoanDetails = ({data, isLoading,loaneeDocs}:props ) => {
 
 
     const userRole  = getItemSessionStorage("user_role")
@@ -68,11 +70,11 @@ const LoaneeLoanDetails = ({data, isLoading}:props ) => {
     }
 
     return (
-        <div>
+        <div className={`  `}>
             <div id={'loaneeLoanDetails'}
                  data-testid={'loaneeLoanDetails'}
                  className={`md:max-h-fit md:w-[55%] sm:w-[100%] w-[100%] px-4 pb-6 md:border-r md:border-r-grey-200] `}>
-                <div className={`  md:max-h-[60vh]  grid gap-4 w-full  ${styles.container}`}>
+                <div className={` md:max-h-[60vh]  ${styles.container}   grid gap-4 w-full  `}>
                     <div className={` h-fit py-2 text-[18px] ${inter500.className}   `}>Loan information</div>
                     {userRole === 'LOANEE' ?
                         renderLoaneeView()
@@ -80,7 +82,15 @@ const LoaneeLoanDetails = ({data, isLoading}:props ) => {
                         renderAdminView()
                     }
                 </div>
+            </div>
+            <div className={` md:max-h-[60vh]  ${styles.container}  `}>
+                <div className={` h-fit py-2 text-[18px] ${inter500.className}   `}>Document</div>
 
+                { loaneeDocs?.length  && loaneeDocs?.length > 0 ?
+                    <ViewDocument listOfDocument={loaneeDocs}/>
+                :
+                    <p>No document available</p>
+                }
             </div>
 
         </div>
