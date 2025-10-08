@@ -145,6 +145,7 @@ export const cohortApi = createApi({
                 status?: string,
                 pageSize?: number;
                 pageNumber?: number;
+                uploadedStatus? : string
             }) => ({
                 url: '/loanee/cohorts/search/loanees',
                 method: 'GET',
