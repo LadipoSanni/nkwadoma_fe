@@ -5,7 +5,7 @@ import {setUnderlineTabCurrentTab} from "@/redux/slice/layout/adminLayout";
 import {store, useAppSelector} from '@/redux/store';
 
 interface Props {
-    tabTriggers: {name: string; id: string,value: string}[];
+    tabTriggers: {name: string; id: string}[];
     tabValue: {name: string;displayValue: React.ReactNode}[];
     defaultTab: string;
 }
@@ -28,7 +28,7 @@ const UnderlineTab = ({tabTriggers, tabValue, defaultTab}: Props) => {
                 <TabsList className="w-full justify-start rounded-none border-b bg-transparent p-0">
                     {tabTriggers.map((item, i) => (
                         <TabsTrigger
-                            value={item.value}
+                            value={item.name}
                             key={item.id+i}
                             id={item.id}
                             data-testid={item.id}

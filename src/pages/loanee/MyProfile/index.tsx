@@ -12,6 +12,7 @@ import {useAppSelector} from "@/redux/store";
 import UnderlineTab from "@/components/UnderlineTab";
 import ViewRepayment from "@/components/loanee-my-profile/ViewRepayment";
 import {getItemSessionStorage} from "@/utils/storage";
+import ViewRepaymentSchedule from "@/components/loanee-my-profile/ViewRepaymentSchedule";
 
 const Index = dynamic(
     () => Promise.resolve(LoaneeDetails),
@@ -44,16 +45,16 @@ const LoaneeDetails = () => {
     //
     // ]
 
-    const tabTriggers: {name: string; id: string,value: string}[] = [
-        {name: 'Details', id: 'details',value: 'details'},
-        {name: 'Repayment', id: 'repayment',value: 'repayment'},
-        {name: 'Repayment schedule', id: 'repaymentSchedule',value: 'repayment schedule'},
+    const tabTriggers: {name: string; id: string}[] = [
+        {name: 'Details', id: 'details'},
+        {name: 'Repayment', id: 'repayment'},
+        {name: 'Repayment schedule', id: 'repaymentSchedule'},
 
     ]
     const tab:  {name: string; displayValue: React.ReactNode}[] = [
         {name: 'Details',  displayValue: <div></div>},
-        {name: 'repayment',  displayValue:<ViewRepayment/>},
-        {name: 'Repayment schedule',  displayValue:<div></div>},
+        {name: 'Repayment',  displayValue:<ViewRepayment/>},
+        {name: 'Repayment schedule',  displayValue:<ViewRepaymentSchedule/>},
 
     ]
 
@@ -74,7 +75,7 @@ const LoaneeDetails = () => {
            {/*    <LoaneeBasicDetails isLoading={isLoading || isFetching} data={data?.data}/>*/}
            {/*</div>*/}
             <div className={`px-4 `}>
-                <UnderlineTab defaultTab={'details'} tabTriggers={tabTriggers} tabValue={tab}/>
+                <UnderlineTab defaultTab={'Details'} tabTriggers={tabTriggers} tabValue={tab}/>
             </div>
         </main>
     );

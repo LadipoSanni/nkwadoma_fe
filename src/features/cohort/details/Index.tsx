@@ -96,14 +96,14 @@ const CohortDetails = () => {
 
     ]
 
-    const tabTriggers: {name: string; id: string,value: string}[] = [
-        {name: 'Details', id: 'details',value: 'details'},
-        {name: 'Loanee', id: 'loanees',value: 'loanee'},
+    const tabTriggers: {name: string; id: string}[] = [
+        {name: 'Details', id: 'details'},
+        {name: 'Loanee', id: 'loanees'},
 
     ]
     const tab:  {name: string; displayValue: React.ReactNode}[] = [
-        {name: 'details',  displayValue: <DetailsComponent/>},
-        {name: 'loanee',  displayValue: <LoaneeInCohortView cohortFee={cohortDetails?.data?.tuitionAmount}/>
+        {name: 'Details',  displayValue: <DetailsComponent/>},
+        {name: 'Loanee',  displayValue: <LoaneeInCohortView cohortFee={cohortDetails?.data?.tuitionAmount}/>
         },
 
     ]
@@ -167,7 +167,7 @@ const CohortDetails = () => {
                     isLoading={isDeleteLoading}
                 />
             </DeleteModal>
-            <UnderlineTab defaultTab={'details'} tabTriggers={tabTriggers} tabValue={tab}/>
+            <UnderlineTab defaultTab={'Details'} tabTriggers={tabTriggers} tabValue={tab}/>
 
         </div>
     );
