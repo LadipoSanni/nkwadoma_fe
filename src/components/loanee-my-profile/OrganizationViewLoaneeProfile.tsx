@@ -6,6 +6,7 @@ import PmLoaneeLoanDetails from "@/components/loanee-my-profile/PmLoaneeLoanDeta
 import { useAppSelector } from '@/redux/store';
 import { useViewLoaneeInACohortDetailsQuery} from "@/service/users/Loanee_query";
 import {getItemSessionStorage} from "@/utils/storage";
+import Index from "@/pages/loanee/MyProfile/index";
 
 const OrganizationViewLoaneeProfile = () => {
     const id =  useAppSelector(state => state.organization.loaneeId)
@@ -23,16 +24,17 @@ const OrganizationViewLoaneeProfile = () => {
 
     const userName = data?.data?.firstName + ' '+ data?.data?.lastName
     return (
-        <div
-            className={` w-full h-full px-4 py-2`}
-        >
-            {/*<BackButton sx={'pl- pt-2 pb-4'} id={'backToViewLoanee'} handleClick={handleBack} iconBeforeLetters={true} textColor={'meedlBlue'} text={'Back'} />*/}
-            <LoaneeProfileHeader isLoading={isFetching || isLoading} userName={userName } program={data?.data?.programName} cohort={data?.data?.cohortName}/>
-            <div className={`flex w-full ${userRole?.includes('ADMIN') ? 'max-h-[55vh]  ' :'max-h-[60vh]'}   `}>
-                <PmLoaneeLoanDetails isLoading={isFetching || isLoading} loaneeId={id} data={data?.data} />
-                <LoaneeBasicDetails isLoading={isFetching || isLoading} data={data?.data} />
-            </div>
-        </div>
+        // <div
+        //     className={` w-full h-full px-4 py-2`}
+        // >
+        //     {/*<BackButton sx={'pl- pt-2 pb-4'} id={'backToViewLoanee'} handleClick={handleBack} iconBeforeLetters={true} textColor={'meedlBlue'} text={'Back'} />*/}
+        //     <LoaneeProfileHeader isLoading={isFetching || isLoading} userName={userName } program={data?.data?.programName} cohort={data?.data?.cohortName}/>
+        //     {/*<div className={`flex w-full ${userRole?.includes('ADMIN') ? 'max-h-[55vh]  ' :'max-h-[60vh]'}   `}>*/}
+        //     {/*    <PmLoaneeLoanDetails isLoading={isFetching || isLoading} loaneeId={id} data={data?.data} />*/}
+        //     {/*    <LoaneeBasicDetails isLoading={isFetching || isLoading} data={data?.data} />*/}
+        //     {/*</div>*/}
+        // </div>
+        <Index/>
     );
 };
 

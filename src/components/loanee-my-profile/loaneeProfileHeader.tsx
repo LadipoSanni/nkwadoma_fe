@@ -111,7 +111,7 @@ const LoaneeProfileHeader = ({cohort ,userName,institutionName, program, isLoadi
                    >
                            <Avatar>
                                <AvatarImage src="" alt="@shadcn" />
-                               <AvatarFallback>{userRole === 'LOANEE' ?  providedInstitutionName :providedLoaneeName}</AvatarFallback>
+                               <AvatarFallback>{userRole === 'LOANEE' ?  providedInstitutionName : providedLoaneeName}</AvatarFallback>
                            </Avatar>
                    </div>
                    <div className={` mt-auto mb-auto `}>

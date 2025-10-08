@@ -3,7 +3,7 @@ import React from 'react';
 import LoaneeProfileHeader from "@/components/loanee-my-profile/loaneeProfileHeader";
 // import LoaneeLoanDetails from '@/components/loanee-my-profile/LoaneeLoanDetails'
 // import LoaneeBasicDetails from "@/components/loanee-my-profile/LoaneeBasicDetails";
-import { useViewLoanDetailsQuery} from '@/service/users/Loanee_query';
+import {useViewLoanDetailsQuery, useViewLoaneeInACohortDetailsQuery} from '@/service/users/Loanee_query';
 import dynamic from "next/dynamic";
 import {useAppSelector} from "@/redux/store";
 // import {ThreeDotTriggerDropDownItemsProps} from "@/types/Component.type";
@@ -11,6 +11,7 @@ import {useAppSelector} from "@/redux/store";
 // import {LoaneeInCohortView} from "@/features/cohort/cohort-details/LoaneeInCohortView";
 import UnderlineTab from "@/components/UnderlineTab";
 import ViewRepayment from "@/components/loanee-my-profile/ViewRepayment";
+import {getItemSessionStorage} from "@/utils/storage";
 
 const Index = dynamic(
     () => Promise.resolve(LoaneeDetails),
@@ -20,8 +21,22 @@ const Index = dynamic(
 const LoaneeDetails = () => {
 
     const selectedLoanId = useAppSelector(state => state.selectedLoan.clickedLoanId);
-    const {data, isFetching, isLoading} = useViewLoanDetailsQuery(selectedLoanId)
+    const {data: viewLoaneeLoanDetails, isFetching:  isFetchingLoaneeLoanDetails, isLoading: isLoadingLoaneeLoanDetails} = useViewLoanDetailsQuery(selectedLoanId)
 
+    const id =  useAppSelector(state => state.organization.loaneeId)
+    const cohortId = useAppSelector(state => state.cohort.setCohortId)
+    const notificationCohortId = useAppSelector((state) => state.cohort?.notificationCohortId)
+    const userRole  = getItemSessionStorage("user_role")
+
+    const  props = {
+        loaneeId: id,
+        cohortId: notificationCohortId ||  cohortId,
+    }
+    const  {data, isLoading, isFetching} = useViewLoaneeInACohortDetailsQuery(props)
+
+
+
+    const userName = data?.data?.firstName + ' '+ data?.data?.lastName
 
     // const dropD: ThreeDotTriggerDropDownItemsProps[] = [
     //     {id: 'editCohortDropDownItem', name: 'Edit cohort', handleClick: editCohort, sx: ``},
@@ -47,7 +62,13 @@ const LoaneeDetails = () => {
             id={'loaneeProfile'}
             className={`w-full  h-full`}
         >
-          <LoaneeProfileHeader isLoading={isLoading || isFetching} institutionName={data?.data?.organizationName} cohort={data?.data?.cohortName} program={data?.data?.programName}/>
+          <LoaneeProfileHeader
+              userName={userRole !== 'LOANEE' ? userName : '' }
+              institutionName={userRole === 'LOANEE' ?   viewLoaneeLoanDetails?.data?.organizationName :''}
+              isLoading={userRole !== 'LOANEE' ?  isLoading || isFetching : isFetchingLoaneeLoanDetails || isLoadingLoaneeLoanDetails }
+              cohort={userRole === 'LOANEE' ?  viewLoaneeLoanDetails?.data?.cohortName : data?.data?.programName}
+              program={userRole === 'LOANEE' ? viewLoaneeLoanDetails?.data?.programName : data?.data?.programName}
+          />
            {/*<div className={`flex w-full  max-h-[77vh]  `}>*/}
            {/*    <LoaneeLoanDetails isLoading={isLoading || isFetching} data={data?.data}/>*/}
            {/*    <LoaneeBasicDetails isLoading={isLoading || isFetching} data={data?.data}/>*/}
