@@ -1,6 +1,6 @@
 import React from 'react';
-import {Tabs, TabsList, TabsTrigger, TabsContent} from "@/components/ui/tabs";
-import {inter, inter500} from "@/app/fonts";
+import {Tabs, TabsContent} from "@/components/ui/tabs";
+import {inter} from "@/app/fonts";
 import Details from "@/components/loanee-my-profile/Details";
 import styles from './index.module.css'
 import LoaneeRepayment from "@/components/loanee-my-profile/loaneeRepayment";
