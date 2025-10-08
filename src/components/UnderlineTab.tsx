@@ -26,7 +26,7 @@ const UnderlineTab = ({tabTriggers, tabValue, defaultTab}: Props) => {
         <div>
             <Tabs defaultValue={currentTab || defaultTab} onValueChange={handleTabChange} className="relative mr-auto w-full">
                 <TabsList className="w-full justify-start rounded-none border-b bg-transparent p-0">
-                    {tabTriggers.map((item, i) => (
+                    {tabTriggers?.map((item, i) => (
                         <TabsTrigger
                             value={item.name}
                             key={item.id+i}

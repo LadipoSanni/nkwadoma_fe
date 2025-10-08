@@ -17,6 +17,7 @@ interface Props {
     loaneeId: string;
 }
 
+// delete if not in use
 const LoaneeRepayment = ({loaneeId}:Props) => {
     const [hasNextPage, setNextPage] = useState(false)
     const [totalPage, setTotalPage] = useState(0)
