@@ -179,7 +179,7 @@ const MyInvestmentDetailsContent = () => {
                     return;
                 }
             }
-
+            if (typeof window === "undefined") return;
             window.open(docUrl, '_blank', 'noopener,noreferrer');
         } catch (error) {
             setDocError('Error opening document');

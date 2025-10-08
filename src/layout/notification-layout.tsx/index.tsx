@@ -102,7 +102,8 @@ function NotificationLayout({children}: Props) {
        const {data: searchData, refetch, isLoading:isSearchLoading,isFetching} = useSearchNotificationQuery({param},{skip: !debouncedSearchTerm})
 
        useEffect(() => {
-        const mediaQuery = window.matchMedia('(max-width: 959px)'); 
+           if (typeof window === "undefined") return;
+           const mediaQuery = window.matchMedia('(max-width: 959px)');
         setIsMobile(mediaQuery.matches);
 
         const handleResize = () => setIsMobile(mediaQuery.matches);
