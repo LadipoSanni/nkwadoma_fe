@@ -12,7 +12,7 @@ const ViewAParticularLoan = dynamic(
     {ssr: false}
 )
 
-
+// delete this nonsense component
 const ViewAParticularLoanContent = () => {
     const selectedLoanId = useAppSelector(state => state.selectedLoan.clickedLoanId);
     const {data, isFetching, isLoading} = useViewLoanDetailsQuery(selectedLoanId)

@@ -330,7 +330,7 @@ function AddTraineeForm({setIsOpen, tuitionFee,cohortId, isEdit,loaneeBasicDetai
 
     };
 
-    const handleAddButton = (e:React.MouseEvent<HTMLButtonElement>) => {
+    const handleAddButton = (e:React.MouseEvent<HTMLDivElement, MouseEvent>) => {
         e?.preventDefault()
         setOpenEmptyField(true)
     }
@@ -618,12 +618,12 @@ function AddTraineeForm({setIsOpen, tuitionFee,cohortId, isEdit,loaneeBasicDetai
                                         </div>
                                     </div>
                                     {names?.length !== 0 &&
-                                    <button
+                                    <div
                                         onClick={(e) => {handleAddButton(e)}}
                                         className={` flex gap-2 text-[14px] ${inter.className} pt-2  text-meedlBlue  `}>
                                         <MdAdd className={` w-6 h-6  `}/>
                                         Add another
-                                    </button>
+                                    </div>
                                     }
 
                                 </div>

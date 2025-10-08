@@ -187,6 +187,10 @@ export interface CohortInfo {
 }
 
 export interface LoaneeDetails {
+    repaymentPercentage: string,
+    amountRepaid: string,
+    amountOutstanding:string,
+    amountReceived: string,
     "id": string,
     "firstName": string,
     "lastName": string,

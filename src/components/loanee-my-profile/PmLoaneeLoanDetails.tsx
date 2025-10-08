@@ -1,6 +1,6 @@
 import React from 'react';
-import {Tabs, TabsList, TabsTrigger, TabsContent} from "@/components/ui/tabs";
-import {inter, inter500} from "@/app/fonts";
+import {Tabs, TabsContent} from "@/components/ui/tabs";
+import {inter} from "@/app/fonts";
 import Details from "@/components/loanee-my-profile/Details";
 import styles from './index.module.css'
 import LoaneeRepayment from "@/components/loanee-my-profile/loaneeRepayment";
@@ -75,14 +75,14 @@ const PmLoaneeLoanDetails = ({data, loaneeId, isLoading}: props) => {
         <div className={`   md:w-[55%] w-full  h-[60vh]   md:border-r md:border-r-grey-200 `}>
             <Tabs className={` grid w-full overflow-hidden  `} defaultValue={'loanInfo'}>
               <div className={` py-4 ${styles.tab} `}>
-                  <TabsList className="w-full     md:w-fit  lg:wfit ">
-                    <div className={`w-full    flex h-full `}>
-                        <TabsTrigger id={'loanInfo'} className={`w-fit ${inter.className} text-[14px] text-[#6A6B6A] data-[state=active]:text-[#212221] data-[state=active]:border data-[state=active]:border-grey-200 data-[state=active]:${inter500.className} `} value="loanInfo">Loan Information</TabsTrigger>
-                        <TabsTrigger id={'repayment'} className={`w-fit ${inter.className} text-[14px] text-[#6A6B6A] data-[state=active]:text-[#212221] data-[state=active]:border data-[state=active]:border-grey-200 data-[state=active]:${inter500.className} `} value="repayment">Repayment</TabsTrigger>
-                        <TabsTrigger id={'bioDetail'} className={`w-fit ${inter.className} md:hidden lg:hidden flex text-[14px] text-[#6A6B6A] data-[state=active]:text-[#212221] data-[state=active]:border data-[state=active]:border-grey-200 data-[state=active]:${inter500.className} `} value="bioDetails">Bio details</TabsTrigger>
-                        <TabsTrigger id={'document'} className={`w-fit ${inter.className} md:hidden lg:hidden flex text-[14px] text-[#6A6B6A] data-[state=active]:text-[#212221] data-[state=active]:border data-[state=active]:border-grey-200 data-[state=active]:${inter500.className} `} value="documents">Documents</TabsTrigger>
-                    </div>
-                  </TabsList>
+                  {/*<TabsList className="w-full     md:w-fit  lg:wfit ">*/}
+                  {/*  <div className={`w-full    flex h-full `}>*/}
+                  {/*      <TabsTrigger id={'loanInfo'} className={`w-fit ${inter.className} text-[14px] text-[#6A6B6A] data-[state=active]:text-[#212221] data-[state=active]:border data-[state=active]:border-grey-200 data-[state=active]:${inter500.className} `} value="loanInfo">Loan Information</TabsTrigger>*/}
+                  {/*      <TabsTrigger id={'repayment'} className={`w-fit ${inter.className} text-[14px] text-[#6A6B6A] data-[state=active]:text-[#212221] data-[state=active]:border data-[state=active]:border-grey-200 data-[state=active]:${inter500.className} `} value="repayment">Repayment</TabsTrigger>*/}
+                  {/*      <TabsTrigger id={'bioDetail'} className={`w-fit ${inter.className} md:hidden lg:hidden flex text-[14px] text-[#6A6B6A] data-[state=active]:text-[#212221] data-[state=active]:border data-[state=active]:border-grey-200 data-[state=active]:${inter500.className} `} value="bioDetails">Bio details</TabsTrigger>*/}
+                  {/*      <TabsTrigger id={'document'} className={`w-fit ${inter.className} md:hidden lg:hidden flex text-[14px] text-[#6A6B6A] data-[state=active]:text-[#212221] data-[state=active]:border data-[state=active]:border-grey-200 data-[state=active]:${inter500.className} `} value="documents">Documents</TabsTrigger>*/}
+                  {/*  </div>*/}
+                  {/*</TabsList>*/}
               </div>
               <div className={`   md:max-h-[54vh] w-full   ${styles.container}  `}>
                     <TabsContent value={'loanInfo'} className={`  px-2  grid gap-3 `}>
