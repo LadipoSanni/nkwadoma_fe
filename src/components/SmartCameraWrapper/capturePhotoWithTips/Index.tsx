@@ -1,3 +1,4 @@
+'use client'
 import React, { useRef, useState, useEffect } from "react";
 import { inter, inter500 } from '@/app/fonts';
 import * as faceapi from 'face-api.js';
@@ -44,30 +45,7 @@ const CapturePhotoWithTips: React.FC<CapturePhotoWithTipsProps> = ({ onCapture }
         loadModels();
     }, []);
 
-    // useEffect(() => {
-    //     const startCamera = async () => {
-    //         try {
-    //             const stream = await navigator.mediaDevices.getUserMedia({ video: {} });
-    //             setCameraStream(stream)
-    //             if (videoRef.current) {
-    //                 videoRef.current.srcObject = stream;
-    //             }
-    //         } catch (error) {
-    //             console.error("Error accessing camera:", error);
-    //             setModelLoadingError("Could not access camera");
-    //         }
-    //     };
 
-    //     startCamera();
-
-    //     return () => {
-    //         if (videoRef.current && videoRef.current.srcObject) {
-    //             const stream = videoRef.current.srcObject as MediaStream;
-    //             const tracks = stream.getTracks();
-    //             tracks.forEach(track => track.stop());
-    //         }
-    //     };
-    // }, []);
 
     useEffect(() => {
         let stream: MediaStream | null = null;  
