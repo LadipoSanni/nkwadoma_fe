@@ -20,7 +20,7 @@ interface props {
 
 const LoaneeLoanDetails = ({data, isLoading,loaneeDocs,loaneeViewDetails}:props ) => {
 
-    console.log('organization loanee data: ', loaneeViewDetails)
+    // console.log('organization loanee data: ', loaneeViewDetails)
 
     const userRole  = getItemSessionStorage("user_role")
 
