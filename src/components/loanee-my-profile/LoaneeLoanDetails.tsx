@@ -19,6 +19,7 @@ interface props {
 
 const LoaneeLoanDetails = ({data, isLoading,loaneeDocs}:props ) => {
 
+    // console.log('organization loanee data: ', data)?
 
     const userRole  = getItemSessionStorage("user_role")
 
@@ -70,7 +71,7 @@ const LoaneeLoanDetails = ({data, isLoading,loaneeDocs}:props ) => {
     }
 
     return (
-        <div className={`  `}>
+        <div className={` md:flex grid gap-4 `}>
             <div id={'loaneeLoanDetails'}
                  data-testid={'loaneeLoanDetails'}
                  className={`md:max-h-fit md:w-[55%] sm:w-[100%] w-[100%] px-4 pb-6 md:border-r md:border-r-grey-200] `}>
