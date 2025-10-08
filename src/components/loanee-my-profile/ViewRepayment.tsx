@@ -26,7 +26,7 @@ interface TableRowData {
 }
 
 
-const ViewRepayment = () => {
+const ViewRepayment = ({loanId: string}) => {
 
     // const [searchTerm, setSearchTerm] = useState("");
     const [selectedYear, setSelectedYear] = useState<string | number>("");
