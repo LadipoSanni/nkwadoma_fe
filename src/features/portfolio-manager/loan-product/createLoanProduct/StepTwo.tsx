@@ -144,41 +144,41 @@ function StepTwo() {
          },[completedStep, router])
 
 
-     const creditLifeInsuranceNigeria = [
-        "Sanlam Nigeria",
-        "Industrial and General Insurance Plc (IGI)",
-        "Capital Express Assurance",
-        "Stanbic IBTC Insurance Limited",
-        "Tangerine Life Insurance",
-        "Emple Life Assurance Limited (emPLE)",
-        "NICO Life Assurance",
-        "AIICO Insurance",
-        "Zenith Life Assurance",
-        "Axa Mansard Life Insurance",
-        "African Alliance Insurance",
-        "Sovereign Trust Insurance",
-        "Coronation Insurance",
-        "Old Mutual Nigeria",
-        "FBS Reinsurance",
-        "Custodian Life Assurance",
-        "Veritas Kapital Assurance",
-        "GoldLink Insurance Plc",
-        "LASACO Assurance Plc",
-        "Leadway Assurance"
-      ];
+    //  const creditLifeInsuranceNigeria = [
+    //     "Sanlam Nigeria",
+    //     "Industrial and General Insurance Plc (IGI)",
+    //     "Capital Express Assurance",
+    //     "Stanbic IBTC Insurance Limited",
+    //     "Tangerine Life Insurance",
+    //     "Emple Life Assurance Limited (emPLE)",
+    //     "NICO Life Assurance",
+    //     "AIICO Insurance",
+    //     "Zenith Life Assurance",
+    //     "Axa Mansard Life Insurance",
+    //     "African Alliance Insurance",
+    //     "Sovereign Trust Insurance",
+    //     "Coronation Insurance",
+    //     "Old Mutual Nigeria",
+    //     "FBS Reinsurance",
+    //     "Custodian Life Assurance",
+    //     "Veritas Kapital Assurance",
+    //     "GoldLink Insurance Plc",
+    //     "LASACO Assurance Plc",
+    //     "Leadway Assurance"
+    //   ];
 
-      const healthInsuranceProvidersNigeria = [
-        "Hygeia HMO",
-        "AXA Mansard Health",
-        "Avon Healthcare Limited",
-        "Clearline International Limited",
-        "Greenbay Healthcare Services",
-        "Integrated Healthcare Limited",
-        "Marina Medical Services HMO",
-        "Mediplan Healthcare Limited",
-        "Metropolitan Health HMO",
-        "Premier Health HMO"
-    ];
+    //   const healthInsuranceProvidersNigeria = [
+    //     "Hygeia HMO",
+    //     "AXA Mansard Health",
+    //     "Avon Healthcare Limited",
+    //     "Clearline International Limited",
+    //     "Greenbay Healthcare Services",
+    //     "Integrated Healthcare Limited",
+    //     "Marina Medical Services HMO",
+    //     "Mediplan Healthcare Limited",
+    //     "Metropolitan Health HMO",
+    //     "Premier Health HMO"
+    // ];
    
      const initialFormValue = {
         bankPartner: loanProductField?.bankPartner ||  "",
@@ -286,7 +286,7 @@ function StepTwo() {
                 validateOnMount={true}
             >
                 {
-                    ({setFieldValue, values,setFieldError, errors, touched}) =>{ 
+                    ({setFieldValue, values,setFieldError}) =>{ 
                        
                       const handleVendorNameChange = (index: number, value: string) => {
                         if (!providers.includes(value)) {
