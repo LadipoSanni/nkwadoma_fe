@@ -53,10 +53,10 @@ const LoaneeLoanDetails = ({data, isLoading,loaneeDocs,loaneeViewDetails}:props 
         return(
             <div  className={` grid gap-4 `}>
 
-                 <Details id={'loanAmount'} isLoading={isLoading} showAsWholeNumber={true}   maxWidth={'100%'} name={'Loan amount'} value={data?.amountReceived} valueType={'currency'} />
+                 <Details id={'loanAmount'} isLoading={isLoading} showAsWholeNumber={true}   maxWidth={'100%'} name={'Loan amount'} value={data?.amountReceived ? data?.amountReceived  : 0} valueType={'currency'} />
          <div className={` md:flex md:gap-4  grid gap-4    `}>
-             <Details isLoading={isLoading}  id={'amountOutstanding'}  showAsWholeNumber={true}  maxWidth={'100%'} name={'Amount outstanding'} value={data?.amountOutstanding} valueType={'currency'} />
-             <Details isLoading={isLoading} id={'AmountRepaid'} showAsWholeNumber={true}   maxWidth={'100%'} name={'Amount repaid'} value={data?.amountRepaid} valueType={'currency'}  />
+             <Details isLoading={isLoading}  id={'amountOutstanding'}  showAsWholeNumber={true}  maxWidth={'100%'} name={'Amount outstanding'} value={data?.amountOutstanding ? data?.amountOutstanding  : 0} valueType={'currency'} />
+             <Details isLoading={isLoading} id={'AmountRepaid'} showAsWholeNumber={true}   maxWidth={'100%'} name={'Amount repaid'} value={data?.amountRepaid ? data?.amountRepaid : 0} valueType={'currency'}  />
          </div>
          <div className={` md:flex md:gap-4 grid gap-4 w-full  `}>
              <Details isLoading={isLoading} id={'interest'}    maxWidth={'100%'} name={'Interest'} value={data?.interestRate ? data?.interestRate?.toFixed(2) : 0} valueType={'percentage'} />
