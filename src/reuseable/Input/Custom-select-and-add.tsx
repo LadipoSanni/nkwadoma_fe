@@ -179,7 +179,7 @@ function CustomSelect({
                 >
 
 <SelectGroup 
-                    className="selectgroup max-h-30 overflow-y-scroll overflow-x-hidden"
+                    className="selectgroup "
 
                     >
                         {selectContent?.map((content, index) => {

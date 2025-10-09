@@ -33,7 +33,8 @@ interface ApiError {
   providerServices: string[],
     vendorName: string,
     costOfService: string,
-    duration: string
+    duration: string,
+    id?: string
  }
 
 
@@ -47,13 +48,15 @@ function StepTwo() {
     const [error, setError] = useState('');
      const [createLoanProduct, {isLoading}] = useCreateLoanProductMutation();
      const [updateLoanProduct, {isLoading:isUpdateLoading}] =useUpdateLoanProductMutation()
-    const [providers, setProviders] = useState<string[]>([]);
+     const [providersSet, setProvidersSet] = useState<Set<partner>>(new Set());
     const [pageNumber, setPageNumber] = useState(0);
     const [hasNextPage, setNextPage] = useState(true);
     const [services, setServices] = useState<string[]>([]);
     const [pageServiceNumber, setPageServiceNumber] = useState(0);
     const [serviceHasasNextPage, setServiceNextPage] = useState(true);
      const {toast} = useToast();
+
+     const providers = Array.from(providersSet);
 
      const param = {
         pageSize: 10,
@@ -66,41 +69,46 @@ function StepTwo() {
    }
 
 
-     const {data,isLoading:isProvidersLoading,isFetching} = useViewAllProviderServicesQuery(param)
+     const {data,isLoading:isProvidersLoading,isFetching} = useViewAllPartnerProvidersQuery(param)
+
+     console.log("the data: ",providersSet)
 
     //  console.log({ data, errors,isProvidersLoading, status });
 
-     const {data:serviceData,isLoading:isServiceLoading,isFetching: isServiceFetching } = useViewAllPartnerProvidersQuery(serviceParam)
+     const {data:serviceData,isLoading:isServiceLoading,isFetching: isServiceFetching } = useViewAllProviderServicesQuery(serviceParam)
 
      useEffect(() => {
       if (data && data?.data) {
-        setProviders((prev) => {
-          if (pageNumber === 0) {
-            return [...data.data.body].sort((a, b) => a.localeCompare(b));
-          }
-          const newProviders = data.data.body.filter(
-            (newProvider: string) => !prev.includes(newProvider)
-          );
-          return [...prev, ...newProviders].sort((a, b) => a.localeCompare(b));
-        });
-        setNextPage(data?.data?.hasNextPage);
+          setProvidersSet((prevSet) => {
+              const newSet = new Set(prevSet);
+              
+              if (pageNumber === 0) {
+                  newSet.clear();
+                  data.data.body.forEach((provider: partner) => newSet.add(provider));
+              } else {
+                  data.data.body.forEach((provider: partner) => newSet.add(provider));
+              }
+              
+              return newSet;
+          });
+          setNextPage(data?.data?.hasNextPage);
       }
-    }, [data, pageNumber]);
+  }, [data, pageNumber]);
 
     useEffect(() => {
       if (serviceData && serviceData?.data) {
         setServices((prev) => {
           if (pageServiceNumber === 0) {
-            return [...data.data.body].sort((a, b) => a.localeCompare(b));
+            return [...serviceData.data.body].sort((a, b) => a.localeCompare(b));
           }
-          const newProviders = data.data.body.filter(
+          const newProviders = serviceData.data.body.filter(
             (newProvider: string) => !prev.includes(newProvider)
           );
           return [...prev, ...newProviders].sort((a, b) => a.localeCompare(b));
         });
-        setServiceNextPage(data?.data?.hasNextPage);
+        setServiceNextPage(serviceData.data?.hasNextPage);
       }
-    }, [data, pageServiceNumber]);
+    }, [serviceData, pageServiceNumber]);
 
       const isFormValid = (values: typeof initialFormValue) => {
         
@@ -113,6 +121,11 @@ function StepTwo() {
           return true;
         });
       };
+
+      const providerOptions = providers.map(provider => ({
+        id: provider.id,
+        name: provider.vendorName
+      }));
 
       const loadMore = () => {
         if (!isFetching && hasNextPage) {
@@ -142,43 +155,6 @@ function StepTwo() {
             router.push('/loan-product/step-one');
            }
          },[completedStep, router])
-
-
-    //  const creditLifeInsuranceNigeria = [
-    //     "Sanlam Nigeria",
-    //     "Industrial and General Insurance Plc (IGI)",
-    //     "Capital Express Assurance",
-    //     "Stanbic IBTC Insurance Limited",
-    //     "Tangerine Life Insurance",
-    //     "Emple Life Assurance Limited (emPLE)",
-    //     "NICO Life Assurance",
-    //     "AIICO Insurance",
-    //     "Zenith Life Assurance",
-    //     "Axa Mansard Life Insurance",
-    //     "African Alliance Insurance",
-    //     "Sovereign Trust Insurance",
-    //     "Coronation Insurance",
-    //     "Old Mutual Nigeria",
-    //     "FBS Reinsurance",
-    //     "Custodian Life Assurance",
-    //     "Veritas Kapital Assurance",
-    //     "GoldLink Insurance Plc",
-    //     "LASACO Assurance Plc",
-    //     "Leadway Assurance"
-    //   ];
-
-    //   const healthInsuranceProvidersNigeria = [
-    //     "Hygeia HMO",
-    //     "AXA Mansard Health",
-    //     "Avon Healthcare Limited",
-    //     "Clearline International Limited",
-    //     "Greenbay Healthcare Services",
-    //     "Integrated Healthcare Limited",
-    //     "Marina Medical Services HMO",
-    //     "Mediplan Healthcare Limited",
-    //     "Metropolitan Health HMO",
-    //     "Premier Health HMO"
-    // ];
    
      const initialFormValue = {
         bankPartner: loanProductField?.bankPartner ||  "",
@@ -289,12 +265,28 @@ function StepTwo() {
                     ({setFieldValue, values,setFieldError}) =>{ 
                        
                       const handleVendorNameChange = (index: number, value: string) => {
-                        if (!providers.includes(value)) {
-                          setProviders(prev => [...prev, value]);
+                        const vendorExists = Array.from(providersSet).some(provider => 
+                            provider.vendorName === value
+                        );
+                        
+                        if (!vendorExists) {
+                            const newProvider: partner = {
+                                id: "",
+                                vendorName: value,
+                                providerServices: [""],
+                                costOfService: "",
+                                duration: ""
+                            };
+                            
+                            setProvidersSet(prev => {
+                                const newSet = new Set(prev);
+                                newSet.add(newProvider);
+                                return newSet;
+                            });
                         }
-                      
+                        
                         setFieldValue(`vendor.${index}.vendorName`, value);
-                      };
+                    };
 
                       const handleVendorServicesChange = (index: number, value: string) => {
                         if (!services.includes(value)) {
@@ -361,7 +353,7 @@ function StepTwo() {
                                    <CustomSelect
                                   triggerId={`vendorTrigger-${index}`}
                                   id={`vendorId-${index}`}
-                                  selectContent={providers} 
+                                  selectContent={providerOptions} 
                                   value={vendor?.vendorName}
                                   onChange={(value: string) => 
                                     handleVendorNameChange(index, value)
@@ -506,12 +498,12 @@ function StepTwo() {
                                     </div>
                          </div>
 
-                         <div className="mt-6 p-4 bg-gray-100 rounded-md">
+                         {/* <div className="mt-6 p-4 bg-gray-100 rounded-md">
   <h3 className="text-sm font-medium mb-2">Form Values (Debug):</h3>
   <pre className="text-xs bg-white p-3 rounded border overflow-auto max-h-40">
     {JSON.stringify(values, null, 2)}
   </pre>
-</div>
+</div> */}
                     
                                 </div>
                                 
