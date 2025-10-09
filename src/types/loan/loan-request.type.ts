@@ -72,6 +72,36 @@ export interface LoanType {
 
 }
 
+export interface LoanProuctType {
+    "id": "4c325043-cfe0-48a3-8eca-9335d445e24f",
+    "name": "Junana",
+    "moratorium": 2,
+    "tenor": 6,
+    "interestRate": 5,
+    "termsAndCondition": "https://res.cloudinary.com/dfkxvsiiu/image/upload/v1759965450/loan-product-terms-and-conditions/CardinalStone_Balanced_Fund_Term_Sheet_tw7ufr.pdf",
+    "createdAt": "2025-10-08",
+    "totalAmountAvailable": 2000000,
+    "availableAmountToBeDisbursed": 2000000,
+    "availableAmountToBeOffered": 2000000,
+    "totalAmountDisbursed": 0,
+    "obligorLoanLimit": 1000000,
+    "totalOutstandingLoan": 0,
+    "totalAmountRepaid": 0,
+    "totalAmountEarned": 0,
+    "loanProductSize": 2000000,
+    "costOfFund": "1.0",
+    "mandate": "https://res.cloudinary.com/dfkxvsiiu/image/upload/v1759965442/loan-product-mandate/CardinalStone_Balanced_Fund_Term_Sheet_sdvekc.pdf",
+    "sponsor": null,
+    "bankPartner": "Access Bank",
+    "disbursementTerms": "",
+    "investmentVehicleId": "24935e0c-1b51-46a3-a366-b5a9788a5aca",
+    "investmentVehicleName": "jumiaa",
+    "totalNumberOfLoanee": 0,
+    "minRepaymentAmount": 10000,
+    "vendors": null,
+    "sponsors": null
+}
+
 
 export interface LoanOrganization {
 

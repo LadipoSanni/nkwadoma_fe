@@ -147,7 +147,7 @@ function InfiniteScrollTable <T extends TableRowData>  ({
                             <TableRow className={` h-fit py-6`}>
                                 <TableHead
                                     id={staticHeader?.toString()} data-testid={staticHeader?.toString()}
-                                    className={` f mt-auto mb-auto py-4  text-[#545F7D] text-[16px]`}
+                                    className={` f mt-auto mb-auto py-4  text- text-[16px]`}
                                 >
                                     {staticHeader}
                                 </TableHead>
@@ -158,9 +158,9 @@ function InfiniteScrollTable <T extends TableRowData>  ({
                                         onOpenChange={handleDropdownOpen}
                                     >
                                         <SelectTrigger className={`h-4 border-none shadow-none focus:border-none focus:ring-0  mt-auto mb-auto text-[#545F7D] text-[16px]`}>
-                                            <div className="truncate max-w-[120px]">
+                                            <div className="truncate max-w-[80%]">
                                                 <SelectValue
-                                                    className={` f mt-auto mb-auto text-[#545F7D] text-[16px]`} placeholder="Select" />
+                                                    className={` f mt-auto mb-auto text- text-[16px]`} placeholder="Select" />
                                             </div>
                                             <div className="ml-4">
                                                 {dropdownOpen ? <ChevronUpIcon /> : <ChevronDownIcon />}
@@ -171,7 +171,7 @@ function InfiniteScrollTable <T extends TableRowData>  ({
                                                 {tableHeader?.filter((header) => header.id !== staticColumn).map((header) => (
                                                     <SelectItem
                                                         id={header.title?.toString()} data-testid={header.title?.toString()}
-                                                        className={`  mt-auto mb-auto text-[#545F7D] text-[16px]`} key={header.id} value={header.id}>{header.title}</SelectItem>
+                                                        className={`  mt-auto mb-auto t text-[16px]`} key={header.id} value={header.id}>{header.title}</SelectItem>
                                                 ))}
                                             </SelectGroup>
                                         </SelectContent>
@@ -189,7 +189,7 @@ function InfiniteScrollTable <T extends TableRowData>  ({
                                 return (
                                     <TableRow
                                         key={rowIndex}
-                                        className={`h-fit py-3 text-[#545F7D] text-[14px] `}
+                                        className={`h-fit py-3 text- text-[14px] `}
                                         // onClick={() => handleRowClick(String(row?.id))}
                                     >
                                         <TableCell className="truncate px-4 py-2">

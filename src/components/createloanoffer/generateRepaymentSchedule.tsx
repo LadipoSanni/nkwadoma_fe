@@ -9,7 +9,11 @@ import {formatAmount} from "@/utils/Format";
 import dayjs from "dayjs";
 import InfiniteScrollTable from "@/reuseable/table/InfiniteScrollTable";
 import {store, useAppSelector} from "@/redux/store";
-import {useViewLoanScheduleQuery} from "@/service/admin/loan/loan-request-api";
+import {
+    useGenerateLoanRepaymentScheduleQuery,
+    useRespondToLoanRequestMutation,
+    useViewLoanScheduleQuery
+} from "@/service/admin/loan/loan-request-api";
 import {useToast} from "@/hooks/use-toast";
 import {useRouter} from "next/navigation";
 import {setCurrentTab, setcurrentTabRoute, setCurrentTabStatus} from "@/redux/slice/loan/selected-loan";
@@ -25,7 +29,13 @@ interface viewAllType {
 
 const GenerateRepaymentSchedule = () => {
     const loanRequestId = useAppSelector(state => state.createLoanOffer.selectedLoanRequestId);
-    const {data} = useViewLoanScheduleQuery(loanRequestId);
+    const selectedLoanProductId = useAppSelector(state => state.createLoanOffer.selectedLoanProductId);
+    const unformatedAmount = useAppSelector(state => state.createLoanOffer.amount);
+
+    // const {data} = useViewLoanScheduleQuery(loanRequestId);
+    const {data} = useGenerateLoanRepaymentScheduleQuery({amountApproved:unformatedAmount, loanProductId:selectedLoanProductId})
+    const [respondToLoanRequest, { isLoading:isLoanOfferCreating}] = useRespondToLoanRequestMutation();
+
     const router = useRouter()
     const tableHeader =  [
         { title: 'Date', sortable: true, id: 'date', selector: (row: viewAllType) =><div>{dayjs(row.repaymentDate?.toString()).format('MMM D, YYYY')}</div> },
@@ -39,7 +49,31 @@ const GenerateRepaymentSchedule = () => {
     const {toast} = useToast()
 
 
+    const handleCreateLoanProduct = async () => {
+        const data = {
+            // loanRequestId,
+            // loanProductId: selectedLoanProductId,
+            // status: "APPROVED",
+            // amountApproved: unformatedAmount,
+            // loanRequestDecision: 'ACCEPTED',
+            // declineReason: ""
+        };
+
+        const response=  await respondToLoanRequest(data);
+        if (response?.error){
+            toast({
+                //eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-expect-error
+                description: response?.error?.data?.message,
+                status: "error",
+            })
+        }else{
+            router.push('/create-loan-offer/generate-repayment-schedule')
+        }
+    }
+
     const confirmSchedule = () => {
+
         toast({
             description: "Loan offer has been created",
             status: "success",
@@ -54,11 +88,11 @@ const GenerateRepaymentSchedule = () => {
         <div
             id={'generateRepaymentScheduleComponent'}
             data-testid={'generateRepaymentScheduleComponent'}
-            className={` w-full grid gap-6  md:h-fit h-full px-2 py-2 `}
+            className={` w-full grid gap-6  md:h-fit h-full pr-2 md:pr-0  md:px-6 py-4 `}
         >
             <div className={`w-full grid gap-2  md:gap-0 h-fit md:flex md:justify-between `}>
                 <span className={` ${inter.className} text-[#101828] text-[24px] md:text-[28px] font-bold  `}>Generate repayment schedule</span>
-                <button onClick={confirmSchedule} id={'confirmRepaymentButton'} data-tesid={'confirmRepaymentButton'} className={` rounded-md text-[12px] ${inter700.className} w-full  md:w-fit h-fit py-3  md:py-2 px-2 bg-meedlBlue text-white  `}>Confirm repayment schedule</button>
+                <button onClick={confirmSchedule} id={'confirmRepaymentButton'} data-tesid={'confirmRepaymentButton'} className={` rounded-md text-[12px] ${inter700.className} w-full  md:w-fit h-fit py-3  md:py-2 px-2 bg-meedlBlue text-white  `}>Create loan offer</button>
             </div>
             <div className={` grid  md:flex gap-3  `}>
                 <div className={` w-full md:w-[50%] `}>
