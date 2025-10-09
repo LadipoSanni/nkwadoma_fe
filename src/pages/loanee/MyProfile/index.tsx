@@ -39,8 +39,8 @@ const LoaneeDetails = () => {
     const  {data, isLoading, isFetching} = useViewLoaneeInACohortDetailsQuery(props)
 
 
-    console.log('data: ', data)
-    console.log('viewLoaneeLoanDetails : ', viewLoaneeLoanDetails)
+    // console.log('data: ', data)
+    // console.log('viewLoaneeLoanDetails : ', viewLoaneeLoanDetails)
 
     const userName = data?.data?.firstName + ' '+ data?.data?.lastName
 
@@ -111,7 +111,7 @@ const LoaneeDetails = () => {
     const loaneeBioDataTab :  {name: string; displayValue: React.ReactNode} = {name: 'Bio details', displayValue: <div className={` md:max-h-[60vh]  grid gap-4 w-full  ${styles.container}`}>{loaneeBioDa()}</div>}
     const tab:  {name: string; displayValue: React.ReactNode}[] = [
         {name: 'Details',  displayValue: <LoaneeLoanDetails loaneeViewDetails={viewLoaneeLoanDetails?.data} data={data?.data} isLoading={false} />},
-        {name: 'Repayment',  displayValue:<ViewRepayment loanId={userRole !== 'LOANEE'? data?.data?.loanId : ''}/>},
+        {name: 'Repayment',  displayValue:<ViewRepayment loanId={userRole !== 'LOANEE'? data?.data?.loanId : viewLoaneeLoanDetails?.data?.loanId}/>},
         {name: 'Repayment schedule',  displayValue:<ViewRepaymentSchedule/>},
         ...(userRole !== "LOANEE" ? [loaneeBioDataTab] : []),
 

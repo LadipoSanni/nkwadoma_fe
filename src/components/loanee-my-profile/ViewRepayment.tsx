@@ -1,7 +1,9 @@
 import React, {ReactNode, useEffect, useState} from 'react';
 // import SearchInput from "@/reuseable/Input/SearchInput";
 import DropdownFilter from "@/reuseable/Dropdown/DropdownFilter";
-import {months, repaymentsData} from "@/utils/LoanProductMockData";
+import {months, 
+    // repaymentsData
+} from "@/utils/LoanProductMockData";
 import {IoMdClose} from "react-icons/io";
 import TableEmptyState from "@/reuseable/emptyStates/TableEmptyState";
 import {MagnifyingGlassIcon} from "@radix-ui/react-icons";
@@ -9,13 +11,14 @@ import {MdOutlineLibraryBooks} from "react-icons/md";
 // import {useDebounce} from "@/hooks/useDebounce";
 import {
     useGetRepaymentHistoryYearRangeQuery,
+    useViewALoanRepaymentHistoryQuery,
     // useSearchAllRepaymentHistoryQuery,
-    useViewAllRepaymentHistoryQuery
+    // useViewAllRepaymentHistoryQuery
 } from "@/service/admin/overview";
 import {store} from "@/redux/store";
 import {clearSaveCreateInvestmentField, resetAll} from "@/redux/slice/vehicle/vehicle";
 import {inter} from "@/app/fonts";
-import {capitalizeFirstLetters} from "@/utils/GlobalMethods";
+// import {capitalizeFirstLetters} from "@/utils/GlobalMethods";
 import dayjs from "dayjs";
 import {formatAmount} from "@/utils/Format";
 import Table from '@/reuseable/table/Table';
@@ -24,9 +27,13 @@ import Table from '@/reuseable/table/Table';
 interface TableRowData {
     [key: string]: string | number | null | React.ReactNode;
 }
+interface Props {
+    loanId: string
+}
+
+const ViewRepayment = ({loanId}: Props) => {
 
 
-const ViewRepayment = ({loanId: string}) => {
 
     // const [searchTerm, setSearchTerm] = useState("");
     const [selectedYear, setSelectedYear] = useState<string | number>("");
@@ -44,10 +51,12 @@ const ViewRepayment = ({loanId: string}) => {
     const props =  {
         pageSize: pageSize,
         pageNumber: pageNumber,
-        month:  selectedIndex ,
-        year:  year ,
+        loanId: loanId
+        // month:  selectedIndex ,
+        // year:  year ,
     }
-    const {data, isFetching , isLoading} = useViewAllRepaymentHistoryQuery(props)
+    const {data, isFetching , isLoading} = useViewALoanRepaymentHistoryQuery(props)
+    console.log('data: ', data,selectedIndex,year )
     // const searchProps = {
     //     pageSize: pageSize,
     //     pageNumber: pageNumber,
@@ -81,11 +90,11 @@ const ViewRepayment = ({loanId: string}) => {
         //     setTotalPage(searchData?.data?.totalPages)
         //     setPageNumber(searchData?.data?.pageNumber)
         // }
-        // else if(!debouncedSearchTerm && data?.data?.body) {
+        if( data?.data?.body) {
             setNextPage(data?.data?.hasNextPage)
             setTotalPage(data?.data?.totalPages)
             setPageNumber(data?.data?.pageNumber)
-        // }
+        }
         store.dispatch(resetAll())
         store.dispatch(clearSaveCreateInvestmentField())
     },
@@ -108,13 +117,24 @@ const ViewRepayment = ({loanId: string}) => {
     }
 
 
+    // "id": "cd15d3aa-dea8-41f6-885c-b040e308626f",
+    //     "firstName": null,
+    //     "lastName": null,
+    //     "paymentDateTime": "2025-10-09T00:00:00",
+    //     "amountPaid": 100.00,
+    //     "modeOfPayment": "TRANSFER",
+    //     "totalAmountRepaid": null,
+    //     "amountOutstanding": 1900.00,
+    //     "interestIncurred": 0.99
+
     const tableHeader = [
-        { title: 'Name', sortable: true, id: 'name', selector: (row: TableRowData) => capitalizeFirstLetters(row.firstName?.toString()) + " " + row.lastName  },
+        // { title: 'Name', sortable: true, id: 'name', selector: (row: TableRowData) => capitalizeFirstLetters(row.firstName?.toString()) + " " + row.lastName  },
         { title: 'Payment date', sortable: true, id: 'paymentDate', selector: (row: TableRowData) =><div>{row?.paymentDateTime ? dayjs(row.paymentDateTime?.toString()).format('MMM D, YYYY') : ''}</div>},
         { title: 'Amount paid', sortable: true, id: 'amountPaid', selector: (row: TableRowData) => <div className=''>{formatAmount(row.amountPaid)}</div> },
-        { title: 'Payment mode', sortable: true, id: 'modeOfPayment', selector: (row: TableRowData) => <div className={`  `}>{getModeOfPayment(row.modeOfPayment)}</div>},
-        { title: 'Total amount repaid', sortable: true, id: 'totalAmountRepaid', selector: (row: TableRowData) =><div className=''>{formatAmount(row.totalAmountRepaid)}</div> },
         { title: 'Amount outstanding', sortable: true, id: 'amountOutstanding', selector: (row: TableRowData) => <div className=''>{formatAmount(row.amountOutstanding)}</div> },
+        { title: 'Payment mode', sortable: true, id: 'modeOfPayment', selector: (row: TableRowData) => <div className={`  `}>{getModeOfPayment(row.modeOfPayment)}</div>},
+        // { title: 'Total amount repaid', sortable: true, id: 'totalAmountRepaid', selector: (row: TableRowData) =><div className=''>{formatAmount(row.totalAmountRepaid)}</div> },
+        // { title: 'Amount outstanding', sortable: true, id: 'amountOutstanding', selector: (row: TableRowData) => <div className=''>{formatAmount(row.amountOutstanding)}</div> },
     ];
 
     const handleRowClick = (ID: string | object | React.ReactNode) => {
@@ -260,7 +280,7 @@ const ViewRepayment = ({loanId: string}) => {
                                 </div>
                                 <Table
                                     // tableData={debouncedSearchTerm?.length > 0 ? searchData?.data?.body : data?.data?.body}
-                                    tableData={repaymentsData}
+                                    tableData={data?.data?.body}
                                     tableHeader={tableHeader}
                                     handleRowClick={handleRowClick}
                                     tableHeight={40}

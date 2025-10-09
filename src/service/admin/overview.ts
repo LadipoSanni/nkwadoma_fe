@@ -33,6 +33,12 @@ export const portfolioOverviewApi = createApi({
             }),
             providesTags: ['loanee','upload-repayment']
         }),
+        viewALoanRepaymentHistory: builder.query({
+            query: ({loanId, pageNumber, pageSize}) => ({
+                url: `/repayment/history/loan?loanId=${loanId}&pageSize=${pageSize}&pageNumber=${pageNumber}`,
+                method: 'GET'
+            })
+        }),
         setUpObligorLimit: builder.mutation({
             query: (param:{obligorLoanLimit: number}) => ({
                 url: `/meedl/obligor/limit/set-up`,
@@ -51,7 +57,8 @@ export const portfolioOverviewApi = createApi({
     })
 
 })
-export const {useViewMeedlPortfolioQuery, 
+export const {useViewMeedlPortfolioQuery,
+    useViewALoanRepaymentHistoryQuery,
     useGetRepaymentHistoryYearRangeQuery,
      useSearchAllRepaymentHistoryQuery,
      useViewAllRepaymentHistoryQuery,
