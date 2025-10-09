@@ -20,12 +20,33 @@ const Details = () => {
 
     const {data} = useGetInvestmentVehicleDetailQuery({id: loanProduct?.data?.investmentVehicleId }, {skip: !loanProduct?.data?.investmentVehicleId ,refetchOnMountOrArgChange: !loanProduct?.data?.investmentVehicleId? false : true});
 
-    const getVendorByProductType = (vendors: string, productType: string) => {
-        if (!vendors || !Array.isArray(vendors)) return 'Not provided';
+    // const getVendorByProductType = (vendors: string, productType: string) => {
+    //     if (!vendors || !Array.isArray(vendors)) return 'Not provided';
         
-        const vendor = vendors.find(v => v.product === productType);
-        return vendor ? vendor.vendorName : 'Not provided';
-      };
+    //     const vendor = vendors.find(v => v.product === productType);
+    //     return vendor ? vendor.vendorName : 'Not provided';
+    //   };
+
+    const renderVendors = (vendors: Array<{vendorName: string; providerServices: string[]}>) => {
+      if (!vendors || !Array.isArray(vendors) || vendors.length === 0) {
+          return 'Not provided';
+      }
+      
+      return (
+          <div className="space-y-6">
+              {vendors.map((vendor, index) => (
+                  <div key={index} className="flex flex-col ">
+                      <span className="font-medium">{capitalizeFirstLetters(vendor.vendorName)}</span>
+                      {vendor.providerServices && vendor.providerServices.length > 0 && (
+                          <span className="text-sm text-gray-600">
+                              Service: {vendor.providerServices.map(service => capitalizeFirstLetters(service)).join(', ')}
+                          </span>
+                      )}
+                  </div>
+              ))}
+          </div>
+      );
+  };
 
 
       useEffect(() => {
@@ -69,21 +90,10 @@ const Details = () => {
           },
         {label: "Bank partner", value: loanProduct?.data.bankPartner || ''},
         {
-            label: 'Credit life insurance provider', 
-            value: getVendorByProductType(loanProduct?.data.vendors, 'CREDIT_LIFE_INSURANCE_PROVIDER')
-          },
-          {
-            label: "Health insurance provider", 
-            value: getVendorByProductType(loanProduct?.data.vendors, 'HEALTH_INSURANCE_PROVIDER')
-          },
-          {
-            label: "Accomodation provider", 
-            value: getVendorByProductType(loanProduct?.data.vendors, 'ACCOMMODATION')
-          },
-          {
-            label: "Device provider", 
-            value: getVendorByProductType(loanProduct?.data.vendors, 'DEVICE')
-          },
+          label: "Service providers", 
+          value: renderVendors(loanProduct?.data.vendors)
+      }
+       
     ];
 
     const documentData = [

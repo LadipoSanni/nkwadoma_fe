@@ -99,6 +99,12 @@ function CustomSelect({
         setDropdownOpen(false);
     }
 
+    const handleKeyDown = (e: React.KeyboardEvent) => {
+        if (dropdownOpen && e.key.length === 1 && !e.ctrlKey && !e.metaKey) {
+            e.stopPropagation();
+        }
+    }
+
     return (
         <div>
             <Select
@@ -118,6 +124,7 @@ function CustomSelect({
                     id={triggerId}
                     className={`min-w-0 h-[3.2rem] w-full border focus:ring-0 focus:outline-none shadow-none flex justify-between ${className}`}
                      role="button"
+                     onKeyDown={handleKeyDown}
                 >
                     <SelectValue className="" data-testid="SelectContent" placeholder={placeHolder} id={`selectId${id}`} >
                     {value ? capitalizeFirstLetters(value) : placeHolder}
@@ -134,6 +141,7 @@ function CustomSelect({
                     id="generalSelectContent"
                     className="border-none border-[#FAFBFC] text-[#404653] text-sm max-h-full  overflow-visible"
                     style={{ zIndex: 1000 }}
+                    onKeyDown={handleKeyDown}
                 >
                 {!showSearch? "" :  <div className='w-full mb-3 px-2 border-black border-opacity-30 border-solid border-b-[1px] pb-3'>
       <SearchInput
@@ -182,16 +190,23 @@ function CustomSelect({
                     className="selectgroup "
 
                     >
-                        {selectContent?.map((content, index) => {
+                        {selectContent?.filter(content => {
+    const value = typeof content === 'object' ? content.name : String(content);
+    return value && value.trim() !== "";
+  })?.map((content, index) => {
                             const itemValue = typeof content === 'object' ? content.name : String(content);
                             const itemDisplay = typeof content === 'object' ? content.name : String(content);
-                            const itemId = typeof content === 'object' && content.id ? content.id : `${content}-${index}`;
+                            
+                            const itemId = typeof content === 'object' 
+            ? content.id || `obj-${content.name}-${index}-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`
+            : `str-${String(content)}-${index}-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
+
 
                             return (
                                 <div key={itemId} id={itemId}>
                                     <SelectItem
-                                        key={`${itemValue}-${index}`}
-                                        id={itemId}
+                                        key={`${itemId}-selectitem`}
+                                        // id={itemId}
                                         value={itemValue}
                                         className={`${itemValue} hover:bg-[#EEF5FF]`}
                                         disabled={isItemDisabled ? isItemDisabled(content) : false}
@@ -206,17 +221,23 @@ function CustomSelect({
                     className="selectgroup max-h-36 overflow-y-scroll overflow-x-hidden"
 
                     >
-                        {selectContent?.map((content, index) => {
-                            // Determine value and display text
+                        {selectContent?.filter(content => {
+    const value = typeof content === 'object' ? content.name : String(content);
+    return value && value.trim() !== "";
+  })?.map((content, index) => {
                             const itemValue = typeof content === 'object' ? content.name : String(content);
                             const itemDisplay = typeof content === 'object' ? content.name : String(content);
-                            const itemId = typeof content === 'object' && content.id ? content.id : `${content}-${index}`;
+                            
+                            const itemId = typeof content === 'object' 
+            ? content.id || `obj-${content.name}-${index}-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`
+            : `str-${String(content)}-${index}-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
+
 
                             return (
                                 <div key={itemId} id={itemId}>
                                     <SelectItem
-                                        key={`${itemValue}-${index}`}
-                                        id={itemId}
+                                         key={`${itemId}-selectitem`}
+                                        // id={itemId}
                                         value={itemValue}
                                         className={`${itemValue} hover:bg-[#EEF5FF]`}
                                         disabled={isItemDisabled ? isItemDisabled(content) : false}
@@ -268,6 +289,10 @@ function CustomSelect({
                                     } else {
                                         setFieldValue("name", cleanedValue);
                                     }
+                                    }}
+                                    onKeyDown={(e: React.KeyboardEvent) => {
+                                        // Stop propagation to prevent the select from handling these events
+                                        e.stopPropagation();
                                     }}
                                   />
                                   <Button

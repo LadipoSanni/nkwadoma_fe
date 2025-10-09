@@ -1,4 +1,3 @@
-
 'use client'
 import {Form, Formik,FieldArray} from "formik";
 import * as Yup from "yup";
@@ -48,15 +47,18 @@ function StepTwo() {
     const [error, setError] = useState('');
      const [createLoanProduct, {isLoading}] = useCreateLoanProductMutation();
      const [updateLoanProduct, {isLoading:isUpdateLoading}] =useUpdateLoanProductMutation()
-     const [providersSet, setProvidersSet] = useState<Set<partner>>(new Set());
+
+     const [providersMap, setProvidersMap] = useState<Map<string, partner>>(new Map());
     const [pageNumber, setPageNumber] = useState(0);
     const [hasNextPage, setNextPage] = useState(true);
-    const [services, setServices] = useState<string[]>([]);
+
+    const [servicesMap, setServicesMap] = useState<Map<string, string>>(new Map());
     const [pageServiceNumber, setPageServiceNumber] = useState(0);
     const [serviceHasasNextPage, setServiceNextPage] = useState(true);
      const {toast} = useToast();
 
-     const providers = Array.from(providersSet);
+     const providers = Array.from(providersMap.values());
+     const services = Array.from(servicesMap.values());
 
      const param = {
         pageSize: 10,
@@ -71,59 +73,79 @@ function StepTwo() {
 
      const {data,isLoading:isProvidersLoading,isFetching} = useViewAllPartnerProvidersQuery(param)
 
-     console.log("the data: ",providersSet)
+     console.log("the data: ",providersMap)
 
-    //  console.log({ data, errors,isProvidersLoading, status });
 
      const {data:serviceData,isLoading:isServiceLoading,isFetching: isServiceFetching } = useViewAllProviderServicesQuery(serviceParam)
 
      useEffect(() => {
       if (data && data?.data) {
-          setProvidersSet((prevSet) => {
-              const newSet = new Set(prevSet);
-              
-              if (pageNumber === 0) {
-                  newSet.clear();
-                  data.data.body.forEach((provider: partner) => newSet.add(provider));
-              } else {
-                  data.data.body.forEach((provider: partner) => newSet.add(provider));
-              }
-              
-              return newSet;
+        setProvidersMap(prev => {
+          const newMap = new Map(prev);
+          
+          if (pageNumber === 0) {
+            newMap.clear();
+          }
+          data.data.body
+            .filter((provider: partner) => 
+              provider.vendorName && 
+              provider.vendorName.trim() !== "" &&
+              typeof provider.vendorName === 'string'
+            )
+            .forEach((provider: partner) => {
+              newMap.set(provider.vendorName.toLowerCase(), provider);
+            });
+          
+          return newMap;
+        });
+        setNextPage(data?.data?.hasNextPage);
+      }
+    }, [data, pageNumber]);
+
+  useEffect(() => {
+    if (serviceData && serviceData?.data) {
+      setServicesMap(prev => {
+        const newMap = new Map(prev);
+        
+        if (pageServiceNumber === 0) {
+          newMap.clear();
+        }
+        
+        serviceData.data.body
+          .filter((service: string) => service && service.trim() !== "") // Remove empty strings
+          .forEach((service: string) => {
+            newMap.set(service.toLowerCase(), service);
           });
-          setNextPage(data?.data?.hasNextPage);
-      }
-  }, [data, pageNumber]);
-
-    useEffect(() => {
-      if (serviceData && serviceData?.data) {
-        setServices((prev) => {
-          if (pageServiceNumber === 0) {
-            return [...serviceData.data.body].sort((a, b) => a.localeCompare(b));
-          }
-          const newProviders = serviceData.data.body.filter(
-            (newProvider: string) => !prev.includes(newProvider)
-          );
-          return [...prev, ...newProviders].sort((a, b) => a.localeCompare(b));
-        });
-        setServiceNextPage(serviceData.data?.hasNextPage);
-      }
-    }, [serviceData, pageServiceNumber]);
-
-      const isFormValid = (values: typeof initialFormValue) => {
         
-        if (values.vendor.length === 0) return true;
-        
-        return values.vendor.every(vendor => {
-          if (vendor.vendorName) { 
-            return vendor.vendorName && vendor.providerServices?.[0] && vendor.costOfService && vendor.duration && /^[1-9]\d{0,2}$/.test(vendor.duration);
-          }
-          return true;
-        });
-      };
+        return newMap;
+      });
+      setServiceNextPage(serviceData.data?.hasNextPage);
+    }
+  }, [serviceData, pageServiceNumber]);
+
+  const isFormValid = (values: typeof initialFormValue) => {
+    if (values.vendor.length === 0) return true;
+    
+    const vendorNames = values.vendor.map(v => v.vendorName?.toLowerCase().trim());
+    const hasDuplicateVendors = new Set(vendorNames).size !== vendorNames.length;
+    
+    const serviceNames = values.vendor.map(v => v.providerServices?.[0]?.toLowerCase().trim());
+    const hasDuplicateServices = new Set(serviceNames).size !== serviceNames.length;
+    
+    if (hasDuplicateVendors || hasDuplicateServices) {
+      return false;
+    }
+    
+    return values.vendor.every(vendor => {
+      if (vendor.vendorName) { 
+        return vendor.vendorName && vendor.providerServices?.[0] && vendor.costOfService && vendor.duration && /^[1-9]\d{0,2}$/.test(vendor.duration);
+      }
+      return true;
+    });
+  };
 
       const providerOptions = providers.map(provider => ({
-        id: provider.id,
+        // id: provider.id || `temp-${provider.vendorName}`,
         name: provider.vendorName
       }));
 
@@ -265,11 +287,7 @@ function StepTwo() {
                     ({setFieldValue, values,setFieldError}) =>{ 
                        
                       const handleVendorNameChange = (index: number, value: string) => {
-                        const vendorExists = Array.from(providersSet).some(provider => 
-                            provider.vendorName === value
-                        );
-                        
-                        if (!vendorExists) {
+                        if (!providersMap.has(value.toLowerCase())) {
                             const newProvider: partner = {
                                 id: "",
                                 vendorName: value,
@@ -278,24 +296,28 @@ function StepTwo() {
                                 duration: ""
                             };
                             
-                            setProvidersSet(prev => {
-                                const newSet = new Set(prev);
-                                newSet.add(newProvider);
-                                return newSet;
+                            setProvidersMap(prev => {
+                                const newMap = new Map(prev);
+                                newMap.set(value.toLowerCase(), newProvider);
+                                return newMap;
                             });
                         }
                         
                         setFieldValue(`vendor.${index}.vendorName`, value);
                     };
 
-                      const handleVendorServicesChange = (index: number, value: string) => {
-                        if (!services.includes(value)) {
-                          setServices(prev => [...prev, value]);
-                        }
+                    const handleVendorServicesChange = (index: number, value: string) => {
+                      if (!servicesMap.has(value.toLowerCase())) {
+                          setServicesMap(prev => {
+                              const newMap = new Map(prev);
+                              newMap.set(value.toLowerCase(), value);
+                              return newMap;
+                          });
+                      }
                       
-                        setFieldValue(`vendor.${index}.providerServices`, [value]);
-                      };
-
+                      setFieldValue(`vendor.${index}.providerServices`, [value]);
+                  };
+              
                       return (
                         <Form className={`${inter.className}`}>
                             <div>
@@ -332,18 +354,7 @@ function StepTwo() {
                               {
                                 values.vendor?.map((vendor, index)  => (
                                   <div key={index} className="mt-4">
-                                     {values.vendor.length > 1 && (
-                                    <div className="border-solid border-b-[1px] mb-8 pb-3">
-                                        <Button
-                                            type="button"
-                                            variant="ghost"
-                                            onClick={() => remove(index)}
-                                            className="text-red-500 hover:text-red-700 text-[14px] font-normal"
-                                        >
-                                            <MdDeleteOutline className="h-5 w-[18px]" /> <span className="pl-1 relative mt-[1px]">Delete</span>
-                                        </Button>
-                                </div>
-                                   )} 
+                                    
                                  <div className="border border-solid border-gray-200 rounded-lg p-6 bg-white">
                                   <div  className="mb-4">
                                   <Label htmlFor={`vendor.${index}.vendorName`} className="text-sm font-medium">
@@ -367,6 +378,10 @@ function StepTwo() {
                                   }}
                                   isloading={isProvidersLoading}
                                   emptyState="No provider available"
+                                  isItemDisabled={(item) => {
+                                    const itemName = typeof item === 'object' ? item.name : String(item);
+                                    return values.vendor.some((v, i) => i !== index && v.vendorName === itemName);
+                                  }}
                               />
 
                                   </div>
@@ -394,6 +409,10 @@ function StepTwo() {
                                     }}
                                     isloading={isServiceLoading}
                                     emptyState="No service available"
+                                    isItemDisabled={(item) => {
+                                      const serviceName = typeof item === 'object' ? item.name : String(item);
+                                      return values.vendor.some((v, i) => i !== index && v.providerServices?.[0] === serviceName);
+                                    }}
                                 />
                               
                               </div>
@@ -409,7 +428,7 @@ function StepTwo() {
                                   className="h-[3.2rem]"
                               />
                               <VendorCostField
-                                  value={vendor.costOfService}
+                                  value={vendor.costOfService || ""}
                                   onChange={(value: string) => { 
                                       setFieldValue(`vendor.${index}.costOfService`, value);
                                       validateNumber("costOfService", setFieldValue);
@@ -447,19 +466,29 @@ function StepTwo() {
                                   </div>
                                                                 </div>
 
-                              <div>
-
-                              </div>
+                                                                
                                  </div>
+                                 {values.vendor.length > 1 && (
+                                    <div className="border-solid border-b-[1px] mb-8 pb-3 flex justify-end">
+                                        <Button
+                                            type="button"
+                                            variant="ghost"
+                                            onClick={() => remove(index)}
+                                            className="text-red-500 hover:text-red-700 text-[14px] font-normal"
+                                        >
+                                            <MdDeleteOutline className="h-5 w-[18px]" /> <span className="pl-1 relative mt-[1px]">Delete</span>
+                                        </Button>
+                                </div>
+                                   )} 
                                  
                                  </div>
                                 ))
-                              }
-                              <div>
+ }
+                              <div className="relative bottom-5">
                                  <Button
                                       type="button"
                                       variant="ghost"
-                                      className={`text-[#142854] border-none shadow-none hover:bg-white ${!areCurrentProvidersValid(values.vendor) ? 'opacity-50 cursor-not-allowed' : ''}`}
+                                      className={`text-[#142854] border-none shadow-none hover:bg-white px-0 ${!areCurrentProvidersValid(values.vendor) ? 'opacity-50 cursor-not-allowed' : ''}`}
                                       onClick={() => push({
                                         providerServices: [""], 
                                           vendorName: "",
@@ -480,7 +509,7 @@ function StepTwo() {
                          </div>
                          </div>
 
-                         <div>
+                         <div className="relative bottom-8">
                            <Label htmlFor="disbursementTerms" className={`pb-5`}>
                                Loan disbursement terms (optional)</Label>
                            
