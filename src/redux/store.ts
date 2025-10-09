@@ -23,7 +23,7 @@ import {portfolioOverviewApi} from '@/service/admin/overview'
 import { loanBookApi } from '@/service/admin/loan_book';
 import {unauthorizedApis} from "@/service/unauthorized/action";
 import { walletApi } from '@/service/users/wallet';
-
+import { vendorApi } from '@/service/admin/vendor/vendor_query';
 
 const persistConfig = {
     key: 'root',
@@ -63,6 +63,7 @@ export const store = configureStore({
             unauthorizedApis.middleware,
             loanBookApi.middleware,
             walletApi.middleware,
+            vendorApi.middleware,
         ]),
 });
 

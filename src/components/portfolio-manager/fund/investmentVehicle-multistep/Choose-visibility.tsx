@@ -563,7 +563,7 @@ function ChooseVisibility() {
                                           handleOpenModal();
                                           closeDropdown(); 
                                         }}
-                                        className="text-[#142854] border-none shadow-none"
+                                        className="text-[#142854] border-none shadow-none font-medium text-[14px]"
                                       >
                                         Add new Financier
                                       </Button>

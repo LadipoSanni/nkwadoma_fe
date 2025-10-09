@@ -1,6 +1,6 @@
 
 'use client'
-import {Form, Formik} from "formik";
+import {Form, Formik,FieldArray} from "formik";
 import * as Yup from "yup";
 import {inter} from "@/app/fonts"
 import {Label} from '@/components/ui/label';
@@ -13,14 +13,14 @@ import 'react-quill-new/dist/quill.snow.css'
 import PdfAndDocFileUpload from "@/reuseable/Input/Pdf&docx-fileupload";
 import {useRouter } from 'next/navigation';
 import BankSelectField from '@/reuseable/Input/Bank-select-field';
-import { Checkbox } from "@/components/ui/checkbox"
-import CustomSelect from "@/reuseable/Input/Custom-select";
+import CustomSelect from "@/reuseable/Input/Custom-select-and-add";
 import { validateNumber, validateNumberLimit } from "@/utils/Format";
 import VendorCostField from "./VendorCostField";
 import {store, useAppSelector} from "@/redux/store";
 import { setLoanProductFieldStepTwo,clearLoanProductField} from "@/redux/slice/loan-product/Loan-product";
 import {useToast} from "@/hooks/use-toast";
-
+import { MdDeleteOutline, MdAdd } from 'react-icons/md';
+import { useViewAllProviderServicesQuery,useViewAllPartnerProvidersQuery } from "@/service/admin/vendor/vendor_query";
 
 interface ApiError {
     status: number;
@@ -29,11 +29,12 @@ interface ApiError {
     };
 }
 
- interface Obj{
-    product: string,
+ interface partner{
+  providerServices: string[],
     vendorName: string,
     costOfService: string,
-    duration: string
+    duration: string,
+    id?: string
  }
 
 
@@ -47,18 +48,105 @@ function StepTwo() {
     const [error, setError] = useState('');
      const [createLoanProduct, {isLoading}] = useCreateLoanProductMutation();
      const [updateLoanProduct, {isLoading:isUpdateLoading}] =useUpdateLoanProductMutation()
+     const [providersSet, setProvidersSet] = useState<Set<partner>>(new Set());
+    const [pageNumber, setPageNumber] = useState(0);
+    const [hasNextPage, setNextPage] = useState(true);
+    const [services, setServices] = useState<string[]>([]);
+    const [pageServiceNumber, setPageServiceNumber] = useState(0);
+    const [serviceHasasNextPage, setServiceNextPage] = useState(true);
      const {toast} = useToast();
+
+     const providers = Array.from(providersSet);
+
+     const param = {
+        pageSize: 10,
+        pageNumber: pageNumber
+     }
+
+     const serviceParam = {
+      pageSize: 10,
+      pageNumber: pageServiceNumber
+   }
+
+
+     const {data,isLoading:isProvidersLoading,isFetching} = useViewAllPartnerProvidersQuery(param)
+
+     console.log("the data: ",providersSet)
+
+    //  console.log({ data, errors,isProvidersLoading, status });
+
+     const {data:serviceData,isLoading:isServiceLoading,isFetching: isServiceFetching } = useViewAllProviderServicesQuery(serviceParam)
+
+     useEffect(() => {
+      if (data && data?.data) {
+          setProvidersSet((prevSet) => {
+              const newSet = new Set(prevSet);
+              
+              if (pageNumber === 0) {
+                  newSet.clear();
+                  data.data.body.forEach((provider: partner) => newSet.add(provider));
+              } else {
+                  data.data.body.forEach((provider: partner) => newSet.add(provider));
+              }
+              
+              return newSet;
+          });
+          setNextPage(data?.data?.hasNextPage);
+      }
+  }, [data, pageNumber]);
+
+    useEffect(() => {
+      if (serviceData && serviceData?.data) {
+        setServices((prev) => {
+          if (pageServiceNumber === 0) {
+            return [...serviceData.data.body].sort((a, b) => a.localeCompare(b));
+          }
+          const newProviders = serviceData.data.body.filter(
+            (newProvider: string) => !prev.includes(newProvider)
+          );
+          return [...prev, ...newProviders].sort((a, b) => a.localeCompare(b));
+        });
+        setServiceNextPage(serviceData.data?.hasNextPage);
+      }
+    }, [serviceData, pageServiceNumber]);
 
       const isFormValid = (values: typeof initialFormValue) => {
         
         if (values.vendor.length === 0) return true;
         
         return values.vendor.every(vendor => {
-          if (vendor.product) { 
-            return vendor.vendorName && vendor.costOfService && vendor.duration && /^[1-9]\d{0,2}$/.test(vendor.duration);
+          if (vendor.vendorName) { 
+            return vendor.vendorName && vendor.providerServices?.[0] && vendor.costOfService && vendor.duration && /^[1-9]\d{0,2}$/.test(vendor.duration);
           }
           return true;
         });
+      };
+
+      const providerOptions = providers.map(provider => ({
+        id: provider.id,
+        name: provider.vendorName
+      }));
+
+      const loadMore = () => {
+        if (!isFetching && hasNextPage) {
+            setPageNumber((prevPage) => prevPage + 1);
+        }
+    };
+
+    const loadMoreService = () => {
+      if (!isServiceFetching && serviceHasasNextPage) {
+        setPageServiceNumber((prevPage) => prevPage + 1);
+      }
+  };
+
+      const areCurrentProvidersValid = (vendors: partner[]) => {
+        return vendors.every(vendor => 
+          vendor.vendorName && 
+          vendor.providerServices?.[0] && 
+          vendor.costOfService && 
+          vendor.duration && 
+          /^[1-9]\d{0,2}$/.test(vendor.duration)
+        );
       };
 
 
@@ -67,73 +155,10 @@ function StepTwo() {
             router.push('/loan-product/step-one');
            }
          },[completedStep, router])
-
-
-     const creditLifeInsuranceNigeria = [
-        "Sanlam Nigeria",
-        "Industrial and General Insurance Plc (IGI)",
-        "Capital Express Assurance",
-        "Stanbic IBTC Insurance Limited",
-        "Tangerine Life Insurance",
-        "Emple Life Assurance Limited (emPLE)",
-        "NICO Life Assurance",
-        "AIICO Insurance",
-        "Zenith Life Assurance",
-        "Axa Mansard Life Insurance",
-        "African Alliance Insurance",
-        "Sovereign Trust Insurance",
-        "Coronation Insurance",
-        "Old Mutual Nigeria",
-        "FBS Reinsurance",
-        "Custodian Life Assurance",
-        "Veritas Kapital Assurance",
-        "GoldLink Insurance Plc",
-        "LASACO Assurance Plc",
-        "Leadway Assurance"
-      ];
-
-      const healthInsuranceProvidersNigeria = [
-        "Hygeia HMO",
-        "AXA Mansard Health",
-        "Avon Healthcare Limited",
-        "Clearline International Limited",
-        "Greenbay Healthcare Services",
-        "Integrated Healthcare Limited",
-        "Marina Medical Services HMO",
-        "Mediplan Healthcare Limited",
-        "Metropolitan Health HMO",
-        "Premier Health HMO"
-    ];
-
-    const accommodationProvidersNigeria = [
-        "Airbnb",
-        "Booking.com",
-        "Jumia Travel (formerly Jovago)",
-        "Jara Beach Resort",
-        "Transcorp Hotels",
-        "Eko Hotels & Suites",
-        "Radisson Blu Hotel",
-        "Sheraton Hotels & Resorts",
-        "The Wheatbaker Hotel",
-        "Federal Palace Hotel"
-    ];
-      
-    const deviceProvidersNigeria = [
-        "Samsung Nigeria",
-        "Tecno Mobile",
-        "Infinix Mobility",
-        "Apple Authorized Resellers Nigeria",
-        "HP Nigeria",
-        "Dell Nigeria",
-        "Lenovo Nigeria",
-        "Microsoft Nigeria",
-        "Oracle Nigeria",
-        "Slot Nigeria"
-    ];
    
      const initialFormValue = {
         bankPartner: loanProductField?.bankPartner ||  "",
-        vendor: loanProductField?.vendor || [] as Obj[],
+        vendor: loanProductField?.vendor && loanProductField?.vendor?.length > 0 ? loanProductField.vendor : [{providerServices: [""],vendorName: "",costOfService: "",duration: ""}] as partner[],
         disbursementTerms: loanProductField?.disbursementTerms ||  ""
                
          }
@@ -155,44 +180,6 @@ function StepTwo() {
     const handleBackRoute =() => {
         router.push("/loan-product/step-one")
     }
-
-    const handleInsuranceChange = (
-        checked: boolean | string, 
-        setFieldValue: (field: string, value: string | number | boolean | Obj[] | null | undefined) => void, 
-        values: typeof initialFormValue,
-        insuranceType: string,
-    ) => {
-        const insurance: Obj = {
-            product: insuranceType,
-            vendorName: "",
-            costOfService: "",
-            duration: ""
-        };
-
-        if (checked) {
-            if (!values.vendor.some(v => v.product === insuranceType)) {
-                setFieldValue("vendor", [...values.vendor, insurance]);
-            }
-        } else {
-            setFieldValue("vendor", values.vendor.filter(v => v.product !== insuranceType));
-        }
-    };
-     
-
-    const updateVendorField = (
-        setFieldValue: (field: string, value:string | number | boolean | Obj[] | null | undefined) => void,
-        values: typeof initialFormValue,
-        insuranceType: string,
-        fieldName: keyof Obj,
-        value: string
-    ) => {
-        const updatedVendor = values.vendor.map(v => 
-            v.product === insuranceType 
-                ? {...v, [fieldName]: value}
-                : v
-        );
-        setFieldValue("vendor", updatedVendor);
-    };
     
     const handleSubmit = async (values: typeof initialFormValue) => {
         const formData = {
@@ -275,7 +262,41 @@ function StepTwo() {
                 validateOnMount={true}
             >
                 {
-                    ({setFieldValue, values,setFieldError}) => (
+                    ({setFieldValue, values,setFieldError}) =>{ 
+                       
+                      const handleVendorNameChange = (index: number, value: string) => {
+                        const vendorExists = Array.from(providersSet).some(provider => 
+                            provider.vendorName === value
+                        );
+                        
+                        if (!vendorExists) {
+                            const newProvider: partner = {
+                                id: "",
+                                vendorName: value,
+                                providerServices: [""],
+                                costOfService: "",
+                                duration: ""
+                            };
+                            
+                            setProvidersSet(prev => {
+                                const newSet = new Set(prev);
+                                newSet.add(newProvider);
+                                return newSet;
+                            });
+                        }
+                        
+                        setFieldValue(`vendor.${index}.vendorName`, value);
+                    };
+
+                      const handleVendorServicesChange = (index: number, value: string) => {
+                        if (!services.includes(value)) {
+                          setServices(prev => [...prev, value]);
+                        }
+                      
+                        setFieldValue(`vendor.${index}.providerServices`, [value]);
+                      };
+
+                      return (
                         <Form className={`${inter.className}`}>
                             <div>
                             <div className="grid grid-cols-1 gap-y-4 md:max-h-[45vh] md:relative overflow-y-auto lg:px-16 relative  lg:right-16  "
@@ -302,313 +323,160 @@ function StepTwo() {
                         </div>
 
                          <div className="relative bottom-4">
-                         <Label htmlFor="insuranceProvider">Loan insurance provider (optional)</Label> 
-                           <div>
-                           <div className="border border-solid py-4 rounded-md pl-4 mt-4">
-                           <div className="flex items-center gap-2">
-                                <Checkbox 
-                                id="credit"
-                                 className="  border-[#D7D7D7] shadow-none data-[state=checked]:bg-[#142854] pb-3 h-[18px] w-[18px]"
-                                checked={values.vendor.some(v => v.product === "CREDIT_LIFE_INSURANCE_PROVIDER")}
-                                onCheckedChange={(checked) => 
-                                handleInsuranceChange(checked, setFieldValue, values, "CREDIT_LIFE_INSURANCE_PROVIDER")
-                                }
-                                 />
-                                <Label htmlFor="credit" className="text-[14px]">Credit life insurance provider</Label>
-                            </div>
-                           {
-                            values.vendor.some(v => v.product === "CREDIT_LIFE_INSURANCE_PROVIDER") && (
-                                <div className="mt-8 pr-4">
-                                    <div>
-                                    <Label htmlFor="provider" className="text-[14px]">Provider</Label> 
-                                    <CustomSelect
-                                      triggerId='providerTriggerId'
-                                       id='providerId'
-                                       selectContent={creditLifeInsuranceNigeria}
-                                       value={values.vendor.find(v => v.product === "CREDIT_LIFE_INSURANCE_PROVIDER")?.vendorName || ""}
-                                       onChange={(value: string) => updateVendorField(setFieldValue, values, "CREDIT_LIFE_INSURANCE_PROVIDER", "vendorName", value)}
-                                       name="vendorName"
-                                       placeHolder="Select provider"
-                                    />  
-                                    </div>
-                                    <div>
-                  <Label htmlFor="serviceCost">Cost of service</Label>
-                  <div className="flex gap-2 items-center justify-center">
-                    <CurrencySelectInput
-                      selectedcurrency={selectCurrency}
-                      setSelectedCurrency={setSelectCurrency}
-                    />
-                    <VendorCostField
-                    value={values.vendor.find(v => v.product === "CREDIT_LIFE_INSURANCE_PROVIDER")?.costOfService || ""}
-                    onChange={(value: string) => { 
-                    updateVendorField(setFieldValue, values, "CREDIT_LIFE_INSURANCE_PROVIDER", "costOfService", value);
-                    validateNumber("costOfService", setFieldValue);
-                    }}
-                     />   
-                  </div>
-                
-                </div>
-
-                  <div className="font-normal">
-                  <Label htmlFor="duration">Duration</Label>
-                  <div className="flex border border-solid rounded-md w-40 gap-4 mt-3">
-                  <input
-                    id="durationId"
-                    className="w-20 p-3 border rounded focus:outline-none mt-2 text-[14px] border-none"
-                    placeholder="0"
-                    value={values.vendor.find(v => v.product === "CREDIT_LIFE_INSURANCE_PROVIDER")?.duration || ""}
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                        const value = e.target.value;
-                        if (/^[1-9]\d{0,2}$/.test(value) || value === "") {
-                            updateVendorField(setFieldValue, values, "CREDIT_LIFE_INSURANCE_PROVIDER", "duration", value);
-                            validateNumberLimit(
-                              "duration",
-                              setFieldValue,
-                              setFieldError,
-                              3,
-                              "Duration must be a positive number, must not start with zero, and must be a maximum of three digits."
-                            );
-                          }
-                        }}
-                    />
-                    <p className="bg-[#F9F9F9] flex items-center h-[44px] relative top-[4px] text-[14px] px-2 rounded-lg">month</p>
-                  </div>
-                  </div>
-                                </div>
-                            )
-                           }
-                            </div> 
-                         </div>
-
+                         <Label htmlFor="insuranceProvider">Loan service provider (optional)</Label> 
                          <div>
-                           <div className="border border-solid py-4 rounded-md pl-4 mt-4">
-                           <div className="flex items-center gap-2">
-                                <Checkbox 
-                                id="credit"
-                                 className="  border-[#D7D7D7] shadow-none data-[state=checked]:bg-[#142854] pb-3 h-[18px] w-[18px]"
-                                checked={values.vendor.some(v => v.product === "HEALTH_INSURANCE_PROVIDER")}
-                                onCheckedChange={(checked) => 
-                                handleInsuranceChange(checked, setFieldValue, values, "HEALTH_INSURANCE_PROVIDER")
-                                }
-                                 />
-                                <Label htmlFor="credit" className="text-[14px]">Health insurance provider</Label>
-                            </div>
+                          <FieldArray name="vendor">
                            {
-                            values.vendor.some(v => v.product === "HEALTH_INSURANCE_PROVIDER") && (
-                                <div className="mt-8 pr-4">
-                                    <div>
-                                    <Label htmlFor="provider" className="text-[14px]">Provider</Label> 
-                                    <CustomSelect
-                                      triggerId='providerTriggerId'
-                                       id='providerId'
-                                       selectContent={healthInsuranceProvidersNigeria}
-                                       value={values.vendor.find(v => v.product === "HEALTH_INSURANCE_PROVIDER")?.vendorName || ""}
-                                       onChange={(value: string) => updateVendorField(setFieldValue, values, "HEALTH_INSURANCE_PROVIDER", "vendorName", value)}
-                                       name="vendorName"
-                                       placeHolder="Select provider"
-                                    />  
-                                    </div>
-                                    <div>
-                  <Label htmlFor="serviceCost">Cost of service</Label>
-                  <div className="flex gap-2 items-center justify-center">
-                    <CurrencySelectInput
-                      selectedcurrency={selectCurrency}
-                      setSelectedCurrency={setSelectCurrency}
-                    />
-                    <VendorCostField
-                    value={values.vendor.find(v => v.product === "HEALTH_INSURANCE_PROVIDER")?.costOfService || ""}
-                    onChange={(value: string) => { 
-                    updateVendorField(setFieldValue, values, "HEALTH_INSURANCE_PROVIDER", "costOfService", value);
-                    validateNumber("costOfService", setFieldValue);
-                    }}
-                     />   
-                  </div>
-                
-                </div>
-
-                  <div className="font-normal">
-                  <Label htmlFor="duration">Duration</Label>
-                  <div className="flex border border-solid rounded-md w-40 gap-4 mt-3">
-                  <input
-                    id="durationId"
-                    className="w-20 p-3 border rounded focus:outline-none mt-2 text-[14px] border-none"
-                    placeholder="0"
-                    value={values.vendor.find(v => v.product === "HEALTH_INSURANCE_PROVIDER")?.duration || ""}
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                        const value = e.target.value;
-                        if (/^[1-9]\d{0,2}$/.test(value) || value === "") {
-                            updateVendorField(setFieldValue, values, "HEALTH_INSURANCE_PROVIDER", "duration", value);
-                            validateNumberLimit(
-                              "duration",
-                              setFieldValue,
-                              setFieldError,
-                              3,
-                              "Duration must be a positive number, must not start with zero, and must be a maximum of three digits."
-                            );
-                          }
-                        }}
-                    />
-                    <p className="bg-[#F9F9F9] flex items-center h-[44px] relative top-[4px] text-[14px] px-2 rounded-lg">month</p>
-                  </div>
-                  </div>
+                            ({ push, remove }) => (
+                              <div className="space-y-4">
+                              {
+                                values.vendor?.map((vendor, index)  => (
+                                  <div key={index} className="mt-4">
+                                     {values.vendor.length > 1 && (
+                                    <div className="border-solid border-b-[1px] mb-8 pb-3">
+                                        <Button
+                                            type="button"
+                                            variant="ghost"
+                                            onClick={() => remove(index)}
+                                            className="text-red-500 hover:text-red-700 text-[14px] font-normal"
+                                        >
+                                            <MdDeleteOutline className="h-5 w-[18px]" /> <span className="pl-1 relative mt-[1px]">Delete</span>
+                                        </Button>
                                 </div>
+                                   )} 
+                                 <div className="border border-solid border-gray-200 rounded-lg p-6 bg-white">
+                                  <div  className="mb-4">
+                                  <Label htmlFor={`vendor.${index}.vendorName`} className="text-sm font-medium">
+                                                                        Provider name
+                                   </Label>
+
+                                   <CustomSelect
+                                  triggerId={`vendorTrigger-${index}`}
+                                  id={`vendorId-${index}`}
+                                  selectContent={providerOptions} 
+                                  value={vendor?.vendorName}
+                                  onChange={(value: string) => 
+                                    handleVendorNameChange(index, value)
+                                  }
+                                  name={`vendor.${index}.vendorName`}
+                                  placeHolder="Enter provider name"
+                                  infinityScroll={{
+                                    hasMore: hasNextPage,
+                                    loadMore: loadMore,
+                                    loader: isFetching
+                                  }}
+                                  isloading={isProvidersLoading}
+                                  emptyState="No provider available"
+                              />
+
+                                  </div>
+
+                                  <div className="mb-4">
+                                  <Label htmlFor={`vendor.${index}.product`} className="text-sm font-medium">
+                                                                        Provider service
+                                   </Label>
+                                   <CustomSelect
+                                    triggerId={`serviceTrigger-${index}`}
+                                    id={`serviceId-${index}`}
+                                    selectContent={services}
+                                    value={vendor?.providerServices?.[0] || ""}
+                                    onChange={(value: string) => {
+                                      handleVendorServicesChange(index, value)
+                                        
+                                        }
+                                    }
+                                    name={`vendor.${index}.product`}
+                                    placeHolder="Select service"
+                                    infinityScroll={{
+                                      hasMore: serviceHasasNextPage,
+                                      loadMore: loadMoreService,
+                                      loader: isServiceFetching
+                                    }}
+                                    isloading={isServiceLoading}
+                                    emptyState="No service available"
+                                />
+                              
+                              </div>
+
+                              <div className="mb-4">
+                              <Label htmlFor={`vendor.${index}.costOfService`} className="text-sm font-medium">
+                                  Cost of service
+                              </Label>
+                              <div className="flex items-center gap-2">
+                              <CurrencySelectInput
+                                  selectedcurrency={selectCurrency}
+                                  setSelectedCurrency={setSelectCurrency}
+                                  className="h-[3.2rem]"
+                              />
+                              <VendorCostField
+                                  value={vendor.costOfService}
+                                  onChange={(value: string) => { 
+                                      setFieldValue(`vendor.${index}.costOfService`, value);
+                                      validateNumber("costOfService", setFieldValue);
+                                  }}
+                              />   
+                              </div>
+                            
+                              </div>
+
+                              <div className="relative bottom-4">
+                                  <Label htmlFor={`vendor.${index}.duration`} className="text-sm font-medium">
+                                      Duration
+                                  </Label>
+                                  <div className="flex border border-solid border-gray-300 rounded-md w-40 gap-2 mt-2">
+                                      <input
+                                          id={`duration-${index}`}
+                                          className="w-20 p-3 focus:outline-none text-sm border-none"
+                                          placeholder="0"
+                                          value={vendor.duration}
+                                          onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                                              const value = e.target.value;
+                                              if (/^[1-9]\d{0,2}$/.test(value) || value === "") {
+                                                  setFieldValue(`vendor.${index}.duration`, value);
+                                                  validateNumberLimit(
+                                                      "duration",
+                                                      setFieldValue,
+                                                      setFieldError,
+                                                      3,
+                                                      "Duration must be a positive number, must not start with zero, and must be a maximum of three digits."
+                                                  );
+                                              }
+                                          }}
+                                      />
+                                      <p className="bg-[#F9F9F9] flex items-center h-[44px] text-sm px-3 text-gray-600">month</p>
+                                  </div>
+                                                                </div>
+
+                              <div>
+
+                              </div>
+                                 </div>
+                                 
+                                 </div>
+                                ))
+                              }
+                              <div>
+                                 <Button
+                                      type="button"
+                                      variant="ghost"
+                                      className={`text-[#142854] border-none shadow-none hover:bg-white ${!areCurrentProvidersValid(values.vendor) ? 'opacity-50 cursor-not-allowed' : ''}`}
+                                      onClick={() => push({
+                                        providerServices: [""], 
+                                          vendorName: "",
+                                          costOfService: "",
+                                          duration: ""
+                                      })}
+                                      disabled={!areCurrentProvidersValid(values.vendor)} 
+                                  >
+                                      <MdAdd color="#142854" className="h-[16px] w-[16px]" /> Add another provider
+                                  </Button> 
+                                 </div>
+                              </div>
                             )
                            }
-                            </div> 
-                         </div>
+                           
+                          </FieldArray>
 
-                         <div>
-                           <div className="border border-solid py-4 rounded-md pl-4 mt-4">
-                           <div className="flex items-center gap-2">
-                                <Checkbox 
-                                id="credit"
-                                 className="  border-[#D7D7D7] shadow-none data-[state=checked]:bg-[#142854] pb-3 h-[18px] w-[18px]"
-                                checked={values.vendor.some(v => v.product === "ACCOMMODATION")}
-                                onCheckedChange={(checked) => 
-                                handleInsuranceChange(checked, setFieldValue, values, "ACCOMMODATION")
-                                }
-                                 />
-                                <Label htmlFor="credit" className="text-[14px]">Accomodation provider</Label>
-                            </div>
-                           {
-                            values.vendor.some(v => v.product === "ACCOMMODATION") && (
-                                <div className="mt-8 pr-4">
-                                    <div>
-                                    <Label htmlFor="provider" className="text-[14px]">Provider</Label> 
-                                    <CustomSelect
-                                      triggerId='providerTriggerId'
-                                       id='providerId'
-                                       selectContent={accommodationProvidersNigeria}
-                                       value={values.vendor.find(v => v.product === "ACCOMMODATION")?.vendorName || ""}
-                                       onChange={(value: string) => updateVendorField(setFieldValue, values, "ACCOMMODATION", "vendorName", value)}
-                                       name="vendorName"
-                                       placeHolder="Select provider"
-                                    />  
-                                    </div>
-                                    <div>
-                  <Label htmlFor="serviceCost">Cost of service</Label>
-                  <div className="flex gap-2 items-center justify-center">
-                    <CurrencySelectInput
-                      selectedcurrency={selectCurrency}
-                      setSelectedCurrency={setSelectCurrency}
-                    />
-                    <VendorCostField
-                    value={values.vendor.find(v => v.product === "ACCOMMODATION")?.costOfService || ""}
-                    onChange={(value: string) => { 
-                    updateVendorField(setFieldValue, values, "ACCOMMODATION", "costOfService", value);
-                    validateNumber("costOfService", setFieldValue);
-                    }}
-                     />   
-                  </div>
-                
-                </div>
-
-                  <div className="font-normal">
-                  <Label htmlFor="duration">Duration</Label>
-                  <div className="flex border border-solid rounded-md w-40 gap-4 mt-3">
-                  <input
-                    id="durationId"
-                    className="w-20 p-3 border rounded focus:outline-none mt-2 text-[14px] border-none"
-                    placeholder="0"
-                    value={values.vendor.find(v => v.product === "ACCOMMODATION")?.duration || ""}
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                        const value = e.target.value;
-                        if (/^[1-9]\d{0,2}$/.test(value) || value === "") {
-                            updateVendorField(setFieldValue, values, "ACCOMMODATION", "duration", value);
-                            validateNumberLimit(
-                              "duration",
-                              setFieldValue,
-                              setFieldError,
-                              3,
-                              "Duration must be a positive number, must not start with zero, and must be a maximum of three digits."
-                            );
-                          }
-                        }}
-                    />
-                    <p className="bg-[#F9F9F9] flex items-center h-[44px] relative top-[4px] text-[14px] px-2 rounded-lg">month</p>
-                  </div>
-                  </div>
-                                </div>
-                            )
-                           }
-                            </div> 
-                         </div>
-
-                         <div>
-                           <div className="border border-solid py-4 rounded-md pl-4 mt-4">
-                           <div className="flex items-center gap-2">
-                                <Checkbox 
-                                id="credit"
-                                 className="  border-[#D7D7D7] shadow-none data-[state=checked]:bg-[#142854] pb-3 h-[18px] w-[18px]"
-                                checked={values.vendor.some(v => v.product === "DEVICE")}
-                                onCheckedChange={(checked) => 
-                                handleInsuranceChange(checked, setFieldValue, values, "DEVICE")
-                                }
-                                 />
-                                <Label htmlFor="credit" className="text-[14px]">Device provider</Label>
-                            </div>
-                           {
-                            values.vendor.some(v => v.product === "DEVICE") && (
-                                <div className="mt-8 pr-4">
-                                    <div>
-                                    <Label htmlFor="provider" className="text-[14px]">Provider</Label> 
-                                    <CustomSelect
-                                      triggerId='providerTriggerId'
-                                       id='deviceProviderId'
-                                       selectContent={deviceProvidersNigeria}
-                                       value={values.vendor.find(v => v.product === "DEVICE")?.vendorName || ""}
-                                       onChange={(value: string) => updateVendorField(setFieldValue, values, "DEVICE", "vendorName", value)}
-                                       name="vendorName"
-                                       placeHolder="Select provider"
-                                    />  
-                                    </div>
-                                    <div>
-                  <Label htmlFor="serviceCost">Cost of service</Label>
-                  <div className="flex gap-2 items-center justify-center">
-                    <CurrencySelectInput
-                      selectedcurrency={selectCurrency}
-                      setSelectedCurrency={setSelectCurrency}
-                    />
-                    <VendorCostField
-                    value={values.vendor.find(v => v.product === "DEVICE")?.costOfService || ""}
-                    onChange={(value: string) => { 
-                    updateVendorField(setFieldValue, values, "DEVICE", "costOfService", value);
-                    validateNumber("costOfService", setFieldValue);
-                    }}
-                     />   
-                  </div>
-                
-                </div>
-
-                  <div className="font-normal">
-                  <Label htmlFor="duration">Duration</Label>
-                  <div className="flex border border-solid rounded-md w-40 gap-4 mt-3">
-                  <input
-                    id="durationId"
-                    className="w-20 p-3 border rounded focus:outline-none mt-2 text-[14px] border-none"
-                    placeholder="0"
-                    value={values.vendor.find(v => v.product === "DEVICE")?.duration || ""}
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                        const value = e.target.value;
-                        if (/^[1-9]\d{0,2}$/.test(value) || value === "") {
-                            updateVendorField(setFieldValue, values, "DEVICE", "duration", value);
-                            validateNumberLimit(
-                              "duration",
-                              setFieldValue,
-                              setFieldError,
-                              3,
-                              "Duration must be a positive number, must not start with zero, and must be a maximum of three digits."
-                            );
-                          }
-                        }}
-                    />
-                    <p className="bg-[#F9F9F9] flex items-center h-[44px] relative top-[4px] text-[14px] px-2 rounded-lg">month</p>
-                  </div>
-                  </div>
-                                </div>
-                            )
-                           }
-                            </div> 
                          </div>
                          </div>
 
@@ -629,13 +497,14 @@ function StepTwo() {
                                         />
                                     </div>
                          </div>
-                          {/* <div className="mt-6 p-4 bg-gray-100 rounded-md">
+
+                         {/* <div className="mt-6 p-4 bg-gray-100 rounded-md">
   <h3 className="text-sm font-medium mb-2">Form Values (Debug):</h3>
   <pre className="text-xs bg-white p-3 rounded border overflow-auto max-h-40">
     {JSON.stringify(values, null, 2)}
   </pre>
 </div> */}
-       
+                    
                                 </div>
                                 
                             <div className={`md:flex justify-between pt-5 gap-3 pb-5 lg:pr-12 mt-4 md:mt-0 `}>
@@ -673,7 +542,7 @@ function StepTwo() {
                             </div>
                             
                         </Form>
-                    )
+                    )}
                 }
             </Formik>
        </div>
