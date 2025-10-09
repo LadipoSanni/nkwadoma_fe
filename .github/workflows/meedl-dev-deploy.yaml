@@ -1,4 +1,4 @@
-name: 🚀 Meedl Blue-Green Delivery and Deployment
+name: 🚀 Meedl Blue-Green Deployment
 
 on:
   push:
@@ -27,7 +27,7 @@ jobs:
       # 1. INITIAL SETUP & CLEANUP
       # ======================
       - name: ✅ Checkout Repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
 
       - name: 🧹 Initial Docker Cleanup
         run: |
@@ -63,34 +63,12 @@ jobs:
           echo "Deploying to ${{ steps.deployment-target.outputs.target }} on port ${{ steps.deployment-target.outputs.target_port }}"
 
       # ======================
-      # 3. BUILD,TAG, AND PUSH NEW IMAGE
+      # 3. BUILD NEW IMAGE
       # ======================
-      - name: 🐳 Build, Tag, and Push (Frontend)
-        id: build
+      - name: 🐳 Build Docker Image
         run: |
-          set -euo pipefail
-          TIMESTAMP=$(date +%Y%m%d-%H%M%S)
-
-          # Pass all .env variables into docker build args
-          BUILD_ARGS=$(grep -v '^#' .env | xargs -I {} echo --build-arg {} | tr '\n' ' ')
-
-          # Define image tag with meedl-frontend prefix
-          TIMESTAMP_TAG=${{ env.ECR_REPO_URI }}:meedl-frontend-dev${TIMESTAMP}
-
-          echo "🔑 Re-authenticating to ECR..."
-          aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin ${{ env.ECR_REPO_URI }}
-
-          echo "🐳 Building image..."
-          docker build $BUILD_ARGS -t $TIMESTAMP_TAG .
-
-          echo "⬆️ Pushing image..."
-          docker push $TIMESTAMP_TAG
-
-          echo "✅ Successfully pushed: $TIMESTAMP_TAG"
-
-          # Save TIMESTAMP_TAG for deploy step
-          echo "timestamp_tag=$TIMESTAMP_TAG" >> $GITHUB_OUTPUT
-
+          docker build -t $IMAGE_NAME:${{ steps.deployment-target.outputs.target }} . || (echo "❌ Build failed" && exit 1)
+          echo "✅ Image built successfully with tag: ${{ steps.deployment-target.outputs.target }}"
 
       # ======================
       # 4. DEPLOY TO TARGET ENVIRONMENT
@@ -164,30 +142,20 @@ jobs:
       # ======================
       # 8. PRUNE OLD IMAGES & RESOURCES
       # ======================
-      - name: 🗑️ Prune Old Docker Resources (Keep last 30 days)
+      - name: 🗑️ Prune Old Docker Resources
         if: steps.health-check.outputs.status == 'healthy'
         run: |
-          echo "=== Pruning old Docker resources (keeping 30 days) ==="
-      
-          # Prune dangling images first (untagged ones)
+          echo "=== Pruning old Docker resources ==="
           docker image prune -f
-      
-          # Remove images older than 30 days for this repo
-          CUTOFF_DATE=$(date -d '30 days ago' +%s)
-          docker images $IMAGE_NAME --format "{{.ID}} {{.Repository}}:{{.Tag}} {{.CreatedAt}}" | while read -r id tag created; do
-            created_epoch=$(date -d "$created" +%s || true)
-            if [ "$created_epoch" -lt "$CUTOFF_DATE" ]; then
-              echo "🗑️ Removing old image: $tag (created $created)"
-              docker rmi -f "$id" || true
-            fi
-          done
-      
+          
+          # Remove old images, keeping only the most recent ones
+          docker images $IMAGE_NAME --format "{{.ID}} {{.Tag}} {{.CreatedAt}}" | \
+            sort -r -k3 | \
+            awk -v count=$IMAGE_RETENTION_COUNT 'NR>count {print $1}' | \
+            xargs -r docker rmi -f 2>/dev/null || true
+          
           docker network prune -f
-      
           echo "✅ Docker resource pruning completed"
-      
-          echo "=== Remaining images for $IMAGE_NAME ==="
-          docker images $IMAGE_NAME --format "table {{.Repository}}\t{{.Tag}}\t{{.CreatedAt}}"
 
       # ======================
       # 9. FINAL VERIFICATION
@@ -221,3 +189,83 @@ jobs:
 
 
 
+
+
+# name: 🚀 Meedl dev Deployment
+
+# on:
+#   push:
+#     branches:
+#       - dev
+
+# env:
+#   CONTAINER_NAME: meedl-frontend-dev
+#   IMAGE_NAME: meedl-frontend-dev
+#   HOST_PORT: 3032         # external port (host)
+#   CONTAINER_PORT: 3000     # internal port (container)
+#   S3_BUCKET_NAME: ${{ secrets.S3_BUCKET_NAME }}
+#   S3_ENV_FILE_PATH: nkwadoma/frontend/dev/nkwadomafrontend.env
+#   AWS_REGION: eu-west-1
+
+# jobs:
+#   deploy:
+#     runs-on: [self-hosted, nkwadoma-FE]
+
+#     steps:
+#       # ======================
+#       # 1. ENVIRONMENT CLEANUP
+#       # ======================
+#       - name: ✅ Checkout Repository
+#         uses: actions/checkout@v3
+
+#       - name: 🧹 Clean Existing Docker Container
+#         run: |
+#           docker rm -f $CONTAINER_NAME 2>/dev/null || echo "No existing container to remove"
+#           docker container prune -f
+
+#       # ======================
+#       # 2. DOWNLOAD ENV FROM S3
+#       # ======================
+#       - name: 📥 Download .env file from S3
+#         env:
+#           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+#           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+#           # AWS_REGION: ${{ secrets.AWS_REGION }}
+#         run: |
+#           echo "Downloading env file from s3://$S3_BUCKET_NAME/$S3_ENV_FILE_PATH"
+#           aws s3 cp s3://$S3_BUCKET_NAME/$S3_ENV_FILE_PATH .env
+#           echo "✅ Downloaded .env file"
+
+#       # ======================
+#       # 3. BUILD AND DEPLOY
+#       # ======================
+#       - name: 🐳 Build Docker Image
+#         run: |
+#           docker build -t $IMAGE_NAME . || (echo "❌ Build failed" && exit 1)
+#           echo "✅ Image built successfully"
+
+#       - name: 🚀 Deploy Application
+#         run: |
+#           docker run -d \
+#             --name $CONTAINER_NAME \
+#             -p ${HOST_PORT}:${CONTAINER_PORT} \
+#             --env-file .env \
+#             --restart unless-stopped \
+#             $IMAGE_NAME || (echo "❌ Deployment failed" && exit 1)
+
+#           echo "✅ Container started successfully"
+#           echo "=== Basic Verification ==="
+#           echo "Container status: $(docker inspect -f '{{.State.Status}}' $CONTAINER_NAME)"
+#           echo "Port mapping: $(docker port $CONTAINER_NAME)"
+
+#       # ======================
+#       # 4. FINAL VERIFICATION
+#       # ======================
+#       - name: 🔍 Quick Container Check
+#         run: |
+#           echo "=== Deployment Summary ==="
+#           echo "Container ID: $(docker ps -q --filter "name=$CONTAINER_NAME")"
+#           echo "Logs tail:"
+#           docker logs --tail=20 $CONTAINER_NAME
+#           echo "Network status:"
+#           docker inspect $CONTAINER_NAME | jq -r '.[].NetworkSettings.Ports'
