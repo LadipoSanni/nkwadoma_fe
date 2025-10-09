@@ -83,7 +83,7 @@ const ViewFinanciers = () => {
     }
 
     const {data, isLoading, refetch,isFetching} = useGetAllActiveAndInvitedFinanciersQuery(param,{refetchOnMountOrArgChange: true})
-    const {data:searchData, isLoading: searchIsLoading,isFetching: isSearchFetching} = useSearchFinancierQuery({name:debouncedSearchTerm, pageNumber: currentTabState.pageNumber, pageSize: 10, financierType: selectedFinancier.toUpperCase(), activationStatus: tabType.toUpperCase()},{skip: !debouncedSearchTerm})
+    const {data:searchData, isLoading: searchIsLoading,isFetching: isSearchFetching} = useSearchFinancierQuery({name:debouncedSearchTerm, pageNumber: currentTabState.pageNumber, pageSize: 10, financierType: selectedFinancier.toUpperCase(), activationStatuses:  tabType === "invited"? ["PENDING_APPROVAL","DECLINED","INVITED"] : ["ACTIVE"]},{skip: !debouncedSearchTerm})
 
     useEffect(()=>{
         if(debouncedSearchTerm && searchData && searchData?.data){
@@ -272,7 +272,13 @@ const ViewFinanciers = () => {
                     </TabsContent>
 
                     <TabsContent value={"invited"} className={`pt-3`}>
+                    {!isTyping && debouncedSearchTerm?.length > 0 && searchTerm && financiers.length === 0 ? (
+                                <div className={`flex justify-center items-center text-center md:h-[32vh] h-[40%] w-full mt-32`}>
+                                    <SearchEmptyState icon={MdSearch} name="Financier" />
+                                </div>
+                            ) : (  
                     <div className='pr-3 md:pr-0'>
+
                         <Table
                             tableData={financiers}
                             tableHeader={financierHeader}
@@ -292,6 +298,7 @@ const ViewFinanciers = () => {
                             tableCellStyle={'h-12'}
                         />
                </div>
+                )}
                     </TabsContent>
 
                 </Tabs>

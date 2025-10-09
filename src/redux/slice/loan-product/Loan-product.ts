@@ -6,7 +6,7 @@ interface SponsorsObj{
  }
 
  interface Obj{
-    product: string,
+    providerServices: string[],
     vendorName: string,
     costOfService: string,
     duration: string
