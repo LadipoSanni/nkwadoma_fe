@@ -31,9 +31,8 @@ function TabSwitch({ children, tabData, defaultTab,backClickName,backClickRouteP
     const handleRouteChange = (url: string) => {
       setActiveTab(url);
     };
-
+    if (typeof window === "undefined") return;
     setActiveTab(window.location.pathname);
-
     window.addEventListener('popstate', () => handleRouteChange(window.location.pathname));
 
     return () => {
