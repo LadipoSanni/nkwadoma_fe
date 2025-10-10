@@ -106,19 +106,20 @@ const GenerateRepaymentSchedule = () => {
                     <Details showIcon={false} isLoading={isLoading || isFetching } sx={` w-full md:w-[100%] `} id={'moratorium'} showAsWholeNumber={false}    name={'Moratorium'} value={data?.data?.moratorium ? data?.data?.moratorium : 0} valueType={'tenor'}  />
                 </div>
             </div>
-            { isLoading || isFetching  ?
-                <SkeletonForTable />
-                :
+            {/*{ isLoading || isFetching  ?*/}
+            {/*    <SkeletonForTable />*/}
+            {/*    :*/}
                 <InfiniteScrollTable
                 tableData={data?.data?.repaymentScheduleEntries}
                 //eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-expect-error
                 tableHeader={tableHeader}
                 tableHeight={50}
+                isLoading={isLoading || isFetching}
+                dataName={'Repayment Schedule'}
                 staticHeader={'Date'}
                 staticColumn={'date'}
                 />
-            }
 
         </div>
     );

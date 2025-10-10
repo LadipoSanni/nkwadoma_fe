@@ -16,6 +16,7 @@ import ViewRepaymentSchedule from "@/components/loanee-my-profile/ViewRepaymentS
 import LoaneeLoanDetails from "@/components/loanee-my-profile/LoaneeLoanDetails";
 import {inter} from "@/app/fonts";
 import styles from '@/components/loanee-my-profile/index.module.css'
+import dayjs from "dayjs";
 
 const Index = dynamic(
     () => Promise.resolve(LoaneeDetails),
@@ -39,8 +40,8 @@ const LoaneeDetails = () => {
     const  {data, isLoading, isFetching} = useViewLoaneeInACohortDetailsQuery(props)
 
 
-    // console.log('data: ', data)
-    // console.log('viewLoaneeLoanDetails : ', viewLoaneeLoanDetails)
+    console.log('data on details: ', data)
+    console.log('viewLoaneeLoanDetails : ', viewLoaneeLoanDetails)
 
     const userName = data?.data?.firstName + ' '+ data?.data?.lastName
 
@@ -55,11 +56,11 @@ const LoaneeDetails = () => {
     //     {label:"Loan disbursement terms",value:'' }
     // ]
 
-    const nextOfFullName = data?.data?.nextOfKinFirstName + ' ' + data?.data?.nextOfKinLastName
+    const nextOfFullName = data?.data?.nextOfKinFirstName ? data?.data?.nextOfKinFirstName : ''  + ' ' + data?.data?.nextOfKinLastName ? data?.data?.nextOfKinLastName : '';
 
     const basicDetails = [
-        {label: 'Gender', value: `${data?.data?.gender ? data?.data?.datagender : 'Not provided'}`},
-        {label: 'Date of birth', value: `${data?.data?.dateOfBirth ? data?.data?.dateOfBirth : 'Not provided'}`},
+        {label: 'Gender', value: `${data?.data?.gender ? data?.data?.gender : 'Not provided'}`},
+        {label: 'Date of birth', value: `${data?.data?.dateOfBirth ?  dayjs(data?.data?.dateOfBirth?.toString()).format('MMM D, YYYY') : 'Not provided'}`},
         {label: 'Marital status', value: `${data?.data?.maritalStatus ? data?.data?.maritalStatus : 'Not provided'}`},
         {label: 'Nationality', value: `${data?.data?.nationality ? data?.data?.nationality : 'Not provided'}`},
         {label: 'State of origin ', value: `${data?.data?.stateOfOrigin ? data?.data?.stateOfOrigin : 'Not provided'}`},
@@ -112,7 +113,7 @@ const LoaneeDetails = () => {
     const tab:  {name: string; displayValue: React.ReactNode}[] = [
         {name: 'Details',  displayValue: <LoaneeLoanDetails loaneeViewDetails={viewLoaneeLoanDetails?.data} data={data?.data} isLoading={false} />},
         {name: 'Repayment',  displayValue:<ViewRepayment loanId={userRole !== 'LOANEE'? data?.data?.loanId : viewLoaneeLoanDetails?.data?.loanId}/>},
-        {name: 'Repayment schedule',  displayValue:<ViewRepaymentSchedule/>},
+        {name: 'Repayment schedule',  displayValue:<ViewRepaymentSchedule loanId={userRole !== 'LOANEE'? data?.data?.loanId : viewLoaneeLoanDetails?.data?.loanIdTab}/>},
         ...(userRole !== "LOANEE" ? [loaneeBioDataTab] : []),
 
 
