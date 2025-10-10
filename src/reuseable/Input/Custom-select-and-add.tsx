@@ -14,7 +14,6 @@ import SkeletonForLoanOrg from '../Skeleton-loading-state/Skeleton-for-loan-orga
 import GeneralEmptyState from '../emptyStates/General-emptystate';
 import { Book } from 'lucide-react';
 import { capitalizeFirstLetters } from '@/utils/GlobalMethods';
-import SearchEmptyState from '@/reuseable/emptyStates/SearchEmptyState';
 import {MdSearch} from 'react-icons/md';
 
 type SelectItem = {
