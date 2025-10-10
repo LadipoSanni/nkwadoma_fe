@@ -3,6 +3,7 @@ import dayjs from "dayjs";
 import {formatAmount} from "@/utils/Format";
 import InfiniteScrollTable from "@/reuseable/table/InfiniteScrollTable";
 import Details from "@/components/loanee-my-profile/Details";
+import { useViewGeneratedRepaymentScheduleQuery } from '@/service/admin/loan/loan-request-api';
 
 interface viewAllType {
     principalAmount: string
@@ -13,8 +14,11 @@ interface viewAllType {
     totalPayment: string
 }
 
-
-const ViewRepaymentSchedule = () => {
+interface Props{
+    loanId:string
+}
+const ViewRepaymentSchedule = ({loanId}: Props) => {
+    const  {data, isLoading, isFetching} = useViewGeneratedRepaymentScheduleQuery(loanId)
     const tableHeader =  [
         { title: 'Date', sortable: true, id: 'date', selector: (row: viewAllType) =><div>{dayjs(row.repaymentDate?.toString()).format('MMM D, YYYY')}</div> },
         { title: 'Principal amount', sortable: true, id: 'principalAmount', selector: (row:  viewAllType) => <div className=''>{formatAmount(row.principalAmount)}</div>},
@@ -33,27 +37,28 @@ const ViewRepaymentSchedule = () => {
             <div className={` grid  md:flex gap-3  `}>
                 <div className={` w-full md:w-[50%] `}>
                     <Details showIcon={false} isLoading={false} sx={` w-full md:w-[100%] `} id={'total'} showAsWholeNumber={false}    name={'Sum total'}
-                             // value={data?.data?.sumTotal ? data?.data?.sumTotal :0}
-                        value={''}
+                             value={data?.data?.sumTotal ? data?.data?.sumTotal :0}
                              valueType={'currency'}  />
                 </div>
                 <div className={`w-full md:w-[50%] grid md:flex gap-3  `}>
                     <Details showIcon={false} isLoading={false} sx={` w-full md:w-[100%] `} id={'tenor'} showAsWholeNumber={false} name={'Tenor'}
-                             // value={data?.data?.tenor ? data?.data?.tenor : 0 }
-                        value={''}
+                             value={data?.data?.tenor ? data?.data?.tenor : 0 }
                              valueType={'tenor'}  />
                     <Details showIcon={false} isLoading={false} sx={` w-full md:w-[100%] `} id={'moratorium'} showAsWholeNumber={false}    name={'Moratorium'}
-                             // value={data?.data?.moratorium ? data?.data?.moratorium : 0}
-                             value={''}
+                             value={data?.data?.moratorium ? data?.data?.moratorium : 0}
                              valueType={'tenor'}  />
                 </div>
             </div>
             <InfiniteScrollTable
-                tableData={[]}
-                // tableData={data?.data?.repaymentScheduleEntries}
+                // tableData={[]}
+                tableData={data?.data?.repaymentScheduleEntries}
+                dataName={'Repayment Schedule'}
+                isLoading={isLoading || isFetching}
 
+                //eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-expect-error
                 tableHeader={tableHeader}
-                tableHeight={50}
+                tableHeight={40}
                 staticHeader={'Date'}
                 staticColumn={'date'}
             />

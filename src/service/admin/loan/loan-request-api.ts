@@ -95,6 +95,12 @@ export const loanRequestApi = createApi({
                 method: 'GET'
             }),
         }),
+        viewGeneratedRepaymentSchedule: builder.query({
+            query: (loanId)=> ({
+                url: `/repayment/history/generate/repayment/schedule?loanId=${loanId}`,
+                method: 'GET'
+            }),
+        })
     })
 });
 
@@ -109,5 +115,6 @@ export const {
     useSearchLoanDisbursalQuery,
     useSearchLoanOfferQuery,
     useSearchLoanReferralQuery,
-    useSearchLoanRequestQuery
+    useSearchLoanRequestQuery,
+    useViewGeneratedRepaymentScheduleQuery,
 } = loanRequestApi;

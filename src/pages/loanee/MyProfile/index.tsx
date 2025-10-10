@@ -1,14 +1,9 @@
 'use client'
 import React from 'react';
 import LoaneeProfileHeader from "@/components/loanee-my-profile/loaneeProfileHeader";
-// import LoaneeLoanDetails from '@/components/loanee-my-profile/LoaneeLoanDetails'
-// import LoaneeBasicDetails from "@/components/loanee-my-profile/LoaneeBasicDetails";
 import {useViewLoanDetailsQuery, useViewLoaneeInACohortDetailsQuery} from '@/service/users/Loanee_query';
 import dynamic from "next/dynamic";
 import {useAppSelector} from "@/redux/store";
-// import {ThreeDotTriggerDropDownItemsProps} from "@/types/Component.type";
-// import DetailsComponent from "@/features/cohort/details/DetailsComponent";
-// import {LoaneeInCohortView} from "@/features/cohort/cohort-details/LoaneeInCohortView";
 import UnderlineTab from "@/components/UnderlineTab";
 import ViewRepayment from "@/components/loanee-my-profile/ViewRepayment";
 import {getItemSessionStorage} from "@/utils/storage";
@@ -16,6 +11,7 @@ import ViewRepaymentSchedule from "@/components/loanee-my-profile/ViewRepaymentS
 import LoaneeLoanDetails from "@/components/loanee-my-profile/LoaneeLoanDetails";
 import {inter} from "@/app/fonts";
 import styles from '@/components/loanee-my-profile/index.module.css'
+import dayjs from "dayjs";
 
 const Index = dynamic(
     () => Promise.resolve(LoaneeDetails),
@@ -39,27 +35,16 @@ const LoaneeDetails = () => {
     const  {data, isLoading, isFetching} = useViewLoaneeInACohortDetailsQuery(props)
 
 
-    // console.log('data: ', data)
-    // console.log('viewLoaneeLoanDetails : ', viewLoaneeLoanDetails)
 
     const userName = data?.data?.firstName + ' '+ data?.data?.lastName
 
-    // const dropD: ThreeDotTriggerDropDownItemsProps[] = [
-    //     {id: 'editCohortDropDownItem', name: 'Edit cohort', handleClick: editCohort, sx: ``},
-    //     {id: 'deleteCohortDropDownItem', name: 'Delete cohort', handleClick: ()=> {setOpenDeleteModal(true)}, sx: ``},
-    //
-    // ]
-    // const documentData = [
-    //     {label:"Mandate",value:'' },
-    //     {label:"Loan terms and condition",value:''},
-    //     {label:"Loan disbursement terms",value:'' }
-    // ]
 
-    const nextOfFullName = data?.data?.nextOfKinFirstName + ' ' + data?.data?.nextOfKinLastName
+
+    const nextOfFullName = data?.data?.nextOfKinFirstName ? data?.data?.nextOfKinFirstName : ''  + ' ' + data?.data?.nextOfKinLastName ? data?.data?.nextOfKinLastName : '';
 
     const basicDetails = [
-        {label: 'Gender', value: `${data?.data?.gender ? data?.data?.datagender : 'Not provided'}`},
-        {label: 'Date of birth', value: `${data?.data?.dateOfBirth ? data?.data?.dateOfBirth : 'Not provided'}`},
+        {label: 'Gender', value: `${data?.data?.gender ? data?.data?.gender : 'Not provided'}`},
+        {label: 'Date of birth', value: `${data?.data?.dateOfBirth ?  dayjs(data?.data?.dateOfBirth?.toString()).format('MMM D, YYYY') : 'Not provided'}`},
         {label: 'Marital status', value: `${data?.data?.maritalStatus ? data?.data?.maritalStatus : 'Not provided'}`},
         {label: 'Nationality', value: `${data?.data?.nationality ? data?.data?.nationality : 'Not provided'}`},
         {label: 'State of origin ', value: `${data?.data?.stateOfOrigin ? data?.data?.stateOfOrigin : 'Not provided'}`},
@@ -112,7 +97,7 @@ const LoaneeDetails = () => {
     const tab:  {name: string; displayValue: React.ReactNode}[] = [
         {name: 'Details',  displayValue: <LoaneeLoanDetails loaneeViewDetails={viewLoaneeLoanDetails?.data} data={data?.data} isLoading={false} />},
         {name: 'Repayment',  displayValue:<ViewRepayment loanId={userRole !== 'LOANEE'? data?.data?.loanId : viewLoaneeLoanDetails?.data?.loanId}/>},
-        {name: 'Repayment schedule',  displayValue:<ViewRepaymentSchedule/>},
+        {name: 'Repayment schedule',  displayValue:<ViewRepaymentSchedule loanId={userRole !== 'LOANEE'? data?.data?.loanId : viewLoaneeLoanDetails?.data?.loanIdTab}/>},
         ...(userRole !== "LOANEE" ? [loaneeBioDataTab] : []),
 
 
@@ -131,10 +116,6 @@ const LoaneeDetails = () => {
               cohort={userRole === 'LOANEE' ?  viewLoaneeLoanDetails?.data?.cohortName : data?.data?.programName}
               program={userRole === 'LOANEE' ? viewLoaneeLoanDetails?.data?.programName : data?.data?.programName}
           />
-           {/*<div className={`flex w-full  max-h-[77vh]  `}>*/}
-           {/*    <LoaneeLoanDetails isLoading={isLoading || isFetching} data={data?.data}/>*/}
-           {/*    <LoaneeBasicDetails isLoading={isLoading || isFetching} data={data?.data}/>*/}
-           {/*</div>*/}
             <div id={'underline'} data-testid={'underline'} className={`px-4 `}>
                 <UnderlineTab defaultTab={'Details'} tabTriggers={tabTriggers} tabValue={tab}/>
             </div>
