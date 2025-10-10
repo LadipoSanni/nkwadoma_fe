@@ -8,6 +8,7 @@ export const vendorApi = createApi({
   endpoints: (builder) => ({
     viewAllPartnerProviders: builder.query({
       query: (param: {
+        name?:string;
         pageSize: number;
         pageNumber: number;
     }) => {    
@@ -21,6 +22,7 @@ export const vendorApi = createApi({
     }),
     viewAllProviderServices: builder.query({
       query: (param: {
+        name?:string;
         pageSize: number;
         pageNumber: number;
     }) => {    
