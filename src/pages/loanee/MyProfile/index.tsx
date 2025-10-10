@@ -120,8 +120,9 @@ const LoaneeDetails = () => {
 
     return (
         <main
-            id={'loaneeProfile'}
+            id={'loaneeProfileHeader'}
             className={`w-full  h-full`}
+            data-testid={'loaneeProfileHeader'}
         >
           <LoaneeProfileHeader
               userName={userRole !== 'LOANEE' ? userName : '' }
@@ -134,7 +135,7 @@ const LoaneeDetails = () => {
            {/*    <LoaneeLoanDetails isLoading={isLoading || isFetching} data={data?.data}/>*/}
            {/*    <LoaneeBasicDetails isLoading={isLoading || isFetching} data={data?.data}/>*/}
            {/*</div>*/}
-            <div className={`px-4 `}>
+            <div id={'underline'} data-testid={'underline'} className={`px-4 `}>
                 <UnderlineTab defaultTab={'Details'} tabTriggers={tabTriggers} tabValue={tab}/>
             </div>
         </main>

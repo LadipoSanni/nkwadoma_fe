@@ -89,11 +89,18 @@ export const loanRequestApi = createApi({
                 params: data
             }),
         }),
+        generateLoanRepaymentSchedule: builder.query({
+            query: (data:{ amountApproved: string, loanProductId: string})=> ({
+                url: `/repayment/history/generate/repayment/schedule?amountApproved=${data.amountApproved}&loanProductId=${data.loanProductId}`,
+                method: 'GET'
+            }),
+        }),
     })
 });
 
 export const {
     useViewAllLoanRequestQuery,
+    useGenerateLoanRepaymentScheduleQuery,
     useViewLoanRequestDetailsQuery,
     useRespondToLoanRequestMutation,
     useViewAllLoanReferralQuery,
