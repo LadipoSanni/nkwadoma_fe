@@ -47,7 +47,7 @@ export const financierApi = createApi({
                pageNumber: number; 
                 pageSize: number;
                 financierType?: string;
-                activationStatus?: string;
+                activationStatuses?: string[];
                 investmentVehicleId?: string
 
             })=> ({

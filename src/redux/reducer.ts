@@ -43,6 +43,8 @@ import { walletApi } from '@/service/users/wallet';
 import idsReducer from './slice/id/slice-ids';
 import loanProductReducer from "./slice/loan-product/Loan-product"
 import createLoanOfferReducer from './slice/create/createLoanOfferSlice'
+import { vendorApi } from '@/service/admin/vendor/vendor_query';
+
 
 const appReducer = combineReducers({
     adminLayout: adminLayoutReducer,
@@ -88,6 +90,7 @@ const appReducer = combineReducers({
     [unauthorizedApis.reducerPath]: unauthorizedApis.reducer,
     [loanBookApi.reducerPath]: loanBookApi.reducer,
     [walletApi.reducerPath]: walletApi.reducer,
+    [vendorApi.reducerPath]: vendorApi.reducer,
 });
 
 // export default appReducer;

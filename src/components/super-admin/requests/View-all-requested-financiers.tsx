@@ -74,7 +74,7 @@ function ViewAllRequestedFinancier() {
         name:debouncedSearchTerm,
         pageNumber: currentTabState.pageNumber ?? 0,
         pageSize: 10,
-        activationStatus: requestTabStatusType === "pending"?'PENDING_APPROVAL' : 'DECLINED',
+        activationStatuses: requestTabStatusType === "pending"?['PENDING_APPROVAL'] : ['DECLINED'],
     }
 
     const {data, isLoading, refetch,isFetching} = useGetAllActiveAndInvitedFinanciersQuery(param)

@@ -19,7 +19,6 @@ import { useViewFinanciersByInvestmentmentVehicleQuery } from '@/service/admin/f
 import {useRouter } from 'next/navigation';
 import { setLoanProductField,markStepCompleted } from "@/redux/slice/loan-product/Loan-product";
 import { formatPlaceName } from "@/utils/GlobalMethods";
-// import { useViewObligorLimitQuery} from "@/service/admin/overview";
 
 interface viewAllProps {
     id: string;
@@ -37,6 +36,7 @@ interface viewAllProps {
 function StepOne() {
     const fundProductAvailableAmount = useAppSelector(state => (state.selectedLoan.fundProductAvailableAmount))
     const loanProductField = useAppSelector(state => (state?.loanProduct?.createLoanProductField))
+    const investmentVehicleId = useAppSelector(state => (state?.loanProduct?.fundProductId))
     const [selectCurrency, setSelectCurrency] = useState('NGN');
     const [fundPageNumber, setFundPageNumber] = useState(0);
     const [hasNextfundPage, setHasNextfundPage] = useState(true);
@@ -49,12 +49,21 @@ function StepOne() {
     const [financiers,setFinanciers] = useState<viewAllProps[]>([]);
     const [showSponsorError, setShowSponsorError] = useState(false);
     const [localFundAvailableAmount, setLocalFundAvailableAmount] = useState(fundProductAvailableAmount);
-    //  const {data:oblgorLimitData,refetch:refetchObligorLimit} = useViewObligorLimitQuery({})
+    
+    const areValidAndEqual = (value1: string | undefined, value2: string | undefined): boolean => {
+        if (!value1 || !value2) return false;
+        if (value1.trim() === "" || value2.trim() === "") return false;
+        return value1 === value2;
+    };
+    
+    const check = areValidAndEqual(fundProductId, investmentVehicleId);
+   
     const isEdit = useAppSelector(state => state?.loanProduct?.isEdit)
     const router = useRouter();
-    // const generalOblgorLimitData = oblgorLimitData?.data
 
-    
+    const currentLoanSize = Number(loanProductField?.loanProductSize) || 0;
+    const whenEdit = fundProductAvailableAmount + currentLoanSize;
+
     const { data: investmentVehicleData, isFetching, isLoading: isFundLoading } =
         useGetInvestmentVehiclesByTypeAndStatusAndFundRaisingQuery({
             pageSize: 10,
@@ -187,27 +196,42 @@ function StepOne() {
             .matches(/^(?!0$)([1-9]\d*|0\.\d*[1-9]\d*)$/, "Tenor must be greater than 0")
             .required("Tenor is required")
             .test("max-number", "Invalid tenor limit", value => !value || Number(value) <= 999),
-            loanProductSize: Yup.string()
-            .trim()
-            .required("Loan product size is required")
-            .test("max-number", "Product size must be less than or equal to a quadrillion",
-                value => !value || Number(value) <= 1e15)
-            .test(
-              `is-greater-than-fund`,
-              `Amount can't be greater than investment vehicle ${formatAmount(localFundAvailableAmount)}`,
-              function(value) {
+        loanProductSize: Yup.string()
+        .trim()
+        .required("Loan product size is required")
+        .test("max-number", "Product size must be less than or equal to a quadrillion",
+            value => !value || Number(value) <= 1e15)
+        .test(
+            `is-greater-than-fund`,
+            function(value) {
+                const { path, createError } = this;
+                
                 if (!value || localFundAvailableAmount === null || localFundAvailableAmount === undefined) return true;
                 
                 const loanSize = Number(value);
-                const availableAmount = Number(localFundAvailableAmount);
+                let maxAllowedAmount: number;
+                let errorMessage: string;
                 
-                if (availableAmount === 0 && loanSize > 0) {
-                  return false;
+                if (isEdit && check) {
+                    maxAllowedAmount = whenEdit;
+                    errorMessage = `Amount can't be greater than investment vehicle available amount plus current loan product size ${formatAmount(maxAllowedAmount)}`;
+                } else {
+                   
+                    maxAllowedAmount = Number(localFundAvailableAmount);
+                    errorMessage = `Amount can't be greater than investment vehicle ${formatAmount(maxAllowedAmount)}`;
                 }
                 
-                return loanSize <= availableAmount;
-              }
-            ),
+                if (maxAllowedAmount === 0 && loanSize > 0) {
+                    return createError({ path, message: errorMessage });
+                }
+                
+                if (loanSize > maxAllowedAmount) {
+                    return createError({ path, message: errorMessage });
+                }
+                
+                return true;
+            }
+        ),
         obligorLimit: Yup.string()
             .trim()
             .required("Obligor limit is required")
