@@ -18,7 +18,6 @@ import {useRouter} from "next/navigation";
 import {setCurrentTab, setcurrentTabRoute, setCurrentTabStatus} from "@/redux/slice/loan/selected-loan";
 import {Loader2} from "lucide-react";
 import BackButton from "@/components/back-button";
-import SkeletonForTable from "@/reuseable/Skeleton-loading-state/Skeleton-for-table";
 
 interface viewAllType {
     principalAmount: string

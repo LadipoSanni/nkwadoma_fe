@@ -27,7 +27,6 @@ const ViewRepaymentSchedule = ({loanId}: Props) => {
         { title: 'Total payment', sortable: true, id: 'totalPayment', selector: (row: viewAllType) =><div>{formatAmount(row.totalAmountRepaid?.toString())}</div> },
 
     ]
-    console.log('data: ', data)
 
     return (
         <div
