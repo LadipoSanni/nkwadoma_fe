@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { forwardRef } from 'react';
 import {MdSearch} from 'react-icons/md';
 import {inter} from '@/app/fonts'
 
@@ -9,17 +9,27 @@ interface SearchInputProps {
     style?: string,
     testId?: string,
     placeholder?: string,
-
-    
+    onKeyDown?: React.KeyboardEventHandler<HTMLInputElement>;
+    onMouseDown?: React.MouseEventHandler<HTMLInputElement>;
 }
 
-const SearchInput: React.FC<SearchInputProps> = ({id,value,onChange,style,testId, placeholder="search"}: SearchInputProps) => {
+const SearchInput = forwardRef<HTMLInputElement, SearchInputProps>(({
+    id,
+    value,
+    onChange,
+    style,
+    testId, 
+    placeholder = "search",
+    onKeyDown,
+    onMouseDown
+}: SearchInputProps, ref) => {
     return (
         <div
             className={`${inter.className} ${style} md:w-[20.25rem] w-full text-[14px] h-[2.8125rem] flex items-center gap-2 border border-neutral650 rounded-md p-3`}
             id={`${id}Block`}>
             <MdSearch className="text-neutral950 w-5 h-5"/>
             <input
+                ref={ref}
                 id={id}
                 type="text"
                 placeholder={placeholder}
@@ -27,10 +37,13 @@ const SearchInput: React.FC<SearchInputProps> = ({id,value,onChange,style,testId
                 value={value}
                 onChange={onChange}
                 data-testid={testId}
-                
+                onKeyDown={onKeyDown}
+                onMouseDown={onMouseDown}
             />
         </div>
     );
-};
+});
+
+SearchInput.displayName = 'SearchInput';
 
 export default SearchInput;

@@ -20,6 +20,7 @@ import { setLoanProductFieldStepTwo,clearLoanProductField} from "@/redux/slice/l
 import {useToast} from "@/hooks/use-toast";
 import { MdDeleteOutline, MdAdd } from 'react-icons/md';
 import { useViewAllProviderServicesQuery,useViewAllPartnerProvidersQuery } from "@/service/admin/vendor/vendor_query";
+import { useDebounce } from '@/hooks/useDebounce';
 
 interface ApiError {
     status: number;
@@ -47,25 +48,34 @@ function StepTwo() {
     const [error, setError] = useState('');
      const [createLoanProduct, {isLoading}] = useCreateLoanProductMutation();
      const [updateLoanProduct, {isLoading:isUpdateLoading}] =useUpdateLoanProductMutation()
-
-     const [providersMap, setProvidersMap] = useState<Map<string, partner>>(new Map());
+    
+    const [providerSearchTerm, setProviderSearchTerm] = useState("");
+    const [providersMap, setProvidersMap] = useState<Map<string, partner>>(new Map());
     const [pageNumber, setPageNumber] = useState(0);
+    // const [pageSearchNumber, setPageSearchNumber] = useState(0);
     const [hasNextPage, setNextPage] = useState(true);
+    const [debouncedProvidersSearchTerm, isTyping] = useDebounce(providerSearchTerm, 1000);
 
+    const [serviceSearchTerm, setServiceSearchTerm] = useState("");
     const [servicesMap, setServicesMap] = useState<Map<string, string>>(new Map());
     const [pageServiceNumber, setPageServiceNumber] = useState(0);
+    // const [pageSearchServiceNumber, setPageSearchServiceNumber] = useState(0);
     const [serviceHasasNextPage, setServiceNextPage] = useState(true);
+    const [debouncedServiceSearchTerm, isServiceTyping] = useDebounce(serviceSearchTerm, 1000);
+
      const {toast} = useToast();
 
      const providers = Array.from(providersMap.values());
      const services = Array.from(servicesMap.values());
 
      const param = {
+      ...(debouncedProvidersSearchTerm && { name: debouncedProvidersSearchTerm }),
         pageSize: 10,
         pageNumber: pageNumber
      }
 
      const serviceParam = {
+      ...(debouncedServiceSearchTerm && { name: debouncedServiceSearchTerm }),
       pageSize: 10,
       pageNumber: pageServiceNumber
    }
@@ -77,49 +87,57 @@ function StepTwo() {
      const {data:serviceData,isLoading:isServiceLoading,isFetching: isServiceFetching } = useViewAllProviderServicesQuery(serviceParam)
 
      useEffect(() => {
-      if (data && data?.data) {
-        setProvidersMap(prev => {
-          const newMap = new Map(prev);
-          
-          if (pageNumber === 0) {
-            newMap.clear();
-          }
-          data.data.body
-            .filter((provider: partner) => 
-              provider.vendorName && 
-              provider.vendorName.trim() !== "" &&
-              typeof provider.vendorName === 'string'
-            )
-            .forEach((provider: partner) => {
-              newMap.set(provider.vendorName.toLowerCase(), provider);
-            });
-          
-          return newMap;
-        });
-        setNextPage(data?.data?.hasNextPage);
-      }
-    }, [data, pageNumber]);
+      setPageNumber(0);
+          }, [debouncedProvidersSearchTerm]);
 
-  useEffect(() => {
-    if (serviceData && serviceData?.data) {
-      setServicesMap(prev => {
-        const newMap = new Map(prev);
-        
-        if (pageServiceNumber === 0) {
-          newMap.clear();
-        }
-        
-        serviceData.data.body
-          .filter((service: string) => service && service.trim() !== "") // Remove empty strings
-          .forEach((service: string) => {
-            newMap.set(service.toLowerCase(), service);
-          });
-        
-        return newMap;
-      });
-      setServiceNextPage(serviceData.data?.hasNextPage);
-    }
-  }, [serviceData, pageServiceNumber]);
+    useEffect(() => {
+      setPageServiceNumber(0);
+        }, [debouncedServiceSearchTerm]);
+
+        useEffect(() => {
+          if (data && data?.data) {
+              setProvidersMap(prev => {
+                  const newMap = new Map(prev);
+                  if (pageNumber === 0) {
+                      newMap.clear();
+                  }
+                  
+                  data.data.body
+                      .filter((provider: partner) => 
+                          provider.vendorName && 
+                          provider.vendorName.trim() !== "" &&
+                          typeof provider.vendorName === 'string'
+                      )
+                      .forEach((provider: partner) => {
+                          newMap.set(provider.vendorName.toLowerCase(), provider);
+                      });
+                  
+                  return newMap;
+              });
+              setNextPage(data?.data?.hasNextPage);
+          }
+      }, [data, pageNumber, debouncedProvidersSearchTerm]);
+  
+      useEffect(() => {
+          if (serviceData && serviceData?.data) {
+              setServicesMap(prev => {
+                  const newMap = new Map(prev);
+                  
+                  if (pageServiceNumber === 0) {
+                      newMap.clear();
+                  }
+                  
+                  serviceData.data.body
+                      .filter((service: string) => service && service.trim() !== "")
+                      .forEach((service: string) => {
+                          newMap.set(service.toLowerCase(), service);
+                      });
+                  
+                  return newMap;
+              });
+              setServiceNextPage(serviceData.data?.hasNextPage);
+          }
+      }, [serviceData, pageServiceNumber, debouncedServiceSearchTerm]);
 
   const isFormValid = (values: typeof initialFormValue) => {
     if (values.vendor.length === 0) return true;
@@ -374,12 +392,16 @@ function StepTwo() {
                                     loadMore: loadMore,
                                     loader: isFetching
                                   }}
-                                  isloading={isProvidersLoading}
+                                  isloading={isProvidersLoading || isFetching}
                                   emptyState="No provider available"
                                   isItemDisabled={(item) => {
                                     const itemName = typeof item === 'object' ? item.name : String(item);
                                     return values.vendor.some((v, i) => i !== index && v.vendorName === itemName);
                                   }}
+                                  showSearch={true}
+                                  searchTerm={debouncedProvidersSearchTerm}
+                                  setSearchTerm={setProviderSearchTerm}
+                                  isTyping={isTyping}
                               />
 
                                   </div>
@@ -405,12 +427,16 @@ function StepTwo() {
                                       loadMore: loadMoreService,
                                       loader: isServiceFetching
                                     }}
-                                    isloading={isServiceLoading}
+                                    isloading={isServiceLoading || isServiceFetching }
                                     emptyState="No service available"
                                     isItemDisabled={(item) => {
                                       const serviceName = typeof item === 'object' ? item.name : String(item);
                                       return values.vendor.some((v, i) => i !== index && v.providerServices?.[0] === serviceName);
                                     }}
+                                    showSearch={true}
+                                    searchTerm={debouncedServiceSearchTerm}
+                                    setSearchTerm={setServiceSearchTerm}
+                                    isTyping={isServiceTyping}
                                 />
                               
                               </div>

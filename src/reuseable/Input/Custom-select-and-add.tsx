@@ -1,4 +1,4 @@
-import React,{useState} from 'react'
+import React,{useRef, useState,useEffect} from 'react'
 import {Select, SelectTrigger, SelectContent, SelectItem, SelectValue, SelectGroup} from '@/components/ui/select'
 import {ChevronDownIcon, ChevronUpIcon} from "@radix-ui/react-icons";
 import {Form, Formik,Field,FormikHelpers} from "formik";
@@ -14,6 +14,8 @@ import SkeletonForLoanOrg from '../Skeleton-loading-state/Skeleton-for-loan-orga
 import GeneralEmptyState from '../emptyStates/General-emptystate';
 import { Book } from 'lucide-react';
 import { capitalizeFirstLetters } from '@/utils/GlobalMethods';
+import SearchEmptyState from '@/reuseable/emptyStates/SearchEmptyState';
+import {MdSearch} from 'react-icons/md';
 
 type SelectItem = {
     id?: string;
@@ -42,7 +44,8 @@ type Props = {
     setSearchTerm?: (value: string) => void;
     isloading?: boolean,
     emptyState?: string,
-    showSearch? : boolean
+    showSearch? : boolean,
+    isTyping?: boolean
 };
 
 function CustomSelect({
@@ -62,13 +65,39 @@ function CustomSelect({
                           isloading,
                           emptyState,
                           infinityScroll,
-                          showSearch
+                          showSearch,
+                          isTyping
                       }: Props) {
     const [dropdownOpen, setDropdownOpen] = useState(false);
+    const searchInputRef = useRef<HTMLInputElement>(null);
+
+    useEffect(() => {
+        const handleBlur = () => {
+          console.log("Search input lost focus");
+        };
+      
+        const input = searchInputRef.current;
+        input?.addEventListener("blur", handleBlur);
+      
+        return () => {
+          input?.removeEventListener("blur", handleBlur);
+        };
+      }, []);
 
     const handleDropdownOpen = (open: boolean) => {
         setDropdownOpen(open);
+        
+        if (open) {
+            setTimeout(() => {
+                searchInputRef.current?.focus();
+            }, 150);
+        } else {
+            if (!open && searchTerm) {
+                setSearchTerm("");
+              }
+        }
     };
+
 
     const initialFormValue ={ name: "" }
 
@@ -79,6 +108,9 @@ function CustomSelect({
                 onChange(trimmed); 
                 setTimeout(() => {
                   setDropdownOpen(false);
+                  if (!open && searchTerm) {
+                    setSearchTerm("");
+                }
                   resetForm(); 
                 }, 100); 
               }
@@ -102,7 +134,18 @@ function CustomSelect({
     const handleKeyDown = (e: React.KeyboardEvent) => {
         if (dropdownOpen && e.key.length === 1 && !e.ctrlKey && !e.metaKey) {
             e.stopPropagation();
+            e.preventDefault();
         }
+    }
+
+    const handleSelectItemClick = (value: string) => {
+        if (value && value.trim()) {
+            onChange(value);
+            setDropdownOpen(false); 
+            setTimeout(() => {
+                setSearchTerm(""); 
+              }, 100);
+          }
     }
 
     return (
@@ -110,13 +153,7 @@ function CustomSelect({
             <Select
                 name={name}
                 value={value}
-               onValueChange={(val: string) => {
-                console.log("The val: ",val)
-                if (val) {
-                    // console.log('onValueChange:', val);
-                    onChange(val);
-                  }
-                }}
+               onValueChange={handleSelectItemClick}
                 onOpenChange={handleDropdownOpen} 
                 open={dropdownOpen}
             >
@@ -142,27 +179,38 @@ function CustomSelect({
                     className="border-none border-[#FAFBFC] text-[#404653] text-sm max-h-full  overflow-visible"
                     style={{ zIndex: 1000 }}
                     onKeyDown={handleKeyDown}
+                   
                 >
                 {!showSearch? "" :  <div className='w-full mb-3 px-2 border-black border-opacity-30 border-solid border-b-[1px] pb-3'>
       <SearchInput
           testId='search-input'
           id="staffSearchLoanee"
           value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-         style="md:w-full w-full"
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+            const value = e.target.value;
+            setSearchTerm(value);
+          }}
+          style="md:w-full w-full"
+          onKeyDown={(e: React.KeyboardEvent) => {                          
+            e.stopPropagation();
+            e.nativeEvent.stopImmediatePropagation();
+        }}
+        ref={searchInputRef}
          />
        </div>}
 
                    { isloading ? (
-            <div><SkeletonForLoanOrg/></div>
-          ) : selectContent?.length === 0 ? (
-            <div>
+            <div><SkeletonForLoanOrg className='h-8'/></div>
+          ) 
+        
+          :  (searchTerm &&  selectContent?.length === 0) || selectContent?.length === 0 ? (
+            <div className='relative bottom-2'>
               <GeneralEmptyState
-                icon={Book}
+                icon={ searchTerm? MdSearch : Book}
                 iconSize='1.6rem'
                 iconContainerClass='w-[30px] h-[30px]'
                 message={<div className='relative bottom-2'>
-                  <p>{emptyState}</p>
+                  <p>{searchTerm? "Not found" : emptyState}</p>
                 </div>}
               />
             </div>
@@ -182,7 +230,7 @@ function CustomSelect({
                   next={infinityScroll.loadMore}
                   hasMore={infinityScroll.hasMore}
                   loader={infinityScroll.loader ? <SkeletonForLoanOrg /> : null}
-                  height="20.5vh"
+                  height="18vh"
                   className="w-full"
                 >
 
@@ -206,7 +254,7 @@ function CustomSelect({
                                 <div key={itemId} id={itemId}>
                                     <SelectItem
                                         key={`${itemId}-selectitem`}
-                                        // id={itemId}
+                                        onClick={() => handleSelectItemClick(itemValue)}
                                         value={itemValue}
                                         className={`${itemValue} hover:bg-[#EEF5FF]`}
                                         disabled={isItemDisabled ? isItemDisabled(content) : false}
@@ -237,7 +285,7 @@ function CustomSelect({
                                 <div key={itemId} id={itemId}>
                                     <SelectItem
                                          key={`${itemId}-selectitem`}
-                                        // id={itemId}
+                                         onClick={() => handleSelectItemClick(itemValue)}
                                         value={itemValue}
                                         className={`${itemValue} hover:bg-[#EEF5FF]`}
                                         disabled={isItemDisabled ? isItemDisabled(content) : false}
@@ -291,8 +339,8 @@ function CustomSelect({
                                     }
                                     }}
                                     onKeyDown={(e: React.KeyboardEvent) => {
-                                        // Stop propagation to prevent the select from handling these events
                                         e.stopPropagation();
+                                        e.nativeEvent.stopImmediatePropagation();
                                     }}
                                   />
                                   <Button
