@@ -54,14 +54,14 @@ function StepTwo() {
     const [pageNumber, setPageNumber] = useState(0);
     // const [pageSearchNumber, setPageSearchNumber] = useState(0);
     const [hasNextPage, setNextPage] = useState(true);
-    const [debouncedProvidersSearchTerm, isTyping] = useDebounce(providerSearchTerm, 1000);
+    const [debouncedProvidersSearchTerm] = useDebounce(providerSearchTerm, 1000);
 
     const [serviceSearchTerm, setServiceSearchTerm] = useState("");
     const [servicesMap, setServicesMap] = useState<Map<string, string>>(new Map());
     const [pageServiceNumber, setPageServiceNumber] = useState(0);
     // const [pageSearchServiceNumber, setPageSearchServiceNumber] = useState(0);
     const [serviceHasasNextPage, setServiceNextPage] = useState(true);
-    const [debouncedServiceSearchTerm, isServiceTyping] = useDebounce(serviceSearchTerm, 1000);
+    const [debouncedServiceSearchTerm] = useDebounce(serviceSearchTerm, 1000);
 
      const {toast} = useToast();
 
@@ -401,7 +401,7 @@ function StepTwo() {
                                   showSearch={true}
                                   searchTerm={debouncedProvidersSearchTerm}
                                   setSearchTerm={setProviderSearchTerm}
-                                  isTyping={isTyping}
+                                  // isTyping={isTyping}
                               />
 
                                   </div>
@@ -436,7 +436,7 @@ function StepTwo() {
                                     showSearch={true}
                                     searchTerm={debouncedServiceSearchTerm}
                                     setSearchTerm={setServiceSearchTerm}
-                                    isTyping={isServiceTyping}
+                                    // isTyping={isServiceTyping}
                                 />
                               
                               </div>

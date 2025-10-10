@@ -44,7 +44,7 @@ type Props = {
     isloading?: boolean,
     emptyState?: string,
     showSearch? : boolean,
-    isTyping?: boolean
+    // isTyping?: boolean
 };
 
 function CustomSelect({
@@ -65,7 +65,7 @@ function CustomSelect({
                           emptyState,
                           infinityScroll,
                           showSearch,
-                          isTyping
+                        //   isTyping
                       }: Props) {
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const searchInputRef = useRef<HTMLInputElement>(null);
