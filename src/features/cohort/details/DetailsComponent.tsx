@@ -22,19 +22,19 @@ const DetailsComponent = () => {
 
 
     const cohort: {name: string, value: string, valueType: 'percentage'| 'digit'| 'currency' | 'tenor' | 'years', id:string}[] = [
-        {name: 'Total amount disbursed', value: cohortDetails?.data?.amountReceived , valueType: 'currency', id: 'totalAmount'},
-        {name: 'Total amount repaid', value: cohortDetails?.data?.totalAmountRepaid , valueType: 'currency', id: 'totalRepaid'},
-        {name: 'Total amount outstanding', value: cohortDetails?.data?.amountOutstanding , valueType: 'currency', id: 'totalOutstanding'},
-        {name: 'Average starting salary', value: cohortDetails?.data?.averageStartingSalary , valueType: 'currency', id: 'averageStartingSalary'},
-        {name: 'Tuition amount', value: cohortDetails?.data?.tuitionAmount , valueType: 'currency', id: 'tuitionAmount'},
+        {name: 'Total amount disbursed', value: cohortDetails?.data?.amountReceived ? cohortDetails?.data?.amountReceived : 0 , valueType: 'currency', id: 'totalAmount'},
+        {name: 'Total amount repaid', value: cohortDetails?.data?.totalAmountRepaid ? cohortDetails?.data?.totalAmountRepaid : 0 , valueType: 'currency', id: 'totalRepaid'},
+        {name: 'Total amount outstanding', value: cohortDetails?.data?.amountOutstanding ? cohortDetails?.data?.amountOutstanding : 0 , valueType: 'currency', id: 'totalOutstanding'},
+        {name: 'Average starting salary', value: cohortDetails?.data?.averageStartingSalary ? cohortDetails?.data?.averageStartingSalary : 0 , valueType: 'currency', id: 'averageStartingSalary'},
+        {name: 'Tuition amount', value: cohortDetails?.data?.tuitionAmount ? cohortDetails?.data?.tuitionAmount : 0 , valueType: 'currency', id: 'tuitionAmount'},
   ]
 
     const cohort2: {name: string, value: string, valueType: 'percentage'| 'digit'| 'currency' | 'tenor' | 'years', id:string}[] = [
-        {name: 'Total loanees', value: cohortDetails?.data?.numberOfLoanees , valueType: 'digit', id: 'totalLoanees'},
-        {name: 'Total dropouts', value: cohortDetails?.data?.numberOfDropout , valueType: 'digit', id: 'totalDropouts'},
-        {name: 'Total employed', value: cohortDetails?.data?.numberEmployed , valueType: 'digit', id: 'totalEmployed'},
-        {name: 'Employment rate', value: cohortDetails?.data?.totalAmountRepaid , valueType: 'percentage', id: 'employmentRate'},
-        {name: 'Repayment rate', value: cohortDetails?.data?.repaymentRate , valueType: 'percentage', id: 'repaymentRate'},
+        {name: 'Total loanees', value: cohortDetails?.data?.numberOfLoanees ? cohortDetails?.data?.tuitionAmount : 0 , valueType: 'digit', id: 'totalLoanees'},
+        {name: 'Total dropouts', value: cohortDetails?.data?.numberOfDropout ? cohortDetails?.data?.numberOfDropout : 0 , valueType: 'digit', id: 'totalDropouts'},
+        {name: 'Total employed', value: cohortDetails?.data?.numberEmployed ? cohortDetails?.data?.numberEmployed : 0 , valueType: 'digit', id: 'totalEmployed'},
+        {name: 'Employment rate', value: cohortDetails?.data?.totalAmountRepaid ? cohortDetails?.data?.totalAmountRepaid : 0 , valueType: 'percentage', id: 'employmentRate'},
+        {name: 'Repayment rate', value: cohortDetails?.data?.repaymentRate ? cohortDetails?.data?.repaymentRate : 0 , valueType: 'percentage', id: 'repaymentRate'},
     ]
 
     const cohort3 = [
@@ -45,8 +45,8 @@ const DetailsComponent = () => {
         },
         {title: 'Program', id:'programname', value: <span className={` text-meedlBlue bg-[#F3F8FF] rounded-full w-fit h-fit  max-w-[100%] px-4 py-2  `}>{cohortDetails?.data?.programName}</span>},
         {title: 'Status', id: 'status', value: <span className={`rounded-full ${selectedCohortInOrganizationType === 'GRADUATED' ? 'text-[#636363] bg-[#F6F6F6]  '  :selectedCohortInOrganizationType === 'INCOMING'  ? 'text-[#66440A] bg-[#FEF6E8] ' :" bg-[#E7F5EC] text-[#063F1A] "}   h-fit w-fit px-2 py-2   text-[14px] `}>{capitalizeFirstLetters(cohortDetails?.data?.cohortStatus)}</span>},
-        {title: 'Start date',id:'startDate', value: <span className={` ${inter500.className} text-[#212221] text-[14px] `}>{dayjs(cohortDetails?.data?.startDate?.toString()).format('MMM D, YYYY')}</span>},
-        {title: 'End  date',id:'endDate', value: <span className={` ${inter500.className} text-[#212221] text-[14px] `}>{dayjs(cohortDetails?.data?.expectedEndDate?.toString()).format('MMM D, YYYY')}</span>},
+        {title: 'Start date',id:'startDate', value: <span className={` ${inter500.className} text-[#212221] text-[14px] `}>{cohortDetails?.data?.startDate ? dayjs(cohortDetails?.data?.startDate?.toString()).format('MMM D, YYYY') : ''}</span>},
+        {title: 'End  date',id:'endDate', value: <span className={` ${inter500.className} text-[#212221] text-[14px] `}>{cohortDetails?.data?.expectedEndDate ? dayjs(cohortDetails?.data?.expectedEndDate?.toString()).format('MMM D, YYYY') : ''}</span>},
 
 
     ]
@@ -66,14 +66,24 @@ const DetailsComponent = () => {
                         isLoading={isLoading || isFetching}
                     />
                 ))}
-                <div className={` md:grid ${cohortBreakDown?.data?.length === 1 ? 'md:grid-cols-1' :  'md:grid-cols-2 '} md:gap-4  `}>
+                {/*${cohortBreakDown?.data?.length % 2 !== 0  ? 'md:grid-cols-1' :*/}
+                <div className={` md:grid   'md:grid-cols-2  md:gap-4  `}>
                     {cohortBreakDown?.data?.map((item: CohortItems , i: number) => (
-                        <Details
-                            isLoading={isLoading || isFetching}
+                        <div
                             key={'index'+i}
-                            id={item.loanBreakdownId} name={item.itemName} valueType='currency'
-                            value={item.itemAmount}
-                        />
+                            className={` 
+                    ${cohortBreakDown?.data?.length % 2 !== 0 && i === cohortBreakDown?.data?.length - 1
+                                ? "md:col-span-2"  
+                                : ""}`}
+                        >
+                            <Details
+                                isLoading={isLoading || isFetching}
+                                key={'index'+i}
+                                id={item.loanBreakdownId} name={item.itemName} valueType='currency'
+                                value={item.itemAmount}
+                            />
+                        </div>
+
                     ))}
                 </div>
 
