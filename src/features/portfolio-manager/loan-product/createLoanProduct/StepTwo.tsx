@@ -73,8 +73,6 @@ function StepTwo() {
 
      const {data,isLoading:isProvidersLoading,isFetching} = useViewAllPartnerProvidersQuery(param)
 
-     console.log("the data: ",providersMap)
-
 
      const {data:serviceData,isLoading:isServiceLoading,isFetching: isServiceFetching } = useViewAllProviderServicesQuery(serviceParam)
 
