@@ -48,12 +48,21 @@ const ViewRepayment = ({loanId}: Props) => {
     const [displayedMonth, setDisplayedMonth] = useState('')
     // const [debouncedSearchTerm, isTyping] = useDebounce(searchTerm, 1000);
 
+    const yearRangeProps = {
+        loanId: loanId
+    }
+    const  {data:getRepaymentYearRange} = useGetRepaymentHistoryYearRangeQuery(yearRangeProps)
+    console.log(
+        'getRepaymentYearRange ;',
+        getRepaymentYearRange
+    )
+
     const props =  {
         pageSize: pageSize,
         pageNumber: pageNumber,
-        loanId: loanId
-        // month:  selectedIndex ,
-        // year:  year ,
+        loanId: loanId,
+        month:  selectedIndex ,
+        year:  year ,
     }
     const {data, isFetching , isLoading} = useViewALoanRepaymentHistoryQuery(props)
     console.log('data: ', data,selectedIndex,year )
@@ -64,7 +73,6 @@ const ViewRepayment = ({loanId}: Props) => {
     //     year: selectedYear,
     //     searchTerm: debouncedSearchTerm,
     // }
-    const  {data:getRepaymentYearRange} = useGetRepaymentHistoryYearRangeQuery({})
     // const {data:searchData, isLoading:isLoadinFetchedData, isFetching:isFetchingSearchedData } = useSearchAllRepaymentHistoryQuery(searchProps,{skip: !debouncedSearchTerm})
 
 
@@ -142,6 +150,7 @@ const ViewRepayment = ({loanId}: Props) => {
     };
 
     const  getYea = (earlyYear: number,currentYear: number) => {
+        console.log('earlyYear: ', earlyYear, 'currentYear: ', currentYear)
         if (!currentYear) {
             const aa : number[] = [earlyYear]
             const today = new Date().getFullYear();
