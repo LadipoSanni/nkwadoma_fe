@@ -75,6 +75,8 @@ const Index = () => {
     }, [selectedLoanProductId]);
 
     const backToLoanRequest = () => {
+        // router.push(`/loan-request-details?id=${ID?.id}`);
+
         router.push("/loan/loan-request")
     }
     const getLoanProductById = (id: string) => {

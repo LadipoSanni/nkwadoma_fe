@@ -52,10 +52,6 @@ const ViewRepayment = ({loanId}: Props) => {
         loanId: loanId
     }
     const  {data:getRepaymentYearRange} = useGetRepaymentHistoryYearRangeQuery(yearRangeProps)
-    console.log(
-        'getRepaymentYearRange ;',
-        getRepaymentYearRange
-    )
 
     const props =  {
         pageSize: pageSize,
@@ -65,7 +61,6 @@ const ViewRepayment = ({loanId}: Props) => {
         year:  year ,
     }
     const {data, isFetching , isLoading} = useViewALoanRepaymentHistoryQuery(props)
-    console.log('data: ', data,selectedIndex,year )
     // const searchProps = {
     //     pageSize: pageSize,
     //     pageNumber: pageNumber,
@@ -125,15 +120,6 @@ const ViewRepayment = ({loanId}: Props) => {
     }
 
 
-    // "id": "cd15d3aa-dea8-41f6-885c-b040e308626f",
-    //     "firstName": null,
-    //     "lastName": null,
-    //     "paymentDateTime": "2025-10-09T00:00:00",
-    //     "amountPaid": 100.00,
-    //     "modeOfPayment": "TRANSFER",
-    //     "totalAmountRepaid": null,
-    //     "amountOutstanding": 1900.00,
-    //     "interestIncurred": 0.99
 
     const tableHeader = [
         // { title: 'Name', sortable: true, id: 'name', selector: (row: TableRowData) => capitalizeFirstLetters(row.firstName?.toString()) + " " + row.lastName  },
@@ -149,28 +135,31 @@ const ViewRepayment = ({loanId}: Props) => {
         console.log(ID)
     };
 
-    const  getYea = (earlyYear: number,currentYear: number) => {
-        console.log('earlyYear: ', earlyYear, 'currentYear: ', currentYear)
-        if (!currentYear) {
-            const aa : number[] = [earlyYear]
-            const today = new Date().getFullYear();
-            for (const element of aa) {
-                if (element < today){
-                    aa.push(element + 1 )
+    const  getRepaymentYears = (firstRepaymentYear: number,lastRepaymentYear: number) => {
+        if (firstRepaymentYear === 0 || lastRepaymentYear === 0) {
+            return [];
+        }else{
+            if (!lastRepaymentYear) {
+                const repaymentYears : number[] = [firstRepaymentYear]
+                const currentYear = new Date().getFullYear();
+                for (const element of repaymentYears) {
+                    if (element < currentYear){
+                        repaymentYears.push(element + 1 )
+                    }
                 }
-            }
-            return aa;
-        }else if (!earlyYear) {
-            const currentYear = new Date().getFullYear();
-            return [currentYear]
-        }else {
-            const aa : number[] = [earlyYear]
-            for (const element of aa) {
-                if (element < currentYear){
-                    aa.push(element + 1 )
+                return repaymentYears;
+            }else if (!firstRepaymentYear) {
+                const currentYear = new Date().getFullYear();
+                return [currentYear]
+            }else {
+                const repaymentYears : number[] = [firstRepaymentYear]
+                for (const element of repaymentYears) {
+                    if (element < lastRepaymentYear){
+                        repaymentYears.push(element + 1 )
+                    }
                 }
+                return repaymentYears;
             }
-            return aa;
         }
     }
 
@@ -197,7 +186,7 @@ const ViewRepayment = ({loanId}: Props) => {
         setDisplayedYear('')
     }
 
-    const getYears = getYea(getRepaymentYearRange?.data?.firstYear, getRepaymentYearRange?.data?.lastYear)
+    const getYears = getRepaymentYears(getRepaymentYearRange?.data?.firstYear, getRepaymentYearRange?.data?.lastYear)
 
 
 
