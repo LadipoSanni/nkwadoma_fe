@@ -20,7 +20,7 @@ import { setLoanProductFieldStepTwo,clearLoanProductField} from "@/redux/slice/l
 import {useToast} from "@/hooks/use-toast";
 import { MdDeleteOutline, MdAdd } from 'react-icons/md';
 import { useViewAllProviderServicesQuery,useViewAllPartnerProvidersQuery } from "@/service/admin/vendor/vendor_query";
-import { useDebounce } from '@/hooks/useDebounce';
+
 
 interface ApiError {
     status: number;
@@ -52,16 +52,13 @@ function StepTwo() {
     const [providerSearchTerm, setProviderSearchTerm] = useState("");
     const [providersMap, setProvidersMap] = useState<Map<string, partner>>(new Map());
     const [pageNumber, setPageNumber] = useState(0);
-    // const [pageSearchNumber, setPageSearchNumber] = useState(0);
     const [hasNextPage, setNextPage] = useState(true);
-    const [debouncedProvidersSearchTerm] = useDebounce(providerSearchTerm, 1000);
 
     const [serviceSearchTerm, setServiceSearchTerm] = useState("");
     const [servicesMap, setServicesMap] = useState<Map<string, string>>(new Map());
     const [pageServiceNumber, setPageServiceNumber] = useState(0);
-    // const [pageSearchServiceNumber, setPageSearchServiceNumber] = useState(0);
     const [serviceHasasNextPage, setServiceNextPage] = useState(true);
-    const [debouncedServiceSearchTerm] = useDebounce(serviceSearchTerm, 1000);
+
 
      const {toast} = useToast();
 
@@ -69,30 +66,30 @@ function StepTwo() {
      const services = Array.from(servicesMap.values());
 
      const param = {
-      ...(debouncedProvidersSearchTerm && { name: debouncedProvidersSearchTerm }),
+      ...(providerSearchTerm && { name: providerSearchTerm }),
         pageSize: 10,
         pageNumber: pageNumber
      }
 
      const serviceParam = {
-      ...(debouncedServiceSearchTerm && { name: debouncedServiceSearchTerm }),
+      ...(serviceSearchTerm && { name: serviceSearchTerm}),
       pageSize: 10,
       pageNumber: pageServiceNumber
    }
 
 
-     const {data,isLoading:isProvidersLoading,isFetching} = useViewAllPartnerProvidersQuery(param)
+     const {data,isLoading:isProvidersLoading,isFetching} = useViewAllPartnerProvidersQuery(param,{refetchOnMountOrArgChange:true})
 
 
-     const {data:serviceData,isLoading:isServiceLoading,isFetching: isServiceFetching } = useViewAllProviderServicesQuery(serviceParam)
+     const {data:serviceData,isLoading:isServiceLoading,isFetching: isServiceFetching } = useViewAllProviderServicesQuery(serviceParam,{refetchOnMountOrArgChange:true})
 
      useEffect(() => {
       setPageNumber(0);
-          }, [debouncedProvidersSearchTerm]);
+          }, [providerSearchTerm]);
 
     useEffect(() => {
       setPageServiceNumber(0);
-        }, [debouncedServiceSearchTerm]);
+        }, [serviceSearchTerm]);
 
         useEffect(() => {
           if (data && data?.data) {
@@ -116,7 +113,7 @@ function StepTwo() {
               });
               setNextPage(data?.data?.hasNextPage);
           }
-      }, [data, pageNumber, debouncedProvidersSearchTerm]);
+      }, [data, pageNumber, providerSearchTerm]);
   
       useEffect(() => {
           if (serviceData && serviceData?.data) {
@@ -137,7 +134,7 @@ function StepTwo() {
               });
               setServiceNextPage(serviceData.data?.hasNextPage);
           }
-      }, [serviceData, pageServiceNumber, debouncedServiceSearchTerm]);
+      }, [serviceData, pageServiceNumber, serviceSearchTerm]);
 
   const isFormValid = (values: typeof initialFormValue) => {
     if (values.vendor.length === 0) return true;
@@ -220,6 +217,15 @@ function StepTwo() {
     }
     
     const handleSubmit = async (values: typeof initialFormValue) => {
+
+      const filteredVendors = values.vendor.filter(vendor => {
+        const vendorName = String(vendor.vendorName || '').trim();
+        const service = String(vendor.providerServices?.[0] || '').trim();
+        const costOfService = String(vendor.costOfService || '').trim();
+        const duration = String(vendor.duration || '').trim();
+        return vendorName && service && costOfService && duration;
+    });
+
         const formData = {
            id: stepOneLoanProductField?.id,
            name: stepOneLoanProductField?.productName,
@@ -236,7 +242,7 @@ function StepTwo() {
            disbursementTerms: values?.disbursementTerms,
            moratorium: stepOneLoanProductField?.moratorium,
            sponsors: stepOneLoanProductField?.sponsors,
-           vendors: values?.vendor
+           vendors: filteredVendors
         }
 
          try {
@@ -399,7 +405,7 @@ function StepTwo() {
                                     return values.vendor.some((v, i) => i !== index && v.vendorName === itemName);
                                   }}
                                   showSearch={true}
-                                  searchTerm={debouncedProvidersSearchTerm}
+                                  searchTerm={providerSearchTerm}
                                   setSearchTerm={setProviderSearchTerm}
                                   // isTyping={isTyping}
                               />
@@ -434,7 +440,7 @@ function StepTwo() {
                                       return values.vendor.some((v, i) => i !== index && v.providerServices?.[0] === serviceName);
                                     }}
                                     showSearch={true}
-                                    searchTerm={debouncedServiceSearchTerm}
+                                    searchTerm={serviceSearchTerm}
                                     setSearchTerm={setServiceSearchTerm}
                                     // isTyping={isServiceTyping}
                                 />
