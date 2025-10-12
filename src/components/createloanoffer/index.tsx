@@ -10,7 +10,7 @@ import CustomSelectId from "@/reuseable/Input/custom-select-id";
 import {useViewAllLoanProductQuery} from "@/service/admin/loan_product";
 import {MdInfoOutline} from 'react-icons/md';
 import { Button } from '../ui/button';
-import {store} from '@/redux/store';
+import {store, useAppSelector} from '@/redux/store';
 import {formatAmount, unformatAmount} from "@/utils/Format";
 import {LoanProduct} from "@/types/loanee";
 import {LoanProuctType} from "@/types/loan/loan-request.type";
