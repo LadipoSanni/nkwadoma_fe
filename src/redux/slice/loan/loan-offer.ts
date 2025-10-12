@@ -22,7 +22,7 @@ export const loanOfferSlice = createSlice({
         setSelectedLoanRequestId: (state, action: PayloadAction<string>) => {
             state.selectedLoanRequestId = action.payload;
         },
-        setLoanRequestDetailsCurrentTabIndex : (state, action: PayloadAction<string>) => {
+        setLoanRequestDetailsCurrentTabIndex : (state, action: PayloadAction<number>) => {
             state.loanRequestDetailsCurrentTabIndex = action.payload;
         }
     }

@@ -27,7 +27,7 @@ import {NumericFormat} from "react-number-format";
 import dayjs from "dayjs";
 import {Button} from "@/components/ui/button";
 import {ChevronDownIcon, ChevronUpIcon} from "@radix-ui/react-icons";
-import {store} from "@/redux/store";
+import {store, useAppSelector} from "@/redux/store";
 import {setCurrentTab} from "@/redux/slice/loan/selected-loan";
 import CreateLoanOffer from "@/reuseable/modals/createLoanOffer/Index";
 import DeclineLoanModal from "@/reuseable/modals/declineLoan/Index";
@@ -40,6 +40,7 @@ import { Cross2Icon } from "@radix-ui/react-icons";
 import {setSelectedLoanRequestId} from "@/redux/slice/create/createLoanOfferSlice";
 import { capitalizeFirstLetters } from "@/utils/GlobalMethods";
 import { formatMonthInDate } from '@/utils/Format'
+import { setLoanRequestDetailsCurrentTabIndex } from '@/redux/slice/loan/loan-offer';
 
 
 const LoanDetailsContent = dynamic(
@@ -49,7 +50,7 @@ const LoanDetailsContent = dynamic(
 
 function LoanDetails() {
     const router = useRouter()
-    const storedCurrentTabIndex = useAppSelector(state => state.loanOffer.setLoanRequestDetailsCurrentTabIndex)
+    const storedCurrentTabIndex = useAppSelector(state => state.loanOffer.loanRequestDetailsCurrentTabIndex)
     const searchParams = useSearchParams()
     const [currentTab, setCurrentsTab] = useState(storedCurrentTabIndex);
     const [arrowDown, setArrowDown] = useState(false);
