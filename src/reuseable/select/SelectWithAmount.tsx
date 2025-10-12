@@ -30,6 +30,8 @@ interface ProgramSelectProps {
   onOpenChange?: (open: boolean) => void;
   emptyState?: string;
   onChange?: (value: string) => void;
+  setAvailableAmount?: (value: number) => void;
+  availableAmount?: number
 }
 
 const SelectWithAmount: React.FC<ProgramSelectProps> = ({
@@ -39,13 +41,15 @@ const SelectWithAmount: React.FC<ProgramSelectProps> = ({
   setIsSelectOpen,
   selectOptions,
   setId,
+  setAvailableAmount,
   placeholder,
   label,
   infinityScroll,
   isLoading,
   onOpenChange,
   onChange,
-  emptyState = "No program available"
+  emptyState = "No program available",
+  availableAmount
 }) => {
   const uniqueId = `select${Math.random().toString(36).substring(2, 9)}`;
 
@@ -62,6 +66,9 @@ const SelectWithAmount: React.FC<ProgramSelectProps> = ({
           const selectedProgram = selectOptions.find((program) => program.name === value);
           if (selectedProgram) {
             setId(selectedProgram.id ?? "");
+            if(setAvailableAmount){
+              setAvailableAmount(selectedProgram?.totalAvailableAmount ?? 0)
+            }
           }
           setSelectedProgram(value);
           onChange?.(value);
@@ -79,7 +86,7 @@ const SelectWithAmount: React.FC<ProgramSelectProps> = ({
                 <span className="font-normal text-[14px]">{selectedProgram}</span>
                 {
                   <span className="text-[14px] bg-[#F2F2F2] px-2 rounded-xl">
-                    {formatAmount(selectedProgramObj?.totalAvailableAmount)}
+                    {formatAmount(selectedProgramObj?.totalAvailableAmount || availableAmount)}
                   </span>
                 }
               </div>
