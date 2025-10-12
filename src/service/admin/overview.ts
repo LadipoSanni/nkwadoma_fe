@@ -27,8 +27,8 @@ export const portfolioOverviewApi = createApi({
             providesTags: ['loanee','upload-repayment']
         }),
         getRepaymentHistoryYearRange: builder.query({
-            query: () => ({
-                url: `/repayment/history/years`,
+            query: (data?:{loanId?:string}) => ({
+                url: `/repayment/history/years${data?.loanId ? `?loanId=${data?.loanId}` : ''}`,
                 method: 'GET'
             }),
             providesTags: ['loanee','upload-repayment']

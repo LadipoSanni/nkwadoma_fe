@@ -2,7 +2,7 @@
 import Details from '@/components/loanee-my-profile/Details';
 import React from 'react';
 import styles from '@/components/loanee-my-profile/index.module.css'
-import {inter500} from '@/app/fonts';
+import {inter, inter500} from '@/app/fonts';
 import {useAppSelector} from "@/redux/store";
 import {useGetCohortDetailsBreakdownQuery, useViewCohortDetailsQuery} from "@/service/admin/cohort_query";
 import dayjs from "dayjs";
@@ -40,7 +40,7 @@ const DetailsComponent = () => {
     const cohort3 = [
         {title: 'Description', id: 'programDiscription', value:
             <div>
-               <QuillRenderer html={cohortDetails?.data?.cohortDescription || ""}/>
+               <QuillRenderer sx={` ${inter500.className} text-[#212221] text-[14px] `} html={cohortDetails?.data?.cohortDescription || ""}/>
             </div>
         },
         {title: 'Program', id:'programname', value: <span className={` text-meedlBlue bg-[#F3F8FF] rounded-full w-fit h-fit  max-w-[100%] px-4 py-2  `}>{cohortDetails?.data?.programName}</span>},
@@ -108,8 +108,8 @@ const DetailsComponent = () => {
                         id={item.id}
                         data-testid={item.id}
                     >
-                        <p className={` text-[#6A6B6A] text-[14px]  `}>{item.title}</p>
-                        {item.value}
+                        <p className={` text-[#6A6B6A] text-[14px] ${inter.className}  `}>{item.title}</p>
+                        <div className={` text-[#212221] text-[14px] ${inter.className}`}>{item.value}</div>
                     </div>
                 ))}
 

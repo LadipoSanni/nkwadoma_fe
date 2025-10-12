@@ -12,6 +12,7 @@ import LoaneeLoanDetails from "@/components/loanee-my-profile/LoaneeLoanDetails"
 import {inter} from "@/app/fonts";
 import styles from '@/components/loanee-my-profile/index.module.css'
 import dayjs from "dayjs";
+import {capitalizeFirstLetters} from "@/utils/GlobalMethods";
 
 const Index = dynamic(
     () => Promise.resolve(LoaneeDetails),
@@ -48,7 +49,7 @@ const LoaneeDetails = () => {
         {label: 'Marital status', value: `${data?.data?.maritalStatus ? data?.data?.maritalStatus : 'Not provided'}`},
         {label: 'Nationality', value: `${data?.data?.nationality ? data?.data?.nationality : 'Not provided'}`},
         {label: 'State of origin ', value: `${data?.data?.stateOfOrigin ? data?.data?.stateOfOrigin : 'Not provided'}`},
-        {label: 'State of residence', value: `${data?.data?.stateOfResidence ? data?.data?.stateOfResidence : 'Not provided'}`},
+        {label: 'State of residence', value: `${data?.data?.stateOfResidence ? capitalizeFirstLetters(data?.data?.stateOfResidence) : 'Not provided'}`},
         {label: 'Residential address', value: `${data?.data?.residentialAddress ? data?.data?.residentialAddress : 'Not provided'}`},
         {label: 'Phone number', value: `${data?.data?.phoneNumber ? data?.data?.phoneNumber : 'Not provided'}`},
         {label: 'Alternate residential address', value: `${data?.data?.residentialAddress ? data?.data?.residentialAddress : 'Not provided'}`},

@@ -8,6 +8,8 @@ import {formatAmount} from "@/utils/Format";
 import dayjs from "dayjs";
 import {capitalizeFirstLetters} from "@/utils/GlobalMethods";
 import { useLoanParams } from "./useLoanParams";
+import {store} from "@/redux/store";
+import {setSelectedLoanRequestId} from '@/redux/slice/loan/loan-offer'
 
 interface userIdentity {
     firstName?: string;
@@ -84,6 +86,9 @@ const Index = () => {
         //eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-expect-error
         router.push(`/loan-request-details?id=${ID?.id}`);
+        //eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-expect-error
+        store.dispatch(setSelectedLoanRequestId(String(ID?.id)))
     };
 
 

@@ -10,7 +10,7 @@ import CustomSelectId from "@/reuseable/Input/custom-select-id";
 import {useViewAllLoanProductQuery} from "@/service/admin/loan_product";
 import {MdInfoOutline} from 'react-icons/md';
 import { Button } from '../ui/button';
-import {store} from '@/redux/store';
+import {store, useAppSelector} from '@/redux/store';
 import {formatAmount, unformatAmount} from "@/utils/Format";
 import {LoanProduct} from "@/types/loanee";
 import {LoanProuctType} from "@/types/loan/loan-request.type";
@@ -23,6 +23,8 @@ const Index = () => {
     const [pageNumber,setPageNumber] = useState(0);
     const [selectedLoanProductId, setSelectedProductId] = useState('')
     const [loanProducts, setLoanProduct] = useState<LoanProduct[]>()
+    const selectedLoanRequestId = useAppSelector(state => state.loanOffer.selectedLoanRequestId);
+
 
     const [hasNextPage, setHasNextPage] = useState(true);
     const parameter = {
@@ -75,7 +77,8 @@ const Index = () => {
     }, [selectedLoanProductId]);
 
     const backToLoanRequest = () => {
-        router.push("/loan/loan-request")
+        router.push(`/loan-request-details?id=${selectedLoanRequestId}`);
+
     }
     const getLoanProductById = (id: string) => {
         return loanProducts?.find((loanProduct: LoanProduct) => loanProduct.id === id);
