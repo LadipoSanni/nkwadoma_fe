@@ -49,8 +49,9 @@ const LoanDetailsContent = dynamic(
 
 function LoanDetails() {
     const router = useRouter()
+    const storedCurrentTabIndex = useAppSelector(state => state.loanOffer.setLoanRequestDetailsCurrentTabIndex)
     const searchParams = useSearchParams()
-    const [currentTab, setCurrentsTab] = useState(0);
+    const [currentTab, setCurrentsTab] = useState(storedCurrentTabIndex);
     const [arrowDown, setArrowDown] = useState(false);
     const [openCreateLoanOffer, setOpenCreateLoanOffer] = useState(false)
     const [openDeclineLoanRequestModal, setOpenDeclineLoanRequestModal] = useState(false)
@@ -101,12 +102,15 @@ function LoanDetails() {
         }
         if (currentTab < loanRequestDetailsTab.length - 1) {
             setCurrentsTab(currentTab + 1);
+            store.dispatch(setLoanRequestDetailsCurrentTabIndex(currentTab + 1))
         }
     };
 
     const handleBack = () => {
         if (currentTab > 0) {
             setCurrentsTab(currentTab - 1);
+            store.dispatch(setLoanRequestDetailsCurrentTabIndex(currentTab - 1))
+
         }
     };
 

@@ -23,6 +23,8 @@ const Index = () => {
     const [pageNumber,setPageNumber] = useState(0);
     const [selectedLoanProductId, setSelectedProductId] = useState('')
     const [loanProducts, setLoanProduct] = useState<LoanProduct[]>()
+    const selectedLoanRequestId = useAppSelector(state => state.loanOffer.selectedLoanRequestId);
+
 
     const [hasNextPage, setHasNextPage] = useState(true);
     const parameter = {
@@ -75,9 +77,8 @@ const Index = () => {
     }, [selectedLoanProductId]);
 
     const backToLoanRequest = () => {
-        // router.push(`/loan-request-details?id=${ID?.id}`);
+        router.push(`/loan-request-details?id=${selectedLoanRequestId}`);
 
-        router.push("/loan/loan-request")
     }
     const getLoanProductById = (id: string) => {
         return loanProducts?.find((loanProduct: LoanProduct) => loanProduct.id === id);

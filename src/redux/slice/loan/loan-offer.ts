@@ -1,11 +1,15 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface LoanOfferInitialState {
-    loanOfferId: string
+    loanOfferId: string,
+    selectedLoanRequestId: string,
+    loanRequestDetailsCurrentTabIndex: number,
 }
 
 const initialState: LoanOfferInitialState  = {
-    loanOfferId: "" 
+    loanOfferId: "" ,
+    selectedLoanRequestId: "",
+    loanRequestDetailsCurrentTabIndex: 0,
 };
 
 export const loanOfferSlice = createSlice({
@@ -15,9 +19,15 @@ export const loanOfferSlice = createSlice({
         setLoanOfferId: (state, action: PayloadAction<string>) => {
             state.loanOfferId = action.payload;
         },
+        setSelectedLoanRequestId: (state, action: PayloadAction<string>) => {
+            state.selectedLoanRequestId = action.payload;
+        },
+        setLoanRequestDetailsCurrentTabIndex : (state, action: PayloadAction<string>) => {
+            state.loanRequestDetailsCurrentTabIndex = action.payload;
+        }
     }
 })
 
-export const {setLoanOfferId} = loanOfferSlice.actions
+export const {setLoanOfferId, setSelectedLoanRequestId,setLoanRequestDetailsCurrentTabIndex } = loanOfferSlice.actions
 
 export default loanOfferSlice.reducer;
