@@ -135,47 +135,51 @@ const UploadButton = ({whose, url} : Props) => {
 
                 }
 
-                <div className={` grid gap-3 h-fit mt-auto mb-auto `}>
-                    <div>
-                        <p className={` text-[14px] ${inter500.className} text-black `}>Upload image</p>
-                        <p className={`text-[14px] ${inter.className} text-[#6A6B6A]`}>PNG or JPG (max. 800x400px) </p>
+
+                <div>
+                    <div className={` grid gap-3 h-fit mt-auto mb-auto `}>
+                        <div>
+                            <p className={` text-[14px] ${inter500.className} text-black `}>Upload image</p>
+                            <p className={`text-[14px] ${inter.className} text-[#6A6B6A]`}>PNG or JPG (max. 800x400px) </p>
+                        </div>
                     </div>
+                    {!imageUrl ?
+                        <Button
+                            className={` w-fit h-fit py-2 px-4 border border-meedlBlue text-meedlBlue `}
+                            onClick={ onClick }
+                        >
+                            <p> {!loading || !isLoadingOrg ? `Upload` : 'Uploading...'}</p>
+
+                            <input
+                                id="fileInput"
+                                type="file"
+                                accept={supportedFileTypes.join(',')}
+                                style={{ display: 'none' }}
+                                ref={fileInputRef}
+                                onChange={onFileChange}
+                                disabled={loading || isLoadingOrg}
+                            />
+
+                        </Button>
+                        :
+                        <div className={`w-fit  flex gap-2 mr-auto ml-auto   `}>
+                            <Button
+                                onClick={clearSelectedImage}
+                                className={` py-2 px-4 w-fit h-fit text-[16px] ${inter600.className}  border border-meedlBlue text-meedlBlue `}
+                            >Discard</Button>
+                            <Button
+                                onClick={handleSaveUser}
+                                className={`text-[16px] ${inter600.className}  py-2 px-4 w-fit h-fit border bg-meedlBlue text-white `}
+                            >
+
+                                <p>{isLoading || isLoadingOrg ? 'Saving...' :'Save'}</p>
+                            </Button>
+                        </div>
+
+                    }
                 </div>
             </div>
-            {!imageUrl ?
-                <Button
-                    className={` w-fit h-fit py-2 px-4 border border-meedlBlue text-meedlBlue `}
-                    onClick={ onClick }
-                >
-                    <p> {!loading || !isLoadingOrg ? `Upload` : 'Uploading...'}</p>
 
-                    <input
-                        id="fileInput"
-                        type="file"
-                        accept={supportedFileTypes.join(',')}
-                        style={{ display: 'none' }}
-                        ref={fileInputRef}
-                        onChange={onFileChange}
-                        disabled={loading || isLoadingOrg}
-                    />
-
-                </Button>
-                :
-                <div className={`w-fit  flex gap-2 mr-auto ml-auto   `}>
-                    <Button
-                        onClick={clearSelectedImage}
-                        className={` py-2 px-4 w-fit h-fit text-[16px] ${inter600.className}  border border-meedlBlue text-meedlBlue `}
-                    >Discard</Button>
-                    <Button
-                        onClick={handleSaveUser}
-                        className={`text-[16px] ${inter600.className}  py-2 px-4 w-fit h-fit border bg-meedlBlue text-white `}
-                    >
-
-                        <p>{isLoading || isLoadingOrg ? 'Saving...' :'Save'}</p>
-                    </Button>
-                </div>
-
-            }
         </div>
 
     );
