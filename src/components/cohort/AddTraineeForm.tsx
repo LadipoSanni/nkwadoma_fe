@@ -78,6 +78,8 @@ function AddTraineeForm({setIsOpen, tuitionFee,cohortId, isEdit,loaneeBasicDetai
 
     }, [isEdit, loaneeLoanBreakDown, initialDepositAmount]);
 
+    console.log('data: ', data)
+    console.log('tuition fee: ', tuitionFee)
 
 
     const setNamessOnEdit = () => {
@@ -497,6 +499,16 @@ function AddTraineeForm({setIsOpen, tuitionFee,cohortId, isEdit,loaneeBasicDetai
                                                     Tuition
                                                 </div>
 
+                                                {selectedCohortItem?.map((detail: cohortBreakDown, index: number) => (
+                                                    <div key={'item'+ index}  className={` text-[14px] ${inter.className}   mt-auto mb-auto  w-full   h-full text-black  `}>
+                                                        <StringDropdown
+                                                            height={' h-[3.2rem]  '}
+                                                            label={detail?.itemName}
+                                                            items={names}
+                                                            onSelect={handleSelect}
+                                                        />
+                                                    </div>
+                                                ))}
                                                 {openEmptyField &&
                                                     <div  className={`flex gap-3  mt-auto mb-auto `}>
                                                         <div className={` text-[14px] ${inter.className}  mt-auto mb-auto  w-full  h-fit text-black  `}>
@@ -509,17 +521,6 @@ function AddTraineeForm({setIsOpen, tuitionFee,cohortId, isEdit,loaneeBasicDetai
                                                         </div>
                                                     </div>
                                                 }
-
-                                                {selectedCohortItem?.map((detail: cohortBreakDown, index: number) => (
-                                                    <div key={'item'+ index}  className={` text-[14px] ${inter.className}   mt-auto mb-auto  w-full   h-full text-black  `}>
-                                                        <StringDropdown
-                                                            height={' h-[3.2rem]  '}
-                                                            label={detail?.itemName}
-                                                            items={names}
-                                                            onSelect={handleSelect}
-                                                        />
-                                                    </div>
-                                                ))}
                                             </div>
                                         </div>
 
@@ -543,34 +544,6 @@ function AddTraineeForm({setIsOpen, tuitionFee,cohortId, isEdit,loaneeBasicDetai
                                                    />
 
                                                </div>
-                                               {openEmptyField &&
-                                                   <div
-
-                                                       className={` w-full h-fit  flex  gap-2  `}
-                                                   >
-                                                       <div className={` mt-auto mb-auto bg-white border border-[#D7D7D7] rounded-md  h-[3.2rem] p-3  text-black  `}>
-                                                           NGN
-                                                       </div>
-
-                                                       <NumericFormat
-                                                           id={`detail-01`}
-                                                           name={`detail-01`}
-                                                           type="text"
-                                                           thousandSeparator=","
-                                                           decimalScale={2}
-                                                           fixedDecimalScale={true}
-                                                           // value={detail?.itemAmount?.toLocaleString() || ''}
-                                                           // placeholder={`${detail?.itemAmount || ''}`}
-                                                           className=" w-[70%] p-3 h-[3.2rem] border rounded focus:outline-none"
-                                                           onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                                                               const rawValue = e.target.value.replace(/,/g, '');
-                                                               if (!isNaN(Number(rawValue))) {
-                                                                   setCurrentSelectedItemAmount(rawValue)
-                                                               }
-                                                           }}
-                                                       />
-                                                   </div>
-                                               }
                                                {selectedCohortItem?.map((detail: cohortBreakDown, index: number) => (
                                                    <div
                                                        key={'index' + index}
@@ -614,6 +587,34 @@ function AddTraineeForm({setIsOpen, tuitionFee,cohortId, isEdit,loaneeBasicDetai
 
                                                    </div>
                                                ))}
+                                               {openEmptyField &&
+                                                   <div
+
+                                                       className={` w-full h-fit  flex  gap-2  `}
+                                                   >
+                                                       <div className={` mt-auto mb-auto bg-white border border-[#D7D7D7] rounded-md  h-[3.2rem] p-3  text-black  `}>
+                                                           NGN
+                                                       </div>
+
+                                                       <NumericFormat
+                                                           id={`detail-01`}
+                                                           name={`detail-01`}
+                                                           type="text"
+                                                           thousandSeparator=","
+                                                           decimalScale={2}
+                                                           fixedDecimalScale={true}
+                                                           // value={detail?.itemAmount?.toLocaleString() || ''}
+                                                           // placeholder={`${detail?.itemAmount || ''}`}
+                                                           className=" w-[70%] p-3 h-[3.2rem] border rounded focus:outline-none"
+                                                           onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                                                               const rawValue = e.target.value.replace(/,/g, '');
+                                                               if (!isNaN(Number(rawValue))) {
+                                                                   setCurrentSelectedItemAmount(rawValue)
+                                                               }
+                                                           }}
+                                                       />
+                                                   </div>
+                                               }
                                            </div>
                                         </div>
                                     </div>
