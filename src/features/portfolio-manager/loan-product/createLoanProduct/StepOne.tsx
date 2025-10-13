@@ -224,7 +224,8 @@ function StepOne() {
                 
                 if (isEdit && check) {
                     maxAllowedAmount = whenEdit;
-                    errorMessage = `Amount can't be greater than investment vehicle available amount plus current loan product size ${formatAmount(maxAllowedAmount)}`;
+                    // errorMessage = `Amount can't be greater than investment vehicle  `;
+                     errorMessage = `Amount can't be greater than investment vehicle available amount of ${formatAmount(fundProductAvailableAmount)} plus current loan product size ${formatAmount(currentLoanSize)} which equate to ${formatAmount(maxAllowedAmount)}`;
                 } else {
                    
                     maxAllowedAmount = Number(localFundAvailableAmount);

@@ -9,7 +9,7 @@ import CurrencySelectInput from "@/reuseable/Input/CurrencySelectInput";
 import {useCreateLoanProductMutation,useUpdateLoanProductMutation} from "@/service/admin/loan_product";
 import Isloading from "@/reuseable/display/Isloading";
 import 'react-quill-new/dist/quill.snow.css'
-import PdfAndDocFileUpload from "@/reuseable/Input/Pdf&docx-fileupload";
+// import PdfAndDocFileUpload from "@/reuseable/Input/Pdf&docx-fileupload";
 import {useRouter } from 'next/navigation';
 import BankSelectField from '@/reuseable/Input/Bank-select-field';
 import CustomSelect from "@/reuseable/Input/Custom-select-and-add";
@@ -276,13 +276,13 @@ function StepTwo() {
     };
 
 
-    const handleDrop = (event: React.DragEvent<HTMLDivElement>) => {
-        event.preventDefault();
-    };
+    // const handleDrop = (event: React.DragEvent<HTMLDivElement>) => {
+    //     event.preventDefault();
+    // };
 
-    const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
-        event.preventDefault();
-    };
+    // const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
+    //     event.preventDefault();
+    // };
 
   
 
@@ -392,7 +392,7 @@ function StepTwo() {
                                     handleVendorNameChange(index, value)
                                   }
                                   name={`vendor.${index}.vendorName`}
-                                  placeHolder="Enter provider name"
+                                  placeHolder="Select provider name"
                                   infinityScroll={{
                                     hasMore: hasNextPage,
                                     loadMore: loadMore,
@@ -539,7 +539,7 @@ function StepTwo() {
                          </div>
                          </div>
 
-                         <div className="relative bottom-8">
+                         {/* <div className="relative bottom-8">
                            <Label htmlFor="disbursementTerms" className={`pb-5`}>
                                Loan disbursement terms (optional)</Label>
                            
@@ -555,7 +555,7 @@ function StepTwo() {
                                             cloudinaryFolderName='disbursementTerms'
                                         />
                                     </div>
-                         </div>
+                         </div> */}
 
                          {/* <div className="mt-6 p-4 bg-gray-100 rounded-md">
   <h3 className="text-sm font-medium mb-2">Form Values (Debug):</h3>

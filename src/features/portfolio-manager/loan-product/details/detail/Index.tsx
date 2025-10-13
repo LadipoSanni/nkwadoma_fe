@@ -100,7 +100,7 @@ const Details = () => {
     const documentData = [
         {label:"Mandate",value:loanProduct?.data?.mandate },
         {label:"Loan terms and condition",value:loanProduct?.data?.termsAndCondition},
-        {label:"Loan disbursement terms",value:loanProduct?.data?.disbursementTerms }
+        // {label:"Loan disbursement terms",value:loanProduct?.data?.disbursementTerms }
     ]
 
     const tabData = [
