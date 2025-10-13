@@ -1,5 +1,5 @@
 import React,{useRef, useState, useCallback, useEffect} from 'react'
-import {Select, SelectTrigger, SelectContent, SelectValue, SelectGroup} from '@/components/ui/select'
+import {Select, SelectTrigger, SelectContent,  SelectGroup} from '@/components/ui/select'
 import {ChevronDownIcon, ChevronUpIcon} from "@radix-ui/react-icons";
 import {Form, Formik,Field,FormikHelpers} from "formik";
 import {inter} from "@/app/fonts"
@@ -239,9 +239,9 @@ function CustomSelect({
               }
             }}
           >
-            <SelectValue className="" data-testid="SelectContent" placeholder={placeHolder} id={`selectId${id}`}>
-              {value ? capitalizeFirstLetters(value) : placeHolder}
-            </SelectValue>
+            <div className="" data-testid="SelectContent"  id={`selectId${id}`}>
+              {value ? capitalizeFirstLetters(value) : <span className='opacity-35'>{placeHolder}</span>}
+            </div>
             <div className="">
               {dropdownOpen ? (
                 <ChevronUpIcon data-testid="ChevronUpIcon" id="chevronUp" className="h-4 font-semibold" />

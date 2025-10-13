@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import styles from "./index.module.css";
 import { store, useAppSelector } from "@/redux/store";
-import { setClickedOrganization,resetProgramId,resetProgramName } from "@/redux/slice/loan/selected-loan";
+import { setClickedOrganization,resetProgramId,resetProgramName ,setCurrenId} from "@/redux/slice/loan/selected-loan";
 import Image from "next/image";
 import { useSearchOrganisationByNameQuery, useViewOrganizationsQuery } from "@/service/admin/organization";
 import ConfirmOrgButton from "@/reuseable/buttons/filter/LoaneeButton";
@@ -29,9 +29,10 @@ interface SaveClickedId {
 const ChangeInstitutionModal = () => {
   const currentTab = useAppSelector(state => state?.selectedLoan?.currentTab);
   const currentTabStatus = useAppSelector(state => state?.selectedLoan?.currentTabStatus);
+  const currentId = useAppSelector(state => state?.selectedLoan?.currentId);
   const [searchTerm, setSearchTerm] = useState('');
   const [debouncedSearchTerm, isTyping] = useDebounce(searchTerm, 1000);
-  const [current, setCurrent] = useState<number | string>();
+  // const [current, setCurrent] = useState<number | string>();
   const [saveClickedId, setSaveClickedId] = useState<SaveClickedId | null>(null);
   const [disabled, setDisabled] = useState(true);
   const [page, setPage] = useState(0);
@@ -88,6 +89,7 @@ const ChangeInstitutionModal = () => {
       }
       setHasMore(searchResults.data.body.length === pageSize);
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchResults, page, isSearching]);
 
   useEffect(() => {
@@ -102,6 +104,7 @@ const ChangeInstitutionModal = () => {
       }
       setHasMore(data.data.body.length === pageSize);
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data, page, isSearching]);
 
   const fetchMoreData = useCallback(() => {
@@ -111,13 +114,15 @@ const ChangeInstitutionModal = () => {
   }, [isFetching, isSearchFetching, hasMore]);
 
   const handleClick = (id: string | number, name?: string, logoImage?: string) => {
-    const isSelectingNewOrganization = id !== current;
+    const isSelectingNewOrganization = id !== currentId;
 
-    if (id === current) {
-      setCurrent('');
+    if (id === currentId) {
+      store.dispatch(setClickedOrganization({ id: '', name: '', logoImage: '' }));
+      store.dispatch(setCurrenId(""))
       setDisabled(true);
     } else {
-      setCurrent(id);
+      // setCurrent(id);
+      store.dispatch(setCurrenId(id))
       setDisabled(false);
     }
     setSaveClickedId({ id, name: name || '', logoImage: logoImage || '' });
@@ -155,7 +160,7 @@ const ChangeInstitutionModal = () => {
   };
 
   const handleContinue = () => {
-    setCurrent('');
+    // setCurrent('');
     setDisabled(true);
     store.dispatch(setClickedOrganization(saveClickedId || { id: '', name: '', logoImage: '' }));
   };
@@ -164,6 +169,7 @@ const ChangeInstitutionModal = () => {
     store.dispatch(setClickedOrganization({ id: '', name: '', logoImage: '' }));
     store.dispatch(resetProgramId())
     store.dispatch(resetProgramName())
+    store.dispatch(setCurrenId(""))
   };
 
   const getInitials = (name: string): string => {
@@ -237,13 +243,13 @@ const ChangeInstitutionModal = () => {
                     <button
                       key={`${organization.id}-${index}`}
                       onClick={() => handleClick(organization.id, organization.name, organization.logoImage)}
-                      className={`${styles.institutionMiniCard2}  mb-5 md:flex md:place-items-center md:px-2 py-2 px-2 md:justify-between grid md:py-4 w-[98%] h-fit gap-3 md:h-fit rounded-md border ${organization.id === current ? 'border-meedlBlue' : 'border-[#ECECEC]'}`}
+                      className={`${styles.institutionMiniCard2}  mb-5 md:flex md:place-items-center md:px-2 py-2 px-2 md:justify-between grid md:py-4 w-[98%] h-fit gap-3 md:h-fit rounded-md border ${organization.id === currentId ? 'border-meedlBlue' : 'border-[#ECECEC]'}`}
                     >
                      
                       <div className='flex md:flex gap-3 place-items-center md:place-items-center'>
                        
-                        <div className={`flex w-fit h-fit px-1 py-1 ring-1 ${organization.id === current ? 'ring-meedlBlue' : 'ring-[#ECECEC]'} rounded-full items-center space-x-2`}>
-                          <div className={`w-[0.5rem] h-[0.5rem] rounded-full ${organization.id === current ? 'bg-meedlBlue md:bg-meedlBlue' : 'bg-white'}`}></div>
+                        <div className={`flex w-fit h-fit px-1 py-1 ring-1 ${organization.id === currentId ? 'ring-meedlBlue' : 'ring-[#ECECEC]'} rounded-full items-center space-x-2`}>
+                          <div className={`w-[0.5rem] h-[0.5rem] rounded-full ${organization.id === currentId ? 'bg-meedlBlue md:bg-meedlBlue' : 'bg-white'}`}></div>
                         </div>
                         
                         <div className='md:grid grid place-content-center md:place-content-center px-2 py-3 md:object-fit bg-[#F7F7F7] md:bg-[#F7F7F7] object-fit rounded-full md:rounded-full md:w-[3rem] md:h-[2rem] w-[3rem] h-[3rem]'>
