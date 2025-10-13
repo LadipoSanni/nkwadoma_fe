@@ -165,8 +165,8 @@ const MarketPlaceDetails = () => {
                     return;
                 }
             }
-
-            window.open(docUrl, '_blank', 'noopener,noreferrer');
+            if (typeof window === "undefined") return;
+                window.open(docUrl, '_blank', 'noopener,noreferrer');
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
         } catch (error) {
             setDocError('Error opening document');

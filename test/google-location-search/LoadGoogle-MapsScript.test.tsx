@@ -4,9 +4,11 @@ import { loadGoogleMapsScript } from "@/lib/google-maps";
 
 describe('loadGoogleMapsScript', () => {
     const apiKey = 'mock-api-key';
+    if (typeof window === "undefined") return;
 
-    beforeEach(() => {
-        document.head.innerHTML = '';
+  beforeEach(() => {
+    if (typeof window === "undefined") return;
+    document.head.innerHTML = '';
         jest.clearAllMocks();
         jest.spyOn(console, 'log').mockReturnValue();
         jest.spyOn(console, 'warn').mockReturnValue();
@@ -15,7 +17,7 @@ describe('loadGoogleMapsScript', () => {
 
       it('adds the Google Maps script to the document if not present', async () => {
         const promise = loadGoogleMapsScript(apiKey);
-      
+        if (typeof window === "undefined") return;
         const script = document.querySelector('script[src*="maps.googleapis.com"]') as HTMLScriptElement;
         script.dispatchEvent(new Event('load'));
       
