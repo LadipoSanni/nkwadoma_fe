@@ -85,8 +85,10 @@ function ViewDocument({ listOfDocument }: Props) {
                     return;
                 }
             }
-            if (typeof window === "undefined") return;
-            window.open(docUrl, '_blank', 'noopener,noreferrer');
+            if (typeof window !== "undefined") {
+                window.open(docUrl, '_blank', 'noopener,noreferrer');
+
+            }
         } catch (error) {
             setDocError('Error opening document');
             console.error('Document open error:', error);

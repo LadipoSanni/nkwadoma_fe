@@ -7,13 +7,16 @@ describe('loadGoogleMapsScript', () => {
     if (typeof window === "undefined") return;
 
   beforeEach(() => {
-    if (typeof window === "undefined") return;
-    document.head.innerHTML = '';
-        jest.clearAllMocks();
-        jest.spyOn(console, 'log').mockReturnValue();
-        jest.spyOn(console, 'warn').mockReturnValue();
-        jest.spyOn(console, 'error').mockReturnValue();
-      });
+    if (typeof window !== "undefined") {
+      document.head.innerHTML = '';
+      jest.clearAllMocks();
+      jest.spyOn(console, 'log').mockReturnValue();
+      jest.spyOn(console, 'warn').mockReturnValue();
+      jest.spyOn(console, 'error').mockReturnValue();
+    }
+    });
+
+
 
       it('adds the Google Maps script to the document if not present', async () => {
         const promise = loadGoogleMapsScript(apiKey);
