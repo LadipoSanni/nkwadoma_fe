@@ -15,14 +15,16 @@ const useIsMobile = (breakpoint = 960) => {
     const [isMobile, setIsMobile] = useState(false);
   
     useEffect(() => {
-      const checkScreenSize = () => {
-        setIsMobile(window.innerWidth < breakpoint);
-      };
-  
-      checkScreenSize();
-      window.addEventListener('resize', checkScreenSize);
-  
-      return () => window.removeEventListener('resize', checkScreenSize);
+        if (typeof window !== "undefined") {
+            const checkScreenSize = () => {
+                setIsMobile(window.innerWidth < breakpoint);
+            };
+
+            checkScreenSize();
+            window.addEventListener('resize', checkScreenSize);
+
+            return () => window.removeEventListener('resize', checkScreenSize);
+        }
     }, [breakpoint]);
   
     return isMobile;
@@ -83,8 +85,10 @@ function ViewDocument({ listOfDocument }: Props) {
                     return;
                 }
             }
+            if (typeof window !== "undefined") {
+                window.open(docUrl, '_blank', 'noopener,noreferrer');
 
-            window.open(docUrl, '_blank', 'noopener,noreferrer');
+            }
         } catch (error) {
             setDocError('Error opening document');
             console.error('Document open error:', error);
