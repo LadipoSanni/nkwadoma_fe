@@ -17,7 +17,7 @@ describe('Breakdown Component', () => {
 
         const triggerButton = screen.getByTestId('tuition-breakdown-trigger');
         expect(triggerButton).toBeInTheDocument();
-        expect(screen.getAllByText('Expand to see the tuition breakdown')).toHaveLength(2);
+        expect(screen.getAllByText('Expand to see the cohort breakdown')).toHaveLength(2);
     });
 
     it('toggles breakdown visibility when clicked', () => {
