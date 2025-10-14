@@ -17,6 +17,8 @@ import {AdminViewLoanType} from "@/types/loanee";
 import {setcohortId} from "@/redux/slice/create/cohortSlice"
 import {setLoaneeId} from "@/redux/slice/organization/organization"
 import {MdOutlinePersonOutline} from "react-icons/md";
+import {Icon} from "@iconify/react";
+
 
 const ViewLoaneeLoans = () => {
     const [searchTerm, setSearchTerm] = useState('');
@@ -109,9 +111,9 @@ const ViewLoaneeLoans = () => {
                >
                    { searchTerm && fetchData?.length === 0 ?
                        (
-                           <div className={` mr-auto ml-auto mt-auto mb-auto `}>
-                               <div className={`  grid  h-[10rem] w-[10rem]   rounded-full bg-[#D9EAFF]  `}>
-                                   <MdOutlinePersonOutline height={'3rem'} width={'3rem'} color={'#142854'} className={` self-center `}/>
+                           <div className={` mr-auto ml-auto  mt-auto mb-auto `}>
+                               <div className={`  grid aspect-square h-[10rem] w-[10rem] mr-auto ml-auto  rounded-full bg-[#D9EAFF]  `}>
+                                   <MdOutlinePersonOutline  color={'#142854'} className={` mr-auto ml-auto mt-auto mb-auto  h-8 w-8 `}/>
                                </div>
                               <p className={` text-black text-[20px] ${cabinetGroteskMediumBold.className}`}> Loanee does not have loan with Organization</p>
                            </div>
@@ -128,41 +130,51 @@ const ViewLoaneeLoans = () => {
 
                        </div>
                    </div>
-                       :
-                   <div className={` grid gap-4 md:grid md:grid-cols-3 `}>
-                       {fetchData?.map((loan : AdminViewLoanType) => (
-                           <div  key={"key"+loan?.id} className={` w-full h-fit pb-4 px-4  bg-[#F9F9F9] rounded-md `}>
-                               <div className={` flex gap-2   py-4  `}>
-                                   <Badge className={`h-[40px] w-[40px] hover:bg-[#F6F6F6]    bg-[#F6F6F6] rounded-full `}>
+                       : !fetchData || fetchData?.length === 0 ?
+                               (
+                                   <div className={` mr-auto ml-auto  mt-auto mb-auto `}>
+                                       <div className={`  grid aspect-square h-[10rem] w-[10rem] mr-auto ml-auto  rounded-full bg-[#D9EAFF]  `}>
+                                           {/*<MdOutlinePersonOutline  color={'#142854'} className={` mr-auto ml-auto mt-auto mb-auto  h-8 w-8 `}/>*/}
+                                           <Icon icon="material-symbols:money-bag-outline" height={"2rem"} width={"2rem"} className={` mr-auto ml-auto mt-auto mb-auto `} color={'#142854' }></Icon>
+                                       </div>
+                                       <p className={` text-black text-[20px] ${cabinetGroteskMediumBold.className}`}> Loanee does not have loan with Organization</p>
+                                   </div>
+                               )
+                               :
+                               <div className={` grid gap-4 md:grid md:grid-cols-3 `}>
+                                   {fetchData?.map((loan : AdminViewLoanType) => (
+                                       <div  key={"key"+loan?.id} className={` w-full h-fit pb-4 px-4  bg-[#F9F9F9] rounded-md `}>
+                                           <div className={` flex gap-2   py-4  `}>
+                                               <Badge className={`h-[40px] w-[40px] hover:bg-[#F6F6F6]    bg-[#F6F6F6] rounded-full `}>
 
-                                       <p className={` w-fit h-fit mt-auto mb-auto mr-auto ml-auto ${inter600.className} text-[#4D4E4D] md:text-[#4D4E4D] text-[16px] `}>{getFirstLetterOfWord(loan?.organizationName) ? getFirstLetterOfWord(loan?.organizationName) : loan?.organizationName?.at(0)?.toUpperCase()}</p>
-                                   </Badge>
-                                   <p id={'loaneeProgram'} data-testid={'loaneeProgram'}
-                                      className={`${inter600.className} mt-auto break-all w-full  mb-auto text-black text-[16px] `}>{capitalizeFirstLetters(loan?.organizationName)}</p>
+                                                   <p className={` w-fit h-fit mt-auto mb-auto mr-auto ml-auto ${inter600.className} text-[#4D4E4D] md:text-[#4D4E4D] text-[16px] `}>{getFirstLetterOfWord(loan?.organizationName) ? getFirstLetterOfWord(loan?.organizationName) : loan?.organizationName?.at(0)?.toUpperCase()}</p>
+                                               </Badge>
+                                               <p id={'loaneeProgram'} data-testid={'loaneeProgram'}
+                                                  className={`${inter600.className} mt-auto break-all w-full  mb-auto text-black text-[16px] `}>{capitalizeFirstLetters(loan?.organizationName)}</p>
+                                           </div>
+                                           <div
+                                               className={`grid justify-items-start pl-3 py-3  rounded-md gap-4 ${isLoading ? `bg-white h-[10em] animate-pulse` : `bg-white `}    `}>
+                                               <div className={`${isLoading ? `h-6 rounded bg-gray-200 animated_pulse w-[90%]  bg-[#F9F9F9]` : ``}`}>
+                                                   <p className={` ${inter.className} ${isLoading ? `hidden` : ``} text-[#6A6B6A] text-[14px] `}>Loan amount</p>
+                                                   <p className={`${inter500.className} ${isLoading ? `hidden` : `flex`} text-black text-[14px]`}>{formatAmount(Number(loan?.loanAmountApproved),false)}</p>
+                                               </div>
+                                               <div className={`${isLoading ? `h-6 rounded bg-gray-200 animated_pulse w-[90%]  bg-[#F9F9F9]` : ``}`}>
+                                                   <p className={` ${inter.className} ${isLoading ? `hidden` : ``} text-[#6A6B6A] text-[14px] `}>Amount outstanding</p>
+                                                   <div className={`${inter500.className} ${isLoading ? `hidden` : `flex `} text-black text-[14px]`}>{formatAmount(Number(loan?.loanAmountOutstanding),false)}</div>
+                                               </div>
+                                               <div className={`${isLoading ? `h-6 rounded bg-gray-200 animated_pulse w-[90%]  bg-[#F9F9F9]` : ``}`} >
+                                                   <p className={` ${inter.className} ${isLoading ? `hidden` : ``}  text-[#6A6B6A] text-[14px] `}>Amount repaid</p>
+                                                   <p className={`${inter500.className} ${isLoading ? `hidden` : `flex`}  text-black text-[14px]`}>{formatAmount(Number(loan?.loanAmountRepaid),false)}</p>
+                                               </div>
+                                           </div>
+                                           <div className={`flex w-full  pt-3 pb-1 justify-end`}>
+                                               <button
+                                                   onClick={() => {onCardClick(loan)}}
+                                                   className={`text-[14px] hover:bg-[#E8EAEE] focus:bg-[#E8EAEE] ${inter700.className} border border-meedlBlue w-fit h-fit px-4 py-2 rounded-md text-meedlBlue `}>View details</button>
+                                           </div>
+                                       </div>
+                                   ))}
                                </div>
-                               <div
-                                   className={`grid justify-items-start pl-3 py-3  rounded-md gap-4 ${isLoading ? `bg-white h-[10em] animate-pulse` : `bg-white `}    `}>
-                                   <div className={`${isLoading ? `h-6 rounded bg-gray-200 animated_pulse w-[90%]  bg-[#F9F9F9]` : ``}`}>
-                                       <p className={` ${inter.className} ${isLoading ? `hidden` : ``} text-[#6A6B6A] text-[14px] `}>Loan amount</p>
-                                       <p className={`${inter500.className} ${isLoading ? `hidden` : `flex`} text-black text-[14px]`}>{formatAmount(Number(loan?.loanAmountApproved),false)}</p>
-                                   </div>
-                                   <div className={`${isLoading ? `h-6 rounded bg-gray-200 animated_pulse w-[90%]  bg-[#F9F9F9]` : ``}`}>
-                                       <p className={` ${inter.className} ${isLoading ? `hidden` : ``} text-[#6A6B6A] text-[14px] `}>Amount outstanding</p>
-                                       <div className={`${inter500.className} ${isLoading ? `hidden` : `flex `} text-black text-[14px]`}>{formatAmount(Number(loan?.loanAmountOutstanding),false)}</div>
-                                   </div>
-                                   <div className={`${isLoading ? `h-6 rounded bg-gray-200 animated_pulse w-[90%]  bg-[#F9F9F9]` : ``}`} >
-                                       <p className={` ${inter.className} ${isLoading ? `hidden` : ``}  text-[#6A6B6A] text-[14px] `}>Amount repaid</p>
-                                       <p className={`${inter500.className} ${isLoading ? `hidden` : `flex`}  text-black text-[14px]`}>{formatAmount(Number(loan?.loanAmountRepaid),false)}</p>
-                                   </div>
-                               </div>
-                               <div className={`flex w-full  pt-3 pb-1 justify-end`}>
-                                   <button
-                                       onClick={() => {onCardClick(loan)}}
-                                       className={`text-[14px] hover:bg-[#E8EAEE] focus:bg-[#E8EAEE] ${inter700.className} border border-meedlBlue w-fit h-fit px-4 py-2 rounded-md text-meedlBlue `}>View details</button>
-                               </div>
-                           </div>
-                       ))}
-                   </div>
                    }
 
                </section>

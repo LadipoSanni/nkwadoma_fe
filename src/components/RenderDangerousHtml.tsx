@@ -7,6 +7,8 @@ export default function QuillRenderer({ html,sx }: { html: string, sx?:string })
     const cleanHtml = DOMPurify.sanitize(html, {
         ALLOWED_TAGS: ["p", "ol", "ul", "li", "strong", "em", "u", "br", "span"],
         ALLOWED_ATTR: ["class"],
+        // ALLOWED_TAGS: ["p", "ol", "ul", "li", "strong", "em", "u", "br", "span", "a"],
+        // ALLOWED_ATTR: ["class", "href", "target", "rel"],
     });
 
     return <div className={`${styles.quillContent} ${sx}`} dangerouslySetInnerHTML={{ __html: cleanHtml }} />;

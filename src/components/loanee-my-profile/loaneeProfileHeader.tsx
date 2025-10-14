@@ -70,7 +70,7 @@ const LoaneeProfileHeader = ({cohort ,userName,institutionName, program, isLoadi
             }
 
         }else if(userRole?.includes('ADMIN')) {
-            router.push('/loanees/loans')
+            router.push('/loans')
         }else if(userRole === 'LOANEE') {
             router.push("/my-loans");
         }
