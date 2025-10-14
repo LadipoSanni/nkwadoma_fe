@@ -13,6 +13,7 @@ interface viewAllProgramProps {
   id?: string;
   name: string;
   totalAvailableAmount?: number;
+  totalAmountAvailable?: number;
   size?: number
 }
 
@@ -53,7 +54,7 @@ const SelectWithAmount: React.FC<ProgramSelectProps> = ({
 }) => {
   const uniqueId = `select${Math.random().toString(36).substring(2, 9)}`;
 
-  const selectedProgramObj = selectOptions.find(program => program.name === selectedProgram);
+  const selectedProgramObj = selectOptions?.find(program => program.name === selectedProgram);
 
   return (
     <div id="programContainer" className={'grid gap-2 w-full'}>
@@ -67,7 +68,7 @@ const SelectWithAmount: React.FC<ProgramSelectProps> = ({
           if (selectedProgram) {
             setId(selectedProgram.id ?? "");
             if(setAvailableAmount){
-              setAvailableAmount(selectedProgram?.totalAvailableAmount ?? 0)
+          setAvailableAmount(selectedProgram?.totalAvailableAmount || selectedProgram?.totalAmountAvailable || 0)
             }
           }
           setSelectedProgram(value);
@@ -86,7 +87,7 @@ const SelectWithAmount: React.FC<ProgramSelectProps> = ({
                 <span className="font-normal text-[14px]">{selectedProgram}</span>
                 {
                   <span className="text-[14px] bg-[#F2F2F2] px-2 rounded-xl">
-                    {formatAmount(selectedProgramObj?.totalAvailableAmount || availableAmount)}
+                    {formatAmount(selectedProgramObj?.totalAvailableAmount || selectedProgramObj?.totalAmountAvailable || availableAmount)}
                   </span>
                 }
               </div>
@@ -145,7 +146,7 @@ const SelectWithAmount: React.FC<ProgramSelectProps> = ({
                           </p>
                           {
                             <p className="text-xs bg-[#F2F2F2] px-2 rounded-xl whitespace-nowrap relative py-[1px] group-hover:bg-white">
-                              {formatAmount(item.totalAvailableAmount)}
+                              {formatAmount(item.totalAvailableAmount || item.totalAmountAvailable)}
                             </p>
                           }
                         </div>
@@ -168,7 +169,7 @@ const SelectWithAmount: React.FC<ProgramSelectProps> = ({
                         </div>
                         {
                           <div className="text-xs text-gray-500 bg-[#F2F2F2] px-2 rounded-xl whitespace-nowrap relative right-32 py-[1px] group-hover:bg-[#E0E0E0]">
-                            {formatAmount(item?.totalAvailableAmount)}
+                            {formatAmount(item?.totalAvailableAmount || item.totalAmountAvailable)}
                           </div>
                         }
                       </div>
