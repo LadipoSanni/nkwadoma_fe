@@ -19,10 +19,15 @@ const Index = dynamic(
     {ssr: false}
 )
 
-const LoaneeDetails = () => {
+interface IndexProps {
+    isViewingOrganizationLoaneeLoans?: boolean
+}
+
+const LoaneeDetails = ({isViewingOrganizationLoaneeLoans}: IndexProps) => {
 
     const selectedLoanId = useAppSelector(state => state.selectedLoan.clickedLoanId);
-    const {data: viewLoaneeLoanDetails, isFetching:  isFetchingLoaneeLoanDetails, isLoading: isLoadingLoaneeLoanDetails} = useViewLoanDetailsQuery(selectedLoanId)
+    const {data: viewLoaneeDisbursedLoanDetails, isFetching:  isFetchingLoaneeLoanDetails, isLoading: isLoadingLoaneeLoanDetails} = useViewLoanDetailsQuery(selectedLoanId, {skip: isViewingOrganizationLoaneeLoans})
+
 
     const id =  useAppSelector(state => state.organization.loaneeId)
     const cohortId = useAppSelector(state => state.cohort.setCohortId)
@@ -33,10 +38,12 @@ const LoaneeDetails = () => {
         loaneeId: id,
         cohortId: notificationCohortId ||  cohortId,
     }
-    const  {data, isLoading, isFetching} = useViewLoaneeInACohortDetailsQuery(props)
+    const  {data, isLoading, isFetching} = useViewLoaneeInACohortDetailsQuery(props, {skip:!isViewingOrganizationLoaneeLoans})
 
 
-
+    console.log('isViewingOrganizationLoaneeLoans: ',isViewingOrganizationLoaneeLoans)
+    console.log('disbursed loan details: ', viewLoaneeDisbursedLoanDetails)
+    console.log('organization loanee loan details: ', data?.data)
     const userName = data?.data?.firstName + ' '+ data?.data?.lastName
 
 
@@ -96,9 +103,9 @@ const LoaneeDetails = () => {
     ]
     const loaneeBioDataTab :  {name: string; displayValue: React.ReactNode} = {name: 'Bio details', displayValue: <div className={` md:max-h-[60vh]  grid gap-4 w-full  ${styles.container}`}>{loaneeBioDa()}</div>}
     const tab:  {name: string; displayValue: React.ReactNode}[] = [
-        {name: 'Details',  displayValue: <LoaneeLoanDetails loaneeViewDetails={viewLoaneeLoanDetails?.data} data={data?.data} isLoading={false} />},
-        {name: 'Repayment',  displayValue:<ViewRepayment loanId={userRole !== 'LOANEE'? data?.data?.loanId : viewLoaneeLoanDetails?.data?.loanId}/>},
-        {name: 'Repayment schedule',  displayValue:<ViewRepaymentSchedule loanId={userRole !== 'LOANEE'? data?.data?.loanId : viewLoaneeLoanDetails?.data?.loanIdTab}/>},
+        {name: 'Details',  displayValue: <LoaneeLoanDetails loaneeViewDetails={viewLoaneeDisbursedLoanDetails?.data} data={data?.data} isLoading={false} />},
+        {name: 'Repayment',  displayValue:<ViewRepayment loanId={isViewingOrganizationLoaneeLoans ? data?.data?.loanId :viewLoaneeDisbursedLoanDetails?.data?.id } />},
+        {name: 'Repayment schedule',  displayValue:<ViewRepaymentSchedule loanId={isViewingOrganizationLoaneeLoans ? data?.data?.loanId : viewLoaneeDisbursedLoanDetails?.data?.id }/>},
         ...(userRole !== "LOANEE" ? [loaneeBioDataTab] : []),
 
 
@@ -112,10 +119,10 @@ const LoaneeDetails = () => {
         >
           <LoaneeProfileHeader
               userName={userRole !== 'LOANEE' ? userName : '' }
-              institutionName={userRole === 'LOANEE' ?   viewLoaneeLoanDetails?.data?.organizationName :''}
+              institutionName={userRole === 'LOANEE' ?   viewLoaneeDisbursedLoanDetails?.data?.organizationName :''}
               isLoading={userRole !== 'LOANEE' ?  isLoading || isFetching : isFetchingLoaneeLoanDetails || isLoadingLoaneeLoanDetails }
-              cohort={userRole === 'LOANEE' ?  viewLoaneeLoanDetails?.data?.cohortName : data?.data?.programName}
-              program={userRole === 'LOANEE' ? viewLoaneeLoanDetails?.data?.programName : data?.data?.programName}
+              cohort={userRole === 'LOANEE' ?  viewLoaneeDisbursedLoanDetails?.data?.cohortName : data?.data?.programName}
+              program={userRole === 'LOANEE' ? viewLoaneeDisbursedLoanDetails?.data?.programName : data?.data?.programName}
           />
             <div id={'underline'} data-testid={'underline'} className={`px-4 `}>
                 <UnderlineTab defaultTab={'Details'} tabTriggers={tabTriggers} tabValue={tab}/>
