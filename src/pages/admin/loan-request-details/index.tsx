@@ -1,5 +1,5 @@
 "use client"
-import React, {useState} from 'react';
+import React, {useState,useEffect} from 'react';
 import BackButton from "@/components/back-button";
 import {useRouter, useSearchParams} from "next/navigation";
 import {
@@ -41,6 +41,7 @@ import {setSelectedLoanRequestId} from "@/redux/slice/create/createLoanOfferSlic
 import { capitalizeFirstLetters } from "@/utils/GlobalMethods";
 import { formatMonthInDate } from '@/utils/Format'
 import { setLoanRequestDetailsCurrentTabIndex } from '@/redux/slice/loan/loan-offer';
+import { setLoaneeName,setLoaneeAmountRequested } from '@/redux/slice/loan/loan-offer';
 
 
 const LoanDetailsContent = dynamic(
@@ -106,6 +107,15 @@ function LoanDetails() {
             store.dispatch(setLoanRequestDetailsCurrentTabIndex(currentTab + 1))
         }
     };
+
+     const userFirstLetter = data?.data?.userIdentity?.firstName ?  getInitial(data?.data?.userIdentity?.firstName,data?.data?.userIdentity?.lastName) : ""
+
+    useEffect(() => {
+        store.dispatch(setLoaneeAmountRequested(data?.data?.loanAmountRequested))
+        store.dispatch(setLoaneeName(data?.data?.userIdentity?.firstName + " " + data?.data?.userIdentity?.lastName))
+      },[data])
+
+      
 
     const handleBack = () => {
         if (currentTab > 0) {
@@ -238,9 +248,6 @@ function LoanDetails() {
 
     }
 
-
-    // const userFirstLetter: string | undefined = data?.data?.userIdentity?.firstName ? getFirstLetterOfWord(data?.data?.userIdentity?.firstName) + "" + getFirstLetterOfWord(data?.data?.userIdentity?.lastName) : ''
-    const userFirstLetter = data?.data?.userIdentity?.firstName ?  getInitial(data?.data?.userIdentity?.firstName,data?.data?.userIdentity?.lastName) : ""
 
     return (
         <div id={'loanRequestDetails'} data-testid={'loanRequestDetails'}>

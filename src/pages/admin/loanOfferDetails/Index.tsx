@@ -25,6 +25,7 @@ import { setCurrentNavbarItem } from "@/redux/slice/layout/adminLayout";
 import DeclineLoanModal from "@/reuseable/modals/declineLoan/Index";
 import { capitalizeFirstLetters } from "@/utils/GlobalMethods";
 import { formatMonthInDate } from '@/utils/Format'
+import ViewDocument from "@/reuseable/details/ViewDocument";
 
 const LoanOfferDetailsContent = dynamic(
     () => Promise.resolve(LoanOfferDetails),
@@ -215,7 +216,10 @@ const LoanOfferDetails = () => {
     };
 
     const userFirstLetter: string | undefined = data?.data?.firstName ? getFirstLetterOfWord(data?.data?.firstName) + "" + getFirstLetterOfWord(data?.data?.lastName) : ''
-
+    
+    const documentData = [
+        {label:"Loan terms and condition",value:data?.data?.termsAndCondition },
+    ]
 
     return (
         <>{
@@ -285,11 +289,13 @@ const LoanOfferDetails = () => {
                             </div>
 
                             <div className={` w-full md:max-w-[100%] px-2 md:px-0 md:bg-white`}>
-                                <ul className={' md:max-w-[100%] w-full break-all bg-grey105'}>
+                                <ul className={`md:max-w-[100%] w-full break-all  ${currentTab === 3? "" : "bg-grey105"}`}>
                                     {currentTab === 3 ? (
                                         <div
-                                            dangerouslySetInnerHTML={{__html: data?.data?.termsAndCondition ?? ""}}
-                                            className={`w-full md:break-all  md:max-w-[60%]  text-sm px-4 md:py-2 md:w-full md:px-6 `}>
+                                            // dangerouslySetInnerHTML={{__html: data?.data?.termsAndCondition ?? ""}}
+                                            // className={`w-full md:break-all  md:max-w-[60%]  text-sm px-4 md:py-2 md:w-full md:px-6 `}
+                                            >
+                                           <ViewDocument listOfDocument={documentData}/>
                                         </div>
 
 
@@ -335,7 +341,7 @@ const LoanOfferDetails = () => {
 
                                 >
                                     {isLoading && <Loader2 className="animate-spin"/>}
-                                    {currentTab === 3 ? 'Disburse loan' : 'Continue'}
+                                    {currentTab === 3 ? 'Start loan' : 'Continue'}
                                 </Button>
 
                             </div>

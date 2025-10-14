@@ -61,7 +61,6 @@ function InfiniteScrollTable <T extends TableRowData>  ({
         if (typeof value === "object" && value !== null) return JSON.stringify(value);
         return value;
     };
-    console.log('tableData',tableData)
 
     return (
        <div>

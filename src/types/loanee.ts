@@ -37,7 +37,8 @@ export interface LoanProduct {
     "totalNumberOfLoanee": 0,
     "minRepaymentAmount": 3000,
     "vendors": null,
-    "sponsors": null
+    "sponsors": null,
+    "availableAmountToBeOffered": 0,
 }
 export interface AdminViewLoanType {
     "id": "",
