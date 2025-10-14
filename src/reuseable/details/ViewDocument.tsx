@@ -179,7 +179,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { inter } from '@/app/fonts';
-import { FileText, Download } from "lucide-react";
+import { FileText} from "lucide-react";
 
 interface objProps {
     label: string;
@@ -298,7 +298,7 @@ function ViewDocument({ listOfDocument }: Props) {
                 {listOfDocument?.map((data, index) => {
                     const docUrl = data.value;
                     const docFilename = getFilenameFromUrl(docUrl);
-                    const fileExtension = getFileExtension(docUrl);
+                    // const fileExtension = getFileExtension(docUrl);
                     const isCurrentDoc = currentDocUrl === docUrl;
 
                     return (
