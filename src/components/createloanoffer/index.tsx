@@ -83,7 +83,8 @@ const Index = () => {
     const dd = (unformatedAmount?.length === 0) ||
         (selectedLoanProductId?.length === 0)
             || (amountApprovedError?.length !== 0) ||
-            isAmountExceedingLimits();
+            isAmountExceedingLimits() ||
+            Number(unformatedAmount) === 0;;
 
     useEffect(() => {
         if(data?.data){
@@ -168,26 +169,46 @@ const Index = () => {
 
 
     const handleAmountInputChange = (value: string) => {
+        const rawValue = value.replace(/,/g, ''); 
+        
+        if (rawValue === '0' || rawValue === '0.00' || rawValue === '0.0') {
+            setAmountApprovedError('Amount approved cannot be zero');
+            setAmounts(value);
+            return;
+        }
+        
+        if (rawValue.length > 1 && rawValue.startsWith('0') && !rawValue.startsWith('0.')) {
+            setAmountApprovedError('Amount cannot start with zero');
+            setAmounts(value);
+            return;
+        }
+
+        if (rawValue.startsWith('-')) {
+            setAmountApprovedError('Amount cannot be negative');
+            setAmounts(value);
+            return;
+        }
+        setAmountApprovedError('');
+
         if (selectedLoanProductId ) {
             const selectedLoanProduct = getLoanProductById(selectedLoanProductId)
             const totalAvailableInLoanProduct = Number(selectedLoanProduct?.totalAmountAvailable);
             const amountApproved = Number(unformatAmount(value));
             const requestedAmount = Number(amountRequested);
              const availableToOffer = Number(selectedLoanProduct?.availableAmountToBeOffered);
-            if (amountApproved > totalAvailableInLoanProduct) {
-                 setAmountApprovedError('Amount approved cannot be greater than selected loan product availabe amount')
+             if (amountApproved > availableToOffer) {
+                setAmountApprovedError('Amount approved cannot be greater than amount available to be offered')
             }else 
             if (amountApproved > requestedAmount) {
                 setAmountApprovedError('Amount approved cannot be greater than amount requested')
             }
-             else if (amountApproved > availableToOffer) {
-                setAmountApprovedError('Amount approved cannot be greater than amount available to be offered')
-            }
+             else
+            if (amountApproved > totalAvailableInLoanProduct) {
+                setAmountApprovedError('Amount approved cannot be greater than selected loan product availabe amount')
+           }
             else{
                 setAmountApprovedError('')
                 setAmounts(value)
-                // const remain = totalAvailableInLoanProduct - amountApproved;
-                // setRemainingAmount(remain)
             }
         }else{
             setAmounts(value)
