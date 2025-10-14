@@ -63,7 +63,7 @@ const createLoanOfferSlice = createSlice({
                 totalAmountAvailable: "",
                 loanProductSize: "",
                 id:""
-        },
+        };
         state.loanProductName = "";
         state.amountAvailable = 0;
         state.selectedLoanProductId = "";
