@@ -16,10 +16,13 @@ import {useViewAllLoansTotalCountsByAdminsQuery, useViewLoaneeLoansByAdminQuery,
 import {AdminViewLoanType} from "@/types/loanee";
 import {setcohortId} from "@/redux/slice/create/cohortSlice"
 import {setLoaneeId} from "@/redux/slice/organization/organization"
-import {MdOutlinePersonOutline} from "react-icons/md";
 import {Icon} from "@iconify/react";
 import { setClickedLoanId } from '@/redux/slice/loan/selected-loan';
 
+// import {MdOutlinePersonOutline} from "react-icons/md";
+import { useDebounce } from '@/hooks/useDebounce';
+import GeneralEmptyState from '@/reuseable/emptyStates/General-emptystate';
+import {MdSearch,MdPersonOutline} from 'react-icons/md';
 
 const ViewLoaneeLoans = () => {
     const [searchTerm, setSearchTerm] = useState('');
@@ -35,6 +38,8 @@ const ViewLoaneeLoans = () => {
     ] = useState<number>(0);
     const [pageSize] = useState<number>(10);
 
+    const [debouncedSearchTerm] = useDebounce(searchTerm, 1000);
+
     const data = {
         loaneeId: selectedLoaneeId,
         pageNumber: pageNumber,
@@ -44,15 +49,15 @@ const ViewLoaneeLoans = () => {
         loaneeId: selectedLoaneeId,
         pageNumber: pageNumber,
         pageSize: pageSize,
-        organizationName: searchTerm,
+        organizationName: debouncedSearchTerm,
     }
 
     const {data: viewAllLoans, isLoading: isLoadingViewAll, isFetching: isFetchingViewAll} = useViewLoaneeLoansByAdminQuery(data)
-    const {data: searchData, isLoading: isLoadingSearch, isFetching: isFetchingSearch} = useSearchLoaneeLoansByAdminQuery(searchProps, {skip: !searchTerm})
+    const {data: searchData, isLoading: isLoadingSearch, isFetching: isFetchingSearch} = useSearchLoaneeLoansByAdminQuery(searchProps, {skip: !debouncedSearchTerm})
     const {data: loanCounts, isLoading: isLoadingLoanCounts, isFetching: isFetchingCounts} = useViewAllLoansTotalCountsByAdminsQuery(selectedLoaneeId)
 
     useEffect(() => {
-        if (searchTerm ){
+        if (debouncedSearchTerm){
             setFetchData(searchData?.data?.body)
             // setTotalPage(searchData?.data?.totalPages)
             // setPageNumber(searchData?.data?.pageNumber)
@@ -62,7 +67,7 @@ const ViewLoaneeLoans = () => {
             // setPageNumber(viewAllLoans?.data?.pageNumber)
         }
 
-    }, [viewAllLoans, searchTerm,searchData ])
+    }, [viewAllLoans, debouncedSearchTerm,searchData ])
 
     const onBackButtonClick = () => {
         router.push('/loanees')
@@ -112,16 +117,7 @@ const ViewLoaneeLoans = () => {
                <section
                    className={`h-full   grid  bg-white py-4 w-full `}
                >
-                   { searchTerm && fetchData?.length === 0 ?
-                       (
-                           <div className={` mr-auto ml-auto  mt-auto mb-auto `}>
-                               <div className={`  grid aspect-square h-[10rem] w-[10rem] mr-auto ml-auto  rounded-full bg-[#D9EAFF]  `}>
-                                   <MdOutlinePersonOutline  color={'#142854'} className={` mr-auto ml-auto mt-auto mb-auto  h-8 w-8 `}/>
-                               </div>
-                              <p className={` text-black text-[20px] ${cabinetGroteskMediumBold.className}`}> Loanee does not have loan with Organization</p>
-                           </div>
-                       )
-                       :isLoadingViewAll  || isFetchingViewAll || isLoadingSearch || isFetchingSearch?
+                   { isLoadingViewAll  || isFetchingViewAll || isLoadingSearch || isFetchingSearch?
                    <div className={` grid grid-cols-3 h-[50vh] `}>
                        <div className={` w-full h-[10rem] animate-pulse bg-[#f4f4f5]  `}>
 
@@ -133,14 +129,33 @@ const ViewLoaneeLoans = () => {
 
                        </div>
                    </div>
-                       : !fetchData || fetchData?.length === 0 ?
+                    //    : !fetchData || fetchData?.length === 0 ?
+                    //            (
+                    //                <div className={` mr-auto ml-auto  mt-auto mb-auto `}>
+                    //                    <div className={`  grid aspect-square h-[10rem] w-[10rem] mr-auto ml-auto  rounded-full bg-[#D9EAFF]  `}>
+                    //                        {/*<MdOutlinePersonOutline  color={'#142854'} className={` mr-auto ml-auto mt-auto mb-auto  h-8 w-8 `}/>*/}
+                    //                        <Icon icon="material-symbols:money-bag-outline" height={"2rem"} width={"2rem"} className={` mr-auto ml-auto mt-auto mb-auto `} color={'#142854' }></Icon>
+                    //                    </div>
+                    //                    <p className={` text-black text-[20px] ${cabinetGroteskMediumBold.className}`}> Loanee does not have loan with Organization</p>
+                    //                </div>
+                    //            )
+                               : (debouncedSearchTerm && searchData?.data?.body?.length === 0) || viewAllLoans?.data?.body?.length === 0 ?
                                (
-                                   <div className={` mr-auto ml-auto  mt-auto mb-auto `}>
-                                       <div className={`  grid aspect-square h-[10rem] w-[10rem] mr-auto ml-auto  rounded-full bg-[#D9EAFF]  `}>
-                                           {/*<MdOutlinePersonOutline  color={'#142854'} className={` mr-auto ml-auto mt-auto mb-auto  h-8 w-8 `}/>*/}
-                                           <Icon icon="material-symbols:money-bag-outline" height={"2rem"} width={"2rem"} className={` mr-auto ml-auto mt-auto mb-auto `} color={'#142854' }></Icon>
+                                   <div className={`h-60 relative bottom-3`}>
+                                       {/* <div className={`  grid aspect-square h-[10rem] w-[10rem] mr-auto ml-auto  rounded-full bg-[#D9EAFF]  `}>
+                                           <MdOutlinePersonOutline  color={'#142854'} className={` mr-auto ml-auto mt-auto mb-auto  h-8 w-8 `}/>
                                        </div>
-                                       <p className={` text-black text-[20px] ${cabinetGroteskMediumBold.className}`}> Loanee does not have loan with Organization</p>
+                                      <p className={` text-black text-[20px] ${cabinetGroteskMediumBold.className}`}> Loanee does not have loan with Organization</p> */}
+                                      <GeneralEmptyState
+                                       icon={searchTerm? MdSearch : MdPersonOutline}
+                                       iconSize='1.8rem'
+                                       iconContainerClass='w-[50px] h-[50px]'
+                                       message={<div className='relative bottom-2'>
+                                        <p>{ searchTerm?"Organization  not found with loan" : " Loanee does not have loan" }</p>
+                                      </div>}
+                                      className='h-14'
+                                      />
+
                                    </div>
                                )
                                :

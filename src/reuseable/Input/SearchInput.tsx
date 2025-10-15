@@ -11,6 +11,9 @@ interface SearchInputProps {
     placeholder?: string,
     onKeyDown?: React.KeyboardEventHandler<HTMLInputElement>;
     onMouseDown?: React.MouseEventHandler<HTMLInputElement>;
+    onFocus?: React.FocusEventHandler<HTMLInputElement>;
+    autoFocus?: boolean;
+    onBlur?: React.FocusEventHandler<HTMLInputElement>; 
 }
 
 const SearchInput = forwardRef<HTMLInputElement, SearchInputProps>(({
@@ -21,7 +24,10 @@ const SearchInput = forwardRef<HTMLInputElement, SearchInputProps>(({
     testId, 
     placeholder = "search",
     onKeyDown,
-    onMouseDown
+    onMouseDown,
+    onFocus,
+    autoFocus,
+    onBlur
 }: SearchInputProps, ref) => {
     return (
         <div
@@ -39,6 +45,9 @@ const SearchInput = forwardRef<HTMLInputElement, SearchInputProps>(({
                 data-testid={testId}
                 onKeyDown={onKeyDown}
                 onMouseDown={onMouseDown}
+                onFocus={onFocus}
+                autoFocus={autoFocus}
+                onBlur={onBlur}
             />
         </div>
     );

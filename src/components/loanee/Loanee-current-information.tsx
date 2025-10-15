@@ -40,6 +40,7 @@ function LoaneeCurrentInformation({initialFormValue,handleSubmit,nextOfCountryCo
   const [isRelationshipSelectOpen, setIsRelationshipSelectOpen] = useState(false);
   const [isPhoneNumberError,setPhoneNumberError] = useState(false)
   const [isAltPhoneNumberError,setAltPhoneNumberError] = useState(false)
+  const [customEducationOptions, setCustomEducationOptions] = useState<{value: string, label: string}[]>([]);
 
   const educationalQualifications = [
     { value: "O_LEVEL", label: "O'level" },
@@ -49,9 +50,28 @@ function LoaneeCurrentInformation({initialFormValue,handleSubmit,nextOfCountryCo
     { value: "MSC", label: "MSC" },
     { value: "PHD", label: "PHD" },
     { value: "DIPLOMA", label: "Diploma" },
-    { value: "OTHERS", label: "Others" }
   ] 
 
+
+  const allEducationOptions = [...educationalQualifications, ...customEducationOptions];
+
+  const handleEducationChange = (
+    value: string,
+    setFieldValue: (field: string, value: string, shouldValidate?: boolean) => void
+  ) => {
+    const isCustomValue = !educationalQualifications.some(qual => qual.value === value);
+    const alreadyExists = customEducationOptions.some(opt => opt.value === value);
+  
+    if (isCustomValue && !alreadyExists) {
+      const newOption = { value, label: value };
+      setCustomEducationOptions(prev => [...prev, newOption]);
+    }
+  
+    setTimeout(() => {
+      setFieldValue("levelOfEducation", value);
+    }, 0);
+  };
+  
   return (
     <div>
       <Formik
@@ -68,7 +88,10 @@ function LoaneeCurrentInformation({initialFormValue,handleSubmit,nextOfCountryCo
            values,isValid,isSubmitting,
            setFieldError,
            handleBlur,
-        })=> (
+        })=> { 
+
+    
+          return (
           <Form
           className={`${inter.className}`}
           >
@@ -92,16 +115,17 @@ function LoaneeCurrentInformation({initialFormValue,handleSubmit,nextOfCountryCo
                    triggerId='selectlevelOfEducationTriggerId'
                    id='levelOfEducationId'
                    value={values.levelOfEducation}
-                   onChange={(value)=> {setFieldValue("levelOfEducation", value)}}
+                   onChange={(value)=> handleEducationChange(value, setFieldValue)}
                    name='levelOfEducation'
                   placeHolder='Select level of education'
-                  selectContent={educationalQualifications}
+                  selectContent={allEducationOptions}
                   className='h-[3.5rem]'
+                  showAddField={true}
                  />
                 </div>
               </div>
 
-              <div className='relative bottom-4'>
+              {/* <div className='relative bottom-4'>
                   {
                     values?.levelOfEducation === "OTHERS" && 
                     <div>
@@ -130,7 +154,7 @@ function LoaneeCurrentInformation({initialFormValue,handleSubmit,nextOfCountryCo
                     )}
                     </div>
                   }
-                </div>
+                </div> */}
               <div className={'grid gap-2 relative bottom-2'}>
               <Label htmlFor="alternateEmail" className="block text-sm font-medium text-labelBlue">Alternate
                email address</Label>
@@ -377,7 +401,7 @@ function LoaneeCurrentInformation({initialFormValue,handleSubmit,nextOfCountryCo
             </div>
 
           </Form>
-        )}
+        )}}
 
       </Formik>
       

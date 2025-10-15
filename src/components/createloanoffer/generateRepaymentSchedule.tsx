@@ -1,5 +1,5 @@
 'use client'
-import React from 'react';
+import React,{useEffect} from 'react';
 import {
     inter,
     inter700
@@ -18,6 +18,16 @@ import {useRouter} from "next/navigation";
 import {setCurrentTab, setcurrentTabRoute, setCurrentTabStatus} from "@/redux/slice/loan/selected-loan";
 import {Loader2} from "lucide-react";
 import BackButton from "@/components/back-button";
+import { Button } from '../ui/button';
+import {resetAll} from "@/redux/slice/create/createLoanOfferSlice";
+import { setLoaneeName,setLoaneeAmountRequested } from '@/redux/slice/loan/loan-offer';
+
+interface ApiError {
+    status: number;
+    data: {
+        message: string;
+    };
+}
 
 interface viewAllType {
     principalAmount: string
@@ -31,10 +41,17 @@ interface viewAllType {
 const GenerateRepaymentSchedule = () => {
     const selectedLoanProductId = useAppSelector(state => state.createLoanOffer.selectedLoanProductId);
     const unformatedAmount = useAppSelector(state => state.createLoanOffer.amount);
+    const loaneeName = useAppSelector(state => state?.loanOffer?.loaneeName)
     const loanRequestId = useAppSelector(state => state.createLoanOffer.selectedLoanRequestId);
 
     const {data, isLoading, isFetching} = useGenerateLoanRepaymentScheduleQuery({amountApproved:unformatedAmount, loanProductId:selectedLoanProductId})
     const [respondToLoanRequest, { isLoading:isLoanOfferCreating }] = useRespondToLoanRequestMutation();
+
+    useEffect(() => {
+        if(loanRequestId === ""){
+            router.push('/loan/loan-request') 
+        }
+    },[loanRequestId])
 
     const router = useRouter()
     const tableHeader =  [
@@ -57,27 +74,52 @@ const GenerateRepaymentSchedule = () => {
             loanRequestDecision: 'ACCEPTED',
             declineReason: ""
         };
-        const response=  await respondToLoanRequest(data);
-        if (response?.error){
-            toast({
-                //eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // @ts-expect-error
-                description: response?.error?.data?.message,
-                status: "error",
-            })
-        }else{
-            store.dispatch(setCurrentTab('Loan requests'))
-            store.dispatch(setCurrentTabStatus('LOAN_REQUEST'))
-            store.dispatch(setcurrentTabRoute('loan-request'))
-            router.push('/loan/loan-request')
-            toast({
-                description: "Loan offer has been created",
-                status: "success",
-            })
-        }
 
+         try {
+            const response=  await respondToLoanRequest(data).unwrap();;
+            if(response){
+                toast({
+                    description: response?.message,
+                    status: "success",
+                    duration: 2000
+                });  
+                store.dispatch(setCurrentTab('Loan requests'))
+                store.dispatch(setCurrentTabStatus('LOAN_REQUEST'))
+                store.dispatch(setcurrentTabRoute('loan-request'))
+                store.dispatch(resetAll())
+                store.dispatch(setLoaneeName(""))
+                store.dispatch(setLoaneeAmountRequested(0))
+                router.push('/loan/loan-request') 
+            }
+            
+         } catch (err) {
+            const error = err as ApiError;
+            toast({
+                description: error?.data?.message ,
+                status: "error",
+                duration: 2000
+            })
+         }
+        // if (response?.error){
+        //     toast({
+        //         //eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        //         // @ts-expect-error
+        //         description: response?.error?.data?.message,
+        //         status: "error",
+        //     })
+        // }else{
+        //     toast({
+        //         description: "Loan offer has been created",
+        //         status: "success",
+        //     })
+        //     store.dispatch(setCurrentTab('Loan requests'))
+        //     store.dispatch(setCurrentTabStatus('LOAN_REQUEST'))
+        //     store.dispatch(setcurrentTabRoute('loan-request'))
+        //     router.push('/loan/loan-request')
+        // }
 
     }
+
     const backToLoanRequest = () => {
         router.push("/create-loan-offer")
     }
@@ -86,15 +128,22 @@ const GenerateRepaymentSchedule = () => {
         <div
             id={'generateRepaymentScheduleComponent'}
             data-testid={'generateRepaymentScheduleComponent'}
-            className={` w-full grid gap-6  md:h-fit h-full pr-2 md:pr- md:pr-2 md:px-6 py-4 `}
+            className={` w-full grid gap-6  md:h-fit h-full px-3  md:px-6 py-4 `}
         >
             <BackButton handleClick={backToLoanRequest} iconBeforeLetters={true} text={"Back"}
                         id={"loanRequestDetailsBackButton"} textColor={'#142854'}/>
             <div className={`w-full grid gap-3  md:gap-0 h-fit md:flex md:justify-between `}>
-                <span className={` ${inter.className} text-[#101828] text-[24px] md:text-[28px] font-bold  `}>Generate repayment schedule</span>
-                <button onClick={confirmSchedule} id={'confirmRepaymentButton'} data-tesid={'confirmRepaymentButton'} className={` rounded-md text-[12px] ${inter700.className} w-full  md:w-fit h-fit py-3  md:py-2 px-2 bg-meedlBlue text-white  `}>
+                <span className={` ${inter.className} text-[#101828] text-[24px] md:text-[28px] font-bold  `}>Repayment schedule for <span className='font-semibold'>{loaneeName}</span> </span>
+                <Button 
+                onClick={confirmSchedule} 
+                id={'confirmRepaymentButton'} 
+                data-tesid={'confirmRepaymentButton'} 
+                className={` rounded-md text-[12px] ${inter700.className} w-full  md:w-36 h-fit py-3  md:py-2 px-2 bg-meedlBlue text-white  `}
+                variant={"secondary"}
+                size={"lg"}
+                >
                     {isLoanOfferCreating ? <Loader2 className="animate-spin"  />  : "Create loan offer"}
-                </button>
+                </Button>
             </div>
             <div className={` grid  md:flex gap-3  `}>
                 <div className={` w-full md:w-[50%] `}>

@@ -6,65 +6,111 @@ import {cabinetGroteskMediumBold, inter, inter700} from "@/app/fonts";
 import {Label} from "@/components/ui/label";
 import CurrencySelectInput from "@/reuseable/Input/CurrencySelectInput";
 import {NumericFormat} from "react-number-format";
-import CustomSelectId from "@/reuseable/Input/custom-select-id";
 import {useViewAllLoanProductQuery} from "@/service/admin/loan_product";
 import {MdInfoOutline} from 'react-icons/md';
 import { Button } from '../ui/button';
 import {store, useAppSelector} from '@/redux/store';
 import {formatAmount, unformatAmount} from "@/utils/Format";
-import {LoanProduct} from "@/types/loanee";
-import {LoanProuctType} from "@/types/loan/loan-request.type";
-import {setSelectedLoanProductId,setAmount} from "@/redux/slice/create/createLoanOfferSlice";
+// import {LoanProduct} from "@/types/loanee";
+// import {LoanProuctType} from "@/types/loan/loan-request.type";
+import {setSelectedLoanProductId,setAmount,setAmountAvailable,setLoanProductType,setLoanProductName} from "@/redux/slice/create/createLoanOfferSlice";
+import SelectWithAmount from "@/reuseable/select/SelectWithAmount";
+import { loanProductObj } from '@/redux/slice/create/createLoanOfferSlice'; 
+
+interface viewAllProps {
+    id: string;
+    name: string;
+    size?: number;
+    totalAvailableAmount?: number;
+    totalAmountAvailable?: number;
+    availableAmountToBeOffered: number,
+    rate?: number
+  }
+
+
 
 const Index = () => {
-
+    const amountRequested = useAppSelector(state => state?.loanOffer?.loaneeAmountRequested)
+    const loaneeName = useAppSelector(state => state?.loanOffer?.loaneeName)
+    const  amountApproved = useAppSelector(state => state?.createLoanOffer?.amount)
+    const  loanProductId = useAppSelector(state => state?.createLoanOffer?.selectedLoanProductId)
+    const  totalAmountAvailable = useAppSelector(state => state?.createLoanOffer?.amountAvailable)
+    const productName = useAppSelector(state => state?.createLoanOffer?.loanProductName)
+    const loanProductData = useAppSelector(state => state?.createLoanOffer?.loanProductType)
     const router = useRouter();
-    const [amount , setAmounts] = useState('');
+    const [amount , setAmounts] = useState(amountApproved);
     const [pageNumber,setPageNumber] = useState(0);
-    const [selectedLoanProductId, setSelectedProductId] = useState('')
-    const [loanProducts, setLoanProduct] = useState<LoanProduct[]>()
+    const [selectedLoanProductId, setSelectedProductId] = useState(loanProductId)
+    const [loanProducts, setLoanProduct] = useState<viewAllProps[]>([])
     const selectedLoanRequestId = useAppSelector(state => state.loanOffer.selectedLoanRequestId);
-
+    const [selectedLoanProductName, setSelectedLoanProductName] = useState(productName);
+    const [isSelectOpen, setIsSelectOpen] = useState(false);
 
     const [hasNextPage, setHasNextPage] = useState(true);
     const parameter = {
         pageSize: 10,
         pageNumber: pageNumber
     }
+
     const {data, isFetching,isLoading  } = useViewAllLoanProductQuery(parameter)
     const unformatedAmount =  unformatAmount(amount);
-    const [selectedLoanProduct, setSelectedLoanProduct] = useState<LoanProuctType>();
-    const [remainingAmount, setRemainingAmount] = useState(0)
+        
+    const [selectedLoanProduct, setSelectedLoanProduct] = useState<loanProductObj>(loanProductData);
+    // const [remainingAmount, setRemainingAmount] = useState(0)
     const [amountApprovedError, setAmountApprovedError] = useState('')
+
+    useEffect(() => {
+        if (loanProductId && loanProducts.length > 0) {
+            const product = getLoanProductById(loanProductId);
+            if (product) {
+                setSelectedLoanProductName(product.name);
+            }
+        }
+    }, [loanProductId, loanProducts]);
+
+    const isAmountExceedingLimits = () => {
+        if (!unformatedAmount || !amountRequested || !selectedLoanProduct?.availableAmountToBeOffered) {
+            return true;
+        }
+        
+        const amountApproved = Number(unformatedAmount);
+        const requestedAmount = Number(amountRequested);
+        const availableToOffer = Number(selectedLoanProduct.availableAmountToBeOffered);
+        
+        return amountApproved > requestedAmount || amountApproved > availableToOffer;
+    };
 
     const dd = (unformatedAmount?.length === 0) ||
         (selectedLoanProductId?.length === 0)
-            || (amountApprovedError?.length !== 0);
+            || (amountApprovedError?.length !== 0) ||
+            isAmountExceedingLimits() ||
+            Number(unformatedAmount) === 0;;
 
     useEffect(() => {
-        setLoanProduct((prev) => {
+        if(data?.data){
+          setLoanProduct((prev) => {
             if(pageNumber === 0) {
-                return data?.data?.body
+                return [...data?.data?.body].sort((a, b) => a.name.localeCompare(b.name));
             }
             const newLoanProducts = data?.data?.body.filter(
-                (newLoanProducts: LoanProduct) => !prev?.some((prevloanProducts) => prevloanProducts.id === newLoanProducts.id)
+                (newLoanProducts: viewAllProps) => !prev?.some((prevloanProducts) => prevloanProducts.id === newLoanProducts.id)
             );
-            if (prev) {
-                return [...prev, ...newLoanProducts]
-            }
-        });
-        setHasNextPage(data?.data?.hasNextPage)
-    },[data?.data?.body, ])
+            return [...prev, ...newLoanProducts].sort((a,b) => a.name.localeCompare(b.name));
+          });
+          setHasNextPage(data?.data?.hasNextPage)
+        }
+    
+    },[data, pageNumber])
 
 
     useEffect(() => {
         if(selectedLoanProductId ){
             const selectedLoanProduct = getLoanProductById(selectedLoanProductId)
             const totalAvailableInLoanProduct = Number(selectedLoanProduct?.totalAmountAvailable);
-            setRemainingAmount(totalAvailableInLoanProduct)
+            // setRemainingAmount(totalAvailableInLoanProduct)
             const unformatedAmount = Number(unformatAmount(amount));
-            const remain = totalAvailableInLoanProduct - unformatedAmount;
-            setRemainingAmount(remain)
+            // const remain = totalAvailableInLoanProduct - unformatedAmount;
+            // setRemainingAmount(remain)
             if (unformatedAmount >  totalAvailableInLoanProduct){
                 setAmountApprovedError('Amount approved cannot be greater than selected loan product size')
             }else{
@@ -72,8 +118,7 @@ const Index = () => {
             }
             getLoanProductByIds(selectedLoanProductId)
         }
-
-
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [selectedLoanProductId]);
 
     const backToLoanRequest = () => {
@@ -81,13 +126,21 @@ const Index = () => {
 
     }
     const getLoanProductById = (id: string) => {
-        return loanProducts?.find((loanProduct: LoanProduct) => loanProduct.id === id);
+        return loanProducts?.find((loanProduct: viewAllProps) => loanProduct.id === id);
     };
 
-
-    const handleOnSelectLoanProductModal = (value: string)=> {
-        setSelectedProductId(value)
-    }
+    const handleLoanProductSelection = (value: string) => {
+        setSelectedProductId(value);
+        
+        const selectedProduct = getLoanProductById(value);
+        if (selectedProduct) {
+            setSelectedLoanProductName(selectedProduct.name);
+            if (selectedProduct.totalAmountAvailable !== undefined) {
+                store.dispatch(setAmountAvailable(selectedProduct.totalAmountAvailable));
+            }
+            getLoanProductByIds(value);
+        }
+    };
 
     const loadMore = () => {
         if (!isFetching && hasNextPage) {
@@ -99,29 +152,63 @@ const Index = () => {
 
         store.dispatch(setSelectedLoanProductId(selectedLoanProductId))
         store.dispatch(setAmount(String(unformatedAmount)))
+        store.dispatch(setLoanProductName(selectedLoanProductName))
         router.push('/create-loan-offer/generate-repayment-schedule')
 
     }
 
     const getLoanProductByIds = (id: string) => {
-        const datas: LoanProuctType[] = data?.data?.body
+        const datas:  loanProductObj[] = data?.data?.body
         const filtered = datas?.filter((item)=> item.id === id)
-        setSelectedLoanProduct(filtered?.at(0))
+        const foundProduct = filtered?.at(0);
+        if (foundProduct) {
+            setSelectedLoanProduct(foundProduct);
+            store.dispatch(setLoanProductType(foundProduct));
+        }
     }
 
 
     const handleAmountInputChange = (value: string) => {
+        const rawValue = value.replace(/,/g, ''); 
+        
+        if (rawValue === '0' || rawValue === '0.00' || rawValue === '0.0') {
+            setAmountApprovedError('Amount approved cannot be zero');
+            setAmounts(value);
+            return;
+        }
+        
+        if (rawValue.length > 1 && rawValue.startsWith('0') && !rawValue.startsWith('0.')) {
+            setAmountApprovedError('Amount cannot start with zero');
+            setAmounts(value);
+            return;
+        }
+
+        if (rawValue.startsWith('-')) {
+            setAmountApprovedError('Amount cannot be negative');
+            setAmounts(value);
+            return;
+        }
+        setAmountApprovedError('');
+
         if (selectedLoanProductId ) {
             const selectedLoanProduct = getLoanProductById(selectedLoanProductId)
             const totalAvailableInLoanProduct = Number(selectedLoanProduct?.totalAmountAvailable);
             const amountApproved = Number(unformatAmount(value));
+            const requestedAmount = Number(amountRequested);
+             const availableToOffer = Number(selectedLoanProduct?.availableAmountToBeOffered);
+             if (amountApproved > availableToOffer) {
+                setAmountApprovedError('Amount approved cannot be greater than amount available to be offered')
+            }else 
+            if (amountApproved > requestedAmount) {
+                setAmountApprovedError('Amount approved cannot be greater than amount requested')
+            }
+             else
             if (amountApproved > totalAvailableInLoanProduct) {
-                 setAmountApprovedError('Amount approved cannot be greater than selected loan product size')
-            }else{
+                setAmountApprovedError('Amount approved cannot be greater than selected loan product availabe amount')
+           }
+            else{
                 setAmountApprovedError('')
                 setAmounts(value)
-                const remain = totalAvailableInLoanProduct - amountApproved;
-                setRemainingAmount(remain)
             }
         }else{
             setAmounts(value)
@@ -147,8 +234,11 @@ const Index = () => {
                 }}
                 className={` grid md:w-fit max-h-[80vh]  gap-3 overflow-y-scroll   md:ml-auto mr-auto md: `}
             >
-                <p className={` ${cabinetGroteskMediumBold.className} text-[#101828] text-[28px]  `}>Create loan offer</p>
-                <div className="grid gap-2 mt-4">
+                <div className='border-b-[1px] border-solid pb-2'>
+                <p className={` ${cabinetGroteskMediumBold.className} text-[#101828] text-[28px]  `}>Create loan offer for <span className='font-semibold'>{loaneeName}</span></p>
+                <p className='text-[14px] text-[#4D4E4D]'>Amount requested: {formatAmount(amountRequested)}</p>
+                </div>
+                <div className="grid gap-2 mt-4 relative bottom-2">
                     <Label htmlFor="amountApproved">Amount approved</Label>
                     <div>
                         <div className={'flex gap-2'}>
@@ -176,36 +266,40 @@ const Index = () => {
                         <p id={'amountApprovedError'} data-testid={'amountApprovedError'} className={`text-[12px] text-red-400 `}>{amountApprovedError}</p>
                     </div>
                     <div>
-                        <CustomSelectId
-                            placeholder={'Select loan product'}
-                            //eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                            // @ts-expect-error
-                            selectContent={loanProducts}
-                            value={selectedLoanProductId}
-                            onChange={(value) => handleOnSelectLoanProductModal(value)}
-                            isLoading={isLoading || isFetching}
-                            displayName={true}
-                            triggerId={`financier-select-${selectedLoanProductId}`}
-                            selectItemCss='text-[#6A6B6A] cursor-pointer hover:bg-[#F9F9F9]'
-                            className="w-full"
-                            emptyStateText={'No loan products available'}
+                        <SelectWithAmount
+                            selectedProgram={selectedLoanProductName}
+                            setSelectedProgram={setSelectedLoanProductName}
+                            isSelectOpen={isSelectOpen}
+                            setIsSelectOpen={setIsSelectOpen}
+                            selectOptions={loanProducts}
+                            setId={handleLoanProductSelection}
+                            setAvailableAmount={(availableAmount) => {
+                                store.dispatch(setAmountAvailable(availableAmount));
+                            }}
+                            availableAmount={totalAmountAvailable || 0}
+                            onChange={() => {
+                                
+                            }}
+                            placeholder='Select loan product'
+                            isLoading={isLoading}
                             infinityScroll={{
                                 hasMore: hasNextPage,
                                 loadMore: loadMore,
                                 loader: isFetching
                             }}
+                            label=""
                         />
-                        <span className={`text-[14px]  ${inter.className}  `}>Loan product balance after creating loan offer <b>{formatAmount(remainingAmount)}</b></span>
+                        {/* <span className={`text-[14px]  ${inter.className}  `}>Loan product balance after creating loan offer <b>{formatAmount(remainingAmount)}</b></span> */}
                     </div>
                     <div className={` bg-[#F9F9F9] px-4 py-4 grid gap-4  `}>
                         <div className={ ` grid gap-3 `}>
                             <p className={` text-[#6A6B6A] text-[14px] ${inter.className} `}>Loan product size</p>
                             <p className={` text-[#212221] text-[14px] ${inter.className} `} >{formatAmount(selectedLoanProduct?.loanProductSize)}</p>
                         </div>
-                        <div className={ ` grid gap-3 `} >
+                        {/* <div className={ ` grid gap-3 `} >
                             <p className={` text-[#6A6B6A] text-[14px] ${inter.className} `} >Actual amount available</p>
                             <p className={` text-[#212221] text-[14px] ${inter.className} `} >{formatAmount(selectedLoanProduct?.totalAmountAvailable)}</p>
-                        </div>
+                        </div> */}
                         <div className={ ` grid gap-3 `} >
                             <p className={` text-[#6A6B6A] text-[14px] ${inter.className} `} >Amount available to be offered</p>
                             <p className={` text-[#212221] text-[14px] ${inter.className} `} >{formatAmount(selectedLoanProduct?.availableAmountToBeOffered)}</p>

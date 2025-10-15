@@ -11,6 +11,7 @@ import { useSaveNextOfKinDetailsMutation } from "@/service/users/Loanee_query";
 import {useToast} from "@/hooks/use-toast";
 import Isloading from '@/reuseable/display/Isloading';
 import {cleartLoaneeCurrentFieldInfo} from "@/service/users/loanRerralSlice";
+import { convertToPascalCaseWithUnderscore } from '@/utils/Format';
 
 interface ApiError {
     status: number;
@@ -38,14 +39,21 @@ const ConfirmLoanReferralAcceptance = () => {
     const handleSubmitAdditionalDetails = async (e: React.FormEvent) => {
         e.preventDefault();
       
-        let dataToSubmit = { ...currentLoaneeAdditionalInfo };
+        // let dataToSubmit = { ...currentLoaneeAdditionalInfo };
 
-        if (dataToSubmit.levelOfEducation === "OTHERS" && dataToSubmit.others) {
-            dataToSubmit = {
-                ...dataToSubmit,
-                levelOfEducation: dataToSubmit.others
-            };
-        }
+        // if (dataToSubmit.levelOfEducation === "OTHERS" && dataToSubmit.others) {
+        //     dataToSubmit = {
+        //         ...dataToSubmit,
+        //         levelOfEducation: dataToSubmit.others
+        //     };
+        // }
+
+        const dataToSubmit = {
+            ...currentLoaneeAdditionalInfo,
+            levelOfEducation: convertToPascalCaseWithUnderscore(currentLoaneeAdditionalInfo?.levelOfEducation || '')
+        };
+
+        
         try {
             const result =  await saveNextOfKinDetails(dataToSubmit).unwrap();
             if(result){

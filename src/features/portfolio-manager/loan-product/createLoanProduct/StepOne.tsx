@@ -19,6 +19,7 @@ import { useViewFinanciersByInvestmentmentVehicleQuery } from '@/service/admin/f
 import {useRouter } from 'next/navigation';
 import { setLoanProductField,markStepCompleted } from "@/redux/slice/loan-product/Loan-product";
 import { formatPlaceName } from "@/utils/GlobalMethods";
+import {useGetInvestmentVehicleDetailQuery} from '@/service/admin/fund_query';
 
 interface viewAllProps {
     id: string;
@@ -49,6 +50,18 @@ function StepOne() {
     const [financiers,setFinanciers] = useState<viewAllProps[]>([]);
     const [showSponsorError, setShowSponsorError] = useState(false);
     const [localFundAvailableAmount, setLocalFundAvailableAmount] = useState(fundProductAvailableAmount);
+    const isEdit = useAppSelector(state => state?.loanProduct?.isEdit)
+    const [investmentVehicleAmountAvailable,setAmountAvailable] = useState(0)
+    const router = useRouter();
+
+     const {data: investmentVehicleAvailableAmount} = useGetInvestmentVehicleDetailQuery({id: investmentVehicleId}, {skip: !investmentVehicleId && !isEdit});
+
+     useEffect(() => {
+        if(investmentVehicleAvailableAmount &&  investmentVehicleAvailableAmount?.data && isEdit){
+            setAmountAvailable(investmentVehicleAvailableAmount?.data?.totalAvailableAmount)
+        }
+     },[investmentVehicleAvailableAmount,isEdit])
+
     
     const areValidAndEqual = (value1: string | undefined, value2: string | undefined): boolean => {
         if (!value1 || !value2) return false;
@@ -57,9 +70,6 @@ function StepOne() {
     };
     
     const check = areValidAndEqual(fundProductId, investmentVehicleId);
-   
-    const isEdit = useAppSelector(state => state?.loanProduct?.isEdit)
-    const router = useRouter();
 
     const currentLoanSize = Number(loanProductField?.loanProductSize) || 0;
     const whenEdit = fundProductAvailableAmount + currentLoanSize;
@@ -214,7 +224,8 @@ function StepOne() {
                 
                 if (isEdit && check) {
                     maxAllowedAmount = whenEdit;
-                    errorMessage = `Amount can't be greater than investment vehicle available amount plus current loan product size ${formatAmount(maxAllowedAmount)}`;
+                    // errorMessage = `Amount can't be greater than investment vehicle  `;
+                     errorMessage = `Amount can't be greater than investment vehicle available amount of ${formatAmount(fundProductAvailableAmount)} plus current loan product size ${formatAmount(currentLoanSize)} which equate to ${formatAmount(maxAllowedAmount)}`;
                 } else {
                    
                     maxAllowedAmount = Number(localFundAvailableAmount);
@@ -417,6 +428,8 @@ function StepOne() {
                                       setIsSelectOpen={setIsSelectOpen}
                                       selectOptions={investmentVehicleFund}
                                       setId={handleFundSelection}
+                                      setAvailableAmount={setAmountAvailable}
+                                      availableAmount={investmentVehicleAmountAvailable}
                                       onChange={() => {
                                         setFieldValue("loanProductSize", "");
                                       }}

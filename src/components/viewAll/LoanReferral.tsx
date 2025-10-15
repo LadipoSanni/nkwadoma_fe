@@ -66,7 +66,7 @@ const LoanReferral = () => {
                 tableData={getTableData()}
                 tableHeader={ tableHeader}
                 handleRowClick={()=> {} }
-                staticHeader='firstName'
+                staticHeader='Loanee'
                 staticColunm='firstName'
                 icon={<Icon icon="material-symbols:money-bag-outline" height={"2rem"} width={"2rem"} color={ '#142854' }></Icon>}
                 sideBarTabName='Loan referral'

@@ -37,12 +37,12 @@ export const Breakdown: React.FC<breakdownProps> = ({breakDown}) => {
                     <div
                         className="flex justify-center items-center gap-2 bg-meedlWhite">
                         <div className={`${inter.className} text-sm text-black300 md:w-full md:block hidden`}>
-                            {isOpen ? <p> Collapse to hide the tuition breakdown </p> :
-                                <p> Expand to see the tuition breakdown </p>}
+                            {isOpen ? <p> Collapse to hide the cohort breakdown </p> :
+                                <p> Expand to see the cohort breakdown </p>}
                         </div>
                         <div className={`${inter.className} text-sm text-black300 md:w-full md:hidden block`}>
-                            {isOpen ? <p> Collapse to hide <br/> the tuition breakdown </p> :
-                                <p> Expand to see <br/> the tuition breakdown </p>}
+                            {isOpen ? <p> Collapse to hide <br/> the cohort breakdown </p> :
+                                <p> Expand to see <br/> the cohort breakdown </p>}
                         </div>
 
                         <div>
