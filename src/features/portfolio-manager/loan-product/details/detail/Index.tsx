@@ -11,6 +11,7 @@ import { capitalizeFirstLetters } from "@/utils/GlobalMethods";
 import { setLoanProductField,setLoanProductFieldStepTwo,setTotalNumberOfLoanees,setLoanProductName,setFundroductId} from "@/redux/slice/loan-product/Loan-product";
 import { setFundProductAvailableAmount } from "@/redux/slice/loan/selected-loan";
 import {useGetInvestmentVehicleDetailQuery} from '@/service/admin/fund_query';
+import { formatAmount } from "@/utils/Format";
 
 const Details = () => {
 
@@ -27,21 +28,24 @@ const Details = () => {
     //     return vendor ? vendor.vendorName : 'Not provided';
     //   };
 
-    const renderVendors = (vendors: Array<{vendorName: string; providerServices: string[]}>) => {
+    const renderVendors = (vendors: Array<{vendorName: string; providerServices: string[],costOfService: number, duration: number}>) => {
       if (!vendors || !Array.isArray(vendors) || vendors.length === 0) {
           return 'Not provided';
       }
       
       return (
-          <div className="space-y-6">
+          <div className="space-y-5">
               {vendors.map((vendor, index) => (
-                  <div key={index} className="flex flex-col ">
-                      <span className="font-medium">{capitalizeFirstLetters(vendor.vendorName)}</span>
+                  <div key={index} className="flex flex-col border-b-[1px] border-solid pb-2">
+                      <span className="text-sm text-[#4D4E4D]"> <span className="font-medium text-black">Provider: </span>{capitalizeFirstLetters(vendor.vendorName)}</span>
                       {vendor.providerServices && vendor.providerServices.length > 0 && (
-                          <span className="text-sm text-gray-600">
-                              Service: {vendor.providerServices.map(service => capitalizeFirstLetters(service)).join(', ')}
+                          <span className="text-sm text-[#4D4E4D] mt-1">
+                            <span className="font-medium text-black"> Service:</span>  {vendor.providerServices.map(service => capitalizeFirstLetters(service)).join(', ')}
                           </span>
                       )}
+                      <span className="text-sm text-[#4D4E4D] mt-1"> <span className="font-medium text-black">Cost of service: </span>{formatAmount(vendor?.costOfService)}</span> 
+                      <span className="text-sm mt-1 text-[#4D4E4D]"> <span className="font-medium text-black">Duration: </span>{vendor?.duration}</span>
+
                   </div>
               ))}
           </div>
