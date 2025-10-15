@@ -33,20 +33,20 @@ interface TableRowData {
     [key: string]: string | number | null | React.ReactNode;
 }
 
-interface financials {
-    financierType: string,
-    organizationName: string,
-    totalAmountInvested: string
-    userIdentity: {
-        email: string,
-        firstName: string,
-        lastName: string,
+// interface financials {
+//     financierType: string,
+//     organizationName: string,
+//     totalAmountInvested: string
+//     userIdentity: {
+//         email: string,
+//         firstName: string,
+//         lastName: string,
 
-    }
+//     }
 
-}
+// }
 
-type viewAllfinancier = financials & TableRowData
+// type viewAllfinancier = financials & TableRowData
 
 interface TabState {
     pageNumber: number;
@@ -59,12 +59,12 @@ const ViewFinanciers = () => {
     const tabType = useAppSelector(state => state?.financier?.financierStatusTab)
     const [searchTerm, setSearchTerm] = useState('');
     const [selectedFinancier, setSelectedFinancier] = useState('');
-    const [financiers, setFinanciers] = useState<viewAllfinancier[]>([])
+    // const [financiers, setFinanciers] = useState<viewAllfinancier[]>([])
     const [isModalOpen, setIsModalOpen] = useState(false);
     const router = useRouter()
     const isDisabled = false;
 
-    const [debouncedSearchTerm, isTyping] = useDebounce(searchTerm, 1000);
+    const [debouncedSearchTerm] = useDebounce(searchTerm, 1000);
 
     const [tabStates, setTabStates] = useState<Record<string, TabState>>({
             active: { pageNumber: 0, totalPages: 0, hasNextPage: false },
@@ -87,8 +87,8 @@ const ViewFinanciers = () => {
 
     useEffect(()=>{
         if(debouncedSearchTerm && searchData && searchData?.data){
-            const result = searchData?.data?.body
-            setFinanciers(result)
+            // const result = searchData?.data?.body
+            // setFinanciers(result)
             setTabStates(prev => ({
                 ...prev,
                 [tabType]: {
@@ -99,7 +99,7 @@ const ViewFinanciers = () => {
             }));
         }
         else if(data && data?.data){
-            setFinanciers(data?.data?.body)
+            // setFinanciers(data?.data?.body)
             setTabStates(prev => ({
                 ...prev,
                 [tabType]: {
@@ -114,9 +114,15 @@ const ViewFinanciers = () => {
        store.dispatch(clearSaveCreateInvestmentField())
     },[debouncedSearchTerm, searchData,data,tabType])
 
+    const getTableData = () => {
+        if (!data?.data?.body) return [];
+        if ( debouncedSearchTerm ) return searchData?.data?.body || [];
+        return data?.data?.body;
+    }
+
     const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSearchTerm(event.target.value);
-        if(!isTyping ){
+        // if(!isTyping ){
             setTabStates(prev => ({
                 ...prev,
                 [tabType]: {
@@ -124,7 +130,7 @@ const ViewFinanciers = () => {
                     pageNumber: 0
                 }
             }));
-        }
+        // }
        
     };
 
@@ -153,24 +159,24 @@ const ViewFinanciers = () => {
 
 
     const financierHeader = [
-        { title: 'Name', id: 'name', selector: (row: viewAllfinancier) => capitalizeFirstLetters(row?.name?.toString())},
-        { title: 'Type', id: 'type', selector: (row: viewAllfinancier) => (
+        { title: 'Name', id: 'name', selector: (row: TableRowData) => capitalizeFirstLetters(row?.name?.toString())},
+        { title: 'Type', id: 'type', selector: (row: TableRowData) => (
                 <span className={`${row.financierType === "INDIVIDUAL"  ? 'text-[#66440A] bg-[#FEF6E8]' : 'text-[#142854] bg-[#EEF5FF]'} rounded-[32px] px-2 h-5`}>
-            {capitalizeFirstLetters(row.financierType)}
+            {capitalizeFirstLetters(String(row.financierType))}
         </span>
             ) },
-        { title: 'No. of investments', id: 'investments', selector: (row:viewAllfinancier) => row.investments || 0 },
+        { title: 'No. of investments', id: 'investments', selector: (row:TableRowData) => row.investments || 0 },
         ...(tabType === "invited" ? [
             { 
                 title: 'Status', 
                 id: 'activationStatus', 
-               selector: (row: viewAllfinancier) =><StatusBadge status={row.activationStatus?.toString()} className='truncate'/> 
+               selector: (row: TableRowData) =><StatusBadge status={row.activationStatus?.toString()} className='truncate'/> 
             }
         ] : []),
-        { title: 'Amount invested', id: 'totalAmountInvested', selector: (row:viewAllfinancier) => formatAmount(row.totalAmountInvested) },
-        { title: 'Amount earned', id: 'amountEarned', selector: (row:viewAllfinancier) => formatAmount(row.amountEarned) },
-        { title: 'Payout', id: 'payout', selector: (row:viewAllfinancier) => formatAmount(row.payout) },
-        { title: 'Portfolio value', id: 'portfolioValue', selector: (row:viewAllfinancier) => formatAmount(row.portfolioValue) }
+        { title: 'Amount invested', id: 'totalAmountInvested', selector: (row:TableRowData) => formatAmount(row.totalAmountInvested) },
+        { title: 'Amount earned', id: 'amountEarned', selector: (row:TableRowData) => formatAmount(row.amountEarned) },
+        { title: 'Payout', id: 'payout', selector: (row:TableRowData) => formatAmount(row.payout) },
+        { title: 'Portfolio value', id: 'portfolioValue', selector: (row:TableRowData) => formatAmount(row.portfolioValue) }
     ];
 
     const handleRowClick = (row: TableRowData) => {
@@ -242,14 +248,10 @@ const ViewFinanciers = () => {
                                 gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
                             }}
                         >
-                            {!isTyping && debouncedSearchTerm?.length > 0 && searchTerm && financiers.length === 0 ? (
-                                <div className={`flex justify-center items-center text-center md:h-[32vh] h-[40%] w-full mt-32`}>
-                                    <SearchEmptyState icon={MdSearch} name="Financier" />
-                                </div>
-                            ) : (
+                            
                                 <div className='pr-3 md:pr-0'>
                                 <Table
-                                    tableData={financiers}
+                                    tableData={getTableData()}
                                     tableHeader={financierHeader}
                                     handleRowClick={handleRowClick}
                                     tableHeight={55}
@@ -265,22 +267,19 @@ const ViewFinanciers = () => {
                                     totalPages={currentTabState.totalPages}
                                     isLoading={isLoading || searchIsLoading || isFetching || isSearchFetching}
                                     tableCellStyle={'h-12'}
+                                    searchEmptyState={debouncedSearchTerm ? searchData?.data?.body?.length < 1 : undefined}
                                 />
                                 </div>
-                            )}
+                            {/* )} */}
                         </div>
                     </TabsContent>
 
                     <TabsContent value={"invited"} className={`pt-3`}>
-                    {!isTyping && debouncedSearchTerm?.length > 0 && searchTerm && financiers.length === 0 ? (
-                                <div className={`flex justify-center items-center text-center md:h-[32vh] h-[40%] w-full mt-32`}>
-                                    <SearchEmptyState icon={MdSearch} name="Financier" />
-                                </div>
-                            ) : (  
+                   
                     <div className='pr-3 md:pr-0'>
 
                         <Table
-                            tableData={financiers}
+                            tableData={getTableData()}
                             tableHeader={financierHeader}
                             handleRowClick={handleRowClick}
                             tableHeight={55}
@@ -296,9 +295,10 @@ const ViewFinanciers = () => {
                             totalPages={currentTabState.totalPages}
                             isLoading={isLoading || searchIsLoading || isFetching || isSearchFetching}
                             tableCellStyle={'h-12'}
+                            searchEmptyState={debouncedSearchTerm ? searchData?.data?.body?.length < 1 : undefined}
                         />
                </div>
-                )}
+                {/* )} */}
                     </TabsContent>
 
                 </Tabs>
