@@ -66,9 +66,9 @@ describe('LoanApplicationDetails', () => {
                 <LoanApplicationDetails loaneeLoanDetail={data} />
             </Providers>
         );
-        const trigger = screen.getByText('Expand to see the tuition breakdown');
+        const trigger = screen.getByText('Expand to see the cohort breakdown');
         fireEvent.click(trigger);
-        expect(screen.getByText('Collapse to hide the tuition breakdown')).toBeInTheDocument();
+        expect(screen.getByText('Collapse to hide the cohort breakdown')).toBeInTheDocument();
         expect(screen.getByText('Tuition')).toBeInTheDocument();
     });
     test('renders additional information component', () => {
@@ -86,7 +86,7 @@ describe('LoanApplicationDetails', () => {
                 <LoanApplicationDetails loaneeLoanDetail={data} />
             </Providers>
         );
-        const trigger = screen.getByText('Expand to see the tuition breakdown');
+        const trigger = screen.getByText('Expand to see the cohort breakdown');
         expect(trigger).toBeInTheDocument();
     });
 
@@ -96,7 +96,7 @@ describe('LoanApplicationDetails', () => {
                 <LoanApplicationDetails loaneeLoanDetail={data}/>
             </Providers>
         );
-        const trigger = screen.getByText('Expand to see the tuition breakdown');
+        const trigger = screen.getByText('Expand to see the cohort breakdown');
         expect(trigger).toHaveClass('font-normal', 'text-[14px]', 'leading-[150%]', 'text-black300');
     });
 });

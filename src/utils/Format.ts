@@ -287,6 +287,17 @@ export const validateNumberLimit =
     return `${formatToTwoDecimals(numValue)}%`;
 };
 
+export const convertToPascalCaseWithUnderscore = (input: string): string => {
+  return input
+    .trim()
+    .split(/\s+/) 
+    .map(word => 
+      word.charAt(0).toUpperCase() + word.slice(1).toUpperCase()
+    )
+    .join('_'); 
+};
+
+
 //   interface NestedData {
 //     body?: TableRowData[];
 // }
