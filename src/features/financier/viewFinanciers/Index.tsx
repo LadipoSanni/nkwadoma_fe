@@ -32,21 +32,6 @@ interface TableRowData {
     [key: string]: string | number | null | React.ReactNode;
 }
 
-// interface financials {
-//     financierType: string,
-//     organizationName: string,
-//     totalAmountInvested: string
-//     userIdentity: {
-//         email: string,
-//         firstName: string,
-//         lastName: string,
-
-//     }
-
-// }
-
-// type viewAllfinancier = financials & TableRowData
-
 interface TabState {
     pageNumber: number;
     totalPages: number;
