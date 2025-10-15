@@ -2,11 +2,7 @@ import React from 'react';
 import { inter500} from '@/app/fonts'
 import Details from './Details';
 import styles from './index.module.css'
-// import BasicDetails from "@/components/loanee-my-profile/BasicDetails";
-// import Document from "@/components/loanee-my-profile/Document";
 import {LoaneeDetails} from '@/types/loanee'
-// import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/components/ui/tabs";
-// import LoaneeRepayment from "@/components/loanee-my-profile/loaneeRepayment";
 import {getItemSessionStorage} from "@/utils/storage";
 import ViewDocument from "@/reuseable/details/ViewDocument";
 
@@ -14,13 +10,12 @@ interface props {
     data: LoaneeDetails;
     isLoading?: boolean;
     loaneeDocs?:  {label:string,value:string }[];
-    loaneeViewDetails: LoaneeDetails;
+    isViewingOrganizationLoaneeLoans?: boolean;
 
 }
 
-const LoaneeLoanDetails = ({data, isLoading,loaneeDocs,loaneeViewDetails}:props ) => {
+const LoaneeLoanDetails = ({data, isLoading,loaneeDocs ,isViewingOrganizationLoaneeLoans}:props ) => {
 
-    // console.log('organization loanee data: ', loaneeViewDetails)
 
     const userRole  = getItemSessionStorage("user_role")
 
@@ -28,23 +23,15 @@ const LoaneeLoanDetails = ({data, isLoading,loaneeDocs,loaneeViewDetails}:props 
     const renderLoaneeView = () => {
         return(
             <div className={` grid gap-4 `}>
-                <Details isLoading={isLoading} id={'loanAmount'} showAsWholeNumber={true}   maxWidth={'100%'} name={'Loan amount'} value={loaneeViewDetails?.loanAmountApproved ? loaneeViewDetails?.loanAmountApproved : 0} valueType={'currency'} />
+                <Details isLoading={isLoading} id={'loanAmount'} showAsWholeNumber={true}   maxWidth={'100%'} name={'Loan amount'} value={data?.loanAmountApproved ? data?.loanAmountApproved : 0} valueType={'currency'} />
                 <div className={` md:flex md:gap-4  grid gap-4  w-full  `}>
-                    <Details isLoading={isLoading} id={'amountOutstanding'}  showAsWholeNumber={true}  maxWidth={'100%'} name={'Amount outstanding'} value={loaneeViewDetails?.loanAmountOutstanding ? loaneeViewDetails?.loanAmountOutstanding : 0} valueType={'currency'} />
-                    <Details isLoading={isLoading} id={'AmountRepaid'} showAsWholeNumber={true}   maxWidth={'100%'} name={'Amount repaid'} value={loaneeViewDetails?.loanAmountRepaid ? loaneeViewDetails?.loanAmountRepaid : 0} valueType={'currency'}  />
+                    <Details isLoading={isLoading} id={'amountOutstanding'}  showAsWholeNumber={true}  maxWidth={'100%'} name={'Amount outstanding'} value={data?.loanAmountOutstanding ? data?.loanAmountOutstanding : 0} valueType={'currency'} />
+                    <Details isLoading={isLoading} id={'AmountRepaid'} showAsWholeNumber={true}   maxWidth={'100%'} name={'Amount repaid'} value={data?.loanAmountRepaid ? data?.loanAmountRepaid : 0} valueType={'currency'}  />
                 </div>
                 <div className={` md:flex md:gap-4 grid gap-4 w-full  `}>
-                    <Details isLoading={isLoading} id={'interest'}    maxWidth={'100%'} name={'Interest'} value={loaneeViewDetails?.interestRate ? loaneeViewDetails?.interestRate?.toFixed(2) : 0 } valueType={'percentage'} />
-                    {/*<Details isLoading={isLoading}  id={'interestIncured'}    maxWidth={'100%'} name={'Interest incurred'} value={data?.interestIncurred ?data?.interestIncurred : 0} valueType={'percentage'}  />*/}
-                    <Details isLoading={isLoading}  id={'repaymentPercentage'}    maxWidth={'100%'} name={'Repayment percentage'} value={loaneeViewDetails?.repaymentRate ?loaneeViewDetails?.repaymentRate?.toFixed(2) : 0} valueType={'percentage'}  />
-
+                    <Details isLoading={isLoading} id={'interest'}    maxWidth={'100%'} name={'Interest'} value={data?.interestRate ? data?.interestRate?.toFixed(2) : 0 } valueType={'percentage'} />
+                    <Details isLoading={isLoading}  id={'repaymentPercentage'}    maxWidth={'100%'} name={'Repayment percentage'} value={data?.repaymentRate ?data?.repaymentRate?.toFixed(2) : 0} valueType={'percentage'}  />
                 </div>
-                {/*<div className={` md:flex md:gap-4 grid gap-4 w-full  `}>*/}
-                {/*    /!*<Details isLoading={isLoading}  id={'deptPercentage'}    maxWidth={'100%'} name={'Debt percentage'} value={data?.debtPercentage? data?.debtPercentage : 0} valueType={'percentage'} />*!/*/}
-                {/*    /!*<Details isLoading={isLoading}  id={'repaymentPercentage'}    maxWidth={'100%'} name={'Repayment percentage'} value={data?.repaymentRate ?data?.repaymentRate : 0} valueType={'percentage'}  />*!/*/}
-                {/*</div>*/}
-
-
             </div>
         )
     }
@@ -53,10 +40,10 @@ const LoaneeLoanDetails = ({data, isLoading,loaneeDocs,loaneeViewDetails}:props 
         return(
             <div  className={` grid gap-4 `}>
 
-                 <Details id={'loanAmount'} isLoading={isLoading} showAsWholeNumber={true}   maxWidth={'100%'} name={'Loan amount'} value={data?.amountReceived ? data?.amountReceived : 0} valueType={'currency'} />
+                 <Details  id={'loanAmount'} isLoading={isLoading} showAsWholeNumber={false}   maxWidth={'100%'} name={'Loan amount'} value={ isViewingOrganizationLoaneeLoans ? data?.amountReceived ? data?.amountReceived : 0 : data?.loanAmountApproved ? data?.loanAmountApproved : 0} valueType={'currency'} />
          <div className={` md:flex md:gap-4  grid gap-4    `}>
-             <Details isLoading={isLoading}  id={'amountOutstanding'}  showAsWholeNumber={true}  maxWidth={'100%'} name={'Amount outstanding'} value={data?.amountOutstanding ? data?.amountOutstanding : 0} valueType={'currency'} />
-             <Details isLoading={isLoading} id={'AmountRepaid'} showAsWholeNumber={true}   maxWidth={'100%'} name={'Amount repaid'} value={data?.amountRepaid ? data?.amountRepaid : 0} valueType={'currency'}  />
+             <Details isLoading={isLoading}  id={'amountOutstanding'}  showAsWholeNumber={false}  maxWidth={'100%'} name={'Amount outstanding'} value={isViewingOrganizationLoaneeLoans ? data?.amountOutstanding ? data?.amountOutstanding : 0 : data?.loanAmountApproved ? data?.loanAmountApproved : 0} valueType={'currency'} />
+             <Details isLoading={isLoading} id={'AmountRepaid'} showAsWholeNumber={false}   maxWidth={'100%'} name={'Amount repaid'} value={isViewingOrganizationLoaneeLoans ? data?.amountRepaid ? data?.amountRepaid : 0 : data?.loanAmountRepaid ? data?.loanAmountRepaid : 0} valueType={'currency'}  />
          </div>
          <div className={` md:flex md:gap-4 grid gap-4 w-full  `}>
              <Details isLoading={isLoading} id={'interest'}    maxWidth={'100%'} name={'Interest'} value={data?.interestRate ? data?.interestRate?.toFixed(2) : 0} valueType={'percentage'} />

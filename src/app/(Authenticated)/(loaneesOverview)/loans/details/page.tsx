@@ -1,8 +1,8 @@
 import React from 'react';
-import OrganizationViewLoaneeProfile from "@/components/loanee-my-profile/OrganizationViewLoaneeProfile";
+import Index from "@/pages/loanee/MyProfile";
 const Page = () => {
     return (
-        <OrganizationViewLoaneeProfile />
+        <Index isViewingOrganizationLoaneeLoansThrowCohortFlow={false}/>
     );
 };
 

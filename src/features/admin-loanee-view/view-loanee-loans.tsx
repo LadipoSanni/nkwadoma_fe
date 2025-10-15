@@ -18,6 +18,7 @@ import {setcohortId} from "@/redux/slice/create/cohortSlice"
 import {setLoaneeId} from "@/redux/slice/organization/organization"
 import {MdOutlinePersonOutline} from "react-icons/md";
 import {Icon} from "@iconify/react";
+import { setClickedLoanId } from '@/redux/slice/loan/selected-loan';
 
 
 const ViewLoaneeLoans = () => {
@@ -74,7 +75,9 @@ const ViewLoaneeLoans = () => {
     const onCardClick = (item: AdminViewLoanType) => {
         store.dispatch(setcohortId(item?.cohortId))
         store.dispatch(setLoaneeId(item?.loaneeId))
+        store.dispatch(setClickedLoanId(item?.id))
         router.push(`${LoaneeLoannDetails(item.id)}`);
+
     }
 
 

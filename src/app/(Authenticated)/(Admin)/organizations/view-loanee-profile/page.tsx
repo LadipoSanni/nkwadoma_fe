@@ -3,7 +3,7 @@ import OrganizationViewLoaneeProfile from "@/components/loanee-my-profile/Organi
 
 const Page = () => {
     return (
-        <OrganizationViewLoaneeProfile/>
+        <OrganizationViewLoaneeProfile />
     );
 };
 
