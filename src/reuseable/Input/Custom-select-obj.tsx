@@ -122,7 +122,7 @@ function CustomSelectObj({ value, onChange, className, selectContent, name, plac
               onSubmit={handleSubmit}
               validationSchema={validationSchema}
             >
-              {({ setFieldValue, isValid, values, errors, touched }) => { 
+              {({ setFieldValue, isValid, values}) => { 
                 const shouldDisableButton = !isValid || !values.name.trim();
 
                 return (
@@ -160,9 +160,6 @@ function CustomSelectObj({ value, onChange, className, selectContent, name, plac
                           Add
                         </Button>
                       </div>
-                      {/* {errors.name && touched.name && (
-                        <div className="text-red-500 text-xs mt-1">{errors.name}</div>
-                      )} */}
                     </div>
                   </Form>
                 );
