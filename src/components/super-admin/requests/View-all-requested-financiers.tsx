@@ -232,7 +232,7 @@ function ViewAllRequestedFinancier() {
         staticHeader='Name'
         staticColunm='name'
         icon={MdOutlineAssignmentTurnedIn}
-         sideBarTabName='Organization'
+         sideBarTabName='Financier'
         tableCellStyle="h-12"
         tableHeight={data?.data?.body?.length < 10 || searchResults?.data?.body?.length < 10 ? 60 : undefined}
         isLoading={isLoading || isFetching || isSearchfetching || isSearchloading}
