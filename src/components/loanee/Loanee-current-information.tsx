@@ -1,4 +1,4 @@
-import React,{useState,useEffect} from 'react'
+import React,{useState} from 'react'
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { LoaneeInformationvalidationSchema} from '@/utils/validation-schema';
 import { inter } from "@/app/fonts";
@@ -57,7 +57,7 @@ function LoaneeCurrentInformation({initialFormValue,handleSubmit,nextOfCountryCo
 
   const handleEducationChange = (
     value: string,
-    setFieldValue: (field: string, value: any, shouldValidate?: boolean) => void
+    setFieldValue: (field: string, value: string, shouldValidate?: boolean) => void
   ) => {
     const isCustomValue = !educationalQualifications.some(qual => qual.value === value);
     const alreadyExists = customEducationOptions.some(opt => opt.value === value);
