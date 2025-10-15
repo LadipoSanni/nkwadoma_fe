@@ -6,7 +6,7 @@ const OrganizationViewLoaneeProfile = () => {
 
     return (
 
-        <Index/>
+        <Index isViewingOrganizationLoaneeLoansThrowCohortFlow={true}/>
     );
 };
 

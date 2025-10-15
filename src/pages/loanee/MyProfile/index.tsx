@@ -19,10 +19,15 @@ const Index = dynamic(
     {ssr: false}
 )
 
-const LoaneeDetails = () => {
+interface IndexProps {
+    isViewingOrganizationLoaneeLoansThrowCohortFlow?: boolean
+}
+
+const LoaneeDetails = ({isViewingOrganizationLoaneeLoansThrowCohortFlow}: IndexProps) => {
 
     const selectedLoanId = useAppSelector(state => state.selectedLoan.clickedLoanId);
-    const {data: viewLoaneeLoanDetails, isFetching:  isFetchingLoaneeLoanDetails, isLoading: isLoadingLoaneeLoanDetails} = useViewLoanDetailsQuery(selectedLoanId)
+    const {data: viewLoaneeDisbursedLoanDetails, isFetching:  isFetchingLoaneeLoanDetails, isLoading: isLoadingLoaneeLoanDetails} = useViewLoanDetailsQuery(selectedLoanId, {skip: isViewingOrganizationLoaneeLoansThrowCohortFlow})
+
 
     const id =  useAppSelector(state => state.organization.loaneeId)
     const cohortId = useAppSelector(state => state.cohort.setCohortId)
@@ -33,34 +38,32 @@ const LoaneeDetails = () => {
         loaneeId: id,
         cohortId: notificationCohortId ||  cohortId,
     }
-    const  {data, isLoading, isFetching} = useViewLoaneeInACohortDetailsQuery(props)
+    const  {data, isLoading, isFetching} = useViewLoaneeInACohortDetailsQuery(props, {skip:!isViewingOrganizationLoaneeLoansThrowCohortFlow})
+
+    const userName = isViewingOrganizationLoaneeLoansThrowCohortFlow ?   data?.data?.firstName + ' '+ data?.data?.lastName :  viewLoaneeDisbursedLoanDetails?.data?.firstName + ' '+ viewLoaneeDisbursedLoanDetails?.data?.lastName ;
 
 
 
-    const userName = data?.data?.firstName + ' '+ data?.data?.lastName
-
-
-
-    const nextOfFullName = data?.data?.nextOfKinFirstName ? data?.data?.nextOfKinFirstName : ''  + ' ' + data?.data?.nextOfKinLastName ? data?.data?.nextOfKinLastName : '';
+    const nextOfFullName = isViewingOrganizationLoaneeLoansThrowCohortFlow ? data?.data?.nextOfKinFirstName + '' + data?.data?.nextOfKinLatName : ''  + ' ' + viewLoaneeDisbursedLoanDetails?.data?.nextOfKin?.firstName ? viewLoaneeDisbursedLoanDetails?.data?.nextOfKin?.lastName : '';
 
     const basicDetails = [
-        {label: 'Gender', value: `${data?.data?.gender ? data?.data?.gender : 'Not provided'}`},
-        {label: 'Date of birth', value: `${data?.data?.dateOfBirth ?  dayjs(data?.data?.dateOfBirth?.toString()).format('MMM D, YYYY') : 'Not provided'}`},
-        {label: 'Marital status', value: `${data?.data?.maritalStatus ? data?.data?.maritalStatus : 'Not provided'}`},
-        {label: 'Nationality', value: `${data?.data?.nationality ? data?.data?.nationality : 'Not provided'}`},
-        {label: 'State of origin ', value: `${data?.data?.stateOfOrigin ? data?.data?.stateOfOrigin : 'Not provided'}`},
-        {label: 'State of residence', value: `${data?.data?.stateOfResidence ? capitalizeFirstLetters(data?.data?.stateOfResidence) : 'Not provided'}`},
-        {label: 'Residential address', value: `${data?.data?.residentialAddress ? data?.data?.residentialAddress : 'Not provided'}`},
-        {label: 'Phone number', value: `${data?.data?.phoneNumber ? data?.data?.phoneNumber : 'Not provided'}`},
-        {label: 'Alternate residential address', value: `${data?.data?.residentialAddress ? data?.data?.residentialAddress : 'Not provided'}`},
-        {label: 'Alternate email address', value: `${data?.alternateEmail? data?.data?.alternateEmail : 'Not provided'}`},
+        {label: 'Gender', value: `${ isViewingOrganizationLoaneeLoansThrowCohortFlow ? data?.data?.gender ? data?.data?.gender : 'Not provided' : viewLoaneeDisbursedLoanDetails?.data?.userIdentity?.gender ? viewLoaneeDisbursedLoanDetails?.data?.userIdentity?.gender : 'Not provided'}`},
+        {label: 'Date of birth', value: `${ isViewingOrganizationLoaneeLoansThrowCohortFlow ? data?.data?.dateOfBirth ?  dayjs(data?.data?.dateOfBirth?.toString()).format('MMM D, YYYY') : 'Not provided' : viewLoaneeDisbursedLoanDetails?.data?.userIdentity?.dateOfBirth ? dayjs(viewLoaneeDisbursedLoanDetails?.data?.userIdentity?.dateOfBirth?.toString()).format("MMM D, YYYY") : 'Not provided'}`},
+        {label: 'Marital status', value: `${isViewingOrganizationLoaneeLoansThrowCohortFlow ? data?.data?.maritalStatus ? data?.data?.maritalStatus : 'Not provided' :  viewLoaneeDisbursedLoanDetails?.data?.userIdentity?.maritalStatus ? viewLoaneeDisbursedLoanDetails?.data?.userIdentity?.maritalStatus : 'Not provided'}`},
+        {label: 'Nationality', value: `${isViewingOrganizationLoaneeLoansThrowCohortFlow ? data?.data?.nationality ? data?.data?.nationality : 'Not provided' : viewLoaneeDisbursedLoanDetails?.data?.userIdentity?.nationality ? viewLoaneeDisbursedLoanDetails?.data?.userIdentity?.nationality : 'Not provided' }`},
+        {label: 'State of origin ', value: `${ isViewingOrganizationLoaneeLoansThrowCohortFlow ? data?.data?.stateOfOrigin ? data?.data?.stateOfOrigin : 'Not provided' : viewLoaneeDisbursedLoanDetails?.data?.userIdentity?.stateOfOrigin ? viewLoaneeDisbursedLoanDetails?.data?.userIdentity?.stateOfOrigin : 'Not provided'}`},
+        {label: 'State of residence', value: `${isViewingOrganizationLoaneeLoansThrowCohortFlow ? data?.data?.stateOfResidence ? capitalizeFirstLetters(data?.data?.stateOfResidence) : 'Not provided' : viewLoaneeDisbursedLoanDetails?.data?.userIdentity?.stateOfResidence ? capitalizeFirstLetters(viewLoaneeDisbursedLoanDetails?.data?.userIdentity?.stateOfResidence) : 'Not provided'}`},
+        {label: 'Residential address', value: `${isViewingOrganizationLoaneeLoansThrowCohortFlow ? data?.data?.residentialAddress ? data?.data?.residentialAddress : 'Not provided' : viewLoaneeDisbursedLoanDetails?.data?.userIdentity?.residentialAddress ? viewLoaneeDisbursedLoanDetails?.data?.userIdentity?.residentialAddress : 'Not provided' }`},
+        {label: 'Phone number', value: `${isViewingOrganizationLoaneeLoansThrowCohortFlow ? data?.data?.phoneNumber ? data?.data?.phoneNumber : 'Not provided' : viewLoaneeDisbursedLoanDetails?.data?.userIdentity?.phoneNumber ? viewLoaneeDisbursedLoanDetails?.data?.userIdentity?.phoneNumber : 'Not provided' }`},
+        {label: 'Alternate residential address', value: `${isViewingOrganizationLoaneeLoansThrowCohortFlow ? data?.data?.residentialAddress ? data?.data?.residentialAddress : 'Not provided' : viewLoaneeDisbursedLoanDetails?.data?.userIdentity?.alternateContactAddress ? viewLoaneeDisbursedLoanDetails?.data?.userIdentity?.alternateContactAddress : 'Not provided' }`},
+        {label: 'Alternate email address', value: `${isViewingOrganizationLoaneeLoansThrowCohortFlow ? data?.alternateEmail? data?.data?.alternateEmail : 'Not provided' : viewLoaneeDisbursedLoanDetails?.data?.userIdentity?.gender ? viewLoaneeDisbursedLoanDetails?.data?.userIdentity?.alternateEmail : 'Not provided' }`},
         {label: 'Next of kin full name', value: nextOfFullName},
-        {label: 'Next of kin phone number', value: `${data?.data?.nextOfKinPhoneNumber ? data?.data?.nextOfKinPhoneNumber : 'Not provided'}`},
-        {label: 'Next of kin residential address', value: `${data?.data?.nextOfKinResidentialAddress ? data?.data?.nextOfKinResidentialAddress : 'Not provided'}`},
-        {label: 'Next of kin relationship ', value: `${data?.data?.nextOfKinRelationship ? data?.data?.nextOfKinRelationship : 'Not provided'}`},
-        {label: 'Highest level of education ', value: `${data?.highestLevelOfEducation ? data?.data?.highestLevelOfEducation : `Not provided`}`},
-        {label: 'Institution name ', value: `${data?.data?.organizationName ? data?.data?.organizationName : 'Not provided'}`},
-        {label: 'Program of study ', value: `${data?.data?.programName ? data?.data?.programName : 'Not provided'}`},
+        {label: 'Next of kin phone number', value: `${isViewingOrganizationLoaneeLoansThrowCohortFlow ? data?.data?.nextOfKinPhoneNumber ? data?.data?.nextOfKinPhoneNumber : 'Not provided' : viewLoaneeDisbursedLoanDetails?.data?.nextOfKin?.phoneNumber ? viewLoaneeDisbursedLoanDetails?.data?.nextOfKin?.phoneNumber : 'Not provided'}`},
+        {label: 'Next of kin residential address', value: `${isViewingOrganizationLoaneeLoansThrowCohortFlow ? data?.data?.nextOfKinResidentialAddress ? data?.data?.nextOfKinResidentialAddress : 'Not provided' : viewLoaneeDisbursedLoanDetails?.data?.nextOfKin?.contactAddress ? viewLoaneeDisbursedLoanDetails?.data?.nextOfKin?.contactAddress : 'Not provided' }`},
+        {label: 'Next of kin relationship ', value: `${isViewingOrganizationLoaneeLoansThrowCohortFlow ? data?.data?.nextOfKinRelationship ? data?.data?.nextOfKinRelationship : 'Not provided' : viewLoaneeDisbursedLoanDetails?.data?.nextOfKin?.nextOfKinRelationship ? viewLoaneeDisbursedLoanDetails?.data?.nextOfKin?.nextOfKinRelationship : 'Not provided' }`},
+        {label: 'Highest level of education ', value: `${isViewingOrganizationLoaneeLoansThrowCohortFlow ? data?.highestLevelOfEducation ? data?.data?.highestLevelOfEducation : `Not provided` : viewLoaneeDisbursedLoanDetails?.data?.userIdentity?.levelOfEduction ? viewLoaneeDisbursedLoanDetails?.data?.userIdentity?.levelOfEduction : 'Not provided' }`},
+        {label: 'Institution name ', value: `${isViewingOrganizationLoaneeLoansThrowCohortFlow ? data?.data?.organizationName ? data?.data?.organizationName : 'Not provided' : viewLoaneeDisbursedLoanDetails?.data?.organizationName ? viewLoaneeDisbursedLoanDetails?.data?.organizationName : 'Not provided' }`},
+        {label: 'Program of study ', value: `${isViewingOrganizationLoaneeLoansThrowCohortFlow ? data?.data?.programName ? data?.data?.programName : 'Not provided' : viewLoaneeDisbursedLoanDetails?.data?.programName ? viewLoaneeDisbursedLoanDetails?.data?.programName : 'Not provided' }`},
 
     ]
 
@@ -96,9 +99,9 @@ const LoaneeDetails = () => {
     ]
     const loaneeBioDataTab :  {name: string; displayValue: React.ReactNode} = {name: 'Bio details', displayValue: <div className={` md:max-h-[60vh]  grid gap-4 w-full  ${styles.container}`}>{loaneeBioDa()}</div>}
     const tab:  {name: string; displayValue: React.ReactNode}[] = [
-        {name: 'Details',  displayValue: <LoaneeLoanDetails loaneeViewDetails={viewLoaneeLoanDetails?.data} data={data?.data} isLoading={false} />},
-        {name: 'Repayment',  displayValue:<ViewRepayment loanId={userRole !== 'LOANEE'? data?.data?.loanId : viewLoaneeLoanDetails?.data?.loanId}/>},
-        {name: 'Repayment schedule',  displayValue:<ViewRepaymentSchedule loanId={userRole !== 'LOANEE'? data?.data?.loanId : viewLoaneeLoanDetails?.data?.loanIdTab}/>},
+        {name: 'Details',  displayValue: <LoaneeLoanDetails isViewingOrganizationLoaneeLoans={isViewingOrganizationLoaneeLoansThrowCohortFlow}  data={isViewingOrganizationLoaneeLoansThrowCohortFlow ?  data?.data : viewLoaneeDisbursedLoanDetails?.data } isLoading={false} />},
+        {name: 'Repayment',  displayValue:<ViewRepayment loanId={isViewingOrganizationLoaneeLoansThrowCohortFlow ? data?.data?.loanId :viewLoaneeDisbursedLoanDetails?.data?.id } />},
+        {name: 'Repayment schedule',  displayValue:<ViewRepaymentSchedule loanId={isViewingOrganizationLoaneeLoansThrowCohortFlow ? data?.data?.loanId : viewLoaneeDisbursedLoanDetails?.data?.id }/>},
         ...(userRole !== "LOANEE" ? [loaneeBioDataTab] : []),
 
 
@@ -111,11 +114,11 @@ const LoaneeDetails = () => {
             data-testid={'loaneeProfileHeader'}
         >
           <LoaneeProfileHeader
-              userName={userRole !== 'LOANEE' ? userName : '' }
-              institutionName={userRole === 'LOANEE' ?   viewLoaneeLoanDetails?.data?.organizationName :''}
-              isLoading={userRole !== 'LOANEE' ?  isLoading || isFetching : isFetchingLoaneeLoanDetails || isLoadingLoaneeLoanDetails }
-              cohort={userRole === 'LOANEE' ?  viewLoaneeLoanDetails?.data?.cohortName : data?.data?.programName}
-              program={userRole === 'LOANEE' ? viewLoaneeLoanDetails?.data?.programName : data?.data?.programName}
+              userName={ userRole !== 'LOANEE' ? userName : '' }
+              institutionName={userRole === 'LOANEE' ?   viewLoaneeDisbursedLoanDetails?.data?.organizationName :''}
+              isLoading={isViewingOrganizationLoaneeLoansThrowCohortFlow ?  isLoading || isFetching : isFetchingLoaneeLoanDetails || isLoadingLoaneeLoanDetails }
+              cohort={isViewingOrganizationLoaneeLoansThrowCohortFlow ?  data?.data?.programName : viewLoaneeDisbursedLoanDetails?.data?.cohortName }
+              program={isViewingOrganizationLoaneeLoansThrowCohortFlow ? data?.data?.programName : viewLoaneeDisbursedLoanDetails?.data?.programName }
           />
             <div id={'underline'} data-testid={'underline'} className={`px-4 `}>
                 <UnderlineTab defaultTab={'Details'} tabTriggers={tabTriggers} tabValue={tab}/>

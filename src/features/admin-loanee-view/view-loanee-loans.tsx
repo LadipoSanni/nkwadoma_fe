@@ -16,6 +16,8 @@ import {useViewAllLoansTotalCountsByAdminsQuery, useViewLoaneeLoansByAdminQuery,
 import {AdminViewLoanType} from "@/types/loanee";
 import {setcohortId} from "@/redux/slice/create/cohortSlice"
 import {setLoaneeId} from "@/redux/slice/organization/organization"
+import { setClickedLoanId } from '@/redux/slice/loan/selected-loan';
+
 // import {MdOutlinePersonOutline} from "react-icons/md";
 import { useDebounce } from '@/hooks/useDebounce';
 import GeneralEmptyState from '@/reuseable/emptyStates/General-emptystate';
@@ -77,7 +79,9 @@ const ViewLoaneeLoans = () => {
     const onCardClick = (item: AdminViewLoanType) => {
         store.dispatch(setcohortId(item?.cohortId))
         store.dispatch(setLoaneeId(item?.loaneeId))
+        store.dispatch(setClickedLoanId(item?.id))
         router.push(`${LoaneeLoannDetails(item.id)}`);
+
     }
 
 
@@ -150,7 +154,7 @@ const ViewLoaneeLoans = () => {
                                       </div>}
                                       className='h-14'
                                       />
-                                     
+
                                    </div>
                                )
                                :

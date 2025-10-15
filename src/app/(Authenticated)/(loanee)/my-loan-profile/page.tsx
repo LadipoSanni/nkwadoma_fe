@@ -3,7 +3,7 @@ import Index from "@/pages/loanee/MyProfile";
 
 const Page = () => {
     return (
-        <Index/>
+        <Index isViewingOrganizationLoaneeLoansThrowCohortFlow={false}/>
     );
 };
 
