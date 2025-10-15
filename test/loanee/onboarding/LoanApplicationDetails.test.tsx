@@ -86,7 +86,7 @@ describe('LoanApplicationDetails', () => {
                 <LoanApplicationDetails loaneeLoanDetail={data} />
             </Providers>
         );
-        const trigger = screen.getByText('Expand to see the tuition breakdown');
+        const trigger = screen.getByText('Expand to see the cohort breakdown');
         expect(trigger).toBeInTheDocument();
     });
 
@@ -96,7 +96,7 @@ describe('LoanApplicationDetails', () => {
                 <LoanApplicationDetails loaneeLoanDetail={data}/>
             </Providers>
         );
-        const trigger = screen.getByText('Expand to see the tuition breakdown');
+        const trigger = screen.getByText('Expand to see the cohort breakdown');
         expect(trigger).toHaveClass('font-normal', 'text-[14px]', 'leading-[150%]', 'text-black300');
     });
 });
