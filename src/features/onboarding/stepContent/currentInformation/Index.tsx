@@ -1,10 +1,7 @@
 import React,{useState} from 'react';
 import { useDispatch } from 'react-redux';
-// import { MdClose, MdPersonOutline } from "react-icons/md";
-// import { cabinetGrotesk, inter } from "@/app/fonts";
 import { Button } from "@/components/ui/button";
 import {setLoaneeCurrentInfo, setIsFormSubmited} from "@/service/users/loanRerralSlice";
-// import {LoaneeCurentInformation} from "@/types/loanee";
 import LoaneeCurrentInformation from '@/components/loanee/Loanee-current-information';
 import { store,useAppSelector } from "@/redux/store";
 import { formatInternationalNumber } from '@/utils/phoneNumber';
@@ -51,6 +48,7 @@ const CurrentInformation: React.FC<CurrentInformationProps> = ({ setCurrentStep 
             values.phoneNumber, 
             nextCountryCode
           );
+
         
         const additionalLoaneeInfo = {
         firstName: values.firstName,
@@ -73,24 +71,6 @@ const CurrentInformation: React.FC<CurrentInformationProps> = ({ setCurrentStep 
           saveToReduxSlice(values)
          store.dispatch(setIsFormSubmited(true));
       }
-
-    // const handleSubmit = async (e: React.FormEvent) => {
-    //     e.preventDefault();
-    //     const dataToSubmit = {
-    //         ...values,
-    //         selectedProgram,
-    //     };
-    //     try {
-    //       const result =  await saveNextOfKinDetails(dataToSubmit).unwrap();
-    //        if(result){
-    //         setIsModalOpen(false);
-    //         dispatch(setLoaneeCurrentInfo(values))
-    //         setIsFormSubmitted(true);
-    //        }
-    //     } catch (error) {
-    //         console.error(error);
-    //     }
-    // };
 
     const handleContinueClick = () => {
         if (isFormSubmitted) {
