@@ -26,7 +26,6 @@ interface IndexProps {
 const LoaneeDetails = ({isViewingOrganizationLoaneeLoansThrowCohortFlow}: IndexProps) => {
 
     const selectedLoanId = useAppSelector(state => state.selectedLoan.clickedLoanId);
-    console.log('selectedLoanId; ', selectedLoanId)
     const {data: viewLoaneeDisbursedLoanDetails, isFetching:  isFetchingLoaneeLoanDetails, isLoading: isLoadingLoaneeLoanDetails} = useViewLoanDetailsQuery(selectedLoanId, {skip: isViewingOrganizationLoaneeLoansThrowCohortFlow})
 
 
