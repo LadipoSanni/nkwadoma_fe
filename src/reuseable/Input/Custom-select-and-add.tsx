@@ -15,6 +15,7 @@ import GeneralEmptyState from '../emptyStates/General-emptystate';
 import { Book } from 'lucide-react';
 import { capitalizeFirstLetters } from '@/utils/GlobalMethods';
 import {MdSearch} from 'react-icons/md';
+import TruncatedTextWithTooltip from '@/reuseable/tool-tip/Truncated-textWith-tooltip';
 
 type SelectItem = {
     id?: string;
@@ -43,6 +44,7 @@ type Props = {
     isloading?: boolean,
     emptyState?: string,
     showSearch? : boolean,
+    isFetching?: boolean
 };
 
 function CustomSelect({
@@ -63,6 +65,7 @@ function CustomSelect({
     emptyState,
     infinityScroll,
     showSearch,
+    isFetching
   }: Props) {
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const searchInputRef = useRef<HTMLInputElement>(null);
@@ -214,7 +217,11 @@ function CustomSelect({
           `}
           tabIndex={-1}
         >
-          {display}
+          <TruncatedTextWithTooltip
+                 text={display}
+                 className='max-w-[170px] md:max-w-[350px]'
+                 maxWidth='250px'
+               />
         </div>
       );
     };
@@ -240,7 +247,14 @@ function CustomSelect({
             }}
           >
             <div className="" data-testid="SelectContent"  id={`selectId${id}`}>
-              {value ? capitalizeFirstLetters(value) : <span className='opacity-35'>{placeHolder}</span>}
+              { value ?
+                 <TruncatedTextWithTooltip
+                 text={capitalizeFirstLetters(value) }
+                 className='max-w-[170px] md:max-w-[350px]'
+                 maxWidth='350px'
+               />
+              
+              : <span className='opacity-35'>{placeHolder}</span>}
             </div>
             <div className="">
               {dropdownOpen ? (
@@ -274,8 +288,12 @@ function CustomSelect({
             )}
   
             {isloading ? (
-              <div><SkeletonForLoanOrg className='h-8'/></div>
-            ) : (searchTerm && filteredContent.length === 0) || filteredContent.length === 0 ? (
+              <div><SkeletonForLoanOrg className='h-6'/></div>
+            ) 
+            : isFetching && searchTerm? (
+              <div><SkeletonForLoanOrg className='h-6'/></div>
+            ) 
+            :  (searchTerm && filteredContent.length === 0) || filteredContent.length === 0 ? (
               <div className='relative bottom-14'>
                 <GeneralEmptyState
                   icon={searchTerm ? MdSearch : Book}
@@ -301,7 +319,7 @@ function CustomSelect({
                     dataLength={filteredContent.length}
                     next={infinityScroll.loadMore}
                     hasMore={infinityScroll.hasMore}
-                    loader={infinityScroll.loader ? <SkeletonForLoanOrg /> : null}
+                    loader={infinityScroll.loader ? <SkeletonForLoanOrg className='h-6'/> : null}
                     height="18vh"
                     className="w-full"
                     key={`infinite-scroll-${filteredContent.length}`}
@@ -395,7 +413,7 @@ function CustomSelect({
                             } else {
                               setFieldValue("name", cleanedValue);
                             }
-                            // Also trigger search when typing in Other field
+                           
                             handleOtherFieldSearch(cleanedValue);
                           }}
                           onKeyDown={(e: React.KeyboardEvent) => {

@@ -398,7 +398,8 @@ function StepTwo() {
                                     loadMore: loadMore,
                                     loader: isFetching
                                   }}
-                                  isloading={isProvidersLoading || isFetching}
+                                  isloading={isProvidersLoading }
+                                  isFetching={isFetching}
                                   emptyState="No provider available"
                                   isItemDisabled={(item) => {
                                     const itemName = typeof item === 'object' ? item.name : String(item);
@@ -433,7 +434,8 @@ function StepTwo() {
                                       loadMore: loadMoreService,
                                       loader: isServiceFetching
                                     }}
-                                    isloading={isServiceLoading || isServiceFetching }
+                                    isloading={isServiceLoading}
+                                    isFetching={isServiceFetching}
                                     emptyState="No service available"
                                     isItemDisabled={(item) => {
                                       const serviceName = typeof item === 'object' ? item.name : String(item);
