@@ -16,7 +16,6 @@ import {useViewAllLoansTotalCountsByAdminsQuery, useViewLoaneeLoansByAdminQuery,
 import {AdminViewLoanType} from "@/types/loanee";
 import {setcohortId} from "@/redux/slice/create/cohortSlice"
 import {setLoaneeId} from "@/redux/slice/organization/organization"
-import {Icon} from "@iconify/react";
 import { setClickedLoanId } from '@/redux/slice/loan/selected-loan';
 
 // import {MdOutlinePersonOutline} from "react-icons/md";

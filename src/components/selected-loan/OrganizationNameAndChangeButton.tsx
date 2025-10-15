@@ -44,6 +44,7 @@ const OrganizationNameAndChangeButton = () => {
                     <TruncatedTextWithTooltip
                       text={name}
                       className='max-w-[250px] md:max-w-[500px]'
+                      maxWidth='500px'
                     />
                 </div> : "All organizations"}
             </div>

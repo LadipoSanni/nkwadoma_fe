@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import {
   Tooltip,
   TooltipContent,
@@ -10,18 +10,37 @@ interface TruncatedTextWithTooltipProps {
   text: string;
   className?: string;
   tooltipContentClassName?: string;
-  showTooltip?: boolean;
+  maxWidth?: string;
 }
 
 const TruncatedTextWithTooltip: React.FC<TruncatedTextWithTooltipProps> = ({
   text,
   className = '',
   tooltipContentClassName = '',
-  showTooltip = true,
+  maxWidth = '200px',
 }) => {
-  
+  const textRef = useRef<HTMLDivElement>(null);
+  const [isTruncated, setIsTruncated] = useState(false);
+
+  useEffect(() => {
+    const checkTruncation = () => {
+      if (textRef.current) {
+        const element = textRef.current;
+        setIsTruncated(element.scrollWidth > element.clientWidth);
+      }
+    };
+
+    checkTruncation();
+    
+    if (typeof window !== 'undefined') {
+      window.addEventListener('resize', checkTruncation);
+      return () => window.removeEventListener('resize', checkTruncation);
+    }
+  }, [text]);
+
   const content = (
     <div
+      ref={textRef}
       className={`truncate cursor-default ${className}`}
       style={{ 
         overflow: 'hidden',
@@ -33,7 +52,7 @@ const TruncatedTextWithTooltip: React.FC<TruncatedTextWithTooltipProps> = ({
     </div>
   );
 
-  if (!showTooltip) {
+  if (!isTruncated) {
     return content;
   }
 
@@ -43,7 +62,15 @@ const TruncatedTextWithTooltip: React.FC<TruncatedTextWithTooltipProps> = ({
         <TooltipTrigger asChild>
           {content}
         </TooltipTrigger>
-        <TooltipContent className={`text-black py-2 shadow-md text-[13px] bg-[#EEF5FF] ${tooltipContentClassName}`}>
+        <TooltipContent 
+          className={`text-black py-2 shadow-md text-[13px] bg-[#EEF5FF] ${tooltipContentClassName}`}
+          style={{
+            maxWidth: maxWidth,
+            wordWrap: 'break-word',
+            whiteSpace: 'normal',
+            zIndex: 3000
+          }}
+        >
           <p>{text}</p>
         </TooltipContent>
       </Tooltip>
