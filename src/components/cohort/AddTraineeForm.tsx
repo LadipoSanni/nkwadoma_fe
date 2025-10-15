@@ -426,9 +426,10 @@ function AddTraineeForm({setIsOpen, tuitionFee,cohortId, isEdit,loaneeBasicDetai
                                                     className="w-full p-3 h-[3.2rem] border rounded focus:outline-none"
                                                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                                                         const value = e.target.value;
-                                                        setInitialDepositAmount(value)
+                                                        // setInitialDepositAmount(value)
                                                         if (/^\d*$/.test(value)) {
                                                             if (Number(e.target.value) < Number(totalItemAmount) || Number(e.target.value) === Number(totalItemAmount)) {
+                                                                console.log('cohort item: ',totalItemAmount)
                                                                 setInitialDepositError('')
                                                                 setInitialDepositAmount(value)
                                                                 void setFieldValue("initialDeposit", e.target.value);
