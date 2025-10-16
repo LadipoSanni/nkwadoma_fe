@@ -48,6 +48,7 @@ const formatNumberWithCommas = (value: string | number) => {
 
 const CustomInputField: React.FC<FieldProps> = ({ field, form }) => {
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        console.log('entering this weird component')
         let rawValue = e.target.value.replace(/,/g, '');
 
         rawValue = rawValue.replace(/[^0-9.]/g, '');

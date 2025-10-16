@@ -58,6 +58,8 @@ function AddTraineeForm({setIsOpen, tuitionFee,cohortId, isEdit,loaneeBasicDetai
     const [names, setNames] = useState<string[]>([])
     const [openEmptyField, setOpenEmptyField] = useState(selectedCohortItem?.length === 0)
 
+    const [cohortBreakDownTotal, setCohortBreakDownTotal  ] = useState(0)
+
     useEffect(() => {
         if (data?.data) {
             setCohortBreakDown(data?.data);
@@ -75,11 +77,19 @@ function AddTraineeForm({setIsOpen, tuitionFee,cohortId, isEdit,loaneeBasicDetai
             calculateTotalForAddingLoanee( tuitionFee);
             setSelectedCohortItem([])
         }
+        calculateCohortItemsTotal(data?.data, tuitionFee ? Number(tuitionFee) : 0)
 
-    }, [isEdit, loaneeLoanBreakDown, initialDepositAmount]);
+    }, [isEdit, loaneeLoanBreakDown, initialDepositAmount, tuitionFee, data?.data]);
 
     console.log('data: ', data)
     console.log('tuition fee: ', tuitionFee)
+
+    const calculateCohortItemsTotal = (cohortItems: cohortBreakDown[], tuitionFee: number)=> {
+        // const cohortItems: cohortBreakDown[] = data?.data;
+        const total = cohortItems?.reduce((sum: number, item: cohortBreakDown) => sum + Number(item?.itemAmount) , 0)
+        const totalPlusTuition = total + tuitionFee ;
+        console.log('totalPlusTuition: ',totalPlusTuition)
+    }
 
 
     const setNamessOnEdit = () => {
@@ -120,6 +130,7 @@ function AddTraineeForm({setIsOpen, tuitionFee,cohortId, isEdit,loaneeBasicDetai
         emailAddress: loaneeBasicDetails  && isEdit  ? loaneeBasicDetails?.loaneeEmail : '',
         initialDeposit: loaneeBasicDetails && isEdit ? loaneeBasicDetails?.loaneeInitialDeposit : ''
     };
+
 
     const toastPopUp = ToastPopUp({
         description: 'Cohort loanee successfully added.',
@@ -417,34 +428,75 @@ function AddTraineeForm({setIsOpen, tuitionFee,cohortId, isEdit,loaneeBasicDetai
                                                 setSelectedCurrency={setSelectCurrency}
                                             />
                                             <div className='w-full '>
-                                                <Field
+                                                <NumericFormat
                                                     id="initialDeposit"
                                                     name="initialDeposit"
-                                                    type="number"
+                                                    // type="number"
+                                                    type="text"
+                                                    inputMode="numeric"
+                                                    thousandSeparator=","
+                                                    decimalScale={2}
+                                                    fixedDecimalScale={true}
                                                     placeholder="Enter Initial Deposit"
-                                                    component={CustomInputField}
-                                                    className="w-full p-3 h-[3.2rem] border rounded focus:outline-none"
-                                                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                                                        const value = e.target.value;
-                                                        // setInitialDepositAmount(value)
-                                                        if (/^\d*$/.test(value)) {
-                                                            if (Number(e.target.value) < Number(totalItemAmount) || Number(e.target.value) === Number(totalItemAmount)) {
-                                                                console.log('cohort item: ',totalItemAmount)
-                                                                setInitialDepositError('')
-                                                                setInitialDepositAmount(value)
-                                                                void setFieldValue("initialDeposit", e.target.value);
-                                                            }else {
-                                                                void setFieldValue("initialDeposit", '');
-                                                                setInitialDepositError("initialDeposit can not be greater than cohort amount");
+                                                    // component={CustomInputField}
+                                                    className="w-full p-3 h-[3rem] border rounded focus:outline-none"
+                                                    // onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                                                    //     const value = e.target.value;
+                                                    //     setInitialDepositAmount(value)
+                                                    //     console.log('totalItemAmount: ', totalItemAmount)
+                                                    //     if (/^\d*$/.test(value)) {
+                                                    //         console.log('totalItemAmount: ', totalItemAmount)
+                                                    //         if (Number(e.target.value) < Number(totalItemAmount) || Number(e.target.value) === Number(totalItemAmount)) {
+                                                    //             console.log('cohort item: ',totalItemAmount, 'AMOUNT Entered: ', value)
+                                                    //             setInitialDepositError('')
+                                                    //             setInitialDepositAmount(value)
+                                                    //             void setFieldValue("initialDeposit", e.target.value);
+                                                    //         }else {
+                                                    //             void setFieldValue("initialDeposit", e.target.value);
+                                                    //             // void setFieldValue("initialDeposit", '');
+                                                    //             setInitialDepositError("InitialDeposit can not be greater than cohort total break down amount");
+                                                    //
+                                                    //         }
+                                                    //     }
+                                                    // }}
 
-                                                            }
+                                                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                                                        let value = e.target.value;
+
+                                                        // Remove all non-digit characters (sanitize)
+                                                        value = value.replace(/\D/g, "");
+
+                                                        setInitialDepositAmount(value);
+                                                        void setFieldValue("initialDeposit", value);
+
+                                                        if (value === "") {
+                                                            setInitialDepositError("");
+                                                            return;
+                                                        }
+
+                                                        const numericValue = Number(value);
+                                                        const total = Number(totalItemAmount);
+
+                                                        if (numericValue <= total) {
+                                                            setInitialDepositError("");
+                                                        } else {
+                                                            setInitialDepositError(
+                                                                "Initial deposit cannot be greater than cohort total breakdown amount"
+                                                            );
                                                         }
                                                     }}
                                                 />
                                             </div>
                                         </div>
+                                        {/*<div className='relative bottom-6 ml-[90px]'>*/}
+                                        {/*    {errors.initialDeposit && touched.initialDeposit && (*/}
+                                        {/*        <ErrorMessage name="initialDeposit" component="div" className="text-red-500 text-sm" />*/}
+                                        {/*    )}*/}
+                                        {/*    {initialDepositError.length > 1 &&*/}
+                                        {/*        <span className="text-red-500 text-sm" >{initialDepositError}</span>}*/}
+                                        {/*</div>*/}
                                     </div>
-                                    <div className='relative bottom-6 ml-[90px]'>
+                                    <div className='relative bottom-6 m'>
                                         {errors.initialDeposit && touched.initialDeposit && (
                                             <ErrorMessage name="initialDeposit" component="div" className="text-red-500 text-sm" />
                                         )}
@@ -465,8 +517,8 @@ function AddTraineeForm({setIsOpen, tuitionFee,cohortId, isEdit,loaneeBasicDetai
                                     <Button
                                         type='submit'
                                         variant="secondary"
-                                        className={`w-full md:w-36 h-[57px] ${!isValid ? 'bg-[#D7D7D7] hover:bg-[#D7D7D7]' : 'cursor-pointer'}`}
-                                        disabled={!isValid}
+                                        className={`w-full md:w-36 h-[57px] ${!isValid || Boolean(initialDepositError) ? 'bg-[#D7D7D7] hover:bg-[#D7D7D7]' : 'cursor-pointer'}`}
+                                        disabled={!isValid || Boolean(initialDepositError)}
                                     >
                                         Continue
                                     </Button>
