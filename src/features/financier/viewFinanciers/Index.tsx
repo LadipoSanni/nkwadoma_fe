@@ -32,6 +32,7 @@ interface TableRowData {
     [key: string]: string | number | null | React.ReactNode;
 }
 
+
 interface TabState {
     pageNumber: number;
     totalPages: number;
@@ -48,7 +49,7 @@ const ViewFinanciers = () => {
     const router = useRouter()
     const isDisabled = false;
 
-    const [debouncedSearchTerm] = useDebounce(searchTerm, 1000);
+    const [debouncedSearchTerm, isTyping] = useDebounce(searchTerm, 1000);
 
     const [tabStates, setTabStates] = useState<Record<string, TabState>>({
             active: { pageNumber: 0, totalPages: 0, hasNextPage: false },
@@ -106,7 +107,7 @@ const ViewFinanciers = () => {
 
     const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSearchTerm(event.target.value);
-        // if(!isTyping ){
+         if(!isTyping ){
             setTabStates(prev => ({
                 ...prev,
                 [tabType]: {
@@ -114,7 +115,7 @@ const ViewFinanciers = () => {
                     pageNumber: 0
                 }
             }));
-        // }
+         }
        
     };
 

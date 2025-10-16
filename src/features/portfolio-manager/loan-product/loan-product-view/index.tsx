@@ -153,7 +153,8 @@ const LoanProductPage = () => {
                         className='w-full lg:w-80 h-12 focus-visible:outline-0 focus-visible:ring-0 shadow-none  border-solid border border-neutral650  text-grey450 pl-10'
                         type="search" id={`search`} value={searchTerm} placeholder={"Search"}
                         onChange={(e) => setSearchTerm(e.target.value)}
-                        required/>
+                        required
+                        />
                 </div>
                 <div id={`createProduct`}>
                     <Button variant={"secondary"}

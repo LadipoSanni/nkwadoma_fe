@@ -48,13 +48,13 @@ function Staff() {
       const [pageNumber,setPageNumber] = useState(0)
     const [pageSearchNumber,setPageSearchNumber] = useState(0)
     const [searchHasNextPage,setSearchHasNextPage] = useState(false)
-      const [debouncedSearchTerm, isTyping] = useDebounce(searchTerm, 1000);
+      const [debouncedSearchTerm] = useDebounce(searchTerm, 1000);
 
     const dataElement = {
-      name: debouncedSearchTerm,
+      ...(debouncedSearchTerm && { name: debouncedSearchTerm}),
       activationStatuses: ['INVITED',"APPROVED","ACTIVE","DEACTIVATED"],
       identityRoles:user_role === "ORGANIZATION_SUPER_ADMIN"? ["ORGANIZATION_ADMIN","ORGANIZATION_ASSOCIATE","ORGANIZATION_SUPER_ADMIN"] : user_role === "COOPERATE_FINANCIER_SUPER_ADMIN"? ["COOPERATE_FINANCIER_ADMIN","COOPERATE_FINANCIER_SUPER_ADMIN"] : ["PORTFOLIO_MANAGER","MEEDL_ADMIN","PORTFOLIO_MANAGER_ASSOCIATE","MEEDL_SUPER_ADMIN"],
-      pageNumber:pageNumber,
+      pageNumber:debouncedSearchTerm ? pageSearchNumber : pageNumber,
       pageSize: 10
   }
 
@@ -171,6 +171,7 @@ function Staff() {
           value={searchTerm}
            onChange={(e) => setSearchTerm(e.target.value)}
          style="md:w-20 w-full"
+       
         />
 
         <div className='md:mt-0 mt-4'>
@@ -196,14 +197,14 @@ function Staff() {
         tableCellStyle="h-12"
         tableHeight={adminData?.data?.body?.length < 10 ? 62 : undefined}
         isLoading={isLoading || isFetching }
-        hasNextPage={searchTerm !== ""? searchHasNextPage : hasNextPages}
-        pageNumber={searchTerm !== ""? pageSearchNumber :pageNumber}
-        setPageNumber={searchTerm !== ""? setPageSearchNumber : setPageNumber}
+        hasNextPage={debouncedSearchTerm !== ""? searchHasNextPage : hasNextPages}
+        pageNumber={debouncedSearchTerm !== ""? pageSearchNumber :pageNumber}
+        setPageNumber={debouncedSearchTerm !== ""? setPageSearchNumber : setPageNumber}
         totalPages={ totalPage}
          sx={user_role !== "MEEDL_ADMIN"? 'cursor-pointer' : ''}
          condition={true}
         //  showKirkBabel={true}
-        searchEmptyState={!isTyping && debouncedSearchTerm?.length > 0 && adminData?.data?.body?.length < 1 }
+        searchEmptyState={debouncedSearchTerm?.length > 0 && adminData?.data?.body?.length < 1 }
        />
       </div>
       <Modal
