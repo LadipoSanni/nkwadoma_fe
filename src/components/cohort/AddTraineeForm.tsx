@@ -293,6 +293,43 @@ function AddTraineeForm({setIsOpen, tuitionFee,cohortId, isEdit,loaneeBasicDetai
 
     }
 
+    const changeSelectedItem = (currentItemIndex: number, currentItemName: string, selectedItemName: string)=> {
+        console.log('currentItemIndex', currentItemIndex, 'currentItemName: ',currentItemName, 'selectedItemName:', selectedItemName)
+        const selectedItemArray: cohortBreakDown[] =  cohortBreakDown?.filter(item => item?.itemName === selectedItemName);
+        const itemsOnSelectedArray = selectedCohortItem?.filter(item => item?.itemName === selectedItemName )
+        const itemsS : cohortBreakDown = itemsOnSelectedArray?.at(0) ? itemsOnSelectedArray?.at(0 ) : {    currency: '',
+            itemAmount: '',
+            itemName: '',
+            loanBreakdownId: '',
+        };
+        const selectedItem: cohortBreakDown = selectedItemArray?.at(0) ? selectedItemArray?.at(0 ) : {    currency: '',
+            itemAmount: '',
+            itemName: '',
+            loanBreakdownId: '',
+        };
+        const updatedItem: cohortBreakDown = {
+            ...selectedItem,
+            itemAmount: itemsS?.itemAmount,
+        };
+        setSelectedCohortItem((prev: cohortBreakDown[]) =>
+            prev?.map((item: cohortBreakDown, i) => (i === currentItemIndex ? updatedItem : item))
+        );
+        setSelectedCohortItem((prev) =>
+            prev.map((item) =>
+                item.itemName === selectedItem.itemName
+                    ? { ...item, itemAmount: itemsS?.itemAmount }
+                    : item
+            )
+        );
+        setNames(prevNames => {
+            const updated = [...prevNames, currentItemName]
+            return updated;
+        });
+        setNames(prevNames => prevNames.filter(name => name !== selectedItemName));
+
+
+    }
+
 
     const handleSelect = (value: string) => {
        const currentItemArray =  cohortBreakDown?.filter(item => item?.itemName === value);
@@ -422,12 +459,12 @@ function AddTraineeForm({setIsOpen, tuitionFee,cohortId, isEdit,loaneeBasicDetai
                                     </div>
                                     <div>
                                         <Label htmlFor="initialDeposit">Initial Deposit</Label>
-                                        <div className='flex gap-3 items-center '>
+                                        <div className='flex gap-3   h-fit py-0  items-center '>
                                             <CurrencySelectInput
                                                 selectedcurrency={selectCurrency}
                                                 setSelectedCurrency={setSelectCurrency}
                                             />
-                                            <div className='w-full '>
+                                            <div className='w-full h-fit mt-auto  mb-auto  '>
                                                 <NumericFormat
                                                     id="initialDeposit"
                                                     name="initialDeposit"
@@ -439,44 +476,18 @@ function AddTraineeForm({setIsOpen, tuitionFee,cohortId, isEdit,loaneeBasicDetai
                                                     fixedDecimalScale={true}
                                                     placeholder="Enter Initial Deposit"
                                                     // component={CustomInputField}
-                                                    className="w-full p-3 h-[3rem] border rounded focus:outline-none"
-                                                    // onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                                                    //     const value = e.target.value;
-                                                    //     setInitialDepositAmount(value)
-                                                    //     console.log('totalItemAmount: ', totalItemAmount)
-                                                    //     if (/^\d*$/.test(value)) {
-                                                    //         console.log('totalItemAmount: ', totalItemAmount)
-                                                    //         if (Number(e.target.value) < Number(totalItemAmount) || Number(e.target.value) === Number(totalItemAmount)) {
-                                                    //             console.log('cohort item: ',totalItemAmount, 'AMOUNT Entered: ', value)
-                                                    //             setInitialDepositError('')
-                                                    //             setInitialDepositAmount(value)
-                                                    //             void setFieldValue("initialDeposit", e.target.value);
-                                                    //         }else {
-                                                    //             void setFieldValue("initialDeposit", e.target.value);
-                                                    //             // void setFieldValue("initialDeposit", '');
-                                                    //             setInitialDepositError("InitialDeposit can not be greater than cohort total break down amount");
-                                                    //
-                                                    //         }
-                                                    //     }
-                                                    // }}
-
+                                                    className="w-full p-3 h-[3rem] mt-auto mb-auto border rounded focus:outline-none"
                                                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                                                         let value = e.target.value;
-
-                                                        // Remove all non-digit characters (sanitize)
                                                         value = value.replace(/\D/g, "");
-
                                                         setInitialDepositAmount(value);
                                                         void setFieldValue("initialDeposit", value);
-
                                                         if (value === "") {
                                                             setInitialDepositError("");
                                                             return;
                                                         }
-
                                                         const numericValue = Number(value);
                                                         const total = Number(totalItemAmount);
-
                                                         if (numericValue <= total) {
                                                             setInitialDepositError("");
                                                         } else {
@@ -488,13 +499,6 @@ function AddTraineeForm({setIsOpen, tuitionFee,cohortId, isEdit,loaneeBasicDetai
                                                 />
                                             </div>
                                         </div>
-                                        {/*<div className='relative bottom-6 ml-[90px]'>*/}
-                                        {/*    {errors.initialDeposit && touched.initialDeposit && (*/}
-                                        {/*        <ErrorMessage name="initialDeposit" component="div" className="text-red-500 text-sm" />*/}
-                                        {/*    )}*/}
-                                        {/*    {initialDepositError.length > 1 &&*/}
-                                        {/*        <span className="text-red-500 text-sm" >{initialDepositError}</span>}*/}
-                                        {/*</div>*/}
                                     </div>
                                     <div className='relative bottom-6 m'>
                                         {errors.initialDeposit && touched.initialDeposit && (
@@ -558,7 +562,8 @@ function AddTraineeForm({setIsOpen, tuitionFee,cohortId, isEdit,loaneeBasicDetai
                                                             height={' h-[3.2rem]  '}
                                                             label={detail?.itemName}
                                                             items={names}
-                                                            onSelect={handleSelect}
+                                                            onSelect={ (value) => changeSelectedItem(index, detail?.itemName, value)
+                                                        }
                                                         />
                                                     </div>
                                                 ))}
