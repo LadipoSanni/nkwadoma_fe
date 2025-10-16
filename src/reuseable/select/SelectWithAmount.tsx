@@ -32,7 +32,10 @@ interface ProgramSelectProps {
   emptyState?: string;
   onChange?: (value: string) => void;
   setAvailableAmount?: (value: number) => void;
-  availableAmount?: number
+  availableAmount?: number;
+  amountToBeCalculated?: number;
+  isEdit?: boolean;
+  amountFromEdit?: number
 }
 
 const SelectWithAmount: React.FC<ProgramSelectProps> = ({
@@ -50,11 +53,23 @@ const SelectWithAmount: React.FC<ProgramSelectProps> = ({
   onOpenChange,
   onChange,
   emptyState = "No program available",
-  availableAmount
+  availableAmount,
+  amountToBeCalculated,
+  isEdit,
+  amountFromEdit
 }) => {
   const uniqueId = `select${Math.random().toString(36).substring(2, 9)}`;
 
   const selectedProgramObj = selectOptions?.find(program => program.name === selectedProgram);
+
+  const totalAvailable = selectedProgramObj?.totalAvailableAmount || selectedProgramObj?.totalAmountAvailable || availableAmount || 0;
+  const amountToCalculate = amountToBeCalculated || 0;
+
+    const total = isEdit 
+    ? (totalAvailable + (amountFromEdit || 0)) - amountToCalculate
+    : totalAvailable - amountToCalculate;
+
+  // console.log(total)
 
   return (
     <div id="programContainer" className={'grid gap-2 w-full'}>
@@ -87,7 +102,7 @@ const SelectWithAmount: React.FC<ProgramSelectProps> = ({
                 <span className="font-normal text-[14px]">{selectedProgram}</span>
                 {
                   <span className="text-[14px] bg-[#F2F2F2] px-2 rounded-xl">
-                    {formatAmount(selectedProgramObj?.totalAvailableAmount || selectedProgramObj?.totalAmountAvailable || availableAmount)}
+                   {formatAmount(total)}
                   </span>
                 }
               </div>

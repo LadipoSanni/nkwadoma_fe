@@ -8,7 +8,7 @@ import BasicDetailTab from "@/reuseable/details/BasicDetailTab";
 import BasicDetail from "@/reuseable/details/BasicDetail";
 import ViewDocument from "@/reuseable/details/ViewDocument";
 import { capitalizeFirstLetters } from "@/utils/GlobalMethods";
-import { setLoanProductField,setLoanProductFieldStepTwo,setTotalNumberOfLoanees,setLoanProductName,setFundroductId} from "@/redux/slice/loan-product/Loan-product";
+import { setLoanProductField,setLoanProductFieldStepTwo,setTotalNumberOfLoanees,setLoanProductName,setFundroductId,setLoanProductSize} from "@/redux/slice/loan-product/Loan-product";
 import { setFundProductAvailableAmount } from "@/redux/slice/loan/selected-loan";
 import {useGetInvestmentVehicleDetailQuery} from '@/service/admin/fund_query';
 import { formatAmount } from "@/utils/Format";
@@ -82,6 +82,7 @@ const Details = () => {
          store.dispatch(setFundProductAvailableAmount(data?.data?.totalAvailableAmount))
          store.dispatch(setLoanProductName(loanProduct?.data?.name))
          store.dispatch(setFundroductId(loanProduct?.data?.investmentVehicleId))
+         store.dispatch(setLoanProductSize(loanProduct?.data?.loanProductSize))
       },[loanProduct,data])
 
 
