@@ -35,7 +35,7 @@ function ViewAllRequestedFinancier() {
    const [id,setId] = useState("")
    const [role,setRole] = useState("")
    const [status,setStatus] = useState("")
-   const [debouncedSearchTerm, isTyping] = useDebounce(searchTerm, 1000);
+   const [debouncedSearchTerm] = useDebounce(searchTerm, 1000);
    const userRole = getUserDetailsFromStorage('user_role')
 
    const [tabStates, setTabStates] = useState<Record<string, TabState>>({
