@@ -11,7 +11,7 @@ import CustomInputField from "@/reuseable/Input/CustomNumberFormat"
 import 'react-quill-new/dist/quill.snow.css'
 import { setFundProductAvailableAmount } from "@/redux/slice/loan/selected-loan";
 import {store, useAppSelector} from "@/redux/store";
-import {formatAmount} from "@/utils/Format";
+// import {formatAmount} from "@/utils/Format";
 import PdfAndDocFileUpload from "@/reuseable/Input/Pdf&docx-fileupload";
 import SelectWithAmount from "@/reuseable/select/SelectWithAmount";
 import { MultiSelect } from "@/reuseable/mult-select/customMultiselectWithId/Multiselect-object";
@@ -358,7 +358,7 @@ function StepOne() {
                 }}
             >
                 {
-                    ({errors, isValid, touched, setFieldValue, values, setFieldTouched,validateField, validateForm}) => {
+                    ({errors, isValid, touched, setFieldValue, values, setFieldTouched,validateField}) => {
 
                         const validateInvestmentVehicle = (loanSize: string | number): string | null => {
                             if (!loanSize || localFundAvailableAmount === null || localFundAvailableAmount === undefined) {
