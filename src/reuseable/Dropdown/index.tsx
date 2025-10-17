@@ -2,7 +2,6 @@
 import React, { useState } from 'react';
 import {inter} from "@/app/fonts";
 import {MdKeyboardArrowDown, MdKeyboardArrowUp} from "react-icons/md";
-import {Button} from "@/components/ui/button";
 import {
     DropdownMenu,
     DropdownMenuTrigger,
@@ -40,12 +39,12 @@ const disableButton = selectedItem?.length === 0 || trigger === selectedItem;
                 {/*<MenubarMenu >*/}
                     <DropdownMenuTrigger
                         id={'trigger'} data-testid={'trigger'} disabled={isDisabled}
-                        className={` hover:bg-[#F9F9F9] hover:rounded-md flex gap-2 border-none shadow-none  w-fit  h-fit py-1.5  px-1.5 lg:py-2 lg:px-2 mt-auto mb-auto    `} >
+                        className={` hover:bg-[#F9F9F9]  hover:rounded-md flex gap-2 border-none shadow-none  w-fit  h-fit py-1.5  px-1.5 lg:py-2 lg:px-2 mt-auto mb-auto    `} >
                         {trigger}
                         {isIconUp ?
-                            <MdKeyboardArrowUp/>
+                            <MdKeyboardArrowUp className={` mt-auto mb-auto  `}/>
                             :
-                            <MdKeyboardArrowDown/>
+                            <MdKeyboardArrowDown className={` mt-auto mb-auto  `} />
                         }
                     </DropdownMenuTrigger>
                     <DropdownMenuContent  className={`    w-[25vh]  `}>
@@ -67,15 +66,11 @@ const disableButton = selectedItem?.length === 0 || trigger === selectedItem;
                            <DropdownMenuItem
                                onClick={handleButtonClick}
                                disabled={disableButton }
-                           >
-                           <Button
-                               disabled={disableButton }
-                               onClick={handleButtonClick}
-                               className={`w-fit h-fit py-2 flex  ${disableButton  ? `bg-[#D7D7D7] hover:bg-[#D7D7D7] ` : ` bg-meedlBlue hover:bg-meedlBlue `}   `}
+                               className={`w-fit h-fit mt-2 text-white py-2 flex  ${disableButton  ? `bg-[#D7D7D7] hover:bg-[#D7D7D7] ` : ` bg-meedlBlue hover:bg-meedlBlue `}   `}
+
                            >
 
                                {buttonText}
-                           </Button>
                            </DropdownMenuItem>
                        </div>
                     </DropdownMenuContent>

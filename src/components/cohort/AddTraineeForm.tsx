@@ -12,12 +12,11 @@ import ToastPopUp from '@/reuseable/notification/ToastPopUp';
 import { useAddLoaneeToCohortMutation, useGetCohortLoanBreakDownQuery, useEditAddLoaneeToCohortMutation } from "@/service/admin/cohort_query";
 import TotalInput from "@/reuseable/display/TotalInput";
 import { NumericFormat } from 'react-number-format';
-import {MdOutlineDelete, MdAdd} from "react-icons/md";
+import {MdOutlineDelete, MdAdd,MdOutlineErrorOutline} from "react-icons/md";
 import CenterMultistep from "@/reuseable/multiStep-component/Center-multistep";
 import StringDropdown from "@/reuseable/Dropdown/DropdownSelect";
 import { store } from '@/redux/store';
 import {setCohortBreakdownText} from "@/redux/slice/cohort/unpersist-slice";
-import {MdOutlineErrorOutline} from 'react-icons/md'
 interface Props {
     tuitionFee?: string;
     setIsOpen?: (e: boolean | undefined) => void;
