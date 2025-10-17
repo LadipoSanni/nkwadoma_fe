@@ -18,6 +18,7 @@ import loadingLoop from "@iconify/icons-line-md/loading-loop";
 import {Icon} from "@iconify/react";
 import CohortTabs from '../../../components/cohort/CohortTabs'
 import CreateCohort from "@/reuseable/modals/CreateCohort";
+// import CreateCohort from '@/components/cohort/CreateCohort'
 import {inter} from '@/app/fonts'
 import {
     useGetAllCohortByAParticularProgramQuery,
