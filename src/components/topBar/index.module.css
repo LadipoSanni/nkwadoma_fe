@@ -13,3 +13,35 @@
     text-align: left;
     color: #101828;
 }
+
+
+
+  @keyframes swing {
+    0% {
+      transform: translateX(0);
+    }
+    25% {
+      transform: translateX(-10px) scale(1.1);
+    }
+    50% {
+      transform: translateX(0);
+    }
+    75% {
+      transform: translateX(10px) scale(1.1);
+    }
+    100% {
+      transform: translateX(0);
+    }
+  }
+
+
+  .notificationSwing {
+    animation: swing 1.2s ease-in-out infinite;
+  }
+  
+
+ 
+  .notificationGlow {
+    animation: swing 1.2s ease-in-out infinite;
+    box-shadow: 0 0 10px rgba(20, 40, 84, 0.7);
+  }

@@ -22,10 +22,12 @@ import {DISPLAYUSERROLE} from "@/components/topBar/variables";
 import { useViewFinancierDashboardQuery } from '@/service/financier/api';
 import { getItemFromLocalStorage, setItemToLocalStorage } from '@/utils/storage';
 import { convertRole } from '@/utils/GlobalMethods';
+import styles from "./index.module.css"
 
 const TopBar = () => {
     const [arrowToggled, setArrowToggled] = useState(false);
     const [isPopoverOpen, setIsPopoverOpen] = useState(false);
+    const [shouldAnimate, setShouldAnimate] = useState(false);
     const [isFocus, setFocus] =  useState(false);
     const currentTab = useAppSelector(state => state.adminLayout.currentNavbarItem);
     const user_role = getUserDetailsFromStorage('user_role');
@@ -63,6 +65,35 @@ const TopBar = () => {
         }
 
     },[data,pathname, user_role,refetch])
+
+    useEffect(() => {
+        if (data?.data?.unreadCount > 0) {
+            let interval: NodeJS.Timeout;
+            
+            setShouldAnimate(true);
+            
+            const initialTimeout = setTimeout(() => {
+                setShouldAnimate(false);
+                
+                interval = setInterval(() => {
+                    setShouldAnimate(true);
+                    
+                    setTimeout(() => {
+                        setShouldAnimate(false);
+                    }, 8 * 1000); 
+                    
+                }, 2 * 60 * 1000); 
+                
+            }, 8 * 1000); 
+            
+            return () => {
+                clearTimeout(initialTimeout);
+                if (interval) clearInterval(interval);
+            };
+        } else {
+            setShouldAnimate(false);
+        }
+    }, [data?.data?.unreadCount]);
 
 
     const toggleArrow = () => {
@@ -132,7 +163,9 @@ const TopBar = () => {
                                >
                                 { data === undefined || data?.data?.unreadCount === null ? "" :
                                 (data?.data?.unreadCount  === 0? "" : <Badge
-                                 className={`relative bg-[#142854] hover:bg-[#435376] focus:bg-[#142854] ${isFocus && "bg-[#142854]"} bottom-7 left-2  text-white text-xs rounded-full  flex items-center justify-center ${data?.data?.unreadCount > 99 ? "w-7 h-6"  : "w-4 h-5"}`}
+                                 className={`relative bg-[#142854] hover:bg-[#435376] focus:bg-[#142854] ${isFocus && "bg-[#142854]"} bottom-7 left-2  text-white text-xs rounded-full  flex items-center justify-center ${data?.data?.unreadCount > 99 ? "w-7 h-6"  : "w-4 h-5"} ${
+                                    shouldAnimate ? styles.notificationSwing : ""
+                                  }`}
                                 >
                                   {data?.data?.unreadCount > 99 ? "99+" : data?.data?.unreadCount }
                                 </Badge>)}

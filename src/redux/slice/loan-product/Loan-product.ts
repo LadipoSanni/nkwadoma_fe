@@ -44,7 +44,8 @@ interface LoanProduct {
     completedSteps: string[],
     totalNumberOfLoaneess: number,
     isEdit: boolean,
-    fundProductId: string
+    fundProductId: string,
+    loanProductSize: string
 }
 
 const initialState: LoanProduct = {
@@ -55,7 +56,8 @@ const initialState: LoanProduct = {
     completedSteps: [] ,
     totalNumberOfLoaneess: 0,
     isEdit: false,
-    fundProductId: ""
+    fundProductId: "",
+    loanProductSize: ""
 }
 
 export const LoanProductSlice = createSlice({
@@ -74,7 +76,8 @@ export const LoanProductSlice = createSlice({
         clearLoanProductField: (state) => {
             state.createLoanProductField= null;
             state.createLoanProductFieldStepTwo = null;
-            state.fundProductId= ""
+            state.fundProductId= "";
+            state.loanProductSize = ""
         },
         setLoanProductFieldStepTwo: (state, action: PayloadAction<CreateLoanProductFieldStepTwo>) => {
             state.createLoanProductFieldStepTwo = action.payload;
@@ -96,8 +99,15 @@ export const LoanProductSlice = createSlice({
         setFundroductId: (state, action: PayloadAction<string>) => {
             state.fundProductId= action.payload;
         },
+        setLoanProductSize: (state, action: PayloadAction<string>) => {
+            state.loanProductSize = action.payload;
+        },
     }})
 
-    export const {setLoanProductId,setLoanProductName,setLoanProductField,clearLoanProductField, setLoanProductFieldStepTwo,markStepCompleted,resetCompletedSteps,setTotalNumberOfLoanees,setIsEdit,setFundroductId} = LoanProductSlice.actions;
+    export const {setLoanProductId,setLoanProductName,
+        setLoanProductField,clearLoanProductField, 
+        setLoanProductFieldStepTwo,markStepCompleted,
+        resetCompletedSteps,setTotalNumberOfLoanees,
+        setIsEdit,setFundroductId,setLoanProductSize} = LoanProductSlice.actions;
 
     export default LoanProductSlice.reducer;

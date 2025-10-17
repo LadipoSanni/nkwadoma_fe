@@ -11,7 +11,7 @@ import CustomInputField from "@/reuseable/Input/CustomNumberFormat"
 import 'react-quill-new/dist/quill.snow.css'
 import { setFundProductAvailableAmount } from "@/redux/slice/loan/selected-loan";
 import {store, useAppSelector} from "@/redux/store";
-import {formatAmount} from "@/utils/Format";
+// import {formatAmount} from "@/utils/Format";
 import PdfAndDocFileUpload from "@/reuseable/Input/Pdf&docx-fileupload";
 import SelectWithAmount from "@/reuseable/select/SelectWithAmount";
 import { MultiSelect } from "@/reuseable/mult-select/customMultiselectWithId/Multiselect-object";
@@ -38,6 +38,7 @@ function StepOne() {
     const fundProductAvailableAmount = useAppSelector(state => (state.selectedLoan.fundProductAvailableAmount))
     const loanProductField = useAppSelector(state => (state?.loanProduct?.createLoanProductField))
     const investmentVehicleId = useAppSelector(state => (state?.loanProduct?.fundProductId))
+    const loanProductSizeToBeUpdate = useAppSelector(state => (state?.loanProduct?.loanProductSize))
     const [selectCurrency, setSelectCurrency] = useState('NGN');
     const [fundPageNumber, setFundPageNumber] = useState(0);
     const [hasNextfundPage, setHasNextfundPage] = useState(true);
@@ -211,38 +212,40 @@ function StepOne() {
         .required("Loan product size is required")
         .test("max-number", "Product size must be less than or equal to a quadrillion",
             value => !value || Number(value) <= 1e15)
-        .test(
-            `is-greater-than-fund`,
-            function(value) {
-                const { path, createError } = this;
+        // .test(
+        //     `is-greater-than-fund`,
+        //     function(value) {
+        //         const { path, createError } = this;
                 
-                if (!value || localFundAvailableAmount === null || localFundAvailableAmount === undefined) return true;
+        //         if (!value || localFundAvailableAmount === null || localFundAvailableAmount === undefined) return true;
                 
-                const loanSize = Number(value);
-                let maxAllowedAmount: number;
-                let errorMessage: string;
+        //         const loanSize = Number(value);
+        //         let maxAllowedAmount: number;
+        //         let errorMessage: string;
                 
-                if (isEdit && check) {
-                    maxAllowedAmount = whenEdit;
-                    // errorMessage = `Amount can't be greater than investment vehicle  `;
-                     errorMessage = `Amount can't be greater than investment vehicle available amount of ${formatAmount(fundProductAvailableAmount)} plus current loan product size ${formatAmount(currentLoanSize)} which equate to ${formatAmount(maxAllowedAmount)}`;
-                } else {
+        //         if (isEdit && check) {
+        //             maxAllowedAmount = whenEdit;
+        //              errorMessage = `Investment vehicle can,t be a negative available amount  `;
+        //             //  errorMessage = `Amount can't be greater than investment vehicle available amount of ${formatAmount(fundProductAvailableAmount)} plus current loan product size ${formatAmount(currentLoanSize)} which equate to ${formatAmount(maxAllowedAmount)}`;
+        //         } else {
                    
-                    maxAllowedAmount = Number(localFundAvailableAmount);
-                    errorMessage = `Amount can't be greater than investment vehicle ${formatAmount(maxAllowedAmount)}`;
-                }
+        //             maxAllowedAmount = Number(localFundAvailableAmount);
+        //             // errorMessage = `Amount can't be greater than investment vehicle ${formatAmount(maxAllowedAmount)}`;
+        //             errorMessage = `Investment vehicle can,t be a negative available amount  `;
+        //         }
                 
-                if (maxAllowedAmount === 0 && loanSize > 0) {
-                    return createError({ path, message: errorMessage });
-                }
+        //         if (maxAllowedAmount === 0 && loanSize > 0) {
+        //             return createError({ path, message: errorMessage });
+        //         }
                 
-                if (loanSize > maxAllowedAmount) {
-                    return createError({ path, message: errorMessage });
-                }
+        //         if (loanSize > maxAllowedAmount) {
+        //             return createError({ path, message: errorMessage });
+        //         }
                 
-                return true;
-            }
-        ),
+        //         return true;
+        //     }
+        // )
+        ,
         obligorLimit: Yup.string()
             .trim()
             .required("Obligor limit is required")
@@ -261,14 +264,14 @@ function StepOne() {
             //             const platformLimit = generalOblgorLimitData;
             //             return numericValue <= platformLimit;
             //  }),
-        minimumRepaymentAmount: Yup.string()
-            .trim()
-            .required("Amount is required")
-            .test('is-greater-than-loan-product-size', 'Repayment amount can\'t be greater than product size',
-                function (value) {
-                    const {loanProductSize} = this.parent;
-                    return parseFloat(value) <= parseFloat(loanProductSize);
-                }),
+        // minimumRepaymentAmount: Yup.string()
+        //     .trim()
+        //     .required("Amount is required")
+        //     .test('is-greater-than-loan-product-size', 'Repayment amount can\'t be greater than product size',
+        //         function (value) {
+        //             const {loanProductSize} = this.parent;
+        //             return parseFloat(value) <= parseFloat(loanProductSize);
+        //         }),
         moratorium: Yup.string()
             .trim()
             .required("Amount is required")
@@ -349,13 +352,43 @@ function StepOne() {
                 validateOnBlur={true} 
                 initialTouched={ {
                         loanProductSize: !!loanProductField?.loanProductSize,
-                        minimumRepaymentAmount: !!loanProductField?.minimumRepaymentAmount,
+                        // minimumRepaymentAmount: !!loanProductField?.minimumRepaymentAmount,
                         obligorLimit: !!loanProductField?.obligorLimit,
                 
                 }}
             >
                 {
-                    ({errors, isValid, touched, setFieldValue, values, setFieldTouched}) => {
+                    ({errors, isValid, touched, setFieldValue, values, setFieldTouched,validateField}) => {
+
+                        const validateInvestmentVehicle = (loanSize: string | number): string | null => {
+                            if (!loanSize || localFundAvailableAmount === null || localFundAvailableAmount === undefined) {
+                                return null;
+                            }
+                            
+                            const loanSizeNum = Number(loanSize);
+                            let maxAllowedAmount: number;
+                            
+                            if (isEdit && check) {
+                                maxAllowedAmount = whenEdit;
+                            } else {
+                                maxAllowedAmount = Number(localFundAvailableAmount);
+                            }
+                            
+                            if (maxAllowedAmount === 0 && loanSizeNum > 0) {
+                                return "Investment vehicle can't be a negative available amount";
+                            }
+                            
+                            if (loanSizeNum > maxAllowedAmount) {
+                                return "Investment vehicle can't be a negative available amount";
+                            }
+                            
+                            return null;
+                        };
+
+                        const investmentVehicleError = validateInvestmentVehicle(values.loanProductSize);
+
+                        const isFormValid = isValid && !investmentVehicleError;
+
                         
                         const handleFundSelection = (value: string) => {
                             setFieldValue("investmentVehicleId", value);
@@ -376,6 +409,21 @@ function StepOne() {
                                     setFieldValue("costOfFunds", interestRate.toString());
                                 }
                                 store.dispatch(setFundProductAvailableAmount(availableAmount));
+                            }
+                        };
+
+                        const handleLoanProductSizeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+                            let rawValue = e.target.value.replace(/,/g, "");
+                            if (/^(?!0$)\d*$/.test(rawValue)) {
+                                rawValue = parseInt(rawValue).toString();
+                                let formattedValue = Number(rawValue).toLocaleString();
+                                formattedValue += ".00";
+                                setFieldValue("loanProductSize", rawValue, true);
+                                e.target.value = formattedValue;
+                                
+                                setTimeout(() => {
+                                    validateField("loanProductSize");
+                                }, 0);
                             }
                         };
 
@@ -441,7 +489,18 @@ function StepOne() {
                                         loader: isFetching
                                      }}
                                      label=""
+                                     amountToBeCalculated={Number(values?.loanProductSize)}
+                                     isEdit={isEdit && check? true : false}
+                                     amountFromEdit={isEdit && check? Number(loanProductSizeToBeUpdate) : 0}
                                     /> 
+                            <div>
+                            {investmentVehicleError && (
+                        <div className="text-red-500 text-sm mt-1">
+                            {investmentVehicleError}
+                        </div>
+                    )}
+                            </div>
+
                         </div>
                         <div className=" grid grid-cols-1 gap-y-3">
                         <Label htmlFor="FundProductSponsor">Fund product sponsor</Label>   
@@ -499,24 +558,26 @@ function StepOne() {
                                                     onWheel={(e: {
                                                         currentTarget: { blur: () => string; };
                                                     }) => e.currentTarget.blur()}
-                                                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                                                        let rawValue = e.target.value.replace(/,/g, "");
-                                                        if (/^(?!0$)\d*$/.test(rawValue)) {
-                                                            rawValue = parseInt(rawValue).toString();
-                                                            let formattedValue = Number(rawValue).toLocaleString();
-                                                            formattedValue += ".00";
-                                                            setFieldValue("loanProductSize", rawValue);
-                                                            e.target.value = formattedValue;
+                                                    onChange={handleLoanProductSizeChange}
+                                                    // onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                                                    //     let rawValue = e.target.value.replace(/,/g, "");
+                                                    //     if (/^(?!0$)\d*$/.test(rawValue)) {
+                                                    //         rawValue = parseInt(rawValue).toString();
+                                                    //         let formattedValue = Number(rawValue).toLocaleString();
+                                                    //         formattedValue += ".00";
+                                                    //         setFieldValue("loanProductSize", rawValue,true);
+                                                    //         e.target.value = formattedValue;
                                                             
-                                                        }
+                                                    //     }
+                                                    // }}
+                                                    onFocus={(e: React.FocusEvent<HTMLInputElement>) => {
+                                                        setFieldTouched("loanProductSize", true, true);
+                                                        setFieldValue("loanProductSize", e.target.value, true);
+                                                        validateField("loanProductSize");
                                                     }}
-                                                     onFocus={(e: React.FocusEvent<HTMLInputElement>) => {
-                                                        setFieldTouched("adminLastName", true, false);
-                                                        setFieldValue("adminLastName", e.target.value, true); 
-                                                        }}
                                                     onBlur={(e: React.FocusEvent<HTMLInputElement>) => {
                                                         setFieldTouched("loanProductSize", true, true);
-                                                        setFieldValue("adminLastName", e.target.value, true);
+                                                         setFieldValue("loanProductSize", e.target.value, true);
                                                     }}
                                                 />
                                               
@@ -535,7 +596,7 @@ function StepOne() {
                                     </div>
                         
                             
-                             <div className={`relative bottom-4`}>
+                             {/* <div className={`relative bottom-4`}>
                                         <Label htmlFor="minimumRepaymentAmount"
                                                style={{display: 'inline-block', WebkitOverflowScrolling: 'touch'}}>Minimum
                                             repayment amount</Label>
@@ -582,12 +643,12 @@ function StepOne() {
                                         }
                                             </div>
                                         </div>
-                                    </div>
+                                    </div> */}
 
-                                    <div className={`relative bottom-9`}>
+                                    <div className={`relative bottom-5`}>
                                         <Label htmlFor="obligorLimit">Obligor limit</Label>
 
-                                        <div className={`flex flex-row gap-2 w-full`}>
+                                        <div className={`flex flex-row gap-2 w-full relative bottom-2`}>
                                             <div className={`pt-1`}>
                                                 <CurrencySelectInput readOnly={false}
                                                                      selectedcurrency={selectCurrency}
@@ -635,7 +696,7 @@ function StepOne() {
                                             {/* Interest */}
                                             <div>
                                                 <Label htmlFor="interest">Interest</Label>
-                                                <div className="flex items-center border rounded-md h-12 mt-2">
+                                                <div className="flex items-center border rounded-md h-12 mt-2 ">
                                                     <div className="bg-[#F9F9F9] flex items-center justify-center w-10 h-full rounded-l">
                                                         <span>%</span>
                                                     </div>
@@ -644,7 +705,7 @@ function StepOne() {
                                                         data-testid="interest"
                                                         name="interest"
                                                         type="number"
-                                                        className="w-full p-3 border-none rounded-r focus:outline-none text-sm"
+                                                        className={`w-full p-3 border-none rounded-r focus:outline-none text-sm `}
                                                         placeholder="0"
                                                         step="0.01"
                                                         onWheel={(e: React.WheelEvent<HTMLInputElement>) => e.currentTarget.blur()}
@@ -667,7 +728,7 @@ function StepOne() {
                                             </div>
                                             <div>
                                                 <Label htmlFor="costOfFunds">Cost of fund</Label>
-                                                <div className="flex items-center border rounded-md h-12 mt-2">
+                                                <div className="flex items-center border rounded-md h-12 mt-2 ">
                                                     <div className="bg-[#F9F9F9] flex items-center justify-center w-10 h-full rounded-l">
                                                         <span>%</span>
                                                     </div>
@@ -837,10 +898,10 @@ function StepOne() {
                                   </div >
                                   <div className="mt-3 md:mt-0">
                                     <Button
-                                        className={`h-12 md:w-40 w-full ${!isValid ? 'bg-[#D7D7D7] hover:bg-[#D7D7D7] text-meedlWhite cursor-not-allowed ' : 'bg-meedlBlue text-meedlWhite cursor-pointer'}`}
+                                        className={`h-12 md:w-40 w-full ${!isFormValid ? 'bg-[#D7D7D7] hover:bg-[#D7D7D7] text-meedlWhite cursor-not-allowed ' : 'bg-meedlBlue text-meedlWhite cursor-pointer'}`}
                                         variant={"secondary"}
                                         type={"submit"}
-                                        disabled={!isValid}
+                                        disabled={!isFormValid}
                                     >
                                            continue
                                     </Button>
