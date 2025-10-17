@@ -12,13 +12,12 @@ import ToastPopUp from '@/reuseable/notification/ToastPopUp';
 import { useAddLoaneeToCohortMutation, useGetCohortLoanBreakDownQuery, useEditAddLoaneeToCohortMutation } from "@/service/admin/cohort_query";
 import TotalInput from "@/reuseable/display/TotalInput";
 import { NumericFormat } from 'react-number-format';
-// import CustomInputField from "@/reuseable/Input/CustomNumberFormat";
 import {MdOutlineDelete, MdAdd} from "react-icons/md";
 import CenterMultistep from "@/reuseable/multiStep-component/Center-multistep";
 import StringDropdown from "@/reuseable/Dropdown/DropdownSelect";
 import { store } from '@/redux/store';
 import {setCohortBreakdownText} from "@/redux/slice/cohort/unpersist-slice";
-
+import {MdOutlineErrorOutline} from 'react-icons/md'
 interface Props {
     tuitionFee?: string;
     setIsOpen?: (e: boolean | undefined) => void;
@@ -88,7 +87,6 @@ function AddTraineeForm({setIsOpen, tuitionFee,cohortId, isEdit,loaneeBasicDetai
         const total = cohortItems?.reduce((sum: number, item: cohortBreakDown) => sum + Number(item?.itemAmount) , 0)
         const totalPlusTuition = total + tuitionFee ;
         setCohortBreakDownTotal(totalPlusTuition)
-        console.log('totalPlusTuition: ',totalPlusTuition)
     }
 
 
@@ -295,7 +293,6 @@ function AddTraineeForm({setIsOpen, tuitionFee,cohortId, isEdit,loaneeBasicDetai
     }
 
     const changeSelectedItem = (currentItemIndex: number, currentItemName: string, selectedItemName: string)=> {
-        console.log('currentItemIndex', currentItemIndex, 'currentItemName: ',currentItemName, 'selectedItemName:', selectedItemName)
         const selectedItemArray: cohortBreakDown[] =  cohortBreakDown?.filter(item => item?.itemName === selectedItemName);
         const itemsOnSelectedArray = selectedCohortItem?.filter(item => item?.itemName === currentItemName )
 
@@ -406,7 +403,6 @@ function AddTraineeForm({setIsOpen, tuitionFee,cohortId, isEdit,loaneeBasicDetai
                     >
                        <div>
                            <CenterMultistep currentStep={step} totalSteps={2} />
-                           {/*{step === 2 && <div className={` } text-[24px] text-black500  `}>Cohort breakdown</div>}*/}
                        </div>
                         {step === 1 ? (
                             <div>
@@ -487,18 +483,14 @@ function AddTraineeForm({setIsOpen, tuitionFee,cohortId, isEdit,loaneeBasicDetai
                                                         let value = e.target.value;
                                                         value = value.replace(/\D/g, "");
                                                         setInitialDepositAmount(value);
-                                                        // void setFieldValue("initialDeposit", value);
                                                         if (value === "") {
                                                             setInitialDepositError("");
                                                             return;
                                                         }
-                                                        console.log('value:', value)
-                                                        console.log('cohortBreakDownTotal :', cohortBreakDownTotal)
+
                                                         const numericValue = Number(value);
-                                                        console.log('numericValue: ',numericValue)
                                                         const total = Number(cohortBreakDownTotal);
                                                         const newNumString = numericValue?.toString()?.slice(0, -2);
-                                                        console.log('newNumString', newNumString)
                                                         void setFieldValue("initialDeposit",newNumString);
                                                         if (Number(newNumString) <= Number(total)) {
                                                             setInitialDepositError("");
@@ -704,8 +696,8 @@ function AddTraineeForm({setIsOpen, tuitionFee,cohortId, isEdit,loaneeBasicDetai
                                 <div className='w-full border-[#D7D7D7] border-[0.6px]'></div>
                                 {totalItemAmount < 0 &&
                                     <div className={` py-2  `}>
-                                        <div className={` text-sm text-[#66440A] bg-[#FEF6E8] w-fit h-fit px-1 py-1  `}>
-                                            {console.log('totalItemAmount ',totalItemAmount )}
+                                        <div className={` text-sm flex text-[#66440A] bg-[#FEF6E8] w-fit h-fit px-1 py-1  `}>
+                                            <MdOutlineErrorOutline  className={` pl-2 mtauto mbauto h-8 w-8 `}/>
                                             The loan amount is negative because the cohort breakdown is lower than the initial deposit
                                         </div>
                                     </div>}
@@ -719,6 +711,8 @@ function AddTraineeForm({setIsOpen, tuitionFee,cohortId, isEdit,loaneeBasicDetai
                                         Back
                                     </Button>
                                         <Button
+                                            //eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                                            // @ts-expect-error
                                             type={disableAddLoaneeButton || totalItemAmount < 0 ? "" : 'submit' }
                                             className={`w-full md:w-36 h-[3rem] ${disableAddLoaneeButton || totalItemAmount < 0 ? 'hover:bg-[#D0D5DD] bg-[#D0D5DD]' : ' hover:bg-meedlBlue bg-meedlBlue '}  `}>
 
@@ -750,25 +744,16 @@ function AddTraineeForm({setIsOpen, tuitionFee,cohortId, isEdit,loaneeBasicDetai
                                 </div>
                             </div>
                         )}
-                        {/*{totalItemAmount < 0 ?*/}
-                        {/*    <div className={` py-2  `}>*/}
-                        {/*        <div className={` text-sm text-[#66440A] bg-[#FEF6E8] w-fit h-fit px-1 py-1  `}>*/}
-                        {/*            {console.log('totalItemAmount ',totalItemAmount )}*/}
-                        {/*            The loan amount is negative because the cohort breakdown is lower than the initial deposit*/}
-                        {/*        </div>*/}
-                        {/*    </div>*/}
-                        {/*    :*/}
-                        {/*    <div>*/}
-                        {/*        {errorMessage && (*/}
-                        {/*            <div*/}
-                        {/*                className="mb-8 text-error500  text-sm text-center"*/}
-                        {/*                data-testid="formErrorMessage"*/}
-                        {/*            >*/}
-                        {/*                {errorMessage}*/}
-                        {/*            </div>*/}
-                        {/*        )}*/}
-                        {/*    </div>*/}
-                        {/*}*/}
+
+                                {errorMessage && (
+                                    <div
+                                        className="mb-8 text-error500  text-sm text-center"
+                                        data-testid="formErrorMessage"
+                                    >
+                                        {errorMessage}
+                                    </div>
+                                )}
+
 
                     </Form>
                 )}
