@@ -12,7 +12,7 @@ import ToastPopUp from '@/reuseable/notification/ToastPopUp';
 import { useAddLoaneeToCohortMutation, useGetCohortLoanBreakDownQuery, useEditAddLoaneeToCohortMutation } from "@/service/admin/cohort_query";
 import TotalInput from "@/reuseable/display/TotalInput";
 import { NumericFormat } from 'react-number-format';
-import CustomInputField from "@/reuseable/Input/CustomNumberFormat";
+// import CustomInputField from "@/reuseable/Input/CustomNumberFormat";
 import {MdOutlineDelete, MdAdd} from "react-icons/md";
 import CenterMultistep from "@/reuseable/multiStep-component/Center-multistep";
 import StringDropdown from "@/reuseable/Dropdown/DropdownSelect";
@@ -81,13 +81,13 @@ function AddTraineeForm({setIsOpen, tuitionFee,cohortId, isEdit,loaneeBasicDetai
 
     }, [isEdit, loaneeLoanBreakDown, initialDepositAmount, tuitionFee, data?.data]);
 
-    console.log('data: ', data)
-    console.log('tuition fee: ', tuitionFee)
+
 
     const calculateCohortItemsTotal = (cohortItems: cohortBreakDown[], tuitionFee: number)=> {
         // const cohortItems: cohortBreakDown[] = data?.data;
         const total = cohortItems?.reduce((sum: number, item: cohortBreakDown) => sum + Number(item?.itemAmount) , 0)
         const totalPlusTuition = total + tuitionFee ;
+        setCohortBreakDownTotal(totalPlusTuition)
         console.log('totalPlusTuition: ',totalPlusTuition)
     }
 
@@ -228,6 +228,7 @@ function AddTraineeForm({setIsOpen, tuitionFee,cohortId, isEdit,loaneeBasicDetai
 
     const handleFinalSubmit = async (values: typeof initialFormValue) => {
         store.dispatch(setCohortBreakdownText(''))
+        setErrorMessage("")
        if (isEdit){
           await handleEditLoanee(values)
        }else{
@@ -296,23 +297,27 @@ function AddTraineeForm({setIsOpen, tuitionFee,cohortId, isEdit,loaneeBasicDetai
     const changeSelectedItem = (currentItemIndex: number, currentItemName: string, selectedItemName: string)=> {
         console.log('currentItemIndex', currentItemIndex, 'currentItemName: ',currentItemName, 'selectedItemName:', selectedItemName)
         const selectedItemArray: cohortBreakDown[] =  cohortBreakDown?.filter(item => item?.itemName === selectedItemName);
-        const itemsOnSelectedArray = selectedCohortItem?.filter(item => item?.itemName === selectedItemName )
+        const itemsOnSelectedArray = selectedCohortItem?.filter(item => item?.itemName === currentItemName )
+
+        //eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-expect-error
         const itemsS : cohortBreakDown = itemsOnSelectedArray?.at(0) ? itemsOnSelectedArray?.at(0 ) : {    currency: '',
             itemAmount: '',
             itemName: '',
             loanBreakdownId: '',
         };
+
+        //eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-expect-error
         const selectedItem: cohortBreakDown = selectedItemArray?.at(0) ? selectedItemArray?.at(0 ) : {    currency: '',
             itemAmount: '',
             itemName: '',
             loanBreakdownId: '',
         };
-        const updatedItem: cohortBreakDown = {
-            ...selectedItem,
-            itemAmount: itemsS?.itemAmount,
-        };
+
+
         setSelectedCohortItem((prev: cohortBreakDown[]) =>
-            prev?.map((item: cohortBreakDown, i) => (i === currentItemIndex ? updatedItem : item))
+            prev?.map((item: cohortBreakDown, i) => (i === currentItemIndex ? selectedItem : item))
         );
         setSelectedCohortItem((prev) =>
             prev.map((item) =>
@@ -395,7 +400,7 @@ function AddTraineeForm({setIsOpen, tuitionFee,cohortId, isEdit,loaneeBasicDetai
                 onSubmit={step === 1 ? handleSubmitStep1 : handleFinalSubmit}
                 validateOnMount
             >
-                {({ errors, isValid, touched, setFieldValue }) => (
+                {({ errors, isValid, touched,values, setFieldValue }) => (
                     <Form className={`${inter.className} `}
 
                     >
@@ -475,25 +480,34 @@ function AddTraineeForm({setIsOpen, tuitionFee,cohortId, isEdit,loaneeBasicDetai
                                                     decimalScale={2}
                                                     fixedDecimalScale={true}
                                                     placeholder="Enter Initial Deposit"
+                                                    value={values?.initialDeposit}
                                                     // component={CustomInputField}
                                                     className="w-full p-3 h-[3rem] mt-auto mb-auto border rounded focus:outline-none"
                                                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                                                         let value = e.target.value;
                                                         value = value.replace(/\D/g, "");
                                                         setInitialDepositAmount(value);
-                                                        void setFieldValue("initialDeposit", value);
+                                                        // void setFieldValue("initialDeposit", value);
                                                         if (value === "") {
                                                             setInitialDepositError("");
                                                             return;
                                                         }
+                                                        console.log('value:', value)
+                                                        console.log('cohortBreakDownTotal :', cohortBreakDownTotal)
                                                         const numericValue = Number(value);
-                                                        const total = Number(totalItemAmount);
-                                                        if (numericValue <= total) {
+                                                        console.log('numericValue: ',numericValue)
+                                                        const total = Number(cohortBreakDownTotal);
+                                                        const newNumString = numericValue?.toString()?.slice(0, -2);
+                                                        console.log('newNumString', newNumString)
+                                                        void setFieldValue("initialDeposit",newNumString);
+                                                        if (Number(newNumString) <= Number(total)) {
                                                             setInitialDepositError("");
+                                                            setInitialDepositAmount(newNumString);
                                                         } else {
                                                             setInitialDepositError(
-                                                                "Initial deposit cannot be greater than cohort total breakdown amount"
+                                                                "Initial deposit cannot be greater than cohort total breakdown amount:"+total
                                                             );
+
                                                         }
                                                     }}
                                                 />
@@ -688,56 +702,74 @@ function AddTraineeForm({setIsOpen, tuitionFee,cohortId, isEdit,loaneeBasicDetai
                                 </div>
 
                                 <div className='w-full border-[#D7D7D7] border-[0.6px]'></div>
+                                {totalItemAmount < 0 &&
+                                    <div className={` py-2  `}>
+                                        <div className={` text-sm text-[#66440A] bg-[#FEF6E8] w-fit h-fit px-1 py-1  `}>
+                                            {console.log('totalItemAmount ',totalItemAmount )}
+                                            The loan amount is negative because the cohort breakdown is lower than the initial deposit
+                                        </div>
+                                    </div>}
                                 <div className="md:flex   md:gap-4 md:justify-end  grid gap-2 mt-2 md:mb-0 py-3 ">
                                     <Button
                                         variant="outline"
                                         type="reset"
-                                        className="md:w-fit w-full  h-fit px-6 py-4 "
+                                        className="md:w-fit w-full  h-[3rem] px-6  "
                                         onClick={handleBack}
                                     >
                                         Back
                                     </Button>
-                                    {disableAddLoaneeButton ?
                                         <Button
-                                            className={`w-full md:w-36 h-[57px] hover:bg-[#D0D5DD] bg-[#D0D5DD] `}>
-                                            Confirm
-                                        </Button>
-                                        :
-                                        <Button
-                                            variant="secondary"
-                                            className="md:w-fit w-full h-fit px-6 py-4  cursor-pointer"
-                                            type="submit"
-                                        >
-                                            {isLoadingAddLoanee || isLoadingEditLoanee ? (
-                                                <div id="loadingLoopIconDiv" className="flex items-center justify-center">
-                                                    <Icon
-                                                        id="Icon"
-                                                        icon={loadingLoop}
-                                                        width={34}
-                                                        height={32}
-                                                        style={{
-                                                            animation: 'spin 1s linear infinite',
-                                                            strokeWidth: 6,
-                                                            display: 'block',
-                                                        }}
-                                                    />
-                                                </div>
-                                            ) : (
+                                            type={disableAddLoaneeButton || totalItemAmount < 0 ? "" : 'submit' }
+                                            className={`w-full md:w-36 h-[3rem] ${disableAddLoaneeButton || totalItemAmount < 0 ? 'hover:bg-[#D0D5DD] bg-[#D0D5DD]' : ' hover:bg-meedlBlue bg-meedlBlue '}  `}>
+
+                                            {disableAddLoaneeButton || totalItemAmount < 0 ?
                                                 'Confirm'
-                                            )}
+                                                :
+                                                <div>
+                                                    {isLoadingAddLoanee || isLoadingEditLoanee ? (
+                                                        <div id="loadingLoopIconDiv" className="flex items-center justify-center">
+                                                            <Icon
+                                                                id="Icon"
+                                                                icon={loadingLoop}
+                                                                width={34}
+                                                                height={32}
+                                                                style={{
+                                                                    animation: 'spin 1s linear infinite',
+                                                                    strokeWidth: 6,
+                                                                    display: 'block',
+                                                                }}
+                                                            />
+                                                        </div>
+                                                    ) : (
+                                                        'Confirm'
+                                                    )}
+                                                </div>
+
+                                            }
                                         </Button>
-                                    }
                                 </div>
                             </div>
                         )}
-                        {errorMessage && (
-                            <div
-                                className="mb-8 text-error500  text-sm text-center"
-                                data-testid="formErrorMessage"
-                            >
-                                {errorMessage}
-                            </div>
-                        )}
+                        {/*{totalItemAmount < 0 ?*/}
+                        {/*    <div className={` py-2  `}>*/}
+                        {/*        <div className={` text-sm text-[#66440A] bg-[#FEF6E8] w-fit h-fit px-1 py-1  `}>*/}
+                        {/*            {console.log('totalItemAmount ',totalItemAmount )}*/}
+                        {/*            The loan amount is negative because the cohort breakdown is lower than the initial deposit*/}
+                        {/*        </div>*/}
+                        {/*    </div>*/}
+                        {/*    :*/}
+                        {/*    <div>*/}
+                        {/*        {errorMessage && (*/}
+                        {/*            <div*/}
+                        {/*                className="mb-8 text-error500  text-sm text-center"*/}
+                        {/*                data-testid="formErrorMessage"*/}
+                        {/*            >*/}
+                        {/*                {errorMessage}*/}
+                        {/*            </div>*/}
+                        {/*        )}*/}
+                        {/*    </div>*/}
+                        {/*}*/}
+
                     </Form>
                 )}
             </Formik>
