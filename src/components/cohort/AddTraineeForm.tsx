@@ -12,13 +12,11 @@ import ToastPopUp from '@/reuseable/notification/ToastPopUp';
 import { useAddLoaneeToCohortMutation, useGetCohortLoanBreakDownQuery, useEditAddLoaneeToCohortMutation } from "@/service/admin/cohort_query";
 import TotalInput from "@/reuseable/display/TotalInput";
 import { NumericFormat } from 'react-number-format';
-import CustomInputField from "@/reuseable/Input/CustomNumberFormat";
-import {MdOutlineDelete, MdAdd} from "react-icons/md";
+import {MdOutlineDelete, MdAdd,MdOutlineErrorOutline} from "react-icons/md";
 import CenterMultistep from "@/reuseable/multiStep-component/Center-multistep";
 import StringDropdown from "@/reuseable/Dropdown/DropdownSelect";
 import { store } from '@/redux/store';
 import {setCohortBreakdownText} from "@/redux/slice/cohort/unpersist-slice";
-
 interface Props {
     tuitionFee?: string;
     setIsOpen?: (e: boolean | undefined) => void;
@@ -58,6 +56,8 @@ function AddTraineeForm({setIsOpen, tuitionFee,cohortId, isEdit,loaneeBasicDetai
     const [names, setNames] = useState<string[]>([])
     const [openEmptyField, setOpenEmptyField] = useState(selectedCohortItem?.length === 0)
 
+    const [cohortBreakDownTotal, setCohortBreakDownTotal  ] = useState(0)
+
     useEffect(() => {
         if (data?.data) {
             setCohortBreakDown(data?.data);
@@ -75,11 +75,18 @@ function AddTraineeForm({setIsOpen, tuitionFee,cohortId, isEdit,loaneeBasicDetai
             calculateTotalForAddingLoanee( tuitionFee);
             setSelectedCohortItem([])
         }
+        calculateCohortItemsTotal(data?.data, tuitionFee ? Number(tuitionFee) : 0)
 
-    }, [isEdit, loaneeLoanBreakDown, initialDepositAmount]);
+    }, [isEdit, loaneeLoanBreakDown, initialDepositAmount, tuitionFee, data?.data]);
 
-    console.log('data: ', data)
-    console.log('tuition fee: ', tuitionFee)
+
+
+    const calculateCohortItemsTotal = (cohortItems: cohortBreakDown[], tuitionFee: number)=> {
+        // const cohortItems: cohortBreakDown[] = data?.data;
+        const total = cohortItems?.reduce((sum: number, item: cohortBreakDown) => sum + Number(item?.itemAmount) , 0)
+        const totalPlusTuition = total + tuitionFee ;
+        setCohortBreakDownTotal(totalPlusTuition)
+    }
 
 
     const setNamessOnEdit = () => {
@@ -120,6 +127,7 @@ function AddTraineeForm({setIsOpen, tuitionFee,cohortId, isEdit,loaneeBasicDetai
         emailAddress: loaneeBasicDetails  && isEdit  ? loaneeBasicDetails?.loaneeEmail : '',
         initialDeposit: loaneeBasicDetails && isEdit ? loaneeBasicDetails?.loaneeInitialDeposit : ''
     };
+
 
     const toastPopUp = ToastPopUp({
         description: 'Cohort loanee successfully added.',
@@ -217,6 +225,7 @@ function AddTraineeForm({setIsOpen, tuitionFee,cohortId, isEdit,loaneeBasicDetai
 
     const handleFinalSubmit = async (values: typeof initialFormValue) => {
         store.dispatch(setCohortBreakdownText(''))
+        setErrorMessage("")
        if (isEdit){
           await handleEditLoanee(values)
        }else{
@@ -279,6 +288,46 @@ function AddTraineeForm({setIsOpen, tuitionFee,cohortId, isEdit,loaneeBasicDetai
             items?.push({name : element?.itemName, amount : element?.itemAmount})
         })
         setNames(itemNames);
+
+    }
+
+    const changeSelectedItem = (currentItemIndex: number, currentItemName: string, selectedItemName: string)=> {
+        const selectedItemArray: cohortBreakDown[] =  cohortBreakDown?.filter(item => item?.itemName === selectedItemName);
+        const itemsOnSelectedArray = selectedCohortItem?.filter(item => item?.itemName === currentItemName )
+
+        //eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-expect-error
+        const itemsS : cohortBreakDown = itemsOnSelectedArray?.at(0) ? itemsOnSelectedArray?.at(0 ) : {    currency: '',
+            itemAmount: '',
+            itemName: '',
+            loanBreakdownId: '',
+        };
+
+        //eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-expect-error
+        const selectedItem: cohortBreakDown = selectedItemArray?.at(0) ? selectedItemArray?.at(0 ) : {    currency: '',
+            itemAmount: '',
+            itemName: '',
+            loanBreakdownId: '',
+        };
+
+
+        setSelectedCohortItem((prev: cohortBreakDown[]) =>
+            prev?.map((item: cohortBreakDown, i) => (i === currentItemIndex ? selectedItem : item))
+        );
+        setSelectedCohortItem((prev) =>
+            prev.map((item) =>
+                item.itemName === selectedItem.itemName
+                    ? { ...item, itemAmount: itemsS?.itemAmount }
+                    : item
+            )
+        );
+        setNames(prevNames => {
+            const updated = [...prevNames, currentItemName]
+            return updated;
+        });
+        setNames(prevNames => prevNames.filter(name => name !== selectedItemName));
+
 
     }
 
@@ -347,13 +396,12 @@ function AddTraineeForm({setIsOpen, tuitionFee,cohortId, isEdit,loaneeBasicDetai
                 onSubmit={step === 1 ? handleSubmitStep1 : handleFinalSubmit}
                 validateOnMount
             >
-                {({ errors, isValid, touched, setFieldValue }) => (
+                {({ errors, isValid, touched,values, setFieldValue }) => (
                     <Form className={`${inter.className} `}
 
                     >
                        <div>
                            <CenterMultistep currentStep={step} totalSteps={2} />
-                           {/*{step === 2 && <div className={` } text-[24px] text-black500  `}>Cohort breakdown</div>}*/}
                        </div>
                         {step === 1 ? (
                             <div>
@@ -411,39 +459,53 @@ function AddTraineeForm({setIsOpen, tuitionFee,cohortId, isEdit,loaneeBasicDetai
                                     </div>
                                     <div>
                                         <Label htmlFor="initialDeposit">Initial Deposit</Label>
-                                        <div className='flex gap-3 items-center '>
+                                        <div className='flex gap-3   h-fit py-0  items-center '>
                                             <CurrencySelectInput
                                                 selectedcurrency={selectCurrency}
                                                 setSelectedCurrency={setSelectCurrency}
                                             />
-                                            <div className='w-full '>
-                                                <Field
+                                            <div className='w-full h-fit mt-auto  mb-auto  '>
+                                                <NumericFormat
                                                     id="initialDeposit"
                                                     name="initialDeposit"
-                                                    type="number"
+                                                    // type="number"
+                                                    type="text"
+                                                    inputMode="numeric"
+                                                    thousandSeparator=","
+                                                    decimalScale={2}
+                                                    fixedDecimalScale={true}
                                                     placeholder="Enter Initial Deposit"
-                                                    component={CustomInputField}
-                                                    className="w-full p-3 h-[3.2rem] border rounded focus:outline-none"
+                                                    value={values?.initialDeposit}
+                                                    // component={CustomInputField}
+                                                    className="w-full p-3 h-[3rem] mt-auto mb-auto border rounded focus:outline-none"
                                                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                                                        const value = e.target.value;
-                                                        setInitialDepositAmount(value)
-                                                        if (/^\d*$/.test(value)) {
-                                                            if (Number(e.target.value) < Number(totalItemAmount) || Number(e.target.value) === Number(totalItemAmount)) {
-                                                                setInitialDepositError('')
-                                                                setInitialDepositAmount(value)
-                                                                void setFieldValue("initialDeposit", e.target.value);
-                                                            }else {
-                                                                void setFieldValue("initialDeposit", '');
-                                                                setInitialDepositError("initialDeposit can not be greater than cohort amount");
+                                                        let value = e.target.value;
+                                                        value = value.replace(/\D/g, "");
+                                                        setInitialDepositAmount(value);
+                                                        if (value === "") {
+                                                            setInitialDepositError("");
+                                                            return;
+                                                        }
 
-                                                            }
+                                                        const numericValue = Number(value);
+                                                        const total = Number(cohortBreakDownTotal);
+                                                        const newNumString = numericValue?.toString()?.slice(0, -2);
+                                                        void setFieldValue("initialDeposit",newNumString);
+                                                        if (Number(newNumString) <= Number(total)) {
+                                                            setInitialDepositError("");
+                                                            setInitialDepositAmount(newNumString);
+                                                        } else {
+                                                            setInitialDepositError(
+                                                                "Initial deposit cannot be greater than cohort total breakdown amount:"+total
+                                                            );
+
                                                         }
                                                     }}
                                                 />
                                             </div>
                                         </div>
                                     </div>
-                                    <div className='relative bottom-6 ml-[90px]'>
+                                    <div className='relative bottom-6 m'>
                                         {errors.initialDeposit && touched.initialDeposit && (
                                             <ErrorMessage name="initialDeposit" component="div" className="text-red-500 text-sm" />
                                         )}
@@ -464,8 +526,8 @@ function AddTraineeForm({setIsOpen, tuitionFee,cohortId, isEdit,loaneeBasicDetai
                                     <Button
                                         type='submit'
                                         variant="secondary"
-                                        className={`w-full md:w-36 h-[57px] ${!isValid ? 'bg-[#D7D7D7] hover:bg-[#D7D7D7]' : 'cursor-pointer'}`}
-                                        disabled={!isValid}
+                                        className={`w-full md:w-36 h-[57px] ${!isValid || Boolean(initialDepositError) ? 'bg-[#D7D7D7] hover:bg-[#D7D7D7]' : 'cursor-pointer'}`}
+                                        disabled={!isValid || Boolean(initialDepositError)}
                                     >
                                         Continue
                                     </Button>
@@ -505,7 +567,8 @@ function AddTraineeForm({setIsOpen, tuitionFee,cohortId, isEdit,loaneeBasicDetai
                                                             height={' h-[3.2rem]  '}
                                                             label={detail?.itemName}
                                                             items={names}
-                                                            onSelect={handleSelect}
+                                                            onSelect={ (value) => changeSelectedItem(index, detail?.itemName, value)
+                                                        }
                                                         />
                                                     </div>
                                                 ))}
@@ -630,56 +693,67 @@ function AddTraineeForm({setIsOpen, tuitionFee,cohortId, isEdit,loaneeBasicDetai
                                 </div>
 
                                 <div className='w-full border-[#D7D7D7] border-[0.6px]'></div>
+                                {totalItemAmount < 0 &&
+                                    <div className={` py-2  `}>
+                                        <div className={` text-sm flex text-[#66440A] bg-[#FEF6E8] w-fit h-fit px-1 py-1  `}>
+                                            <MdOutlineErrorOutline  className={` pl-2 mtauto mbauto h-8 w-8 `}/>
+                                            The loan amount is negative because the cohort breakdown is lower than the initial deposit
+                                        </div>
+                                    </div>}
                                 <div className="md:flex   md:gap-4 md:justify-end  grid gap-2 mt-2 md:mb-0 py-3 ">
                                     <Button
                                         variant="outline"
                                         type="reset"
-                                        className="md:w-fit w-full  h-fit px-6 py-4 "
+                                        className="md:w-fit w-full  h-[3rem] px-6  "
                                         onClick={handleBack}
                                     >
                                         Back
                                     </Button>
-                                    {disableAddLoaneeButton ?
                                         <Button
-                                            className={`w-full md:w-36 h-[57px] hover:bg-[#D0D5DD] bg-[#D0D5DD] `}>
-                                            Confirm
-                                        </Button>
-                                        :
-                                        <Button
-                                            variant="secondary"
-                                            className="md:w-fit w-full h-fit px-6 py-4  cursor-pointer"
-                                            type="submit"
-                                        >
-                                            {isLoadingAddLoanee || isLoadingEditLoanee ? (
-                                                <div id="loadingLoopIconDiv" className="flex items-center justify-center">
-                                                    <Icon
-                                                        id="Icon"
-                                                        icon={loadingLoop}
-                                                        width={34}
-                                                        height={32}
-                                                        style={{
-                                                            animation: 'spin 1s linear infinite',
-                                                            strokeWidth: 6,
-                                                            display: 'block',
-                                                        }}
-                                                    />
-                                                </div>
-                                            ) : (
+                                            //eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                                            // @ts-expect-error
+                                            type={disableAddLoaneeButton || totalItemAmount < 0 ? "" : 'submit' }
+                                            className={`w-full md:w-36 h-[3rem] ${disableAddLoaneeButton || totalItemAmount < 0 ? 'hover:bg-[#D0D5DD] bg-[#D0D5DD]' : ' hover:bg-meedlBlue bg-meedlBlue '}  `}>
+
+                                            {disableAddLoaneeButton || totalItemAmount < 0 ?
                                                 'Confirm'
-                                            )}
+                                                :
+                                                <div>
+                                                    {isLoadingAddLoanee || isLoadingEditLoanee ? (
+                                                        <div id="loadingLoopIconDiv" className="flex items-center justify-center">
+                                                            <Icon
+                                                                id="Icon"
+                                                                icon={loadingLoop}
+                                                                width={34}
+                                                                height={32}
+                                                                style={{
+                                                                    animation: 'spin 1s linear infinite',
+                                                                    strokeWidth: 6,
+                                                                    display: 'block',
+                                                                }}
+                                                            />
+                                                        </div>
+                                                    ) : (
+                                                        'Confirm'
+                                                    )}
+                                                </div>
+
+                                            }
                                         </Button>
-                                    }
                                 </div>
                             </div>
                         )}
-                        {errorMessage && (
-                            <div
-                                className="mb-8 text-error500  text-sm text-center"
-                                data-testid="formErrorMessage"
-                            >
-                                {errorMessage}
-                            </div>
-                        )}
+
+                                {errorMessage && (
+                                    <div
+                                        className="mb-8 text-error500  text-sm text-center"
+                                        data-testid="formErrorMessage"
+                                    >
+                                        {errorMessage}
+                                    </div>
+                                )}
+
+
                     </Form>
                 )}
             </Formik>
