@@ -69,8 +69,8 @@ const LoanProductPage = () => {
         store.dispatch(resetCompletedSteps())
         store.dispatch(resetAll())
         store.dispatch(clearSaveCreateInvestmentField())
+        store.dispatch(clearLoanProductField())
         if(isEdit){
-         store.dispatch(clearLoanProductField())
          store.dispatch(resetFundProductAvailableAmount())
         }
     },[isEdit])
