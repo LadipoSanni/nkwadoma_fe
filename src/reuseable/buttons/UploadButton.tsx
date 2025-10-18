@@ -41,12 +41,14 @@ const UploadButton = ({whose, url} : Props) => {
         if (file) {
             setFileName(truncateFileName(file.name, 13));
 
-            const handleResize = () => {
-                setFileName(truncateFileName(file.name, window.innerWidth >= 768 ? 40 : 13));
-            };
+            if (typeof window !== undefined){
+                const handleResize = () => {
+                    setFileName(truncateFileName(file.name, window.innerWidth >= 768 ? 40 : 13));
+                };
 
-            window.addEventListener("resize", handleResize);
-            return () => window.removeEventListener("resize", handleResize);
+                window.addEventListener("resize", handleResize);
+                return () => window.removeEventListener("resize", handleResize);
+            }
         }
         if (userDatas){
             store.dispatch(setUser2faState(userDatas?.data?.mfaType))
@@ -66,6 +68,17 @@ const UploadButton = ({whose, url} : Props) => {
     const onFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
         const selectedFile = event.target.files?.[0];
         if (!selectedFile) return;
+        const fileSizeInMB = selectedFile.size / (1024 * 1024);
+        console.log("File size:", fileSizeInMB.toFixed(2), "MB");
+
+// Example: reject if larger than 2MB
+        if (fileSizeInMB > 2) {
+            alert("File size exceeds 2 MB limit");
+            // selectedFile.current.value = null;
+            setLoading(false);
+            setError(`File size exceeds 2 MB limit`);
+            return ;
+        }
 
         setLoading(true);
         if (!validateFile(selectedFile)) {
@@ -136,7 +149,7 @@ const UploadButton = ({whose, url} : Props) => {
                 }
 
 
-                <div>
+                <div className={`grid gap-2 `}>
                     <div className={` grid gap-3 h-fit mt-auto mb-auto `}>
                         <div>
                             <p className={` text-[14px] ${inter500.className} text-black `}>Upload image</p>
@@ -145,10 +158,12 @@ const UploadButton = ({whose, url} : Props) => {
                     </div>
                     {!imageUrl ?
                         <Button
-                            className={` w-fit h-fit py-2 px-4 border border-meedlBlue text-meedlBlue `}
+                            id={'choseImage'}
+                            data-testid={'choseImage'}
+                            className={` w-fit h-[2.2rem]  px-4 border border-meedlBlue text-meedlBlue `}
                             onClick={ onClick }
                         >
-                            <p> {!loading || !isLoadingOrg ? `Upload` : 'Uploading...'}</p>
+                            <p className={` text-[14px] ${inter600.className} `}> {!loading || !isLoadingOrg ? `Upload` : 'Uploading...'}</p>
 
                             <input
                                 id="fileInput"
@@ -162,14 +177,14 @@ const UploadButton = ({whose, url} : Props) => {
 
                         </Button>
                         :
-                        <div className={`w-fit  flex gap-2 mr-auto ml-auto   `}>
+                        <div className={`w-fit  flex gap-2    `}>
                             <Button
                                 onClick={clearSelectedImage}
-                                className={` py-2 px-4 w-fit h-fit text-[16px] ${inter600.className}  border border-meedlBlue text-meedlBlue `}
+                                className={`  px-4 w-fit h-[2.2rem] text-[14px] ${inter600.className}  border border-meedlBlue text-meedlBlue `}
                             >Discard</Button>
                             <Button
                                 onClick={handleSaveUser}
-                                className={`text-[16px] ${inter600.className}  py-2 px-4 w-fit h-fit border bg-meedlBlue text-white `}
+                                className={`text-[14px] ${inter600.className}   px-4 w-fit h-[2.2rem] border bg-meedlBlue text-white `}
                             >
 
                                 <p>{isLoading || isLoadingOrg ? 'Saving...' :'Save'}</p>
