@@ -69,7 +69,7 @@ const UploadButton = ({whose, url} : Props) => {
         const selectedFile = event.target.files?.[0];
         if (!selectedFile) return;
         const fileSizeInMB = selectedFile.size / (1024 * 1024);
-        console.log("File size:", fileSizeInMB.toFixed(2), "MB");
+        // console.log("File size:", fileSizeInMB.toFixed(2), "MB");
 
 // Example: reject if larger than 2MB
         if (fileSizeInMB > 2) {
