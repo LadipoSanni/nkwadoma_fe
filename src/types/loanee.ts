@@ -188,6 +188,7 @@ export interface CohortInfo {
 }
 
 export interface LoaneeDetails {
+    loanTermsAndCondition: string,
     repaymentPercentage: string,
     amountRepaid: string,
     amountOutstanding:string,

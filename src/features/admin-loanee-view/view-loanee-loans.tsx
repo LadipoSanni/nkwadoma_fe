@@ -17,8 +17,6 @@ import {AdminViewLoanType} from "@/types/loanee";
 import {setcohortId} from "@/redux/slice/create/cohortSlice"
 import {setLoaneeId} from "@/redux/slice/organization/organization"
 import { setClickedLoanId } from '@/redux/slice/loan/selected-loan';
-
-// import {MdOutlinePersonOutline} from "react-icons/md";
 import { useDebounce } from '@/hooks/useDebounce';
 import GeneralEmptyState from '@/reuseable/emptyStates/General-emptystate';
 import {MdSearch,MdPersonOutline} from 'react-icons/md';
@@ -33,7 +31,6 @@ const ViewLoaneeLoans = () => {
     const router = useRouter()
     const [fetchData, setFetchData] = useState<AdminViewLoanType[]>([]);
     const [pageNumber,
-        // setPageNumber
     ] = useState<number>(0);
     const [pageSize] = useState<number>(10);
 
@@ -128,16 +125,7 @@ const ViewLoaneeLoans = () => {
 
                        </div>
                    </div>
-                    //    : !fetchData || fetchData?.length === 0 ?
-                    //            (
-                    //                <div className={` mr-auto ml-auto  mt-auto mb-auto `}>
-                    //                    <div className={`  grid aspect-square h-[10rem] w-[10rem] mr-auto ml-auto  rounded-full bg-[#D9EAFF]  `}>
-                    //                        {/*<MdOutlinePersonOutline  color={'#142854'} className={` mr-auto ml-auto mt-auto mb-auto  h-8 w-8 `}/>*/}
-                    //                        <Icon icon="material-symbols:money-bag-outline" height={"2rem"} width={"2rem"} className={` mr-auto ml-auto mt-auto mb-auto `} color={'#142854' }></Icon>
-                    //                    </div>
-                    //                    <p className={` text-black text-[20px] ${cabinetGroteskMediumBold.className}`}> Loanee does not have loan with Organization</p>
-                    //                </div>
-                    //            )
+
                                : (debouncedSearchTerm && searchData?.data?.body?.length === 0) || viewAllLoans?.data?.body?.length === 0 ?
                                (
                                    <div className={`h-60 relative bottom-3`}>
