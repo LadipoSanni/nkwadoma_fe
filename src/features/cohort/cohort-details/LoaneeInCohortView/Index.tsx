@@ -18,11 +18,14 @@ import {useToast} from "@/hooks/use-toast";
 import {cohortLoaneeResponse} from "@/types/Component.type";
 import Isloading from "@/reuseable/display/Isloading";
 import SearchEmptyState from "@/reuseable/emptyStates/SearchEmptyState";
-import { useAppSelector } from '@/redux/store';
+import {store, useAppSelector } from '@/redux/store';
 import CheckBoxTable from '@/reuseable/table/Checkbox-table';
 import { useDebounce } from '@/hooks/useDebounce';
 import {capitalizeFirstLetters} from "@/utils/GlobalMethods";
 import DropDownWithActionButton from "@/reuseable/Dropdown";
+import { setcohortId } from '@/redux/slice/create/cohortSlice';
+import { setLoaneeId } from '@/redux/slice/organization/organization';
+import {useRouter} from "next/navigation";
 
 interface userIdentity {
     firstName: string;
@@ -199,6 +202,7 @@ export const LoaneeInCohortView = ({cohortFee}: props) => {
     }
 
 
+    const router = useRouter();
     const handleSelected = (value: string) => {
         setIsReferred(value);
     }
@@ -209,7 +213,10 @@ export const LoaneeInCohortView = ({cohortFee}: props) => {
     }
     const {toast} = useToast()
     const handleRowClick = (row: TableRowData) => {
+        store.dispatch(setLoaneeId(String(row?.id)))
+        store.dispatch(setcohortId(String(cohortId)))
         setSelectedLoaneeId(String(row?.id))
+        router.push('/cohort/loaneeDetails')
 
     }
 
