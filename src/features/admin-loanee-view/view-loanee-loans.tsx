@@ -20,6 +20,8 @@ import { setClickedLoanId } from '@/redux/slice/loan/selected-loan';
 import { useDebounce } from '@/hooks/useDebounce';
 import GeneralEmptyState from '@/reuseable/emptyStates/General-emptystate';
 import {MdSearch,MdPersonOutline} from 'react-icons/md';
+import {getItemSessionStorage} from "@/utils/storage";
+import {MEEDLE_ORG_ADMIN} from "@/types/roles";
 
 const ViewLoaneeLoans = () => {
     const [searchTerm, setSearchTerm] = useState('');
@@ -33,6 +35,7 @@ const ViewLoaneeLoans = () => {
     const [pageNumber,
     ] = useState<number>(0);
     const [pageSize] = useState<number>(10);
+    const userRole  = getItemSessionStorage("user_role")
 
     const [debouncedSearchTerm] = useDebounce(searchTerm, 1000);
 
@@ -82,7 +85,6 @@ const ViewLoaneeLoans = () => {
     }
 
 
-
     return (
         <div
             id={'viewLoaneeLoans'}
@@ -102,13 +104,16 @@ const ViewLoaneeLoans = () => {
                        <Details isLoading={isLoadingLoanCounts || isFetchingCounts} sx={` w-[20em] md:w-[100%] `} id={'TotalAmountOutstanding'} showAsWholeNumber={false}    name={'Total amount outstanding'} value={loanCounts?.data ? loanCounts?.data?.totalAmountOutstanding :''} valueType={'currency'}  />
                        <Details isLoading={isLoadingLoanCounts || isFetchingCounts} sx={` w-[20em] md:w-[100%] `} id={"totalAmountRepaid"} showAsWholeNumber={false}    name={'Total amount repaid'} value={loanCounts?.data ? loanCounts?.data?.totalAmountRepaid : ''} valueType={'currency'}  />
                    </div>
-                   <SearchInput
-                       id={'searchField'}
-                       data-testid={'searchField'}
-                       placeholder={'Search by organization'}
-                       value={searchTerm}
-                       onChange={handleSearchChange}
-                   />
+                   {!MEEDLE_ORG_ADMIN?.includes(userRole ? userRole :'' ) &&
+                       <SearchInput
+                           id={'searchField'}
+                           data-testid={'searchField'}
+                           placeholder={'Search by organization'}
+                           value={searchTerm}
+                           onChange={handleSearchChange}
+                       />
+                   }
+
                </section>
                <section
                    className={`h-full   grid  bg-white py-4 w-full `}
@@ -170,6 +175,10 @@ const ViewLoaneeLoans = () => {
                                                <div className={`${isLoading ? `h-6 rounded bg-gray-200 animated_pulse w-[90%]  bg-[#F9F9F9]` : ``}`} >
                                                    <p className={` ${inter.className} ${isLoading ? `hidden` : ``}  text-[#6A6B6A] text-[14px] `}>Amount repaid</p>
                                                    <p className={`${inter500.className} ${isLoading ? `hidden` : `flex`}  text-black text-[14px]`}>{formatAmount(Number(loan?.loanAmountRepaid),false)}</p>
+                                               </div>
+                                               <div className={`${isLoading ? `h-6 rounded bg-gray-200 animated_pulse w-[90%]  bg-[#F9F9F9]` : ``}`} >
+                                                   <p className={` ${inter.className} ${isLoading ? `hidden` : ``}  text-[#6A6B6A] text-[14px] `}>Loan status</p>
+                                                   <p className={`${inter500.className} ${isLoading ? `hidden` : `flex`}  text-black text-[14px]`}></p>
                                                </div>
                                            </div>
                                            <div className={`flex w-full  pt-3 pb-1 justify-end`}>
