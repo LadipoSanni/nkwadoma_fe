@@ -11,8 +11,7 @@ import {MdInfoOutline} from 'react-icons/md';
 import { Button } from '../ui/button';
 import {store, useAppSelector} from '@/redux/store';
 import {formatAmount, unformatAmount} from "@/utils/Format";
-// import {LoanProduct} from "@/types/loanee";
-// import {LoanProuctType} from "@/types/loan/loan-request.type";
+
 import {setSelectedLoanProductId,setAmount,setAmountAvailable,setLoanProductType,setLoanProductName} from "@/redux/slice/create/createLoanOfferSlice";
 import SelectWithAmount from "@/reuseable/select/SelectWithAmount";
 import { loanProductObj } from '@/redux/slice/create/createLoanOfferSlice'; 
@@ -58,6 +57,9 @@ const Index = () => {
     const [selectedLoanProduct, setSelectedLoanProduct] = useState<loanProductObj>(loanProductData);
     // const [remainingAmount, setRemainingAmount] = useState(0)
     const [amountApprovedError, setAmountApprovedError] = useState('')
+    const getLoanProductById = (id: string) => {
+        return loanProducts?.find((loanProduct: viewAllProps) => loanProduct.id === id);
+    };
 
     useEffect(() => {
         if (loanProductId && loanProducts.length > 0) {
@@ -66,7 +68,7 @@ const Index = () => {
                 setSelectedLoanProductName(product.name);
             }
         }
-    }, [loanProductId, loanProducts]);
+    }, [getLoanProductById, loanProductId, loanProducts]);
 
     const isAmountExceedingLimits = () => {
         if (!unformatedAmount || !amountRequested || !selectedLoanProduct?.availableAmountToBeOffered) {
@@ -125,9 +127,7 @@ const Index = () => {
         router.push(`/loan-request-details?id=${selectedLoanRequestId}`);
 
     }
-    const getLoanProductById = (id: string) => {
-        return loanProducts?.find((loanProduct: viewAllProps) => loanProduct.id === id);
-    };
+
 
     const handleLoanProductSelection = (value: string) => {
         setSelectedProductId(value);

@@ -64,7 +64,29 @@ function AddTraineeForm({setIsOpen, tuitionFee,cohortId, isEdit,loaneeBasicDetai
             dropDownItem(data.data)
         }
     }, [data, tuitionFee, initialDepositAmount]);
+    const calculateTotalForAddingLoanee = (tuitionFee?: string) => {
+        const totalWithInitialDepositDeducted  = (tuitionFee ? parseFloat(tuitionFee) : 0) - (initialDepositAmount ? parseFloat(initialDepositAmount) : 0);
+        setTotalItemAmount(totalWithInitialDepositDeducted);
+    };
 
+
+    const calculateTotalForEditingLoane = (loaneeAddedItems: cohortBreakDown[], tuitionFee?: string) => {
+        const totalItems = loaneeAddedItems.reduce((sum, item) => sum + parseFloat(item.itemAmount || '0'), 0);
+        const total = totalItems + (tuitionFee ? parseFloat(tuitionFee) : 0);
+        const totalWithInitialDepositDeducted = total - (initialDepositAmount ? parseFloat(initialDepositAmount) : 0);
+        setTotalItemAmount(totalWithInitialDepositDeducted);
+
+    }
+
+    const setNamessOnEdit = () => {
+        if(loaneeLoanBreakDown){
+            const unselectedItemNames = cohortBreakDown
+                .filter(item => !loaneeLoanBreakDown.some(sel => sel.itemName === item.itemName))
+                .map(item => item.itemName);
+            setNames(unselectedItemNames)
+
+        }
+    }
 
     useEffect(() => {
         if (isEdit && loaneeLoanBreakDown){
@@ -77,7 +99,7 @@ function AddTraineeForm({setIsOpen, tuitionFee,cohortId, isEdit,loaneeBasicDetai
         }
         calculateCohortItemsTotal(data?.data, tuitionFee ? Number(tuitionFee) : 0)
 
-    }, [isEdit, loaneeLoanBreakDown, initialDepositAmount, tuitionFee, data?.data]);
+    }, [isEdit, loaneeLoanBreakDown, initialDepositAmount, tuitionFee, data?.data, calculateTotalForEditingLoane, setNamessOnEdit, calculateTotalForAddingLoanee]);
 
 
 
@@ -89,15 +111,7 @@ function AddTraineeForm({setIsOpen, tuitionFee,cohortId, isEdit,loaneeBasicDetai
     }
 
 
-    const setNamessOnEdit = () => {
-        if(loaneeLoanBreakDown){
-            const unselectedItemNames = cohortBreakDown
-                .filter(item => !loaneeLoanBreakDown.some(sel => sel.itemName === item.itemName))
-                .map(item => item.itemName);
-            setNames(unselectedItemNames)
 
-        }
-    }
 
 
     const validationSchemaStep1 = Yup.object().shape({
@@ -140,19 +154,6 @@ function AddTraineeForm({setIsOpen, tuitionFee,cohortId, isEdit,loaneeBasicDetai
         }
     };
 
-    const calculateTotalForAddingLoanee = (tuitionFee?: string) => {
-        const totalWithInitialDepositDeducted  = (tuitionFee ? parseFloat(tuitionFee) : 0) - (initialDepositAmount ? parseFloat(initialDepositAmount) : 0);
-        setTotalItemAmount(totalWithInitialDepositDeducted);
-    };
-
-
-    const calculateTotalForEditingLoane = (loaneeAddedItems: cohortBreakDown[], tuitionFee?: string) => {
-        const totalItems = loaneeAddedItems.reduce((sum, item) => sum + parseFloat(item.itemAmount || '0'), 0);
-        const total = totalItems + (tuitionFee ? parseFloat(tuitionFee) : 0);
-        const totalWithInitialDepositDeducted = total - (initialDepositAmount ? parseFloat(initialDepositAmount) : 0);
-        setTotalItemAmount(totalWithInitialDepositDeducted);
-
-    }
 
     const calculateTotal = (items: cohortBreakDown[], tuitionFee?: string) => {
         const total = items.reduce((sum, item) => sum + parseFloat(item.itemAmount || '0'), 0);
