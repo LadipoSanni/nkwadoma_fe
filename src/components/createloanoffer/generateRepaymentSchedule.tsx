@@ -46,14 +46,15 @@ const GenerateRepaymentSchedule = () => {
 
     const {data, isLoading, isFetching} = useGenerateLoanRepaymentScheduleQuery({amountApproved:unformatedAmount, loanProductId:selectedLoanProductId})
     const [respondToLoanRequest, { isLoading:isLoanOfferCreating }] = useRespondToLoanRequestMutation();
+    const router = useRouter()
+
 
     useEffect(() => {
         if(loanRequestId === ""){
             router.push('/loan/loan-request') 
         }
-    },[loanRequestId])
+    },[loanRequestId, router])
 
-    const router = useRouter()
     const tableHeader =  [
         { title: 'Date', sortable: true, id: 'date', selector: (row: viewAllType) =><div>{dayjs(row.repaymentDate?.toString()).format('MMM D, YYYY')}</div> },
         { title: 'Principal amount', sortable: true, id: 'principalAmount', selector: (row:  viewAllType) => <div className=''>{formatAmount(row.principalAmount)}</div>},
@@ -100,23 +101,7 @@ const GenerateRepaymentSchedule = () => {
                 duration: 2000
             })
          }
-        // if (response?.error){
-        //     toast({
-        //         //eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        //         // @ts-expect-error
-        //         description: response?.error?.data?.message,
-        //         status: "error",
-        //     })
-        // }else{
-        //     toast({
-        //         description: "Loan offer has been created",
-        //         status: "success",
-        //     })
-        //     store.dispatch(setCurrentTab('Loan requests'))
-        //     store.dispatch(setCurrentTabStatus('LOAN_REQUEST'))
-        //     store.dispatch(setcurrentTabRoute('loan-request'))
-        //     router.push('/loan/loan-request')
-        // }
+
 
     }
 

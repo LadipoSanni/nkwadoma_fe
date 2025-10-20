@@ -14,10 +14,15 @@ interface props {
 
 }
 
-const LoaneeLoanDetails = ({data, isLoading,loaneeDocs ,isViewingOrganizationLoaneeLoans}:props ) => {
+const LoaneeLoanDetails = ({data, isLoading ,isViewingOrganizationLoaneeLoans}:props ) => {
 
 
     const userRole  = getItemSessionStorage("user_role")
+
+    const documentData = [
+        {label:"Loan terms and condition",value:data?.loanTermsAndCondition},
+        // {label:"Loan disbursement terms",value:loanProduct?.data?.disbursementTerms }
+    ]
 
 
     const renderLoaneeView = () => {
@@ -75,8 +80,8 @@ const LoaneeLoanDetails = ({data, isLoading,loaneeDocs ,isViewingOrganizationLoa
             <div className={` md:max-h-[60vh]  ${styles.container}  `}>
                 <div className={` h-fit py-2 text-[18px] ${inter500.className}   `}>Document</div>
 
-                { loaneeDocs?.length  && loaneeDocs?.length > 0 ?
-                    <ViewDocument listOfDocument={loaneeDocs}/>
+                { data?.loanTermsAndCondition?.length  && data?.loanTermsAndCondition?.length > 0 ?
+                    <ViewDocument listOfDocument={documentData}/>
                 :
                     <p>No document available</p>
                 }
