@@ -29,7 +29,7 @@ const DetailsComponent = () => {
   ]
 
     const cohort2: {name: string, value: string, valueType: 'percentage'| 'digit'| 'currency' | 'tenor' | 'years', id:string}[] = [
-        {name: 'Total loanees', value: cohortDetails?.data?.numberOfLoanees ? cohortDetails?.data?.tuitionAmount : 0 , valueType: 'digit', id: 'totalLoanees'},
+        {name: 'Total number of loanee', value: cohortDetails?.data?.numberOfLoanees ? cohortDetails?.data?.numberOfLoanees : 0 , valueType: 'digit', id: 'totalLoanees'},
         {name: 'Total dropouts', value: cohortDetails?.data?.numberOfDropout ? cohortDetails?.data?.numberOfDropout : 0 , valueType: 'digit', id: 'totalDropouts'},
         {name: 'Total employed', value: cohortDetails?.data?.numberEmployed ? cohortDetails?.data?.numberEmployed : 0 , valueType: 'digit', id: 'totalEmployed'},
         {name: 'Employment rate', value: cohortDetails?.data?.totalAmountRepaid ? cohortDetails?.data?.totalAmountRepaid : 0 , valueType: 'percentage', id: 'employmentRate'},

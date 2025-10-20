@@ -15,7 +15,7 @@ import TableModal from "@/reuseable/modals/TableModal";
 import {useToast} from "@/hooks/use-toast";
 import DeleteModal from "@/reuseable/modals/Delete-modal";
 import DeleteCohort from "@/reuseable/details/DeleteCohort";
-import { setCreateCohortField } from "@/redux/slice/create/cohortSlice";
+import { setCreateCohortField,resetCreateCohortField } from "@/redux/slice/create/cohortSlice";
 import EditCohortForm from '@/components/cohort/CreateCohort';
 import { LoanBreakDowns } from '@/components/cohort/CreateCohort';
 
@@ -162,6 +162,7 @@ const CohortDetails = () => {
                 isOpen={openEditModal}
                 closeModal={() => {
                     setOpenEditModal(false)
+                    store.dispatch(resetCreateCohortField())
                 }}
                 closeOnOverlayClick={true}
                 headerTitle='Edit Cohort'
