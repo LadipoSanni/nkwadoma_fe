@@ -11,7 +11,7 @@ import CustomSelect from '@/reuseable/Input/Custom-select';
 import {useCreateProgramMutation} from "@/service/admin/program_query";
 import CustomSelectObj from '@/reuseable/Input/Custom-select-obj';
 import  QuillFieldEditor  from '@/reuseable/textArea/Quill-field';
-// import FormikCustomQuillField from "@/reuseable/textArea/FormikCustomQuillField";
+import { formatPlaceName } from "@/utils/GlobalMethods";
 
 
 type Props = {
@@ -56,16 +56,16 @@ function CreateProgram({setIsOpen}:Props) {
         programName:Yup.string()
        .trim()
       //  .matches(/^[a-zA-Z\s_-]+$/, 'Program name can only contain letters, underscores, hyphens, and spaces.')
-      .max(200, "Program name cannot be more than 200 characters.")
-      .test(
-        "valid-name",
-        "Program name can include at least a letter and then numbers, hyphens and underscores.",
-        (value = "") => {
-        const regex = /^[a-zA-Z0-9\s-_]*$/;
-        const onlyNumbersOrSpecials = /^[^a-zA-Z]*$/;
-        return regex.test(value) && !onlyNumbersOrSpecials.test(value);
-        }
-      )
+      // .max(200, "Program name cannot be more than 200 characters.")
+      // .test(
+      //   "valid-name",
+      //   "Program name can include at least a letter and then numbers, hyphens and underscores.",
+      //   (value = "") => {
+      //   const regex = /^[a-zA-Z0-9\s-_]*$/;
+      //   const onlyNumbersOrSpecials = /^[^a-zA-Z]*$/;
+      //   return regex.test(value) && !onlyNumbersOrSpecials.test(value);
+      //   }
+      // )
       .required('Program name is required'),
       deliveryType:Yup.string()
       .required('Program delivery type is required'),
@@ -164,18 +164,17 @@ function CreateProgram({setIsOpen}:Props) {
                   name="programName"
                   className="w-full p-3 border rounded focus:outline-none mt-2 text-sm"
                   placeholder="Enter program name"
-                  // onChange={(e: React.ChangeEvent<HTMLInputElement>) => { 
-                  //   const value = e.target.value; const regex = /^[a-zA-Z\s_-]*$/; 
-                  //   if (regex.test(value)) { 
-                  //     setFieldValue("programName", value); } }}
-                  // onChange={(e: React.ChangeEvent<HTMLInputElement>) => { 
-                  //   const regex = /^[a-zA-Z0-9\s_'-.,&/():]*$/;
-                  //  const onlyNumbersOrSpecials = /^[^a-zA-Z]*$/;    
-                  //   const value = e.target.value;
-                  //   if (regex.test(value) && !onlyNumbersOrSpecials.test(value)) { 
-                  //     setFieldValue("programName", value); 
-                  //   }
-                  // }}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                      const value = e.target.value;
+                      const formattedValue = formatPlaceName(value,true);
+                      const cleanedValue = formattedValue.replace(/[^a-zA-Z0-9'_&\-\s]/g, '');
+                      if (cleanedValue.length > 0 && !/^[a-zA-Z0-9]/.test(cleanedValue)) {  
+                          setFieldValue("programName", cleanedValue.substring(1));
+                      } else {
+                          setFieldValue("programName", cleanedValue);
+                          
+                      }
+                  }}
                   /> 
                   {
                     errors.programName && touched.programName &&  (
@@ -192,15 +191,6 @@ function CreateProgram({setIsOpen}:Props) {
                   <div >
                     <Label htmlFor="programDeliveryType">Program delivery type</Label>
                   
-                    {/* <CustomSelect
-                     triggerId='deliveryTypeTriggerId'
-                      id="deliveryTypeSelect"
-                      selectContent={programDeliveryTypes}
-                      value={values.deliveryType} 
-                      onChange={(value) => setFieldValue("deliveryType", value)} 
-                      name="deliveryType"
-                      placeHolder='Select a program delivery type'
-                    /> */}
                      <CustomSelectObj
                      triggerId='deliveryTypeTriggerId'
                       id="deliveryTypeSelect"
@@ -274,20 +264,7 @@ function CreateProgram({setIsOpen}:Props) {
                       placeHolder='Select a duration'
                      
                     />
-                      {/* <Field
-                        id="duration"
-                        name="programDuration"
-                        // type="number"
-                        className="w-full p-3 md:h-[3.2rem] border rounded focus:outline-none mt-2 text-sm"
-                        placeholder="Enter program duration"
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                          const value = e.target.value;
-                          if (/^(?!0)\d*$/.test(value)) { 
-                              setFieldValue("programDuration", value); 
-                          }
-                      }}
-                        />  */}
-
+                      
                      {
                     errors.programDuration && touched.programDuration &&  (
                        <ErrorMessage
@@ -302,46 +279,14 @@ function CreateProgram({setIsOpen}:Props) {
                 </div>
                 <div>
                   <Label htmlFor="programDescription">Program description</Label>
-                  {/* <Field
-                  as="textarea"
-                  id="programDescription"
-                  name="programDescription"
-                  className="w-full p-3 border rounded focus:outline-none mt-2 resize-none text-sm"
-                  placeholder="Enter program description"
-                  rows={4}
-                  maxLength={maxChars}
-                  onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => { 
-                    const value = e.target.value; 
-                    if (value.length <= maxChars) { 
-                      setFieldValue("programDescription", value); } }} 
-                  onPaste={(e: React.ClipboardEvent<HTMLTextAreaElement>) => { 
-                    const paste = e.clipboardData.getData('text'); 
-                    if (paste.length + values.programDescription.length > maxChars) { 
-                      e.preventDefault(); 
-                      setError('Program description must be 2500 characters or less'); } }}
-                  />  */}
+                  
                    <QuillFieldEditor
                       name="programDescription"
                       errorMessage="Program description must be 2500 characters or less"
                       errors={errors}
                       touched={touched}
                      />
-                     {/* <Field
-                      name="programDescription"
-                      component={FormikCustomQuillField}
-                      maximumDescription={2500}
-                      placeholder={"Enter program description..."}
-                     /> */}
-                  {/* {
-                    errors.programDescription && touched.programDescription &&  (
-                       <ErrorMessage
-                    name="programDescription"
-                    component="div"
-                    id='programDescriptionError'
-                    className="text-red-500 text-sm"
-                    />
-                    )
-                   } */}
+                    
                 </div>
                 <div className='md:flex gap-4 justify-end mt-2 mb-4 md:mb-0'>
                 <Button 

@@ -1,5 +1,17 @@
 
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { LoanBreakDowns } from '@/components/cohort/CreateCohort';
+
+interface CreateCohortField{
+  id: string,
+  name: string,
+  programId: string,
+  startDate: string,
+  cohortDescription: string,
+  tuitionAmount : string,
+  programName : string,
+  loanBreakDowns: LoanBreakDowns[]
+}
 
 interface CohortState {
   selectedProgram: string | null;
@@ -9,7 +21,9 @@ interface CohortState {
   selectedCohortInOrganization: {name: string, id: string} | undefined ;
   notificationCohortId: string
    backOfficeAdmin: string
-  selectedCohortInOrganizationType: string
+  selectedCohortInOrganizationType: string;
+  createCohortField: CreateCohortField | null;
+  loanBreakDowns: LoanBreakDowns[] | null
 }
 
 const initialState: CohortState = {
@@ -21,6 +35,8 @@ const initialState: CohortState = {
   notificationCohortId: "",
   backOfficeAdmin: "",
   selectedCohortInOrganizationType: '',
+  createCohortField: null,
+  loanBreakDowns: null
 };
 
 const cohortSlice = createSlice({
@@ -60,10 +76,28 @@ const cohortSlice = createSlice({
   },
     setSelectedCohortInOrganizationType: (state, action: PayloadAction<string>) => {
       state.selectedCohortInOrganizationType = action.payload;
-    }
-  
+    },
+    setCreateCohortField: (state, action: PayloadAction<CreateCohortField>) => {
+      state.createCohortField = action.payload;
+    },
+    setLoanBreakdown: (state, action: PayloadAction<LoanBreakDowns[]>) => {
+      state.loanBreakDowns = action.payload;
+    },
+    resetCreateCohortField: (state) => {
+      state.createCohortField = null
+      state.loanBreakDowns = null
+    },
   },
+
 });
 
-export const {resetSelectedCohortInOrganization, resetNotificationCohortId,setNotificationCohortId,setSelectedCohortInOrganizationType, setSelectedProgram, setSelectedCohortInOrganization, setUploadedUrl,setcohortStatusTab,resetcohortId,setcohortId,setBackOfficeAdmin} = cohortSlice.actions;
+export const {resetSelectedCohortInOrganization, 
+  resetNotificationCohortId,setNotificationCohortId,
+  setSelectedCohortInOrganizationType, 
+  setSelectedProgram, setSelectedCohortInOrganization, 
+  setUploadedUrl,setcohortStatusTab,
+  resetcohortId,setcohortId,setBackOfficeAdmin, 
+  setCreateCohortField,resetCreateCohortField,
+  setLoanBreakdown
+} = cohortSlice.actions;
 export default cohortSlice.reducer;

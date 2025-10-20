@@ -92,7 +92,7 @@ export const MultiSelectContent = ({
               >
                 <CheckIcon className="h-4 w-4" />
               </div>
-              <span className="font-medium">(Select all)</span>
+              <span className="font-medium">Select all</span>
             </CommandItem>
           )}
           

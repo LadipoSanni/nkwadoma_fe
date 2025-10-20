@@ -26,7 +26,7 @@ import SkeletonForDetailPage from "@/reuseable/Skeleton-loading-state/Skeleton-f
 import { useToast } from "@/hooks/use-toast";
 import {useAppSelector} from "@/redux/store";
 import styles from "../../index.module.css"
-
+import SafeHTMLRenderer from "@/reuseable/display/Safe-html-Renderer";
 
 
 interface ApiError {
@@ -163,8 +163,6 @@ const ProgramDetails = () => {
         setIsOpen(true)
     }
 
-
-
     return (
         <div 
         className={`md:max-h-[70vh]  ${styles.container}`}
@@ -188,10 +186,7 @@ const ProgramDetails = () => {
                                     {progamDetail.name}
                                 </h1>
                                 <div className={'grid gap-5'} id={`tagButtonDiv`}>
-                                    <p id={`details`}
-                                       className={'text-sm font-normal w-[351px] text-grey400 break-words scrollbar-width:none overflow-y-auto max-h-40'}
-                                       dangerouslySetInnerHTML={{__html: progamDetail.programDescription}}
-                                       />
+                                <SafeHTMLRenderer html={progamDetail.programDescription} />
                                       
                                     <div id={`details`} data-testid="details"
                                          className="grid md:grid-cols-3 grid-cols-2 gap-3 w-fit">
