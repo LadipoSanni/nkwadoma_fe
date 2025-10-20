@@ -21,6 +21,8 @@ const customJestConfig = {
         "\\.(css|less|sass|scss)$": "identity-obj-proxy",
         "^react-quill-new$": "<rootDir>/__mocks__/react-quill-new.js", 
       },
+    testPathIgnorePatterns: ["/node_modules/", "/.next/"],
+    modulePathIgnorePatterns: ["/.next/"],
     
 };
 
