@@ -1,9 +1,9 @@
 'use client'
 import Details from '@/components/loanee-my-profile/Details';
-import React,{useEffect} from 'react';
+import React from 'react';
 import styles from '@/components/loanee-my-profile/index.module.css'
 import {inter, inter500} from '@/app/fonts';
-import {useAppSelector,store} from "@/redux/store";
+import {useAppSelector} from "@/redux/store";
 import {useGetCohortDetailsBreakdownQuery, useViewCohortDetailsQuery} from "@/service/admin/cohort_query";
 import dayjs from "dayjs";
 import {capitalizeFirstLetters} from "@/utils/GlobalMethods";
