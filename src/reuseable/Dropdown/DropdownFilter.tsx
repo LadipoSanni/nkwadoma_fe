@@ -20,15 +20,11 @@ interface Props {
     placeholder: string;
     clearFilter: () => void;
     sx?: string;
+    emptyState?: string;
 
 }
 
-const DropdownFilter = ({title,sx, handleFilter,clearFilter,setSelectItem,items,selectedItem, placeholder}: Props) => {
-    // const [dropdownOpen, setDropdownOpen] = useState(false);
-    //
-    // const handleDropdownOpen = () => {
-    //     setDropdownOpen(!dropdownOpen);
-    // };
+const DropdownFilter = ({title,sx, handleFilter,clearFilter,setSelectItem,items,emptyState,selectedItem, placeholder}: Props) => {
 
 
 
@@ -49,13 +45,19 @@ const DropdownFilter = ({title,sx, handleFilter,clearFilter,setSelectItem,items,
                 </MenubarTrigger>
                 <MenubarContent className={` w-[23em] sm:w-[20em] md:w-[23em] md:px-4 px-3 py-4 `}>
                     <p className={`${inter600.className} text-[14px] mb-4 `}>{title}</p>
-                    <div className={` max-h-[220px] ${styles.container}  h-fit ${sx ? `${sx}` : `flex flex-wrap`}  gap-3  w-full mb-10`}>
-                        {items?.map((month, index) => (
-                            <div id={'item:'+ index} key={'key: '+ month} onClick={() => {setSelectItem(month)}} className={` ${inter500.className} ${selectedItem === month ? 'bg-[#E6F1FF] text-[#142854] md:bg-[#E6F1FF] md:text-[#142854] '  : 'bg-[#F6F6F6] text-[#6A6B6A]'} w-fit h-fit rounded-full text-[13px]  py-1 px-2  hover:bg-[#E6F1FF] hover:text-[#142854] `}>
-                                {month}
-                            </div>
-                         ))}
-                    </div>
+                    {items?.length > 0 ?
+                        <div className={` max-h-[220px] ${styles.container}  h-fit ${sx ? `${sx}` : `flex flex-wrap`}  gap-3  w-full mb-10`}>
+                            {items?.map((month, index) => (
+                                <div id={'item:'+ index} key={'key: '+ month} onClick={() => {setSelectItem(month)}} className={` ${inter500.className} ${selectedItem === month ? 'bg-[#E6F1FF] text-[#142854] md:bg-[#E6F1FF] md:text-[#142854] '  : 'bg-[#F6F6F6] text-[#6A6B6A]'} w-fit h-fit rounded-full text-[13px]  py-1 px-2  hover:bg-[#E6F1FF] hover:text-[#142854] `}>
+                                    {month}
+                                </div>
+                            ))}
+                        </div>
+                        :
+                        <div>
+                            {emptyState}
+                        </div>
+                    }
                     <div className={` h-fit w-full flex justify-between `}>
                         <MenubarItem disabled={!selectedItem} id={`clear${title}FilterButton`} onClick={clearFilter} className={`${inter700.className}   rounded-md w-fit h-fit px-4 py-2 border ${selectedItem ? 'border-meedlBlue text-meedlBlue hover:!bg-[#E8EAEE] hover:!text-meedlBlue ' : 'border-[#ECECEC] text-[#A8A8A8] hover:!border-[#ECECEC] hover:!text-[#A8A8A8] '}   text-[14px]  `} >Clear filter</MenubarItem>
                         <MenubarItem disabled={!selectedItem} onClick={() => {handleFilter(selectedItem)}} id={`${title}FilterButton`} className={`${inter700.className}   rounded-md w-fit h-fit px-4 py-2  text-[14px] ${selectedItem  ? 'bg-meedlBlue hover:!text-white hover:!bg-[#435376] ' : 'bg-[#D7D7D7] hover:!text-white hover:!bg-[#D7D7D7]'}   text-white  `}  >Apply</MenubarItem>

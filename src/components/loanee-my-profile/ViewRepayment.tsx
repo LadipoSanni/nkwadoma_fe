@@ -225,6 +225,7 @@ const ViewRepayment = ({loanId}: Props) => {
                             clearFilter={clearYearFilter}
                             placeholder={'Year'}
                             sx={'grid grid-cols-5'}
+                            emptyState={'No repayment has been made'}
                         />
                     </div>
                 </div>
