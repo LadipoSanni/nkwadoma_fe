@@ -72,7 +72,7 @@ export const MultiSelectContent = ({
               key="all"
               value="all"
               onMouseDown={handleItemClick(onToggleAll)}
-              className="cursor-pointer"
+              className="cursor-pointer border-solid border-b-[1px]  rounded-b-none"
             >
               <div
                 className={cn(
@@ -84,7 +84,7 @@ export const MultiSelectContent = ({
               >
                 <CheckIcon className="h-4 w-4" />
               </div>
-              <span>(Select All)</span>
+              <span>Select All</span>
             </CommandItem>
           )}
           {options.map((option) => {

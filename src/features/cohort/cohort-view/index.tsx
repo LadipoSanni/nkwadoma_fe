@@ -17,8 +17,8 @@ import * as Yup from "yup";
 import loadingLoop from "@iconify/icons-line-md/loading-loop";
 import {Icon} from "@iconify/react";
 import CohortTabs from '../../../components/cohort/CohortTabs'
-import CreateCohort from "@/reuseable/modals/CreateCohort";
-// import CreateCohort from '@/components/cohort/CreateCohort'
+// import CreateCohort from "@/reuseable/modals/CreateCohort";
+import CreateCohort from '@/components/cohort/CreateCohort'
 import {inter} from '@/app/fonts'
 import {
     useGetAllCohortByAParticularProgramQuery,
@@ -338,7 +338,7 @@ const CohortView = () => {
             <div id='cohortName'
                  className={` ${["PORTFOLIO_MANAGER", "MEEDL_SUPER_ADMIN", "MEEDL_ADMIN", "MEEDL_ASSOCIATE"].includes(user_role || "") ? "" : "md:px-6 px-4"}`}>
                 <div id='buttonFilterCreate'
-                     className={` ${["PORTFOLIO_MANAGER", "MEEDL_SUPER_ADMIN", "MEEDL_ADMIN", "MEEDL_ASSOCIATE"].includes(user_role || "") ? "md:flex top-2" : "flex top-6  bottom-2"} justify-between items-center z-50 relative  ${inter.className} `}>
+                     className={` ${["PORTFOLIO_MANAGER", "MEEDL_SUPER_ADMIN", "MEEDL_ADMIN", "MEEDL_ASSOCIATE"].includes(user_role || "") ? "md:flex top-2" : "md:flex top-6  bottom-2"} justify-between items-center z-50 relative  ${inter.className} `}>
                     <div id='buttonFilter' className='md:flex gap-4 w-full'>
                         <div className='relative '>
                           <span className="absolute inset-y-0 left-0 flex items-center pl-3">
@@ -353,7 +353,7 @@ const CohortView = () => {
                             />
                         </div>
                         {!["PORTFOLIO_MANAGER", "MEEDL_SUPER_ADMIN", "MEEDL_ADMIN", "MEEDL_ASSOCIATE"].includes(user_role || "") ?
-                            <div className='z-10'>
+                            <div className='z-10 mt-4 md:mt-0'>
                                 <DropdownMenu onOpenChange={toggleDropdown}>
                                     <DropdownMenuTrigger asChild>
                                         <Button id='cohortInProgram' variant={'default'}
@@ -550,6 +550,7 @@ const CohortView = () => {
                     headerTitle={["PORTFOLIO_MANAGER", "MEEDL_SUPER_ADMIN", "MEEDL_ADMIN", "MEEDL_ASSOCIATE"].includes(user_role || "") ? "Add cohort" : 'Create cohort'}
                     className='pb-1'
                     icon={Cross2Icon}
+                   
                 >
                     {["PORTFOLIO_MANAGER", "MEEDL_SUPER_ADMIN", "MEEDL_ADMIN", "MEEDL_ASSOCIATE"].includes(user_role || "") ?
                         <AddCohortInAnOrganization setIsOpen={setIsOpen} organizationId={organizationId}

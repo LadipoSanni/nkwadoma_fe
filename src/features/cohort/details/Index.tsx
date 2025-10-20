@@ -1,21 +1,23 @@
 'use client'
 import BackButton from '@/components/back-button';
-import React from 'react';
+import React,{useEffect,useState} from 'react';
 import {useRouter} from "next/navigation";
 import CircleThreeDot from "@/reuseable/Dropdown/CircleThreeDot";
 import {ThreeDotTriggerDropDownItemsProps} from "@/types/Component.type";
 import UnderlineTab from "@/components/UnderlineTab";
 import DetailsComponent from "@/features/cohort/details/DetailsComponent";
-import {useAppSelector} from "@/redux/store";
+import {useAppSelector,store } from "@/redux/store";
 import {useDeleteCohortMutation, useViewCohortDetailsQuery} from "@/service/admin/cohort_query";
 import {LoaneeInCohortView} from "@/features/cohort/cohort-details/LoaneeInCohortView/Index";
-import EditCohortForm from "@/components/cohort/EditCohortForm";
+// import EditCohortForm from "@/components/cohort/EditCohortForm";
 import {Cross2Icon} from "@radix-ui/react-icons";
 import TableModal from "@/reuseable/modals/TableModal";
 import {useToast} from "@/hooks/use-toast";
 import DeleteModal from "@/reuseable/modals/Delete-modal";
 import DeleteCohort from "@/reuseable/details/DeleteCohort";
-
+import { setCreateCohortField } from "@/redux/slice/create/cohortSlice";
+import EditCohortForm from '@/components/cohort/CreateCohort';
+import { LoanBreakDowns } from '@/components/cohort/CreateCohort';
 
 
 
@@ -23,45 +25,68 @@ const CohortDetails = () => {
     const router = useRouter();
     const cohortId = useAppSelector(store => store?.cohort?.setCohortId)
     const selectedCohortInOrganizationType = useAppSelector(store => store?.cohort?.selectedCohortInOrganizationType)
+    const [loanBreakdowns, setBreakdowns] = useState<LoanBreakDowns[]>([])
     const [deleteItem,{isLoading:isDeleteLoading}] = useDeleteCohortMutation()
     const {data: cohortDetails} = useViewCohortDetailsQuery({
         cohortId: cohortId
     }, {refetchOnMountOrArgChange: true});
     const {toast} = useToast()
 
+
+     useEffect(() => {
+           const breakdowns = cohortDetails?.data.loanBreakdowns
+           const formattedBreakdowns = breakdowns?.map((item: { itemName: string; itemAmount: number; currency: string }) => ({
+            ...item,
+            itemAmount: String(item.itemAmount)
+        })) || [];
+        setBreakdowns(formattedBreakdowns)
+        },[cohortDetails])
+
     const [openEditModal, setOpenEditModal] = React.useState(false);
     const [openDeleteModal, setOpenDeleteModal] = React.useState(false);
-    const [details, setDetails] = React.useState({
-        id: "",
-        programId: "",
-        organizationId: "",
-        cohortDescription: "",
-        name: "",
-        activationStatus: "",
-        cohortStatus: "",
-        tuitionAmount: 0,
-        totalCohortFee: 0,
-        imageUrl: "",
-        startDate: "",
-        expectedEndDate: "",
-    })
+    // const [details, setDetails] = React.useState({
+    //     id: "",
+    //     programId: "",
+    //     organizationId: "",
+    //     cohortDescription: "",
+    //     name: "",
+    //     activationStatus: "",
+    //     cohortStatus: "",
+    //     tuitionAmount: 0,
+    //     totalCohortFee: 0,
+    //     imageUrl: "",
+    //     startDate: "",
+    //     expectedEndDate: "",
+    // })
 
     const editCohort = ( ) => {
         setOpenEditModal(true);
-        setDetails({
-            id: cohortDetails?.data?.id || "",
-            programId: cohortDetails?.data?.programId || "",
-            organizationId: cohortDetails?.data?.organizationId || "",
-            cohortDescription: cohortDetails?.data?.cohortDescription || "",
-            name: cohortDetails?.data?.name || "",
-            activationStatus: cohortDetails?.data?.activationStatus || "",
-            cohortStatus: cohortDetails?.data?.cohortStatus || "",
-            tuitionAmount: cohortDetails?.data?.tuitionAmount || "",
-            totalCohortFee: cohortDetails?.data?.totalCohortFee || "",
-            imageUrl: cohortDetails?.data?.imageUrl || "",
-            startDate: cohortDetails?.data?.startDate || "",
-            expectedEndDate: cohortDetails?.data?.expectedEndDate || "",
-        })
+        // setDetails({
+        //     id: cohortDetails?.data?.id || "",
+        //     programId: cohortDetails?.data?.programId || "",
+        //     organizationId: cohortDetails?.data?.organizationId || "",
+        //     cohortDescription: cohortDetails?.data?.cohortDescription || "",
+        //     name: cohortDetails?.data?.name || "",
+        //     activationStatus: cohortDetails?.data?.activationStatus || "",
+        //     cohortStatus: cohortDetails?.data?.cohortStatus || "",
+        //     tuitionAmount: cohortDetails?.data?.tuitionAmount || "",
+        //     totalCohortFee: cohortDetails?.data?.totalCohortFee || "",
+        //     imageUrl: cohortDetails?.data?.imageUrl || "",
+        //     startDate: cohortDetails?.data?.startDate || "",
+        //     expectedEndDate: cohortDetails?.data?.expectedEndDate || "",
+        // })
+
+        const details = {
+              id: cohortDetails?.data?.id ,
+              name: cohortDetails?.data?.name,
+              programId: cohortDetails?.data?.programId,
+              startDate: cohortDetails?.data?.startDate,
+              cohortDescription: cohortDetails?.data?.cohortDescription,
+              tuitionAmount : String(cohortDetails?.data?.tuitionAmount),
+              loanBreakDowns: loanBreakdowns || [],
+              programName: ""
+        }
+        store.dispatch(setCreateCohortField(details))
     }
 
 
@@ -144,7 +169,8 @@ const CohortDetails = () => {
                 icon={Cross2Icon}
 
             >
-                <EditCohortForm setIsOpen={()=>{setOpenEditModal(false)}} cohortDetail={details}/>
+                {/* <EditCohortForm setIsOpen={()=>{setOpenEditModal(false)}} cohortDetail={details}/> */}
+                <EditCohortForm setIsOpen={()=>{setOpenEditModal(false)}} isEdit={true}/>
             </TableModal>
             <DeleteModal
                 isOpen={openDeleteModal}

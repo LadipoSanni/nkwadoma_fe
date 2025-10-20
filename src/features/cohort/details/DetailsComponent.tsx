@@ -1,16 +1,15 @@
 'use client'
 import Details from '@/components/loanee-my-profile/Details';
-import React from 'react';
+import React,{useEffect} from 'react';
 import styles from '@/components/loanee-my-profile/index.module.css'
 import {inter, inter500} from '@/app/fonts';
-import {useAppSelector} from "@/redux/store";
+import {useAppSelector,store} from "@/redux/store";
 import {useGetCohortDetailsBreakdownQuery, useViewCohortDetailsQuery} from "@/service/admin/cohort_query";
 import dayjs from "dayjs";
 import {capitalizeFirstLetters} from "@/utils/GlobalMethods";
 import {CohortItems} from "@/types/loan/loan-request.type";
-import QuillRenderer from '@/components/RenderDangerousHtml';
-
-
+// import QuillRenderer from '@/components/RenderDangerousHtml';
+import SafeHTMLRenderer from "@/reuseable/display/Safe-html-Renderer";
 
 const DetailsComponent = () => {
     const cohortId = useAppSelector(store => store?.cohort?.setCohortId)
@@ -19,7 +18,7 @@ const DetailsComponent = () => {
     }, {refetchOnMountOrArgChange: true});
     const {data: cohortBreakDown} = useGetCohortDetailsBreakdownQuery({cohortId: cohortId}, {skip: !cohortId})
     const selectedCohortInOrganizationType = useAppSelector(store => store?.cohort?.selectedCohortInOrganizationType)
-
+    
 
     const cohort: {name: string, value: string, valueType: 'percentage'| 'digit'| 'currency' | 'tenor' | 'years', id:string}[] = [
         {name: 'Total amount disbursed', value: cohortDetails?.data?.amountReceived ? cohortDetails?.data?.amountReceived : 0 , valueType: 'currency', id: 'totalAmount'},
@@ -39,8 +38,9 @@ const DetailsComponent = () => {
 
     const cohort3 = [
         {title: 'Description', id: 'programDiscription', value:
-            <div>
-               <QuillRenderer sx={` ${inter500.className} text-[#212221] text-[14px] `} html={cohortDetails?.data?.cohortDescription || ""}/>
+            <div className={`${inter500.className}`}>
+               {/* <QuillRenderer sx={` ${inter500.className} text-[#212221] text-[14px] `} html={cohortDetails?.data?.cohortDescription || ""}/> */}
+                 { cohortDetails?.data?.cohortDescription? <SafeHTMLRenderer html={cohortDetails?.data?.cohortDescription} /> : "Not provided"}
             </div>
         },
         {title: 'Program', id:'programname', value: <span className={` text-meedlBlue bg-[#F3F8FF] rounded-full w-fit h-fit  max-w-[100%] px-4 py-2  `}>{cohortDetails?.data?.programName}</span>},
