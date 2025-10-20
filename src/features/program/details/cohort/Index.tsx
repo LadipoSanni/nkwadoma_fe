@@ -5,7 +5,6 @@ import SearchEmptyState from "@/reuseable/emptyStates/SearchEmptyState";
 import {MdOutlinePerson, MdSearch} from "react-icons/md";
 import {formatAmount} from "@/utils/Format";
 import {useAppSelector} from "@/redux/store";
-import CreateCohortInProgram from "@/components/program/create-cohort/Index";
 import {useGetAllCohortByAParticularProgramQuery} from "@/service/admin/cohort_query";
 import { store } from '@/redux/store'
 import {setcohortId} from '@/redux/slice/create/cohortSlice'
