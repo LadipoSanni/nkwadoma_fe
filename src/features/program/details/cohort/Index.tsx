@@ -19,6 +19,7 @@ import Modal from '@/reuseable/modals/TableModal';
 import {Cross2Icon} from "@radix-ui/react-icons";
 import { Button } from '@/components/ui/button';
 import { inter } from '@/app/fonts';
+import CreateCohort from '@/components/cohort/CreateCohort';
 
 interface loanDetails {
     totalAmountRepaid?: number;
@@ -194,7 +195,7 @@ const ProgramCohortDetails= ()=> {
                 icon={Cross2Icon}
                 headerTitle='Create cohort'
                  >
-                 <CreateCohortInProgram  setIsOpen={setIsOpen}/>
+                 <CreateCohort setIsOpen={setIsOpen}/>
                  </Modal>
                 </div>
             </div>

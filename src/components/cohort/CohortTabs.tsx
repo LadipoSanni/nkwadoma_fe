@@ -18,9 +18,11 @@ import { store,useAppSelector } from '@/redux/store'
 import {setcohortStatusTab, setcohortId, setSelectedCohortInOrganization, setSelectedCohortInOrganizationType} from '@/redux/slice/create/cohortSlice'
 import {capitalizeFirstLetters} from "@/utils/GlobalMethods";
 import { setcohortOrProgramRoute } from '@/redux/slice/program/programSlice';
-import { resetNotificationCohortId,setCreateCohortField,resetCreateCohortField } from '@/redux/slice/create/cohortSlice';
+import { resetNotificationCohortId,setCreateCohortField,resetCreateCohortField,setTotalNumberOfLoanee  } from '@/redux/slice/create/cohortSlice';
 import EditCohort from './CreateCohort'
 import { LoanBreakDowns } from './CreateCohort'
+import DeletionRestrictionMessageProps from './DeletionRestrictionMessageProps'
+import { resetCurrentProgramId } from '@/redux/slice/program/programSlice'
 
 interface allCohortsProps extends TableRowData {
   name:string,
@@ -73,12 +75,16 @@ const CohortTabs = (
   const [cohortId, setCohortId] =  React.useState("")
   const [isOpen, setIsOpen] = React.useState(false);
  const organizationTabStatus = useAppSelector(store => store?.organization?.organizationDetailTabStatus)
-
+ const totalNumberOfLoanee = useAppSelector(store => store?.cohort?.numberOfLoanees)
+  const currentProgramId = useAppSelector(state => (state.program.currentProgramId))
     // const cohortTab = useAppSelector(state => state?.cohort?.cohortStatusTab)
 
   useEffect(() => {
+       if(currentProgramId){
+         store.dispatch(resetCurrentProgramId())
+       }
         store.dispatch(resetNotificationCohortId())
-     })
+     },[currentProgramId])
 
   const router = useRouter()
 
@@ -156,6 +162,11 @@ const CohortTabs = (
       ...item,
       itemAmount: String(item.itemAmount)
   })) || [];
+    
+  const totalNumberOfLoanee = row?.numberOfLoanees as number
+   store.dispatch(setTotalNumberOfLoanee(totalNumberOfLoanee))
+   console.log(totalNumberOfLoanee )
+   
 
     const cohortDetails = {
              id: row?.id as string ,
@@ -184,7 +195,7 @@ const CohortTabs = (
       setCohortId(String(row.id))
       store.dispatch(setCreateCohortField(cohortDetails))
       if(cohortId){
-        setTimeout(()=>{ setIsOpen(true)},800)
+        setTimeout(()=>{setIsOpen(true)},800)
       }
       setTimeout(()=>{ setIsOpen(true)},800)
       
@@ -311,6 +322,21 @@ const CohortTabs = (
         </TableModal>
         )
            }
+
+       { totalNumberOfLoanee > 0? 
+       <TableModal
+         isOpen={isDeleteOpen}
+          closeOnOverlayClick={true}
+          icon={Cross2Icon}
+          headerTitle=''
+          closeModal={() => {
+          setIsDeleteOpen(false)
+          }}
+           styeleType="styleBodyTwo"
+       >
+          <DeletionRestrictionMessageProps totalNumberOfLoanee={totalNumberOfLoanee}/>
+       </TableModal>
+        :
         <DeleteModal
         isOpen={isDeleteOpen}
         closeModal={() => {
@@ -333,7 +359,7 @@ const CohortTabs = (
         errorDeleting={errorDeleted}
         isLoading={isDeleteLoading}
         />
-        </DeleteModal>
+        </DeleteModal>}
 
       </div>
     </div>
