@@ -1,5 +1,5 @@
 'use client'
-import React from 'react';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {useViewAllLoanDisbursalQuery, useViewLoansTotalCalculationQuery} from "@/service/admin/loan/Loan-disbursal-api";
 import { capitalizeFirstLetters } from '@/utils/GlobalMethods';
 import {inter, inter600,inter700, inter500} from '@/app/fonts';
@@ -12,18 +12,51 @@ import styles from '@/features/Overview/index.module.css';
 import {formatAmount} from "@/utils/Format";
 
 const Myloans = () => {
-
+    const [pageNumber,setPageNumber] = useState<number>(0);
+    const [pageSize, setPageSize] = useState<number>(10);
     const request = {
-        pageSize: 400,
-        pageNumber: 0,
+        pageSize: pageSize,
+        pageNumber: pageNumber,
     }
     const router = useRouter()
-    const {data: loaneeLoans, isLoading  } = useViewAllLoanDisbursalQuery(request)
+    const observer = useRef<IntersectionObserver | null>(null);
+    const {data: loaneeLoans, isLoading , isFetching } = useViewAllLoanDisbursalQuery(request)
     const {data:loansTotalCalculations,isLoading:loansTotalCalculationsLoading } = useViewLoansTotalCalculationQuery({})
+    const [hasMore, setHasMore] = useState(true);
+
+    useEffect(() => {
+        if (loaneeLoans){
+            setHasMore(loaneeLoans?.data?.hasNextPage)
+            setPageSize(loaneeLoans?.data?.totalPages)
+        }
+    }, [loaneeLoans]);
     const handleClick = (loanId:string) => {
         store.dispatch(setClickedLoanId(loanId))
         router.push('/my-loan-profile');
     }
+
+    const lastCardObserver = useCallback(
+        (node: HTMLDivElement | null) => {
+            if (isLoading || isFetching) return;
+
+            if (observer.current) observer.current.disconnect();
+
+            observer.current = new IntersectionObserver(
+                entries => {
+                    if (entries[0].isIntersecting && hasMore) {
+                        setPageNumber(prevPage => prevPage + 1);
+                    }
+                },
+                {
+                    rootMargin: "100px",
+                }
+            );
+
+            if (node) observer.current.observe(node);
+        },
+        [isLoading, isFetching, hasMore]
+    );
+
     return (
         <div className={` w-full h-full grid gap-8 px-4 py-4  md:px-8 md:py-6`}>
             <div className={`w-full flex gap-4  md:gap-6 ${styles.overviewCard}   `}>
@@ -34,9 +67,9 @@ const Myloans = () => {
 
           <div className={`w-full h-full grid  gap-4 md:grid md:grid-cols-3 `}>
               {loaneeLoans?.data?.body?.map((loan:LoanType) => (
-                  <div  key={"key"+loan?.cohortName} className={` w-full h-fit pb-4 px-4  bg-[#F9F9F9] rounded-md `}>
+                  <div  key={"key"+loan?.cohortName} ref={lastCardObserver} className={` w-full h-fit pb-4 px-4  bg-[#F9F9F9] rounded-md `}>
                       <div className={` flex gap-2   py-4  `}>
-                          <div className="rounded-full bg-[#ECECEC] flex py-1 px-2  ">
+                          <div className="rounded-full aspect-square  bg-[#ECECEC] flex h-[2rem] w-[2rem]   ">
                                   {loan?.organizationName?.at(0)}
                           </div>
                           <p id={'loaneeProgram'} data-testid={'loaneeProgram'}
