@@ -8,9 +8,8 @@ import {useGetCohortDetailsBreakdownQuery, useViewCohortDetailsQuery} from "@/se
 import dayjs from "dayjs";
 import {capitalizeFirstLetters} from "@/utils/GlobalMethods";
 import {CohortItems} from "@/types/loan/loan-request.type";
-import QuillRenderer from '@/components/RenderDangerousHtml';
-
-
+// import QuillRenderer from '@/components/RenderDangerousHtml';
+import SafeHTMLRenderer from "@/reuseable/display/Safe-html-Renderer";
 
 const DetailsComponent = () => {
     const cohortId = useAppSelector(store => store?.cohort?.setCohortId)
@@ -19,7 +18,7 @@ const DetailsComponent = () => {
     }, {refetchOnMountOrArgChange: true});
     const {data: cohortBreakDown} = useGetCohortDetailsBreakdownQuery({cohortId: cohortId}, {skip: !cohortId})
     const selectedCohortInOrganizationType = useAppSelector(store => store?.cohort?.selectedCohortInOrganizationType)
-
+    
 
     const cohort: {name: string, value: string, valueType: 'percentage'| 'digit'| 'currency' | 'tenor' | 'years', id:string}[] = [
         {name: 'Total amount disbursed', value: cohortDetails?.data?.amountReceived ? cohortDetails?.data?.amountReceived : 0 , valueType: 'currency', id: 'totalAmount'},
@@ -30,7 +29,7 @@ const DetailsComponent = () => {
   ]
 
     const cohort2: {name: string, value: string, valueType: 'percentage'| 'digit'| 'currency' | 'tenor' | 'years', id:string}[] = [
-        {name: 'Total loanees', value: cohortDetails?.data?.numberOfLoanees ? cohortDetails?.data?.tuitionAmount : 0 , valueType: 'digit', id: 'totalLoanees'},
+        {name: 'Total number of loanee', value: cohortDetails?.data?.numberOfLoanees ? cohortDetails?.data?.numberOfLoanees : 0 , valueType: 'digit', id: 'totalLoanees'},
         {name: 'Total dropouts', value: cohortDetails?.data?.numberOfDropout ? cohortDetails?.data?.numberOfDropout : 0 , valueType: 'digit', id: 'totalDropouts'},
         {name: 'Total employed', value: cohortDetails?.data?.numberEmployed ? cohortDetails?.data?.numberEmployed : 0 , valueType: 'digit', id: 'totalEmployed'},
         {name: 'Employment rate', value: cohortDetails?.data?.totalAmountRepaid ? cohortDetails?.data?.totalAmountRepaid : 0 , valueType: 'percentage', id: 'employmentRate'},
@@ -39,8 +38,9 @@ const DetailsComponent = () => {
 
     const cohort3 = [
         {title: 'Description', id: 'programDiscription', value:
-            <div>
-               <QuillRenderer sx={` ${inter500.className} text-[#212221] text-[14px] `} html={cohortDetails?.data?.cohortDescription || ""}/>
+            <div className={`${inter500.className}`}>
+               {/* <QuillRenderer sx={` ${inter500.className} text-[#212221] text-[14px] `} html={cohortDetails?.data?.cohortDescription || ""}/> */}
+                 { cohortDetails?.data?.cohortDescription? <SafeHTMLRenderer html={cohortDetails?.data?.cohortDescription} /> : "Not provided"}
             </div>
         },
         {title: 'Program', id:'programname', value: <span className={` text-meedlBlue bg-[#F3F8FF] rounded-full w-fit h-fit  max-w-[100%] px-4 py-2  `}>{cohortDetails?.data?.programName}</span>},

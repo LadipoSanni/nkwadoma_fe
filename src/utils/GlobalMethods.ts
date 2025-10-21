@@ -86,19 +86,9 @@ export const isTokenExpired = (token?: string): boolean => {
 }
 
 export const validateName = (name: string) : boolean | string  => {
-    // const regex = /^[a-zA-Z][a-zA-Z0-9\s-_]*[a-zA-Z0-9]$/;
-    // if (/[\d ]/.test(name)) {
-    //   return  'name can not contain digit'
-    //
-    // }
-    // if (/[|#%^*@()?>,.{!$}[=+":<]/.test(name)|| /^--+$/.test(name)) {
-    //     return  'name can not contain special characters'
-    // }
-    // // /[|#%^*@()?>,.!${}[\]=+":<>]/
-    //
-    // return /[a-zA-Z& ]+$/.test(name)
+    
     const invalidChars = /[|#%^*@()?>,.!${}[\]=+":<>]/;
-    // Prevent consecutive dashes
+  
     const consecutiveDashes = /--+/;
 
     if (invalidChars.test(name)) {
@@ -110,19 +100,6 @@ export const validateName = (name: string) : boolean | string  => {
     }
 
     return true;
-
-    // if (/\d/.test(name)) {
-    //     return "Name cannot contain digits";
-    // }
-    //
-    // if (!/^[a-zA-Z& ]+$/.test(name)) {
-    //     return "Name can only contain letters, spaces, and &";
-    // }
-    //
-    // if (!/[a-zA-Z]$/.test(name.trim())) {
-    //     return "Name must end with a letter";
-    // }
-    // return true;
 
 }
 
@@ -336,6 +313,7 @@ export const getLoanStatusDisplay = (row: string): string => {
         return row; 
     }
   };
+  
   
   
   

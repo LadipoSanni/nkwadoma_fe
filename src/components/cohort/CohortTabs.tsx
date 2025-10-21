@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react'
 import { Tabs,TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-// import Tables from '@/reuseable/table/LoanProductTable'
 import Table  from '@/reuseable/table/Table'
 import { MdOutlinePeople } from 'react-icons/md'
 import { useRouter } from 'next/navigation'
@@ -9,11 +8,10 @@ import { formatMonthInDate } from '@/utils/Format'
 import TableModal from '@/reuseable/modals/TableModal'
 import DeleteModal from '@/reuseable/modals/Delete-modal'
 import { Cross2Icon } from "@radix-ui/react-icons";
-import EditCohortForm from './EditCohortForm'
+// import EditCohortForm from './EditCohortForm'
 import { inter } from '@/app/fonts'
 import DeleteCohort  from '@/reuseable/details/DeleteCohort'
 import { setItemSessionStorage } from '@/utils/storage';
-import { useGetCohortDetailsQuery } from '@/service/admin/cohort_query'
 import SearchEmptyState from '@/reuseable/emptyStates/SearchEmptyState'
 import { MdSearch } from 'react-icons/md'
 import { store,useAppSelector } from '@/redux/store'
@@ -23,6 +21,10 @@ import { setcohortOrProgramRoute } from '@/redux/slice/program/programSlice';
 import { resetNotificationCohortId } from '@/redux/slice/create/cohortSlice'
 import {setUnderlineTabCurrentTab} from "@/redux/slice/layout/adminLayout";
 
+import EditCohort from './CreateCohort'
+import { LoanBreakDowns } from './CreateCohort'
+import DeletionRestrictionMessageProps from './DeletionRestrictionMessageProps'
+import { resetCurrentProgramId } from '@/redux/slice/program/programSlice'
 
 interface allCohortsProps extends TableRowData {
   name:string,
@@ -75,47 +77,16 @@ const CohortTabs = (
   const [cohortId, setCohortId] =  React.useState("")
   const [isOpen, setIsOpen] = React.useState(false);
  const organizationTabStatus = useAppSelector(store => store?.organization?.organizationDetailTabStatus)
+ const totalNumberOfLoanee = useAppSelector(store => store?.cohort?.numberOfLoanees)
+  const currentProgramId = useAppSelector(state => (state.program.currentProgramId))
     // const cohortTab = useAppSelector(state => state?.cohort?.cohortStatusTab)
-    const [details, setDetails] = React.useState({
-    id: "",
-    programId: "",
-    organizationId: "",
-    cohortDescription: "",
-    name: "",
-    activationStatus: "",
-    cohortStatus: "",
-    tuitionAmount: 0,
-    totalCohortFee: 0,
-    imageUrl: "",
-    startDate: "",
-    expectedEndDate: "",
-})
 
-const {data: cohortDetails, isLoading: loading, refetch} = useGetCohortDetailsQuery({
-  cohortId: cohortId
-}, {skip: !cohortId,refetchOnMountOrArgChange: true});
-
-
-useEffect(() => {
-  if (cohortDetails && cohortDetails?.data) {
-      const details = cohortDetails.data
-      setDetails({
-          id: details?.id || "",
-          programId: details?.programId || "",
-          organizationId: details?.organizationId || "",
-          cohortDescription: details?.cohortDescription || "",
-          name: details?.name || "",
-          activationStatus: details?.activationStatus || "",
-          cohortStatus: details?.cohortStatus || "",
-          tuitionAmount: details?.tuitionAmount || "",
-          totalCohortFee: details?.totalCohortFee || "",
-          imageUrl: details?.imageUrl || "",
-          startDate: details?.startDate || "",
-          expectedEndDate: details?.expectedEndDate || "",
-      })
-  }
-  store.dispatch(resetNotificationCohortId())
-}, [cohortDetails]);
+  useEffect(() => {
+       if(currentProgramId){
+         store.dispatch(resetCurrentProgramId())
+       }
+        store.dispatch(resetNotificationCohortId())
+     },[currentProgramId])
 
   const router = useRouter()
 
@@ -188,6 +159,29 @@ useEffect(() => {
 
 
   const handleDropdownClick = async (id:string,row: rowData) => {
+    const breakdown = row?.loanBreakDowns as LoanBreakDowns[]
+
+    const formattedBreakdowns = breakdown?.map((item: LoanBreakDowns) => ({
+      ...item,
+      itemAmount: String(item.itemAmount)
+  })) || [];
+
+  const totalNumberOfLoanee = row?.numberOfLoanees as number
+   store.dispatch(setTotalNumberOfLoanee(totalNumberOfLoanee))
+   console.log(totalNumberOfLoanee )
+
+
+    const cohortDetails = {
+             id: row?.id as string ,
+            name: row?.name as string ,
+            programId: row?.programId as string,
+            startDate: row?.startDate as string ,
+            cohortDescription: row?.cohortDescription as string,
+            tuitionAmount : String(row?.tuitionAmount),
+            loanBreakDowns: formattedBreakdowns || [],
+            programName: ""
+        };
+
     if(id === "1") {
       setItemSessionStorage("programsId", String(row.programId))
       store.dispatch(setcohortId(String(row.id)))
@@ -202,9 +196,9 @@ useEffect(() => {
   }
     else if(id === "2") {
       setCohortId(String(row.id))
+      store.dispatch(setCreateCohortField(cohortDetails))
       if(cohortId){
-        await refetch()
-        setTimeout(()=>{ setIsOpen(true)},800)
+        setTimeout(()=>{setIsOpen(true)},800)
       }
       setTimeout(()=>{ setIsOpen(true)},800)
       
@@ -312,12 +306,13 @@ useEffect(() => {
 
       </Tabs>
       <div>
-        { loading ? "" : (
+        { (
         <TableModal
         isOpen={isOpen}
         closeModal={() => {
           setIsOpen(false)
           setCohortId('')
+          store.dispatch(resetCreateCohortField())
         }}
         closeOnOverlayClick={true}
         headerTitle='Edit Cohort'
@@ -325,11 +320,26 @@ useEffect(() => {
         icon={Cross2Icon}
        
         >
-          <EditCohortForm setIsOpen={()=>{setIsOpen(false); setCohortId("")}} cohortDetail={details}/>  
+          <EditCohort setIsOpen={()=>{setIsOpen(false); setCohortId("")}} isEdit={true}/>
          
         </TableModal>
         )
            }
+
+       { totalNumberOfLoanee > 0?
+       <TableModal
+         isOpen={isDeleteOpen}
+          closeOnOverlayClick={true}
+          icon={Cross2Icon}
+          headerTitle=''
+          closeModal={() => {
+          setIsDeleteOpen(false)
+          }}
+           styeleType="styleBodyTwo"
+       >
+          <DeletionRestrictionMessageProps totalNumberOfLoanee={totalNumberOfLoanee}/>
+       </TableModal>
+        :
         <DeleteModal
         isOpen={isDeleteOpen}
         closeModal={() => {
@@ -352,7 +362,7 @@ useEffect(() => {
         errorDeleting={errorDeleted}
         isLoading={isDeleteLoading}
         />
-        </DeleteModal>
+        </DeleteModal>}
 
       </div>
     </div>

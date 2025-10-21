@@ -1,67 +1,106 @@
 'use client'
 import BackButton from '@/components/back-button';
-import React from 'react';
+import React,{useEffect,useState} from 'react';
 import {useRouter} from "next/navigation";
 import CircleThreeDot from "@/reuseable/Dropdown/CircleThreeDot";
 import {ThreeDotTriggerDropDownItemsProps} from "@/types/Component.type";
 import UnderlineTab from "@/components/UnderlineTab";
 import DetailsComponent from "@/features/cohort/details/DetailsComponent";
-import {useAppSelector} from "@/redux/store";
+import {useAppSelector,store } from "@/redux/store";
 import {useDeleteCohortMutation, useViewCohortDetailsQuery} from "@/service/admin/cohort_query";
 import {LoaneeInCohortView} from "@/features/cohort/cohort-details/LoaneeInCohortView/Index";
-import EditCohortForm from "@/components/cohort/EditCohortForm";
 import {Cross2Icon} from "@radix-ui/react-icons";
 import TableModal from "@/reuseable/modals/TableModal";
 import {useToast} from "@/hooks/use-toast";
 import DeleteModal from "@/reuseable/modals/Delete-modal";
 import DeleteCohort from "@/reuseable/details/DeleteCohort";
-
-
-
+import { setCreateCohortField,resetCreateCohortField } from "@/redux/slice/create/cohortSlice";
+import EditCohortForm from '@/components/cohort/CreateCohort';
+import { LoanBreakDowns } from '@/components/cohort/CreateCohort';
+import DeletionRestrictionMessageProps from '@/components/cohort/DeletionRestrictionMessageProps';
+import { setCurrentNavbarItem } from '@/redux/slice/layout/adminLayout';
 
 const CohortDetails = () => {
     const router = useRouter();
     const cohortId = useAppSelector(store => store?.cohort?.setCohortId)
     const selectedCohortInOrganizationType = useAppSelector(store => store?.cohort?.selectedCohortInOrganizationType)
+    const [loanBreakdowns, setBreakdowns] = useState<LoanBreakDowns[]>([])
     const [deleteItem,{isLoading:isDeleteLoading}] = useDeleteCohortMutation()
+     const currentProgramId = useAppSelector(state => (state.program.currentProgramId))
     const {data: cohortDetails} = useViewCohortDetailsQuery({
         cohortId: cohortId
     }, {refetchOnMountOrArgChange: true});
     const {toast} = useToast()
 
+
+     useEffect(() => {
+           const breakdowns = cohortDetails?.data.loanBreakdowns
+           const formattedBreakdowns = breakdowns?.map((item: { itemName: string; itemAmount: number; currency: string }) => ({
+            ...item,
+            itemAmount: String(item.itemAmount)
+        })) || [];
+        setBreakdowns(formattedBreakdowns)
+        },[cohortDetails])
+
     const [openEditModal, setOpenEditModal] = React.useState(false);
     const [openDeleteModal, setOpenDeleteModal] = React.useState(false);
-    const [details, setDetails] = React.useState({
-        id: "",
-        programId: "",
-        organizationId: "",
-        cohortDescription: "",
-        name: "",
-        activationStatus: "",
-        cohortStatus: "",
-        tuitionAmount: 0,
-        totalCohortFee: 0,
-        imageUrl: "",
-        startDate: "",
-        expectedEndDate: "",
-    })
+    const [hasLoanee, setHasLoanee] = React.useState(false);
+    // const [details, setDetails] = React.useState({
+    //     id: "",
+    //     programId: "",
+    //     organizationId: "",
+    //     cohortDescription: "",
+    //     name: "",
+    //     activationStatus: "",
+    //     cohortStatus: "",
+    //     tuitionAmount: 0,
+    //     totalCohortFee: 0,
+    //     imageUrl: "",
+    //     startDate: "",
+    //     expectedEndDate: "",
+    // })
+
+    const totalNumberOfLoanee = cohortDetails?.data?.numberOfLoanees as number
 
     const editCohort = ( ) => {
         setOpenEditModal(true);
-        setDetails({
-            id: cohortDetails?.data?.id || "",
-            programId: cohortDetails?.data?.programId || "",
-            organizationId: cohortDetails?.data?.organizationId || "",
-            cohortDescription: cohortDetails?.data?.cohortDescription || "",
-            name: cohortDetails?.data?.name || "",
-            activationStatus: cohortDetails?.data?.activationStatus || "",
-            cohortStatus: cohortDetails?.data?.cohortStatus || "",
-            tuitionAmount: cohortDetails?.data?.tuitionAmount || "",
-            totalCohortFee: cohortDetails?.data?.totalCohortFee || "",
-            imageUrl: cohortDetails?.data?.imageUrl || "",
-            startDate: cohortDetails?.data?.startDate || "",
-            expectedEndDate: cohortDetails?.data?.expectedEndDate || "",
-        })
+        // setDetails({
+        //     id: cohortDetails?.data?.id || "",
+        //     programId: cohortDetails?.data?.programId || "",
+        //     organizationId: cohortDetails?.data?.organizationId || "",
+        //     cohortDescription: cohortDetails?.data?.cohortDescription || "",
+        //     name: cohortDetails?.data?.name || "",
+        //     activationStatus: cohortDetails?.data?.activationStatus || "",
+        //     cohortStatus: cohortDetails?.data?.cohortStatus || "",
+        //     tuitionAmount: cohortDetails?.data?.tuitionAmount || "",
+        //     totalCohortFee: cohortDetails?.data?.totalCohortFee || "",
+        //     imageUrl: cohortDetails?.data?.imageUrl || "",
+        //     startDate: cohortDetails?.data?.startDate || "",
+        //     expectedEndDate: cohortDetails?.data?.expectedEndDate || "",
+        // })
+
+        const details = {
+              id: cohortDetails?.data?.id ,
+              name: cohortDetails?.data?.name,
+              programId: cohortDetails?.data?.programId,
+              startDate: cohortDetails?.data?.startDate,
+              cohortDescription: cohortDetails?.data?.cohortDescription,
+              tuitionAmount : String(cohortDetails?.data?.tuitionAmount),
+              loanBreakDowns: loanBreakdowns || [],
+              programName: ""
+        }
+        store.dispatch(setCreateCohortField(details))
+    }
+
+
+    const handleOpenDeleteModal = () => {
+         if(totalNumberOfLoanee) {
+            setHasLoanee(true)
+        setOpenDeleteModal(true) 
+     }else {
+        setHasLoanee(false)
+        setOpenDeleteModal(true) 
+     }
     }
 
 
@@ -88,11 +127,20 @@ const CohortDetails = () => {
 
     }
 
+    const handleBackaRoute =() => {
+        if(!currentProgramId){
+            router.push( '/cohort') 
+        }else {
+             store.dispatch(setCurrentNavbarItem("Program"))
+            router.push("/program/program-cohorts") 
+        }
+    }
+
 
 
     const dropD: ThreeDotTriggerDropDownItemsProps[] = [
         {id: 'editCohortDropDownItem', name: 'Edit cohort', handleClick: editCohort, sx: ``},
-        {id: 'deleteCohortDropDownItem', name: 'Delete cohort', handleClick: ()=> {setOpenDeleteModal(true)}, sx: ``},
+        {id: 'deleteCohortDropDownItem', name: 'Delete cohort', handleClick: () => {handleOpenDeleteModal()}, sx: ``},
 
     ]
 
@@ -114,7 +162,7 @@ const CohortDetails = () => {
             data-testid={'cohortDetails'}
             className={` px-4 py-4   `}
         >
-            <BackButton id={'backToViewAllCohort'} handleClick={() => router.push('/cohort')} text={'Back'} textColor={'#142854'} iconBeforeLetters={true} />
+            <BackButton id={'backToViewAllCohort'} handleClick={handleBackaRoute} text={'Back'} textColor={'#142854'} iconBeforeLetters={true} />
             <div className={` mt-4 mb-4 flex justify-between w-full `}>
                 <div
                     style={{
@@ -137,6 +185,7 @@ const CohortDetails = () => {
                 isOpen={openEditModal}
                 closeModal={() => {
                     setOpenEditModal(false)
+                    store.dispatch(resetCreateCohortField())
                 }}
                 closeOnOverlayClick={true}
                 headerTitle='Edit Cohort'
@@ -144,9 +193,24 @@ const CohortDetails = () => {
                 icon={Cross2Icon}
 
             >
-                <EditCohortForm setIsOpen={()=>{setOpenEditModal(false)}} cohortDetail={details}/>
+                {/* <EditCohortForm setIsOpen={()=>{setOpenEditModal(false)}} cohortDetail={details}/> */}
+                <EditCohortForm setIsOpen={()=>{setOpenEditModal(false)}} isEdit={true}/>
             </TableModal>
-            <DeleteModal
+           {hasLoanee? 
+           <TableModal
+            isOpen={openDeleteModal}
+            closeOnOverlayClick={true}
+            icon={Cross2Icon}
+            headerTitle=''
+            closeModal={() => {
+                setOpenDeleteModal(false)
+            }}
+            styeleType="styleBodyTwo"
+           >
+            <DeletionRestrictionMessageProps totalNumberOfLoanee={totalNumberOfLoanee}/>
+
+           </TableModal> : 
+           <DeleteModal
                 isOpen={openDeleteModal}
                 closeModal={() => {
                     setOpenDeleteModal(false)
@@ -166,7 +230,7 @@ const CohortDetails = () => {
                     id={cohortId}
                     isLoading={isDeleteLoading}
                 />
-            </DeleteModal>
+            </DeleteModal>}
             <UnderlineTab defaultTab={'Details'} tabTriggers={tabTriggers} tabValue={tab}/>
 
         </div>
