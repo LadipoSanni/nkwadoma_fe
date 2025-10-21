@@ -17,6 +17,7 @@ import CenterMultistep from "@/reuseable/multiStep-component/Center-multistep";
 import StringDropdown from "@/reuseable/Dropdown/DropdownSelect";
 import { store } from '@/redux/store';
 import {setCohortBreakdownText} from "@/redux/slice/cohort/unpersist-slice";
+import {formatAmount} from "@/utils/Format";
 interface Props {
     tuitionFee?: string;
     setIsOpen?: (e: boolean | undefined) => void;
@@ -497,7 +498,7 @@ function AddTraineeForm({setIsOpen, tuitionFee,cohortId, isEdit,loaneeBasicDetai
                                                             setInitialDepositAmount(newNumString);
                                                         } else {
                                                             setInitialDepositError(
-                                                                "Initial deposit cannot be greater than cohort total breakdown amount:"+total
+                                                                "Initial deposit cannot be greater than cohort total breakdown amount: "+formatAmount(total, false)
                                                             );
 
                                                         }
@@ -602,6 +603,7 @@ function AddTraineeForm({setIsOpen, tuitionFee,cohortId, isEdit,loaneeBasicDetai
                                                        id="detail-"
                                                        name="detail-"
                                                        type="text"
+                                                       decimalScale={2}
                                                        defaultValue={tuitionFee?.toLocaleString() || ''}
                                                        readOnly
                                                        className=" p-3 w-[80%]  h-[3.2rem] border rounded bg-grey105 focus:outline-none"
@@ -694,11 +696,15 @@ function AddTraineeForm({setIsOpen, tuitionFee,cohortId, isEdit,loaneeBasicDetai
                                 </div>
 
                                 <div className='w-full border-[#D7D7D7] border-[0.6px]'></div>
-                                {totalItemAmount < 0 &&
+                                {totalItemAmount < 0 || totalItemAmount === 0 &&
                                     <div className={` py-2  `}>
-                                        <div className={` text-sm flex text-[#66440A] bg-[#FEF6E8] w-fit h-fit px-1 py-1  `}>
+                                        <div className={` text-sm flex gap-2  text-[#66440A] bg-[#FEF6E8] w-fit h-fit px-1 py-1  `}>
                                             <MdOutlineErrorOutline  className={` pl-2 mtauto mbauto h-8 w-8 `}/>
-                                            The loan amount is negative because the cohort breakdown is lower than the initial deposit
+                                            { totalItemAmount < 0 ?
+                                                <p className={`mt-auto mb-auto`}>The loan amount is negative because the cohort breakdown is lower than the initial deposit</p>
+                                            :
+                                                <p className={`mt-auto mb-auto`} >Loanee with zero or negative amount request cannot be added to cohort</p>
+                                            }
                                         </div>
                                     </div>}
                                 <div className="md:flex   md:gap-4 md:justify-end  grid gap-2 mt-2 md:mb-0 py-3 ">
@@ -713,10 +719,10 @@ function AddTraineeForm({setIsOpen, tuitionFee,cohortId, isEdit,loaneeBasicDetai
                                         <Button
                                             //eslint-disable-next-line @typescript-eslint/ban-ts-comment
                                             // @ts-expect-error
-                                            type={disableAddLoaneeButton || totalItemAmount < 0 ? "" : 'submit' }
-                                            className={`w-full md:w-36 h-[3rem] ${disableAddLoaneeButton || totalItemAmount < 0 ? 'hover:bg-[#D0D5DD] bg-[#D0D5DD]' : ' hover:bg-meedlBlue bg-meedlBlue '}  `}>
+                                            type={disableAddLoaneeButton || totalItemAmount < 0 || totalItemAmount === 0 ? "" : 'submit' }
+                                            className={`w-full md:w-36 h-[3rem] ${disableAddLoaneeButton || totalItemAmount < 0 || totalItemAmount === 0 ? 'hover:bg-[#D0D5DD] bg-[#D0D5DD]' : ' hover:bg-meedlBlue bg-meedlBlue '}  `}>
 
-                                            {disableAddLoaneeButton || totalItemAmount < 0 ?
+                                            {disableAddLoaneeButton || totalItemAmount < 0 || totalItemAmount === 0  ?
                                                 'Confirm'
                                                 :
                                                 <div>

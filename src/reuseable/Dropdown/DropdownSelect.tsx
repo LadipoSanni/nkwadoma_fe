@@ -31,7 +31,7 @@ const StringDropdown: React.FC<StringDropdownProps> = ({ label = "Select Item", 
                     />
                 </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent>
+            <DropdownMenuContent className={` max-h-[30vh] overflow-y-auto `}>
                 {items.map((item, idx) => (
                     <DropdownMenuItem
                         key={idx}

@@ -28,6 +28,8 @@ const TotalInput = ({total, componentId, prefix}: props) => {
                     displayType={'text'}
                     thousandSeparator={true}
                     prefix={prefix}
+                    decimalScale={2}
+
                 />
             </div>
         </div>
