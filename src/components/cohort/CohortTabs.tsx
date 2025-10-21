@@ -15,7 +15,13 @@ import { setItemSessionStorage } from '@/utils/storage';
 import SearchEmptyState from '@/reuseable/emptyStates/SearchEmptyState'
 import { MdSearch } from 'react-icons/md'
 import { store,useAppSelector } from '@/redux/store'
-import {setcohortStatusTab, setcohortId, setSelectedCohortInOrganization, setSelectedCohortInOrganizationType} from '@/redux/slice/create/cohortSlice'
+import {
+    setcohortStatusTab,
+    setcohortId,
+    setSelectedCohortInOrganization,
+    setSelectedCohortInOrganizationType,
+    resetCreateCohortField, setCreateCohortField, setTotalNumberOfLoanee
+} from '@/redux/slice/create/cohortSlice'
 import {capitalizeFirstLetters} from "@/utils/GlobalMethods";
 import { setcohortOrProgramRoute } from '@/redux/slice/program/programSlice';
 import { resetNotificationCohortId } from '@/redux/slice/create/cohortSlice'
