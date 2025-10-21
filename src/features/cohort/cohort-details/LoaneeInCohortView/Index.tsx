@@ -26,6 +26,7 @@ import DropDownWithActionButton from "@/reuseable/Dropdown";
 import { setcohortId } from '@/redux/slice/create/cohortSlice';
 import { setLoaneeId } from '@/redux/slice/organization/organization';
 import {useRouter} from "next/navigation";
+import {setUnderlineTabCurrentTab} from "@/redux/slice/layout/adminLayout";
 
 interface userIdentity {
     firstName: string;
@@ -216,6 +217,7 @@ export const LoaneeInCohortView = ({cohortFee}: props) => {
         store.dispatch(setLoaneeId(String(row?.id)))
         store.dispatch(setcohortId(String(cohortId)))
         setSelectedLoaneeId(String(row?.id))
+        store.dispatch(setUnderlineTabCurrentTab('Details'))
         router.push('/cohort/loaneeDetails')
 
     }

@@ -17,12 +17,13 @@ import {capitalizeFirstLetters, getFirstLetterOfWord} from "@/utils/GlobalMethod
 import { Skeleton } from "@/components/ui/skeleton"
 import BackButton from '../back-button';
 import {useRouter, useSearchParams} from "next/navigation";
-import { useAppSelector} from '@/redux/store';
+import {store, useAppSelector} from '@/redux/store';
 import {
     Avatar,
     AvatarFallback,
     AvatarImage,
 } from "@/components/ui/avatar"
+import {setUnderlineTabCurrentTab} from "@/redux/slice/layout/adminLayout";
 
 
 interface Props {
@@ -43,6 +44,7 @@ const LoaneeProfileHeader = ({cohort ,userName,institutionName, program, isLoadi
     const router = useRouter()
     const searchParams = useSearchParams()
      const organizationTabStatus = useAppSelector(store => store?.organization?.organizationDetailTabStatus)
+    const organizationAdminView = useAppSelector(store => store?.adminLayout?.organizationFrom)
 
      
 
@@ -57,7 +59,7 @@ const LoaneeProfileHeader = ({cohort ,userName,institutionName, program, isLoadi
             if (searchParams){
                 const id = searchParams.get("id");
                 if (id) {
-                    router.push('/loanees')
+                    router.push('/loans')
                 }else {
                      if(organizationTabStatus === "cohort"){
                         router.push('/organizations/cohort/all')
@@ -68,9 +70,13 @@ const LoaneeProfileHeader = ({cohort ,userName,institutionName, program, isLoadi
 
                 }
             }
-
         }else if(userRole?.includes('ADMIN')) {
-            router.push('/loans')
+            if(organizationAdminView === 'FromLoans'){
+                router.push('/loans')
+            }else{
+                store.dispatch(setUnderlineTabCurrentTab('Loanee'))
+                router.push('/cohort/details')
+            }
         }else if(userRole === 'LOANEE') {
             router.push("/my-loans");
         }

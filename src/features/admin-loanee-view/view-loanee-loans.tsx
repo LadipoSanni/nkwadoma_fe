@@ -22,6 +22,7 @@ import GeneralEmptyState from '@/reuseable/emptyStates/General-emptystate';
 import {MdSearch,MdPersonOutline} from 'react-icons/md';
 import {getItemSessionStorage} from "@/utils/storage";
 import {MEEDLE_ORG_ADMIN} from "@/types/roles";
+import {setOrganizationFrom, setUnderlineTabCurrentTab} from "@/redux/slice/layout/adminLayout";
 
 const ViewLoaneeLoans = () => {
     const [searchTerm, setSearchTerm] = useState('');
@@ -69,6 +70,9 @@ const ViewLoaneeLoans = () => {
     }, [viewAllLoans, debouncedSearchTerm,searchData ])
 
     const onBackButtonClick = () => {
+        if (MEEDLE_ORG_ADMIN?.includes?.(userRole ? userRole : '')){
+            store.dispatch(setOrganizationFrom('FromLoans'))
+        }
         router.push('/loanees')
     }
     const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -80,6 +84,8 @@ const ViewLoaneeLoans = () => {
         store.dispatch(setcohortId(item?.cohortId))
         store.dispatch(setLoaneeId(item?.loaneeId))
         store.dispatch(setClickedLoanId(item?.id))
+        store.dispatch(setUnderlineTabCurrentTab('Details'))
+        store.dispatch(setOrganizationFrom('FromLoans'))
         router.push(`${LoaneeLoannDetails(item.id)}`);
 
     }
