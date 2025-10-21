@@ -41,7 +41,6 @@ const UploadButton = ({whose, url} : Props) => {
         return name.length > length ? name.substring(0, length) + "..." : name;
     };
 
-    console.log('modalIsOpen; ',modalIsOpen)
     useEffect(() => {
         if (file) {
             setFileName(truncateFileName(file.name, 13));
@@ -79,6 +78,7 @@ const UploadButton = ({whose, url} : Props) => {
             setModalIsOpen(true)
             setLoading(false);
             setError(`File size exceeds 2 MB limit`);
+            event.target.value = '';
             return ;
         }
         setLoading(true);
@@ -96,6 +96,7 @@ const UploadButton = ({whose, url} : Props) => {
             setError("Failed to upload image");
             console.error(uploadError);
         } finally {
+            event.target.value = '';
             setLoading(false);
         }
     };
