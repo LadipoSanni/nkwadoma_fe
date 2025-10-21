@@ -403,20 +403,15 @@ function CreateCohort({ setIsOpen,isEdit }: Props) {
 
                                 <div className="relative bottom-6 ">
                                     <Label htmlFor="cohortDescription">Cohort description</Label>
-                                    <div
-                                     onChange={() => {
-                                        if (values.cohortDescription !== createCohortField?.cohortDescription) {
-                                          handleFormChange("cohortDescription", values.cohortDescription);
-                                        }
-                                      }}
-                                    >
+                                   
                                     <QuillFieldEditor
                                         name="cohortDescription"
                                         errorMessage="Cohort description must be 2500 characters or less"
                                         errors={{ cohortDescription: errors.cohortDescription }}
                                         touched={{ cohortDescription: touched.cohortDescription }}
+                                        onExternalChange={(value) => handleFormChange("cohortDescription", value)}
                                     />
-                                    </div>
+                                 
                                     {errors.cohortDescription && touched.cohortDescription && (
                                     <ErrorMessage
                                         name="cohortDescription"
