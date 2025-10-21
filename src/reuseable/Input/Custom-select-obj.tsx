@@ -65,6 +65,12 @@ function CustomSelectObj({ value, onChange, className, selectContent, name, plac
     setDropdownOpen(false); 
   };
 
+  const getDisplayValue = () => {
+    if (!value) return "";
+    const selectedOption = selectContent?.find(option => String(option.value) === String(value));
+    return selectedOption ? selectedOption.label : value;
+  };
+
 
   return (
     <div>
@@ -83,7 +89,7 @@ function CustomSelectObj({ value, onChange, className, selectContent, name, plac
           data-testid={testId}
         >
           <SelectValue className='' data-testid='SelectContent' placeholder={placeHolder} id={`selectId${id}`}>
-            {value}
+          {getDisplayValue()}
           </SelectValue>
           <div className=''>
             {dropdownOpen ? (

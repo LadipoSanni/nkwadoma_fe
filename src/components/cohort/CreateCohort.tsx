@@ -48,11 +48,12 @@ interface ApiError {
 
 function CreateCohort({ setIsOpen,isEdit }: Props) {
     const createCohortField = useAppSelector(state => (state?.cohort?.createCohortField))
-
+    const currentProgramId = useAppSelector(state => (state.program.currentProgramId))
+     
     const initialFormValue = {
          id: createCohortField?.id || "",
         name: createCohortField?.name || "",
-        programId: createCohortField?.programId || "",
+        programId: createCohortField?.programId || currentProgramId || "",
         startDate: createCohortField?.startDate || "",
         cohortDescription: createCohortField?.cohortDescription || "",
         tuitionAmount : createCohortField?.tuitionAmount || "",
@@ -344,8 +345,8 @@ function CreateCohort({ setIsOpen,isEdit }: Props) {
                                         )}
                                     </div>
                                 
-                                <div className="grid md:grid-cols-2 gap-4">
-                                    <div>
+                                <div className={`grid  gap-4 ${!currentProgramId? "md:grid-cols-2" : ""}`}>
+                                  { !currentProgramId &&  <div>
                                         <ProgramSelect
                                             selectedProgram={selectedProgramName }
                                             setSelectedProgram={handleProgramSelect}
@@ -372,7 +373,7 @@ function CreateCohort({ setIsOpen,isEdit }: Props) {
                                                 {errors.programId}
                                             </div>
                                         )}
-                                    </div>
+                                    </div>}
 
                                     <div>
                                     <Label htmlFor="startDate">Start date</Label> 

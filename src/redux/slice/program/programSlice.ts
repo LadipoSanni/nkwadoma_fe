@@ -3,7 +3,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface ProgramSliceState {
     currentProgramId:  string | undefined;
-    cohortOrProgramRoute: string | undefined
+    cohortOrProgramRoute: string | undefined;
 }
 
 const initialState: ProgramSliceState = {
@@ -21,8 +21,11 @@ export const programSlice = createSlice({
          setcohortOrProgramRoute: ( state, action: PayloadAction<undefined | string >) => {
             state.cohortOrProgramRoute = action.payload;
         },
+        resetCurrentProgramId: ( state ) => {
+            state.currentProgramId = "";
+        },
     }
 })
 
-export const {setCurrentProgramId,setcohortOrProgramRoute } = programSlice.actions;
+export const {setCurrentProgramId,setcohortOrProgramRoute,resetCurrentProgramId} = programSlice.actions;
 export default programSlice.reducer;
