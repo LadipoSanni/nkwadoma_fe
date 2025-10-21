@@ -1,16 +1,16 @@
 import React from 'react';
 declare module "react-number-format";
-import { NumericFormat } from 'react-number-format';
+import {formatAmount} from "@/utils/Format";
 
 
 interface props {
     total: string | number,
     componentId: string,
-    prefix: string
+    prefix?: string
 
 }
 
-const TotalInput = ({total, componentId, prefix}: props) => {
+const TotalInput = ({total, componentId}: props) => {
 
 
     return (
@@ -22,15 +22,7 @@ const TotalInput = ({total, componentId, prefix}: props) => {
             <div
                 className={`bg-blue500 text-meedlBlue grid w-fit  h-fit px-3 py-1 rounded-full `}
             >
-                <NumericFormat
-                    value={total }
-                    className="w-fit "
-                    displayType={'text'}
-                    thousandSeparator={true}
-                    prefix={prefix}
-                    decimalScale={2}
-
-                />
+                {formatAmount(total)}
             </div>
         </div>
     );

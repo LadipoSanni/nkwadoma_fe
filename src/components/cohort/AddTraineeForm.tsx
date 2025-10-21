@@ -604,7 +604,7 @@ function AddTraineeForm({setIsOpen, tuitionFee,cohortId, isEdit,loaneeBasicDetai
                                                        name="detail-"
                                                        type="text"
                                                        decimalScale={2}
-                                                       defaultValue={tuitionFee?.toLocaleString() || ''}
+                                                       defaultValue={formatAmount(tuitionFee?.toLocaleString() || '')}
                                                        readOnly
                                                        className=" p-3 w-[80%]  h-[3.2rem] border rounded bg-grey105 focus:outline-none"
                                                    />
