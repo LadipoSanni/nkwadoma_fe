@@ -68,7 +68,7 @@ const Index = () => {
                 setSelectedLoanProductName(product.name);
             }
         }
-    }, [getLoanProductById, loanProductId, loanProducts]);
+    }, [ loanProductId, loanProducts]);
 
     const isAmountExceedingLimits = () => {
         if (!unformatedAmount || !amountRequested || !selectedLoanProduct?.availableAmountToBeOffered) {
