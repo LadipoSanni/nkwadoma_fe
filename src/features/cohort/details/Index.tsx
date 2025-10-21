@@ -9,7 +9,6 @@ import DetailsComponent from "@/features/cohort/details/DetailsComponent";
 import {useAppSelector,store } from "@/redux/store";
 import {useDeleteCohortMutation, useViewCohortDetailsQuery} from "@/service/admin/cohort_query";
 import {LoaneeInCohortView} from "@/features/cohort/cohort-details/LoaneeInCohortView/Index";
-// import EditCohortForm from "@/components/cohort/EditCohortForm";
 import {Cross2Icon} from "@radix-ui/react-icons";
 import TableModal from "@/reuseable/modals/TableModal";
 import {useToast} from "@/hooks/use-toast";
