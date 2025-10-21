@@ -174,7 +174,6 @@ const CohortTabs = (
 
   const totalNumberOfLoanee = row?.numberOfLoanees as number
    store.dispatch(setTotalNumberOfLoanee(totalNumberOfLoanee))
-   console.log(totalNumberOfLoanee )
 
 
     const cohortDetails = {
