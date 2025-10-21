@@ -99,7 +99,7 @@ function AddTraineeForm({setIsOpen, tuitionFee,cohortId, isEdit,loaneeBasicDetai
         }
         calculateCohortItemsTotal(data?.data, tuitionFee ? Number(tuitionFee) : 0)
 
-    }, [isEdit, loaneeLoanBreakDown, initialDepositAmount, tuitionFee, data?.data, calculateTotalForEditingLoane, setNamessOnEdit, calculateTotalForAddingLoanee]);
+    }, [isEdit, loaneeLoanBreakDown, initialDepositAmount, tuitionFee, data?.data]);
 
 
 
