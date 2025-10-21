@@ -6,12 +6,14 @@ interface adminLayoutState  {
     currentNavbarItem: string,
     currentNavBottomItem: string,
     underlineTabCurrentTab: string,
+    organizationFrom: string,
 }
 const initialState: adminLayoutState = {
     showMobileSideBar: false,
     currentNavbarItem: 'Overview',
     currentNavBottomItem: '',
     underlineTabCurrentTab: '',
+    organizationFrom: '',
 
 }
 
@@ -30,9 +32,12 @@ export const adminLayoutSlice = createSlice({
         },
         setUnderlineTabCurrentTab: (state, action:PayloadAction<string>) => {
            state.underlineTabCurrentTab = action.payload;
+        },
+        setOrganizationFrom: (state, action:PayloadAction<string>) => {
+           state.organizationFrom = action.payload;
         }
     }
 })
 
-export const {setShowMobileSideBar,setUnderlineTabCurrentTab, setCurrentNavbarItem, setCurrentNavBottomItem} = adminLayoutSlice.actions;
+export const {setShowMobileSideBar,setUnderlineTabCurrentTab, setOrganizationFrom,setCurrentNavbarItem, setCurrentNavBottomItem} = adminLayoutSlice.actions;
 export default adminLayoutSlice.reducer;

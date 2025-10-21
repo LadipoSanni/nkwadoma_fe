@@ -21,6 +21,7 @@ import {setcohortStatusTab, setcohortId, setSelectedCohortInOrganization, setSel
 import {capitalizeFirstLetters} from "@/utils/GlobalMethods";
 import { setcohortOrProgramRoute } from '@/redux/slice/program/programSlice';
 import { resetNotificationCohortId } from '@/redux/slice/create/cohortSlice'
+import {setUnderlineTabCurrentTab} from "@/redux/slice/layout/adminLayout";
 
 
 interface allCohortsProps extends TableRowData {
@@ -161,7 +162,8 @@ useEffect(() => {
 
   const handleRowClick = (row: TableRowData) => {
     store.dispatch(setcohortId(String(row.id)))
-     if(["PORTFOLIO_MANAGER","MEEDL_SUPER_ADMIN","MEEDL_ADMIN","MEEDL_ASSOCIATE"].includes(userRole|| "")){
+      store.dispatch(setUnderlineTabCurrentTab('Details'))
+      if(["PORTFOLIO_MANAGER","MEEDL_SUPER_ADMIN","MEEDL_ADMIN","MEEDL_ASSOCIATE"].includes(userRole|| "")){
          const cohort = {name: String(row?.name),id: String(row?.id)}
          store.dispatch(setSelectedCohortInOrganization(cohort))
          if(organizationTabStatus === "cohort"){

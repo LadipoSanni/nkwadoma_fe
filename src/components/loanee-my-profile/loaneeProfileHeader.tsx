@@ -43,6 +43,7 @@ const LoaneeProfileHeader = ({cohort ,userName,institutionName, program, isLoadi
     const router = useRouter()
     const searchParams = useSearchParams()
      const organizationTabStatus = useAppSelector(store => store?.organization?.organizationDetailTabStatus)
+    const organizationAdminView = useAppSelector(store => store?.adminLayout?.organizationFrom)
 
      
 
@@ -68,9 +69,12 @@ const LoaneeProfileHeader = ({cohort ,userName,institutionName, program, isLoadi
 
                 }
             }
-
         }else if(userRole?.includes('ADMIN')) {
-            router.push('/loans')
+            if(organizationAdminView === 'FromLoans'){
+                router.push('/loans')
+            }else{
+                router.push('/cohort/details')
+            }
         }else if(userRole === 'LOANEE') {
             router.push("/my-loans");
         }
