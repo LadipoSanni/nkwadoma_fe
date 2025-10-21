@@ -15,10 +15,11 @@ interface FieldName {
     errorMessage: string;
     errors: type; 
     touched: type;
+    onExternalChange?: (value: string) => void;
     
 }
 
-const QuillFieldEditor = ({ name, errorMessage, errors, touched }: FieldName) => {
+const QuillFieldEditor = ({ name, errorMessage, errors, touched,onExternalChange }: FieldName) => {
     const { setFieldValue, setFieldTouched, setFieldError } = useFormikContext();
     const [field, meta] = useField(name);
     const [customError, setCustomError] = useState('');
@@ -82,6 +83,16 @@ const QuillFieldEditor = ({ name, errorMessage, errors, touched }: FieldName) =>
          toolbar: toolbarOptions,
     }
 
+    const handleChange = (value: string) => {
+        if (validateLength(value)) {
+            setFieldValue(name, value);
+            // Call the external onChange if provided
+            if (onExternalChange) {
+                onExternalChange(value);
+            }
+        }
+    };
+
     return (
         <div>
              <style>
@@ -113,12 +124,7 @@ const QuillFieldEditor = ({ name, errorMessage, errors, touched }: FieldName) =>
                modules={quillModules}
                 theme="snow"
                 value={field.value}
-                onChange={(value) => {
-                    if (validateLength(value)) {
-                        setFieldValue(name, value);
-                    }
-                }}
-                
+                onChange={handleChange}
                 placeholder="Enter terms and condition"
                 className="font-inter text-sm font-normal leading-[22px] pt-2 rounded-md"
             />

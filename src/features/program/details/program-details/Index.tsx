@@ -1,5 +1,5 @@
 "use client"
-import React, {useState, useEffect} from "react";
+import React, {useState} from "react";
 import {useRouter} from "next/navigation";
 import {inter, cabinetGrotesk} from "@/app/fonts";
 import {
@@ -16,7 +16,6 @@ import {DetailsTabContainer} from "@/reuseable/details/DetailsTabContainer";
 import TableModal from "@/reuseable/modals/TableModal";
 import DeleteModal from '@/reuseable/modals/Delete-modal';
 import {Cross2Icon} from "@radix-ui/react-icons";
-import EditProgramForm from "@/components/program/edit-program-form";
 import DeleteCohort from "@/reuseable/details/DeleteCohort";
 import {useGetProgramByIdQuery} from "@/service/admin/program_query";
 import {formatAmount} from '@/utils/Format'
@@ -24,10 +23,12 @@ import {useDeleteProgramMutation} from '@/service/admin/program_query';
 import { capitalizeFirstLetters } from "@/utils/GlobalMethods";
 import SkeletonForDetailPage from "@/reuseable/Skeleton-loading-state/Skeleton-for-detailPage";
 import { useToast } from "@/hooks/use-toast";
-import {useAppSelector} from "@/redux/store";
+import {useAppSelector,store} from "@/redux/store";
 import styles from "../../index.module.css"
 import SafeHTMLRenderer from "@/reuseable/display/Safe-html-Renderer";
-
+import CreateProgram from "@/components/program/create-program";
+import { setInitialProgramFormValue,resetInitialProgramFormValue } from "@/redux/slice/program/programSlice";
+import DeletionRestrictionMessageProps from "@/components/cohort/DeletionRestrictionMessageProps";
 
 interface ApiError {
     status: number;
@@ -45,56 +46,23 @@ const ProgramDetails = () => {
     const [deleteProgram, setDeleteProgram] = useState("")
     const {toast} = useToast()
 
-    const [progamDetail, setProgramDetail] = useState({
-            id: "",
-            programDescription: "",
-            name: "",
-            durationType: "",
-            programStartDate: "",
-            duration: 0,
-            mode: "",
-            deliveryType: "",
-            totalAmountRepaid: 0,
-            totalAmountDisbursed: 0,
-            totalAmountOutstanding: 0,
-            numberOfCohort: 0,
-            numberOfLoanees: 0,
-            repaymentRate: 0,
-            debtPercentage: 0,
-        }
-    )
 
     const {data: program,isLoading:loading} = useGetProgramByIdQuery({id: programId}, {refetchOnMountOrArgChange: true, skip: !programId});
     const [deleteItem, {isLoading}] = useDeleteProgramMutation()
 
+    const programDetail = {
+        id: program?.data?.id || "",
+        programName:program?.data?.name  || "",
+        deliveryType: program?.data?.deliveryType ||  "",
+        programMode: program?.data?.mode ||  "",
+        programDuration: String(program?.data?.duration) ||  "",
+        programDescription:program?.data?.programDescription ||  "",
+    }
 
-
-    useEffect(() => {
-        if (program?.data) {
-            const detail = program?.data
-            setProgramDetail({
-                id: detail?.id || "",
-                programDescription: detail?.programDescription || "",
-                name: detail?.name || "",
-                durationType: detail?.durationType || "",
-                programStartDate: detail?.programStartDate || "",
-                duration: detail?.duration || 0,
-                mode: detail?.mode || "",
-                deliveryType: detail?.deliveryType || "",
-                totalAmountRepaid: detail?.totalAmountRepaid || 0,
-                totalAmountDisbursed: detail?.totalAmountDisbursed || 0,
-                totalAmountOutstanding: detail?.totalAmountOutstanding || 0,
-                numberOfCohort: detail?.numberOfCohort,
-                numberOfLoanees: detail?.numberOfLoanees,
-                repaymentRate: detail?.repaymentRate || 0,
-                debtPercentage: detail?.debtPercentage || 0,
-            });
-        }
-    }, [program])
 
     const dataList = [
-        {label: "Program mode", value: capitalizeFirstLetters(progamDetail.mode.replace(/_/g, ' '))},
-        {label: "Program delivery type", value: capitalizeFirstLetters(progamDetail.deliveryType)},
+        {label: "Program mode", value: capitalizeFirstLetters(program?.data?.mode.replace(/_/g, ' '))},
+        {label: "Program delivery type", value: capitalizeFirstLetters(program?.data?.deliveryType)},
         {label: "Completion rate", value: "0%"},
         {label: "Employment rate", value: "0%"},
         {label: "Average starting income", value: formatAmount(0)},
@@ -102,11 +70,11 @@ const ProgramDetails = () => {
     ];
 
     const loanDetail = [
-        {detail: "Total loan amount disbursed", value: formatAmount(progamDetail.totalAmountDisbursed)},
-        {detail: "Total loan amount repaid", value: formatAmount(progamDetail.totalAmountRepaid)},
-        {detail: "Total loan amount outstanding", value: formatAmount(progamDetail.totalAmountOutstanding)},
-        {detail: "Debt percentage", value: Math.ceil(Number(progamDetail?.debtPercentage))+"%"},
-        {detail: "Repayment rate", value: Math.ceil(Number(progamDetail?.repaymentRate))+"%"},
+        {detail: "Total loan amount disbursed", value: formatAmount(program?.data?.totalAmountDisbursed)},
+        {detail: "Total loan amount repaid", value: formatAmount(program?.data?.totalAmountRepaid)},
+        {detail: "Total loan amount outstanding", value: formatAmount(program?.data?.totalAmountOutstanding)},
+        {detail: "Debt percentage", value: Math.ceil(Number(program?.data?.debtPercentage))+"%"},
+        {detail: "Repayment rate", value: Math.ceil(Number(program?.data?.repaymentRate))+"%"},
 
     ]
 
@@ -114,13 +82,13 @@ const ProgramDetails = () => {
     const tagButtonData = [
         {
             tagIcon: MdOutlineDateRange,
-            tagCount: progamDetail.duration ?? 0,
+            tagCount:program?.data?.duration ?? 0,
             tagButtonStyle: "bg-lightBlue100",
-            tagText: progamDetail.duration <= 1 ? 'month' : 'months',
+            tagText: program?.data?.duration <= 1 ? 'month' : 'months',
             textColor: "text-meedlBlue",
         },
-        {tagIcon: MdOutlinePeopleAlt, tagCount: progamDetail.numberOfCohort, tagButtonStyle: "bg-warning80", tagText: progamDetail.numberOfCohort <= 1 ? 'cohort' : 'cohorts', textColor: "text-success700"},
-        {tagIcon: MdPersonOutline, tagCount: progamDetail.numberOfLoanees || 0, tagButtonStyle : "bg-warning50", tagText: progamDetail.numberOfLoanees <= 1 ? 'loanee' : 'loanees', textColor: "text-warning900" },
+        {tagIcon: MdOutlinePeopleAlt, tagCount: program?.data?.numberOfCohort, tagButtonStyle: "bg-warning80", tagText: program?.data?.numberOfCohort <= 1 ? 'cohort' : 'cohorts', textColor: "text-success700"},
+        {tagIcon: MdPersonOutline, tagCount: program?.data?.numberOfLoanees || 0, tagButtonStyle : "bg-warning50", tagText: program?.data?.numberOfLoanees <= 1 ? 'loanee' : 'loanees', textColor: "text-warning900" },
     ];
 
     const programOptions = [
@@ -160,6 +128,7 @@ const ProgramDetails = () => {
     }
 
     const handleModalClick = () => {
+        store.dispatch(setInitialProgramFormValue(programDetail))
         setIsOpen(true)
     }
 
@@ -183,10 +152,10 @@ const ProgramDetails = () => {
                             <div className={'flex flex-col gap-3'} id={`tagDiv`}>
                                 <h1 id={`name`}
                                     className={`text-meedlBlack ${cabinetGrotesk.className} text-[28px] font-medium leading-[33.6px] md:w-[351px] break-words overflow-y-auto max-h-28`}>
-                                    {progamDetail.name}
+                                    {program?.data?.name}
                                 </h1>
                                 <div className={'grid gap-5'} id={`tagButtonDiv`}>
-                                <SafeHTMLRenderer html={progamDetail.programDescription} />
+                                <SafeHTMLRenderer html={program?.data?.programDescription} className="md:max-w-80"/>
                                       
                                     <div id={`details`} data-testid="details"
                                          className="grid md:grid-cols-3 grid-cols-2 gap-3 w-fit">
@@ -221,21 +190,35 @@ const ProgramDetails = () => {
                 <>
                     <TableModal
                         isOpen={isOpen}
-                        closeModal={() => setIsOpen(false)}
+                        closeModal={() => {
+                            setIsOpen(false)
+                            store.dispatch(resetInitialProgramFormValue())
+                        }}
                         closeOnOverlayClick={true}
                         headerTitle={"Edit program"}
                         icon={Cross2Icon}
                     >
-                        <EditProgramForm
-                            // programId={programId}
+                        <CreateProgram
                             setIsOpen={setIsOpen}
-                            programDetail={progamDetail}
+                            isEdit={true}
                         />
                     </TableModal>
 
-                    <DeleteModal
+                   { program?.data?.numberOfLoanees > 0?  <TableModal
+              isOpen={isDeleteOpen}
+              closeOnOverlayClick={true}
+              closeModal={() => {
+                  setIsDeleteOpen(false)
+              }}
+              icon={Cross2Icon}
+               styeleType="styleBodyTwo"
+              >
+              <DeletionRestrictionMessageProps 
+              message={`This program can not be deleted because it has Cohort that contains ${program?.data?.numberOfLoanees > 0? "loanees" : "loanee"}`}
+              /> 
+              </TableModal>  : <DeleteModal
                         isOpen={isDeleteOpen}
-                        closeModal={() => setIsDeleteOpen(false)}
+                        closeModal={() => {setIsDeleteOpen(false)}}
                         closeOnOverlayClick={true}
                         icon={Cross2Icon}
                         width='auto'
@@ -248,7 +231,7 @@ const ProgramDetails = () => {
                             id={programId}
                             isLoading={isLoading}
                         />
-                    </DeleteModal>
+                    </DeleteModal>}
                 </>
             }
         </main>

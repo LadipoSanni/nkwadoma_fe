@@ -7,15 +7,16 @@ import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import Isloading from '@/reuseable/display/Isloading';
 import CustomSelect from '@/reuseable/Input/Custom-select';
-// import { useQueryClient } from '@tanstack/react-query';
-import {useCreateProgramMutation} from "@/service/admin/program_query";
+import {useCreateProgramMutation,useUpdateProgramMutation} from "@/service/admin/program_query";
 import CustomSelectObj from '@/reuseable/Input/Custom-select-obj';
 import  QuillFieldEditor  from '@/reuseable/textArea/Quill-field';
 import { formatPlaceName } from "@/utils/GlobalMethods";
-
+import { setInitialProgramFormValue,resetInitialProgramFormValue } from '@/redux/slice/program/programSlice';
+import { useAppSelector,store } from '@/redux/store';
+import { useToast } from "@/hooks/use-toast";
 
 type Props = {
-    
+    isEdit?: boolean,
    setIsOpen? : (e:boolean) => void;
    
 }
@@ -27,24 +28,39 @@ interface ApiError {
   };
 }
 
-function CreateProgram({setIsOpen}:Props) {
- 
+function CreateProgram({setIsOpen,isEdit}:Props) {
+  const initialProgramValue = useAppSelector((state) => state?.program?.initialProgramFormValue)
   const [createProgram,{isLoading}] = useCreateProgramMutation();
+  const [updateProgram, { isLoading:isEditLoading }] = useUpdateProgramMutation();
   const [error, setError] =  useState('');
+     const { toast } = useToast();
+
 
     const initialFormValue = {
-        programName: "",
-        deliveryType: "",
-        programMode: "",
-        programDuration: "",
-        programDescription: "",
+        id: initialProgramValue?.id || "",
+        programName:initialProgramValue?.programName || "",
+        deliveryType: initialProgramValue?.deliveryType ||  "",
+        programMode: initialProgramValue?.programMode ||  "",
+        programDuration: initialProgramValue?.programDuration ||  "",
+        programDescription: initialProgramValue?.programDescription ||  "",
     }
 
-    
-    // const maxChars = 2500;
+    const handleFormChange = (field: string, value: string ) => {
+         const currentField = initialProgramValue || {
+          id: "",
+          programName: "",
+          deliveryType:  "",
+          programMode:  "",
+          programDuration:  "",
+          programDescription:  "",
+         };
+         store.dispatch(setInitialProgramFormValue({
+          ...currentField,
+          [field]: value   
+         }));
+    }
 
-    // const programDeliveryTypes = ["Onsite", "Online","Hybrid"];
-    // const programModes=["FULL_TIME", "PART_TIME"]
+  
     const programModes = [ { value: "FULL_TIME", label: "Full time" }, { value: "PART_TIME", label: "Part time" } ];
     const programDurations=Array.from({ length: 24 }, (_, i) => (i + 1).toString());
     const programDeliveryType = [ { value: "ONSITE", label: "Onsite" }, { value: "ONLINE", label: "Online" },{ value: "HYBRID", label: "Hybrid" } ];
@@ -55,17 +71,6 @@ function CreateProgram({setIsOpen}:Props) {
     const validationSchema = Yup.object().shape({
         programName:Yup.string()
        .trim()
-      //  .matches(/^[a-zA-Z\s_-]+$/, 'Program name can only contain letters, underscores, hyphens, and spaces.')
-      // .max(200, "Program name cannot be more than 200 characters.")
-      // .test(
-      //   "valid-name",
-      //   "Program name can include at least a letter and then numbers, hyphens and underscores.",
-      //   (value = "") => {
-      //   const regex = /^[a-zA-Z0-9\s-_]*$/;
-      //   const onlyNumbersOrSpecials = /^[^a-zA-Z]*$/;
-      //   return regex.test(value) && !onlyNumbersOrSpecials.test(value);
-      //   }
-      // )
       .required('Program name is required'),
       deliveryType:Yup.string()
       .required('Program delivery type is required'),
@@ -80,13 +85,6 @@ function CreateProgram({setIsOpen}:Props) {
         .max(2500, 'Program description must be 2500 characters or less')
     });
 
-    
-  
-     const toastPopUp = ToastPopUp({
-      description: "Program Created successfully.",
-      status:"success"
-      
-    });
 
     const networkPopUp =  ToastPopUp({
       description: "No internet connection",
@@ -98,6 +96,7 @@ function CreateProgram({setIsOpen}:Props) {
     const handleCloseModal = () => {
         if (setIsOpen) {
           setIsOpen(false);
+          store.dispatch(resetInitialProgramFormValue())
         }
       }
     
@@ -111,20 +110,34 @@ function CreateProgram({setIsOpen}:Props) {
     }
     
     const payload = {
+    id: values.id,
     programName: values.programName,
+    ...(isEdit?{name: values.programName} : {}),
     programDescription: values.programDescription,
     programDuration: values.programDuration,
     deliveryType: values.deliveryType,
     programMode: values.programMode,
   };
     try { 
-    
-     const create = await createProgram(payload).unwrap();
-     if(create) {
-    //  queryClient.invalidateQueries({ queryKey: ['program'] });
-      toastPopUp.showToast();
-      if (setIsOpen) {
-        setIsOpen(false);
+      if(!isEdit){
+        const create = await createProgram(payload).unwrap();
+        if(create) {
+         handleCloseModal()
+       toast({
+         description: create.message,
+         status: "success",
+         duration: 2000
+       })
+      }
+      }else {
+        const update = await updateProgram({  data: payload }).unwrap();
+        if(update) {
+          handleCloseModal()
+        toast({
+          description: update.message,
+          status: "success",
+          
+        });
       }
      
     }} catch (err) {
@@ -148,9 +161,9 @@ function CreateProgram({setIsOpen}:Props) {
          {
             ({errors, isValid, touched,setFieldValue,values}) => (
               <Form className={`${inter.className}`}>
+                <div>
                 <div
-                // className='grid grid-cols-1 gap-y-4'
-                className='grid grid-cols-1 gap-y-4 md:max-h-[56.5vh] overflow-y-auto'
+                className='grid grid-cols-1 gap-y-4 md:max-h-[50.5vh] overflow-y-auto'
                 style={{
                     scrollbarWidth: 'none',
                     msOverflowStyle: 'none',
@@ -170,9 +183,10 @@ function CreateProgram({setIsOpen}:Props) {
                       const cleanedValue = formattedValue.replace(/[^a-zA-Z0-9'_&\-\s]/g, '');
                       if (cleanedValue.length > 0 && !/^[a-zA-Z0-9]/.test(cleanedValue)) {  
                           setFieldValue("programName", cleanedValue.substring(1));
+                          handleFormChange("programName", cleanedValue.substring(1));
                       } else {
                           setFieldValue("programName", cleanedValue);
-                          
+                          handleFormChange("programName", cleanedValue);
                       }
                   }}
                   /> 
@@ -196,7 +210,10 @@ function CreateProgram({setIsOpen}:Props) {
                       id="deliveryTypeSelect"
                       selectContent={programDeliveryType}
                       value={values.deliveryType} 
-                      onChange={(value) => setFieldValue("deliveryType", value)} 
+                      onChange={(value) => {
+                        setFieldValue("deliveryType", value)
+                        handleFormChange("deliveryType", value);
+                      }} 
                      name="deliveryType"
                       placeHolder='Select a program delivery type'
                      
@@ -212,11 +229,9 @@ function CreateProgram({setIsOpen}:Props) {
                     )
                    }
                   </div>
-                <div className='grid md:grid-cols-2 gap-4 w-full'>
+                <div className='grid md:grid-cols-2 gap-4 w-full relative md:bottom-4'>
                   <div>
-                    {/* <Label htmlFor="programMode"
-                     style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', display: 'inline-block', maxWidth: '100%', }}
-                    >Program mode</Label> */}
+                   
                      <div style={{ overflowX: 'auto', whiteSpace: 'nowrap', scrollbarWidth: 'none',
                        msOverflowStyle: 'none'}}> 
                     <Label htmlFor="programMode" style={{ display: 'inline-block',WebkitOverflowScrolling: 'touch'  }}>Program mode</Label> 
@@ -226,7 +241,10 @@ function CreateProgram({setIsOpen}:Props) {
                       id="programModalSelect"
                       selectContent={programModes}
                       value={values.programMode} 
-                      onChange={(value) => setFieldValue("programMode", value)} 
+                      onChange={(value) => {
+                        setFieldValue("programMode", value)
+                        handleFormChange("programMode", value);
+                      }} 
                       name="programMode"
                       placeHolder='Select a mode'
                      
@@ -259,7 +277,10 @@ function CreateProgram({setIsOpen}:Props) {
                     <CustomSelect
                       selectContent={programDurations}
                       value={values.programDuration} 
-                      onChange={(value) => setFieldValue("programDuration", value)} 
+                      onChange={(value) => {
+                        setFieldValue("programDuration", value)
+                        handleFormChange("programDuration", value);
+                      }} 
                       name="programDuration"
                       placeHolder='Select a duration'
                      
@@ -277,17 +298,27 @@ function CreateProgram({setIsOpen}:Props) {
                   }
                    </div>
                 </div>
-                <div>
+                <div className='relative md:bottom-9'>
                   <Label htmlFor="programDescription">Program description</Label>
                   
-                   <QuillFieldEditor
+                  <QuillFieldEditor
                       name="programDescription"
                       errorMessage="Program description must be 2500 characters or less"
-                      errors={errors}
-                      touched={touched}
+                      errors={{ programDescription: errors.programDescription }}
+                      touched={{ programDescription: touched.programDescription }}
+                      onExternalChange={(value) => handleFormChange("programDescription", value)}
                      />
-                    
+                    {errors.programDescription && touched.programDescription && (
+                  <ErrorMessage
+                      name="programDescription"
+                      component="div"
+                      id="programDescriptionError"
+                      className="text-red-500 text-sm"
+                  />
+                  )}
                 </div>
+                </div>
+                <div className='w-full border-[#D7D7D7] border-[0.6px] mt-3 mb-6'></div>
                 <div className='md:flex gap-4 justify-end mt-2 mb-4 md:mb-0'>
                 <Button 
                 id='createProgramCancelButton'
@@ -305,13 +336,12 @@ function CreateProgram({setIsOpen}:Props) {
                 type='submit'
                 disabled={!isValid}
                 >
-                  {isLoading ? <Isloading/>: (
-                                                "Save"
+                  {isLoading || isEditLoading ? <Isloading/>: (
+                                            isEdit? "Edit" : "Save"
                                             )}
                   
                 </Button>
               </div>
-
                 </div>
                 {
                 <div id='createProgramErrorFromBackend' className={`text-error500 flex justify-center items-center`}>{error}</div>
