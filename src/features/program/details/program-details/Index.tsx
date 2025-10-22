@@ -22,7 +22,7 @@ import {useGetProgramByIdQuery} from "@/service/admin/program_query";
 // import {useDeleteProgramMutation} from '@/service/admin/program_query';
 import { capitalizeFirstLetters } from "@/utils/GlobalMethods";
 // import SkeletonForDetailPage from "@/reuseable/Skeleton-loading-state/Skeleton-for-detailPage";
-import { useToast } from "@/hooks/use-toast";
+// import { useToast } from "@/hooks/use-toast";
 import {useAppSelector,store} from "@/redux/store";
 // import styles from "../../index.module.css"
 import SafeHTMLRenderer from "@/reuseable/display/Safe-html-Renderer";
@@ -34,12 +34,12 @@ import Details from "@/components/loanee-my-profile/Details";
 // import SkeletonForSidebar from '@/reuseable/Skeleton-loading-state/Skeleton-for-sidebar';
 import BasicDetail from "@/reuseable/details/BasicDetail";
 
-interface ApiError {
-    status: number;
-    data: {
-        message: string;
-    };
-}
+// interface ApiError {
+//     status: number;
+//     data: {
+//         message: string;
+//     };
+// }
 
 
 const ProgramDetails = () => {
@@ -123,7 +123,7 @@ const ProgramDetails = () => {
     //     if (id === "3") setIsDeleteOpen(true)
     // }
 
-    const router = useRouter();
+    // const router = useRouter();
 
     // const handleDeleteAProgram = async (id: string) => {
 
