@@ -83,10 +83,57 @@ const SafeHTMLRenderer: React.FC<SafeHTMLRendererProps> = ({
     const combinedClasses = `${defaultClasses} ${maxHeight} ${scrollbarClass} ${className}`.trim();
 
     return (
+        <div className={combinedClasses}>
+            <style>
+            {`
+                    /* Quill ordered list styles */
+                    ol {
+                        list-style-type: decimal !important;
+                        padding-left: 1.5em !important;
+                        margin: 0.5em 0 !important;
+                    }
+                    
+                    li {
+                        margin: 0.25em 0 !important;
+                    }
+                    
+                    /* Quill checklist styles */
+                    ul[data-checked=true],
+                    ul[data-checked=false] {
+                        list-style-type: none !important;
+                        padding-left: 0 !important;
+                    }
+                    
+                    li[data-checked=true]::before,
+                    li[data-checked=false]::before {
+                        content: "☐";
+                        margin-right: 8px;
+                        display: inline-block;
+                    }
+                    
+                    li[data-checked=true]::before {
+                        content: "☑";
+                    }
+
+                    /* Ensure proper spacing and styling for all Quill content */
+                    .ql-editor ol, 
+                    .ql-editor ul {
+                        padding-left: 1.5em;
+                    }
+                    
+                    .ql-editor ol {
+                        list-style-type: decimal;
+                    }
+                    
+                    .ql-editor ul {
+                        list-style-type: disc;
+                    }
+                `}
+            </style>
         <div 
-            className={combinedClasses}
             dangerouslySetInnerHTML={{ __html: processedHtml }}
         />
+        </div>
     );
 };
 

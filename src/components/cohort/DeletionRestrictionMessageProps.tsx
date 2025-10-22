@@ -6,15 +6,16 @@ interface Props {
    totalNumberOfLoanee?: number;
    message?: string;
    imageStyle?: string;
-   className?: string
+   className?: string;
+   image?: string
 }
 
-function DeletionRestrictionMessageProps({totalNumberOfLoanee,message,imageStyle,className}:Props) {
+function DeletionRestrictionMessageProps({totalNumberOfLoanee,message,imageStyle,className,image}:Props) {
   return (
     <div className={`${inter.className} ${className}`}>
     <div>
         <Image
-            src={ `/Inner circle (1).png`}
+            src={ image?  image : `/Inner circle (1).png`}
             alt='image'
             width={30}
             height={30}

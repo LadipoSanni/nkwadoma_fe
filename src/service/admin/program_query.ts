@@ -24,14 +24,14 @@ export const programApi = createApi({
                 url: `/program/${id}`,
                 method: "GET",
               }),
-              providesTags: (result, error, arg) => [{ type: 'program', id: arg.id }],
+          
         }),
         deleteProgram:  builder.mutation({
           query: ({id}) => ({
               url: `/program/delete/${id}`,
               method: "DELETE",
             }),
-            invalidatesTags:  ({ id }) => [{ type: 'program', id }],
+            invalidatesTags: ['program'], 
         }),
         searchProgram: builder.query({
             query: (name) => `program/search?name=${name}`,

@@ -36,9 +36,9 @@ import Modal from "@/reuseable/modals/TableModal";
 import {Cross2Icon} from "@radix-ui/react-icons";
 import {getUserDetailsFromStorage} from "@/components/topBar/action";
 import AddCohortInAnOrganization from '@/components/portfolio-manager/organization/AddCohort-in-organization'
-import {useAppSelector} from '@/redux/store'
+import {useAppSelector,store} from '@/redux/store'
 import {useDebounce} from '@/hooks/useDebounce';
-// import { resetcohortId, } from '@/redux/slice/create/cohortSlice'
+import { resetCreateCohortField } from "@/redux/slice/create/cohortSlice";
 
 
 export const initialFormValue = {
@@ -550,7 +550,7 @@ const CohortView = () => {
                     headerTitle={["PORTFOLIO_MANAGER", "MEEDL_SUPER_ADMIN", "MEEDL_ADMIN", "MEEDL_ASSOCIATE"].includes(user_role || "") ? "Add cohort" : 'Create cohort'}
                     className='pb-1'
                     icon={Cross2Icon}
-                   
+                    reset={() => store.dispatch(resetCreateCohortField())}
                 >
                     {["PORTFOLIO_MANAGER", "MEEDL_SUPER_ADMIN", "MEEDL_ADMIN", "MEEDL_ASSOCIATE"].includes(user_role || "") ?
                         <AddCohortInAnOrganization setIsOpen={setIsOpen} organizationId={organizationId}
