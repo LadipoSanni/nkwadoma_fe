@@ -7,6 +7,13 @@ interface InitialProgramFormValue {
     programMode: string,
     programDuration: string,
     programDescription: string,
+
+}
+
+interface  CurrentProgramDetailData {
+    programName?: string,
+    isLoading?: boolean,
+    numberOfLoanee?: number
 }
 
 
@@ -15,13 +22,17 @@ interface ProgramSliceState {
     cohortOrProgramRoute: string | undefined;
     initialProgramFormValue: InitialProgramFormValue | null;
     totalNumberOfLoanee: number,
+    currentProgramDetailData: CurrentProgramDetailData | null;
+    programDetail: string
 }
 
 const initialState: ProgramSliceState = {
     currentProgramId: "",
     cohortOrProgramRoute: "",
     initialProgramFormValue: null,
-    totalNumberOfLoanee: 0
+    totalNumberOfLoanee: 0,
+    currentProgramDetailData: null,
+    programDetail: ""
 }
 
 export const programSlice = createSlice({
@@ -42,15 +53,28 @@ export const programSlice = createSlice({
         },
         resetInitialProgramFormValue: ( state) => {
             state.initialProgramFormValue = null;
-            state.totalNumberOfLoanee = 0
+            state.totalNumberOfLoanee = 0;
+            state.currentProgramDetailData = null
         },
         setTotalNumberOfLoanee: ( state, action: PayloadAction<number>) => {
             state.totalNumberOfLoanee = action.payload;
         },
+        setCurrentProgramDetailData: ( state, action: PayloadAction<CurrentProgramDetailData>) => {
+            state.currentProgramDetailData = action.payload;
+        },
+        resetCurrentProgramDetailData: ( state) => {
+            state.currentProgramDetailData = null
+        },
+        setProgramDetail: ( state, action: PayloadAction<string>) => {
+            state.programDetail = action.payload;
+        },
+        resetProgramDetail: ( state) => {
+            state.programDetail = ""
+        },
     }
 })
 
-export const {setCurrentProgramId,setcohortOrProgramRoute,resetCurrentProgramId,
-    setInitialProgramFormValue,resetInitialProgramFormValue,setTotalNumberOfLoanee
+export const {setCurrentProgramId,setcohortOrProgramRoute,resetCurrentProgramId,resetCurrentProgramDetailData,resetProgramDetail,
+    setInitialProgramFormValue,resetInitialProgramFormValue,setTotalNumberOfLoanee, setCurrentProgramDetailData,setProgramDetail
 } = programSlice.actions;
 export default programSlice.reducer;

@@ -27,7 +27,7 @@ import { capitalizeFirstLetters } from '@/utils/GlobalMethods';
 import SearchEmptyState from '@/reuseable/emptyStates/SearchEmptyState'
 import { MdSearch } from 'react-icons/md'
 import {store,useAppSelector} from "@/redux/store";
-import {setCurrentProgramId,setInitialProgramFormValue,resetInitialProgramFormValue,setTotalNumberOfLoanee} from "@/redux/slice/program/programSlice";
+import {setCurrentProgramId,setInitialProgramFormValue,resetInitialProgramFormValue,setTotalNumberOfLoanee,resetCurrentProgramDetailData,resetProgramDetail} from "@/redux/slice/program/programSlice";
 import DeletionRestrictionMessageProps from '@/components/cohort/DeletionRestrictionMessageProps';
 
 interface TableRowData {
@@ -95,7 +95,6 @@ const ProgramView = () => {
         { id: programId },
         {
             skip: !programId,
-            refetchOnMountOrArgChange: true
         }
     );
 
@@ -105,6 +104,8 @@ const ProgramView = () => {
         setPageNumber(0);
         setProgramView([]);
         setHasNextPage(true);
+        store.dispatch(resetCurrentProgramDetailData())
+        store.dispatch(resetProgramDetail())
     }, [searchTerm, view]);
 
     useEffect(() => {
@@ -182,7 +183,6 @@ const ProgramView = () => {
 
     const handleProgramDetailsOnclick = (id: string) => {
         store.dispatch(setCurrentProgramId(id))
-        setProgramId(id)
         router.push('/program/program-details')
     }
 
@@ -326,8 +326,9 @@ const ProgramView = () => {
             const deletePro = await deleteItem({id}).unwrap();
             if (deletePro) {
                 setProgramView((prevData) => prevData.filter((item) => item.id !== id))
-                // setTimeout(() => {
                     setDeleteProgram("")
+                    setProgramId(""); 
+                    store.dispatch(resetInitialProgramFormValue())
                     setIsDeleteOpen(false)
                     toast({
                         description: deletePro?.message,
@@ -335,7 +336,6 @@ const ProgramView = () => {
                         duration: 1000
                     })
                 }
-                // , 600);
             
 
         } catch (error) {
@@ -410,7 +410,7 @@ const ProgramView = () => {
                                 headerTitle={"Create program"}
                                 className={"w-full"}
                                 icon={Cross2Icon}
-
+                                reset={()=> {store.dispatch(resetInitialProgramFormValue())}}
                         // width={`32%`}
                     >
 
@@ -542,6 +542,7 @@ const ProgramView = () => {
               closeModal={() => {
                   setIsDeleteOpen(false)
                   setDeleteProgram("")
+                  store.dispatch(resetInitialProgramFormValue())
               }}
               icon={Cross2Icon}
                styeleType="styleBodyTwo"
@@ -555,13 +556,15 @@ const ProgramView = () => {
                     closeOnOverlayClick={true}
                     closeModal={() => {
                         setIsDeleteOpen(false)
+                         setDeleteProgram("")
+                         setProgramId(""); 
+                         store.dispatch(resetInitialProgramFormValue())
                     }}
                     icon={Cross2Icon}
                     width='auto'
                 >
                     <DeleteProgram
                         setIsOpen={() =>{ setIsDeleteOpen(false)
-                            setDeleteProgram("")
                                         }}
                         headerTitle='Program'
                         title='program'

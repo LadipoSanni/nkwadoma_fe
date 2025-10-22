@@ -67,7 +67,8 @@ const QuillFieldEditor = ({ name, errorMessage, errors, touched,onExternalChange
         // ['blockquote', 'code-block'],
         ['link'],
         // [{ 'header': 1 }, { 'header': 2 }],
-        [{ 'list': 'check' }],
+        // [{ 'list': 'check' }],
+        [{ 'list': 'ordered' }]
         // [{ 'script': 'sub' }, { 'script': 'super' }],
         // [{ 'indent': '-1' }, { 'indent': '+1' }],
         // [{ 'direction': 'rtl' }],
