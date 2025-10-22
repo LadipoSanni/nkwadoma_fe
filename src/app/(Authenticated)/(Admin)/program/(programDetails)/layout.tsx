@@ -1,6 +1,6 @@
 import React from "react";
-import TabSwitch from "@/layout/tabLayout";
-import {programDetailTab} from "@/types/tabDataTypes";
+// import TabSwitch from "@/layout/tabLayout";
+// import {programDetailTab} from "@/types/tabDataTypes";
 import CustomAuthorization from "@/features/auth/authorization";
 import ProgramLayout from "@/layout/program-details-layout";
 
