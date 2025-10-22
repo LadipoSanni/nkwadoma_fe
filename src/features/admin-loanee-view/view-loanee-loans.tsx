@@ -61,12 +61,16 @@ const ViewLoaneeLoans = () => {
         if (debouncedSearchTerm){
             setFetchData(searchData?.data?.body)
             setHasMore(searchData?.data?.hasNextPage)
-            setPageSize(searchData?.data?.totalPages)
+            if (searchData?.data?.totalPage){
+                setPageSize(searchData?.data?.totalPages)
+            }
             // setPageNumber(searchData?.data?.pageNumber)
         }else {
             setFetchData(viewAllLoans?.data?.body)
             setHasMore(viewAllLoans?.data?.hasNextPage)
-            setPageSize(viewAllLoans?.data?.totalPages)
+            if (viewAllLoans?.data?.totalPages){
+                setPageSize(viewAllLoans?.data?.totalPages)
+            }
             // setPageNumber(viewAllLoans?.data?.pageNumber)
         }
 
