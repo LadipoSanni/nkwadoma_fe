@@ -34,8 +34,8 @@ export const portfolioOverviewApi = createApi({
             providesTags: ['loanee','upload-repayment']
         }),
         viewALoanRepaymentHistory: builder.query({
-            query: ({loanId, pageNumber, pageSize}) => ({
-                url: `/repayment/history/loan?loanId=${loanId}&pageSize=${pageSize}&pageNumber=${pageNumber}`,
+            query: ({loanId, pageNumber, pageSize,month,year}) => ({
+                url: `/repayment/history/loan?loanId=${loanId}${month ? `&month=${month}`:''}${year ? `&year=${year}` : ''}&pageSize=${pageSize}&pageNumber=${pageNumber}`,
                 method: 'GET'
             })
         }),
