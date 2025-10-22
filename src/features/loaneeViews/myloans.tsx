@@ -69,8 +69,8 @@ const Myloans = () => {
               {loaneeLoans?.data?.body?.map((loan:LoanType) => (
                   <div  key={"key"+loan?.cohortName} ref={lastCardObserver} className={` w-full h-fit pb-4 px-4  bg-[#F9F9F9] rounded-md `}>
                       <div className={` flex gap-2   py-4  `}>
-                          <div className="rounded-full aspect-square  bg-[#ECECEC] flex h-[2rem] w-[2rem]   ">
-                                  {loan?.organizationName?.at(0)}
+                          <div className="rounded-full aspect-square flex items-center bg-[#ECECEC]  h-[2rem] w-[2rem]   ">
+                                 <p className={` w-fit h-fit  `}> {loan?.organizationName?.at(0)}</p>
                           </div>
                           <p id={'loaneeProgram'} data-testid={'loaneeProgram'}
                              className={`${inter600.className} mt-auto mb-auto text-black text-[16px] `}>{capitalizeFirstLetters(loan?.organizationName)}</p>
