@@ -529,9 +529,16 @@ const ProgramView = () => {
                             store.dispatch(resetInitialProgramFormValue())
                         }}
                         icon={Cross2Icon}
-                        headerTitle='Edit Program'
+                        headerTitle={numberOfLoanee > 0? '' : 'Edit Program'}
+                         styeleType={numberOfLoanee > 0? "styleBodyTwo" : "styleBody"}
                     >
-                      <CreateProgram setIsOpen={setEditOpen} isEdit={true}/>
+                    { numberOfLoanee > 0?
+                    <DeletionRestrictionMessageProps 
+                     image= "/Icon - Warning.svg"
+                    message={`This program can not be edited because it has Cohort that contains ${numberOfLoanee > 0? "loanees" : "loanee"}`}
+                    />
+                : 
+              <CreateProgram setIsOpen={setEditOpen} isEdit={true}/>}
                     </TableModal>
                 )
                 }
