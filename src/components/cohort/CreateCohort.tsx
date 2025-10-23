@@ -48,7 +48,8 @@ interface ApiError {
 
 function CreateCohort({ setIsOpen,isEdit }: Props) {
     const createCohortField = useAppSelector(state => (state?.cohort?.createCohortField))
-    const currentProgramId = useAppSelector(state => (state.program.currentProgramId))
+    const currentProgramId = useAppSelector(state => (state?.program?.currentProgramId))
+    const currentProgramName = useAppSelector(state => (state?.cohort?.programName))
      
     const initialFormValue = {
          id: createCohortField?.id || "",
@@ -365,7 +366,7 @@ function CreateCohort({ setIsOpen,isEdit }: Props) {
                                 <div className={`grid  gap-4 ${!currentProgramId? "md:grid-cols-2" : ""}`}>
                                   { !currentProgramId &&  <div>
                                         <ProgramSelect
-                                            selectedProgram={selectedProgramName }
+                                            selectedProgram={selectedProgramName  || currentProgramName}
                                             setSelectedProgram={handleProgramSelect}
                                             isSelectOpen={isSelectOpen}
                                             setIsSelectOpen={setIsSelectOpen}

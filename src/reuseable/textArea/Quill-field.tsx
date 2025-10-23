@@ -171,18 +171,15 @@ const QuillFieldEditor = ({ name, errorMessage, errors, touched, onExternalChang
     const quillRef = useRef<ReactQuill | null>(null);
     const maxChars = 2500;
 
-    // NUCLEAR OPTION: Track plain text separately from HTML
     const extractPlainText = (html: string): string => {
         if (!html) return '';
-        
-        // Create a temporary div to parse HTML
+
         const tempDiv = document.createElement('div');
         tempDiv.innerHTML = html;
         
-        // Get ONLY the text content - this strips ALL HTML tags
         const text = tempDiv.textContent || tempDiv.innerText || '';
         
-        // Clean up: remove extra spaces and trim
+
         return text.replace(/\s+/g, ' ').trim();
     };
 
@@ -199,13 +196,13 @@ const QuillFieldEditor = ({ name, errorMessage, errors, touched, onExternalChang
     }, [errors, touched, name, field.value]);
 
     const handleChange = (value: string) => {
-        // Extract plain text for counting
+        
         const textContent = extractPlainText(value);
         setPlainText(textContent);
         setCharCount(textContent.length);
         
         if (textContent.length <= maxChars) {
-            // ALWAYS send the full HTML to backend, regardless of validation
+           
             setFieldValue(name, value);
             if (onExternalChange) {
                 onExternalChange(value);
@@ -216,14 +213,14 @@ const QuillFieldEditor = ({ name, errorMessage, errors, touched, onExternalChang
             setFieldTouched(name, true);
             setFieldError(name, errorMessage);
             
-            // Revert in Quill editor
+           
             const quill = quillRef.current?.getEditor();
             if (quill) {
-                // Get current content and remove excess
+
                 const currentHtml = quill.root.innerHTML;
                 const currentText = extractPlainText(currentHtml);
                 if (currentText.length > maxChars) {
-                    // This is tricky, but we can try to remove the last operation
+
                     quill.history.undo();
                 }
             }
@@ -241,12 +238,11 @@ const QuillFieldEditor = ({ name, errorMessage, errors, touched, onExternalChang
     UseQuillPaste(quillRef, handlePaste);
 
     const handleKeyDown = (e: React.KeyboardEvent) => {
-        // Allow deletion keys always
+       
         if (e.key === 'Backspace' || e.key === 'Delete') {
             return;
         }
         
-        // Prevent typing if at limit
         if (charCount >= maxChars) {
             e.preventDefault();
             setCustomError(errorMessage);
@@ -292,7 +288,7 @@ const QuillFieldEditor = ({ name, errorMessage, errors, touched, onExternalChang
                 className="font-inter text-sm font-normal leading-[22px] pt-2 rounded-md"
             />
             
-            {/* Character counter - ONLY counts visible text */}
+
             <div className={`text-right text-sm mt-1 ${
                 charCount >= maxChars ? 'text-red-500' : 'text-gray-500'
             }`}>

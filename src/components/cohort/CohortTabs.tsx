@@ -20,7 +20,7 @@ import {
     setcohortId,
     setSelectedCohortInOrganization,
     setSelectedCohortInOrganizationType,
-    resetCreateCohortField, setCreateCohortField, setTotalNumberOfLoanee
+    resetCreateCohortField, setCreateCohortField, setTotalNumberOfLoanee,setSelectedProgramName
 } from '@/redux/slice/create/cohortSlice'
 import {capitalizeFirstLetters} from "@/utils/GlobalMethods";
 import { setcohortOrProgramRoute } from '@/redux/slice/program/programSlice';
@@ -171,10 +171,11 @@ const CohortTabs = (
       ...item,
       itemAmount: String(item.itemAmount)
   })) || [];
-
+ 
+  const programName =  row?.programName as string
   const totalNumberOfLoanee = row?.numberOfLoanees as number
    store.dispatch(setTotalNumberOfLoanee(totalNumberOfLoanee))
-
+    store.dispatch(setSelectedProgramName(programName))
 
     const cohortDetails = {
              id: row?.id as string ,
