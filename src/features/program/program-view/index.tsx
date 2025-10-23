@@ -535,7 +535,7 @@ const ProgramView = () => {
                     { numberOfLoanee > 0?
                     <DeletionRestrictionMessageProps 
                      image= "/Icon - Warning.svg"
-                    message={`This program can not be edited because it has Cohort that contains ${numberOfLoanee > 0? "loanees" : "loanee"}`}
+                    message={`This program can not be updated because it has Cohort that contains ${numberOfLoanee > 1? "loanees" : "loanee"}`}
                     />
                 : 
               <CreateProgram setIsOpen={setEditOpen} isEdit={true}/>}

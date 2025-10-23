@@ -65,13 +65,14 @@ function ProgramLayout({children}:props) {
 
   const handleDropdownClick = (id:string) => {
       if(id === "1") {
-        // if(totalNumberOfLoaneesInLoanProduct === 0){
-        //   store.dispatch(setIsEdit(true))
-        //   router.push("/loan-product/step-one")
-        // }else {
+        if(programCurrentDetail?.numberOfLoanee === 0){
           setIsModalOpen(true)
           setModalType("update")
-        // }
+        } else {
+          setIsModalOpen(true)
+          setModalType("update")
+        }
+        
    } else if(id === "3"){
      if(programCurrentDetail?.numberOfLoanee === 0){
       setIsDeleteModal(true)
@@ -135,37 +136,23 @@ function ProgramLayout({children}:props) {
            isOpen={modalIsOpen}
            closeOnOverlayClick={true}
            icon={Cross2Icon}
-            headerTitle={modalType === "update"? "Edit program" : ""}
+            headerTitle={modalType === "update" && programCurrentDetail?.numberOfLoanee === 0? "Edit program" : ""}
            closeModal={() => {
              setIsModalOpen(false)
-             if(modalType === "update"){}
            }}
-           styeleType={ modalType === "delete"? "styleBodyTwo" : "styleBody"}
+           styeleType={ modalType === "delete" || (modalType === "update" && programCurrentDetail?.numberOfLoanee && programCurrentDetail?.numberOfLoanee > 0)? "styleBodyTwo" : "styleBody"}
           >
-          {/* <div className={`${inter.className}`}>
-            <div>
-            <Image
-             src={modalType === "update"? "/Icon - Warning.svg" : "/Inner circle (1).png"}
-             alt='image'
-             width={30}
-             height={30}
-             className={` ${modalType === "update"? "w-14" : "w-11"} `}
-            />
-            </div>
-            <p className='mt-4 mb-5 text-[14px] text-[#475467]'> 
-              {
-                modalType === "update"? "Updates are restricted for loan products associated with existing loanees." : "Deletion is restricted for loan products associated with existing loanees."
-              }
-              
-              </p>
-          </div> */}
-          { 
+          
+          { programCurrentDetail?.numberOfLoanee && programCurrentDetail?.numberOfLoanee > 0 && modalType === "update"?  <DeletionRestrictionMessageProps 
+                     image= "/Icon - Warning.svg"
+                    message={`This program can not be updated because it has Cohort that contains ${programCurrentDetail?.numberOfLoanee && programCurrentDetail?.numberOfLoanee > 1? "loanees" : "loanee"}`}
+                    /> :
              modalType === "update"? <CreateProgram
              setIsOpen={setIsModalOpen}
              isEdit={true}
          /> : 
              <DeletionRestrictionMessageProps 
-             message={`This program can not be deleted because it has Cohort that contains ${programCurrentDetail?.numberOfLoanee && programCurrentDetail?.numberOfLoanee > 0? "loanees" : "loanee"}`}
+             message={`This program can not be deleted because it has Cohort that contains ${programCurrentDetail?.numberOfLoanee && programCurrentDetail?.numberOfLoanee > 1? "loanees" : "loanee"}`}
              /> 
           }
           </Modal>
