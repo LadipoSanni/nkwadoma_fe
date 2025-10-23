@@ -155,16 +155,10 @@ const ViewLoaneeLoans = () => {
                    className={`h-full   grid  bg-white py-4 w-full `}
                >
                    { isLoadingViewAll  || isFetchingViewAll || isLoadingSearch || isFetchingSearch?
-                   <div className={` grid grid-cols-3 h-[50vh] `}>
-                       <div className={` w-full h-[10rem] animate-pulse bg-[#f4f4f5]  `}>
-
-                       </div>
-                       <div className={` w-full h-[10rem] animate-pulse bg-[#f4f4f5]  `}>
-
-                       </div>
-                       <div className={` w-full h-[10rem] animate-pulse bg-[#f4f4f5]  `}>
-
-                       </div>
+                   <div className={` grid grid-cols-3 gap-4 h-[50vh] `}>
+                       <div className={` w-full h-[20rem] px-4 py-8  animate-pulse bg-[#f4f4f5]  `}></div>
+                       <div className={` w-full h-[20rem] px-4 py-8  animate-pulse bg-[#f4f4f5]  `}></div>
+                       <div className={` w-full h-[20rem] px-4 py-8  animate-pulse bg-[#f4f4f5]  `}></div>
                    </div>
 
                                : (debouncedSearchTerm && searchData?.data?.body?.length === 0) || viewAllLoans?.data?.body?.length === 0 ?
