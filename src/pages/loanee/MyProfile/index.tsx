@@ -99,7 +99,7 @@ const LoaneeDetails = ({isViewingOrganizationLoaneeLoansThrowCohortFlow}: IndexP
     ]
     const loaneeBioDataTab :  {name: string; displayValue: React.ReactNode} = {name: 'Bio details', displayValue: <div className={` md:max-h-[60vh]  grid gap-4 w-full  ${styles.container}`}>{loaneeBioDa()}</div>}
     const tab:  {name: string; displayValue: React.ReactNode}[] = [
-        {name: 'Details',  displayValue: <LoaneeLoanDetails isViewingOrganizationLoaneeLoans={isViewingOrganizationLoaneeLoansThrowCohortFlow}  data={isViewingOrganizationLoaneeLoansThrowCohortFlow ?  data?.data : viewLoaneeDisbursedLoanDetails?.data } isLoading={false} />},
+        {name: 'Details',  displayValue: <LoaneeLoanDetails isViewingOrganizationLoaneeLoans={isViewingOrganizationLoaneeLoansThrowCohortFlow}  data={isViewingOrganizationLoaneeLoansThrowCohortFlow ?  data?.data : viewLoaneeDisbursedLoanDetails?.data } isLoading={isViewingOrganizationLoaneeLoansThrowCohortFlow ? isLoading || isFetching :isFetchingLoaneeLoanDetails || isLoadingLoaneeLoanDetails } />},
         {name: 'Repayment',  displayValue:<ViewRepayment loanId={isViewingOrganizationLoaneeLoansThrowCohortFlow ? data?.data?.loanId :viewLoaneeDisbursedLoanDetails?.data?.id } />},
         {name: 'Repayment schedule',  displayValue:<ViewRepaymentSchedule loanId={isViewingOrganizationLoaneeLoansThrowCohortFlow ? data?.data?.loanId : viewLoaneeDisbursedLoanDetails?.data?.id }/>},
         ...(userRole !== "LOANEE" ? [loaneeBioDataTab] : []),

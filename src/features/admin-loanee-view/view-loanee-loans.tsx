@@ -155,7 +155,7 @@ const ViewLoaneeLoans = () => {
                    className={`h-full   grid  bg-white py-4 w-full `}
                >
                    { isLoadingViewAll  || isFetchingViewAll || isLoadingSearch || isFetchingSearch?
-                   <div className={` grid grid-cols-3 h-[50vh] `}>
+                   <div className={` grid grid-cols-3 gap-4 h-[50vh] `}>
                        <div className={` w-full h-[10rem] animate-pulse bg-[#f4f4f5]  `}>
 
                        </div>
