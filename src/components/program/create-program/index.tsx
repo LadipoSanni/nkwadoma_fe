@@ -36,7 +36,17 @@ function CreateProgram({setIsOpen,isEdit}:Props) {
   const [updateProgram, { isLoading:isEditLoading }] = useUpdateProgramMutation();
   const [error, setError] =  useState('');
      const { toast } = useToast();
+  // const [charCount] = useState(0);
+  // const [charCountError, setCharCountError] = useState("");
+  const maxChars = 2500;
 
+  const extractPlainText = (html: string): string => {
+    if (!html) return '';
+    const tempDiv = document.createElement('div');
+    tempDiv.innerHTML = html;
+    const text = tempDiv.textContent || tempDiv.innerText || '';
+    return text.replace(/\s+/g, ' ').trim();
+  };
 
     const initialFormValue = {
         id: initialProgramValue?.id || "",
@@ -46,6 +56,17 @@ function CreateProgram({setIsOpen,isEdit}:Props) {
         programDuration: initialProgramValue?.programDuration ||  "",
         programDescription: initialProgramValue?.programDescription ||  "",
     }
+
+    // useEffect(() => {
+    //   if(charCount > maxChars){
+    //    setCharCountError('Program description must be 2500 characters or less')
+    //    console.log("Error: ",charCountError)
+    //   }else {
+    //     setCharCountError("")
+    //     console.log("No error: ",charCountError)
+    //   }
+
+    // },[charCount])
 
     const handleFormChange = (field: string, value: string ) => {
          const currentField = initialProgramValue || {
@@ -82,10 +103,13 @@ function CreateProgram({setIsOpen,isEdit}:Props) {
       .matches(/^(?!0)\d+$/, 'Program duration must be a number and cannot start with zero.')
       .required('Program duration is required'),
       programDescription: Yup.string()
-       .trim()
-      //  .required('Program Description is required')
-        .max(2500, 'Program description must be 2500 characters or less')
-    });
+      .trim()
+      .test('maxChars', 'Program description must be 2500 characters or less', (value) => {
+        if (!value) return true; 
+        const textContent = extractPlainText(value);
+        return textContent.length <= maxChars;
+      })
+  });
 
 
     const networkPopUp =  ToastPopUp({
@@ -310,11 +334,19 @@ function CreateProgram({setIsOpen,isEdit}:Props) {
                   
                   <QuillFieldEditor
                       name="programDescription"
-                      errorMessage="Program description must be 2500 characters or less"
+                      errorMessage=""
                       errors={{ programDescription: errors.programDescription }}
                       touched={{ programDescription: touched.programDescription }}
                       onExternalChange={(value) => handleFormChange("programDescription", value)}
+                      // onCharCountChange={setCharCount}
+                      // maxChars={maxChars}
                      />
+                     {/* <div className={`text-right text-sm mt-1 ${
+                charCount >= maxChars ? 'text-red-500' : 'text-gray-500'
+              }`}> */}
+                {/* {charCount}/{maxChars} characters
+                {charCount > maxChars && ' - Limit reached'} */}
+              {/* </div> */}
                     {errors.programDescription && touched.programDescription && (
                   <ErrorMessage
                       name="programDescription"
@@ -323,6 +355,14 @@ function CreateProgram({setIsOpen,isEdit}:Props) {
                       className="text-red-500 text-sm"
                   />
                   )}
+                  {/* {
+                    <div className="text-red-500 text-sm">
+                      {charCountError}
+                    </div>
+                  } */}
+                  <div>
+                     
+                  </div>
                 </div>
                 </div>
                 <div className='w-full border-[#D7D7D7] border-[0.6px] mt-3 mb-6'></div>
