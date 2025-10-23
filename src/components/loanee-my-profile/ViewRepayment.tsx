@@ -136,31 +136,6 @@ const ViewRepayment = ({loanId}: Props) => {
     };
 
     const  getRepaymentYears = (firstRepaymentYear: number,lastRepaymentYear: number) => {
-        // if (firstRepaymentYear === 0 || lastRepaymentYear === 0) {
-        //     return [];
-        // }else{
-        //     if (!lastRepaymentYear) {
-        //         const repaymentYears : number[] = [firstRepaymentYear]
-        //         const currentYear = new Date().getFullYear();
-        //         for (const element of repaymentYears) {
-        //             if (element < currentYear){
-        //                 repaymentYears.push(element + 1 )
-        //             }
-        //         }
-        //         return repaymentYears;
-        //     }else if (!firstRepaymentYear) {
-        //         const currentYear = new Date().getFullYear();
-        //         return [currentYear]
-        //     }else {
-        //         const repaymentYears : number[] = [firstRepaymentYear]
-        //         for (const element of repaymentYears) {
-        //             if (element < lastRepaymentYear){
-        //                 repaymentYears.push(element + 1 )
-        //             }
-        //         }
-        //         return repaymentYears;
-        //     }
-        // }
         if (!firstRepaymentYear || !lastRepaymentYear) {
             if (firstRepaymentYear) return [firstRepaymentYear];
             if (lastRepaymentYear) return [lastRepaymentYear];
@@ -305,8 +280,8 @@ const ViewRepayment = ({loanId}: Props) => {
                                     // searchEmptyState={!isTyping && debouncedSearchTerm?.length > 0 && searchData?.data?.body?.length < 1 }
                                     sideBarTabName={'repayment'}
                                     icon={MdOutlineLibraryBooks}
-                                    staticHeader={"Name"}
-                                    staticColunm={'name'}
+                                    staticHeader={"Payment date"}
+                                    staticColunm={'paymentDate'}
                                     hasNextPage={hasNextPage}
                                     pageNumber={pageNumber}
                                     setPageNumber={setPageNumber}
