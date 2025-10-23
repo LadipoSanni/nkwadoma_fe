@@ -1,9 +1,8 @@
 'use client'
 import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {useViewAllLoanDisbursalQuery, useViewLoansTotalCalculationQuery} from "@/service/admin/loan/Loan-disbursal-api";
-import { capitalizeFirstLetters } from '@/utils/GlobalMethods';
+import { formatSentence} from '@/utils/GlobalMethods';
 import {inter, inter600,inter700, inter500} from '@/app/fonts';
-import {LoanType} from "@/types/loan/loan-request.type";
 import {useRouter} from "next/navigation";
 import { setClickedLoanId } from '@/redux/slice/loan/selected-loan';
 import { store } from '@/redux/store';
@@ -12,6 +11,7 @@ import styles from '@/features/Overview/index.module.css';
 import {formatAmount} from "@/utils/Format";
 import GeneralEmptyState from "@/reuseable/emptyStates/General-emptystate";
 import {MdPersonOutline} from "react-icons/md";
+import {AdminViewLoanType} from "@/types/loanee";
 
 const Myloans = () => {
     const [pageNumber,setPageNumber] = useState<number>(0);
@@ -25,11 +25,13 @@ const Myloans = () => {
     const {data: loaneeLoans, isLoading , isFetching } = useViewAllLoanDisbursalQuery(request)
     const {data:loansTotalCalculations,isLoading:loansTotalCalculationsLoading } = useViewLoansTotalCalculationQuery({})
     const [hasMore, setHasMore] = useState(true);
+    const [fetchData, setFetchData] = useState<AdminViewLoanType[]>([]);
 
     useEffect(() => {
         if (loaneeLoans){
+            setFetchData((prev) => [...prev, ...loaneeLoans?.data?.body ])
             setHasMore(loaneeLoans?.data?.hasNextPage)
-            setPageSize(loaneeLoans?.data?.totalPages)
+            setPageSize(loaneeLoans?.data?.pageSize)
         }
     }, [loaneeLoans]);
     const handleClick = (loanId:string) => {
@@ -60,22 +62,22 @@ const Myloans = () => {
     );
 
     return (
-        <div className={` w-full h-full grid gap-8 px-4 py-4  md:px-8 md:py-6`}>
-            <div className={`w-full flex gap-4  md:gap-6 ${styles.overviewCard}   `}>
+        <main className={` w-full h-[85vh]  grid gap-8   pt-3 `}>
+            <div className={`w-full flex gap-4  md:gap-6 ${styles.overviewCard} px-4  `}>
                 <Details isLoading={loansTotalCalculationsLoading} sx={`  w-[20em] md:w-full  `} name={'Total loan amount'} valueType={"currency"}  id={'loaneeTotalLoan'} showAsWholeNumber={false}   maxWidth={'100%'}  value={loansTotalCalculations?.data?.totalAmountReceived}/>
                 <Details isLoading={loansTotalCalculationsLoading} sx={` w-[20em] md:w-full `} id={'loaneeTotalLoaneOutstanding'} showAsWholeNumber={false}   maxWidth={'100%'} name={'Total amount outstanding '} value={loansTotalCalculations?.data?.totalAmountOutstanding} valueType={'currency'}  />
                 <Details isLoading={loansTotalCalculationsLoading} sx={` w-[20em] md:w-full `} id={'loaneeTotalAmountRepaid'} showAsWholeNumber={false}   maxWidth={'100%'} name={'Total amount repaid '} value={loansTotalCalculations?.data?.totalAmountRepaid} valueType={'currency'}  />
             </div>
-            <section>
+            <section className={` max-h-[58vh] overflow-y-auto  pl-4 pr-1 `}>
                 { isLoading  || isFetching ?
-                    <div className={` grid grid-cols-3 gap-4 h-[50vh] `}>
+                    <div className={` grid grid-cols-3 gap-4 h-[50vh] px-4 `}>
                         <div className={` w-full h-[20rem] px-4 py-8  animate-pulse bg-[#f4f4f5]  `}></div>
                         <div className={` w-full h-[20rem] px-4 py-8  animate-pulse bg-[#f4f4f5]  `}></div>
                         <div className={` w-full h-[20rem] px-4 py-8  animate-pulse bg-[#f4f4f5]  `}></div>
                     </div>
-                :loaneeLoans?.data?.body?.length === 0 ?
+                :fetchData?.length === 0 ?
                         (
-                            <div className={`h-60 relative bottom-3`}>
+                            <div className={`h-60 relative  bottom-3`}>
                               <GeneralEmptyState
                                     icon={ MdPersonOutline}
                                     iconSize='1.8rem'
@@ -89,14 +91,14 @@ const Myloans = () => {
                         )
                 :
                         <div className={`w-full h-full grid  gap-4 md:grid md:grid-cols-3 `}>
-                            {loaneeLoans?.data?.body?.map((loan:LoanType) => (
+                            {fetchData?.map((loan:AdminViewLoanType) => (
                                 <div  key={"key"+loan?.cohortName} ref={lastCardObserver} className={` w-full h-fit pb-4 px-4  bg-[#F9F9F9] rounded-md `}>
                                     <div className={` flex gap-2   py-4  `}>
                                         <div className="rounded-full aspect-square flex items-center bg-[#ECECEC]  h-[2rem] w-[2rem]   ">
                                             <p className={` w-fit h-fit mr-auto ml-auto  `}> {loan?.organizationName?.at(0)}</p>
                                         </div>
                                         <p id={'loaneeProgram'} data-testid={'loaneeProgram'}
-                                           className={`${inter600.className} mt-auto mb-auto text-black text-[16px] `}>{capitalizeFirstLetters(loan?.organizationName)}</p>
+                                           className={`${inter600.className} mt-auto mb-auto text-black text-[16px] `}>{formatSentence(loan?.organizationName)}</p>
                                     </div>
                                     <div
                                         className={`grid justify-items-start pl-3 py-3  rounded-md gap-4 ${isLoading ? `bg-white h-[10em] animate-pulse` : `bg-white `}    `}>
@@ -121,7 +123,7 @@ const Myloans = () => {
                         </div>
                 }
             </section>
-        </div>
+        </main>
     );
 };
 

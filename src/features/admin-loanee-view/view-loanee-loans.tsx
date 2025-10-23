@@ -6,7 +6,7 @@ import styles from '@/features/Overview/index.module.css';
 
 import Details from "@/components/loanee-my-profile/Details";
 import SearchInput from "@/reuseable/Input/SearchInput";
-import {capitalizeFirstLetters, getFirstLetterOfWord} from "@/utils/GlobalMethods";
+import { formatSentence, getFirstLetterOfWord} from "@/utils/GlobalMethods";
 import {formatAmount} from "@/utils/Format";
 import { useRouter } from 'next/navigation';
 import {Badge} from "@/components/ui/badge";
@@ -59,19 +59,17 @@ const ViewLoaneeLoans = () => {
 
     useEffect(() => {
         if (debouncedSearchTerm){
-            setFetchData(searchData?.data?.body)
+            setFetchData((prev) => [...prev, ...searchData?.data?.body ])
             setHasMore(searchData?.data?.hasNextPage)
             if (searchData?.data?.totalPage){
                 setPageSize(searchData?.data?.totalPages)
             }
-            // setPageNumber(searchData?.data?.pageNumber)
         }else {
-            setFetchData(viewAllLoans?.data?.body)
+            setFetchData((prev) => [...prev, ...viewAllLoans?.data?.body ])
             setHasMore(viewAllLoans?.data?.hasNextPage)
-            if (viewAllLoans?.data?.totalPages){
-                setPageSize(viewAllLoans?.data?.totalPages)
+            if (viewAllLoans?.data?.pageSize){
+                setPageSize(viewAllLoans?.data?.pageSize)
             }
-            // setPageNumber(viewAllLoans?.data?.pageNumber)
         }
 
     }, [viewAllLoans, debouncedSearchTerm,searchData ])
@@ -190,7 +188,7 @@ const ViewLoaneeLoans = () => {
                                                    <p className={` w-fit h-fit mt-auto mb-auto mr-auto ml-auto ${inter600.className} text-[#4D4E4D] md:text-[#4D4E4D] text-[16px] `}>{getFirstLetterOfWord(loan?.organizationName) ? getFirstLetterOfWord(loan?.organizationName) : loan?.organizationName?.at(0)?.toUpperCase()}</p>
                                                </Badge>
                                                <p id={'loaneeProgram'} data-testid={'loaneeProgram'}
-                                                  className={`${inter600.className} mt-auto break-all w-full  mb-auto text-black text-[16px] `}>{capitalizeFirstLetters(loan?.organizationName)}</p>
+                                                  className={`${inter600.className} mt-auto break-all w-full  mb-auto text-black text-[16px] `}>{formatSentence(loan?.organizationName)}</p>
                                            </div>
                                            <div
                                                className={`grid justify-items-start pl-3 py-3  rounded-md gap-4 ${isLoading ? `bg-white h-[10em] animate-pulse` : `bg-white `}    `}>
