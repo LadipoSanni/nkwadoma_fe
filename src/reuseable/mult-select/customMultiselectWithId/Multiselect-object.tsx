@@ -37,6 +37,8 @@ interface MultiSelectProps
   isLoading?: boolean;
   resetKey?: string;
   selectAllcondition?: boolean;
+  isEdit?: boolean;
+  names?: SelectedValue[]
 }
 
 export const MultiSelect = React.forwardRef<HTMLButtonElement, MultiSelectProps>(
@@ -60,6 +62,7 @@ export const MultiSelect = React.forwardRef<HTMLButtonElement, MultiSelectProps>
       isLoading,
       resetKey,
       selectAllcondition,
+      names,
       ...props
     },
     ref
@@ -82,18 +85,45 @@ export const MultiSelect = React.forwardRef<HTMLButtonElement, MultiSelectProps>
       setIsPopoverOpen(open);
     };
 
-    const toggleOption = (optionId: string) => {
-      const option = options.find(opt => opt.id === optionId);
-      if (!option) return;
+    // const toggleOption = (optionId: string) => {
+    //   const option = options.find(opt => opt.id === optionId);
+    //   if (!option) return;
 
+    //   const isAlreadySelected = selectedValues.some(value => value.id === optionId);
+      
+    //   let newSelectedValues: SelectedValue[];
+      
+    //   if (isAlreadySelected) {
+    //     newSelectedValues = selectedValues.filter(value => value.id !== optionId);
+    //   } else {
+    //     newSelectedValues = [...selectedValues, { id: option.id, name: option.name }];
+    //   }
+      
+    //   setSelectedValues(newSelectedValues);
+    //   onValueChange(newSelectedValues);
+    // };
+
+    const toggleOption = (optionId: string) => {
+     
+      const existingItemFromNames = names?.find(n => n.id === optionId);
+      
+      const optionFromOptions = options.find(opt => opt.id === optionId);
+    
+     
+      if (!existingItemFromNames && !optionFromOptions) return;
+    
       const isAlreadySelected = selectedValues.some(value => value.id === optionId);
       
       let newSelectedValues: SelectedValue[];
       
       if (isAlreadySelected) {
+        
         newSelectedValues = selectedValues.filter(value => value.id !== optionId);
       } else {
-        newSelectedValues = [...selectedValues, { id: option.id, name: option.name }];
+        
+        const nameToUse = existingItemFromNames?.name || optionFromOptions?.name || optionId;
+        const newItem = { id: optionId, name: nameToUse };
+        newSelectedValues = [...selectedValues, newItem];
       }
       
       setSelectedValues(newSelectedValues);
@@ -132,6 +162,7 @@ export const MultiSelect = React.forwardRef<HTMLButtonElement, MultiSelectProps>
             className={className}
             selectButtonId={selcetButtonId}
             horizontalScroll={horizontalScroll}
+            names={names}
             {...props}
           />
         </PopoverTrigger>

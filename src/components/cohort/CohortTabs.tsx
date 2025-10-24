@@ -364,7 +364,7 @@ const CohortTabs = (
         headerTitle='Cohort' 
         title='cohort'
         handleDelete={handleDelete}
-        id={cohortId}
+         id={cohortId}
         errorDeleting={errorDeleted}
         isLoading={isDeleteLoading}
         />

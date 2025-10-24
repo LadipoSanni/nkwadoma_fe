@@ -17,6 +17,12 @@ export const multiSelectVariants = cva("m-1 bg-[#F6F6F6]", {
   },
 });
 
+interface Name {
+  id: string;
+  name: string
+}
+
+
 interface MultiSelectTriggerProps
   extends VariantProps<typeof multiSelectVariants> {
   options: {
@@ -32,6 +38,8 @@ interface MultiSelectTriggerProps
   className?: string;
   selectButtonId?: string;
   horizontalScroll?: boolean;
+  isEdit?: boolean;
+  names?: Name[]
 }
 
 export const MultiSelectTrigger = React.forwardRef<
@@ -50,10 +58,14 @@ export const MultiSelectTrigger = React.forwardRef<
       className,
       selectButtonId,
       horizontalScroll = false,
+      isEdit,
+      names,
       ...props
     },
     ref
   ) => {
+
+
     return (
       <Button
         type="button"
@@ -89,7 +101,13 @@ export const MultiSelectTrigger = React.forwardRef<
                     style={{ animationDuration: `${animation}s` }}
                   >
                     {IconComponent && <IconComponent className="h-4 w-4 mr-2" />}
-                    {option?.name}
+                    {/* {   option?.name } */}
+                    {!isEdit ? (
+                      option?.name
+                    ) : (
+                      
+                      names?.find((n) => n.id === id)?.name || option?.name || id
+                    )}
                     <XIcon
                       className="ml-2 h-4 w-4 cursor-pointer text-[#939CB0]"
                       onClick={(event) => {

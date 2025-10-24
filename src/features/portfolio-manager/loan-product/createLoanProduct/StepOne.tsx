@@ -53,6 +53,7 @@ function StepOne() {
     const [localFundAvailableAmount, setLocalFundAvailableAmount] = useState(fundProductAvailableAmount);
     const isEdit = useAppSelector(state => state?.loanProduct?.isEdit)
     const [investmentVehicleAmountAvailable,setAmountAvailable] = useState(0)
+    const sponsors = useAppSelector(state => (state?.loanProduct?.sponsors))
     const router = useRouter();
 
      const {data: investmentVehicleAvailableAmount} = useGetInvestmentVehicleDetailQuery({id: investmentVehicleId}, {skip: !investmentVehicleId && !isEdit});
@@ -254,24 +255,6 @@ function StepOne() {
                     const {loanProductSize} = this.parent;
                     return parseFloat(value) <= parseFloat(loanProductSize);
                 }),
-            // .test('is-less-than-platform-limit', 
-            //         generalOblgorLimitData 
-            //             ? `Obligor limit can't exceed platform limit of ${formatAmount(generalOblgorLimitData)}`
-            //             : 'Obligor limit exceeds platform limits',
-            //         function (value) {
-            //             if (!generalOblgorLimitData || !value) return true;
-            //             const numericValue = parseFloat(value);
-            //             const platformLimit = generalOblgorLimitData;
-            //             return numericValue <= platformLimit;
-            //  }),
-        // minimumRepaymentAmount: Yup.string()
-        //     .trim()
-        //     .required("Amount is required")
-        //     .test('is-greater-than-loan-product-size', 'Repayment amount can\'t be greater than product size',
-        //         function (value) {
-        //             const {loanProductSize} = this.parent;
-        //             return parseFloat(value) <= parseFloat(loanProductSize);
-        //         }),
         moratorium: Yup.string()
             .trim()
             .required("Amount is required")
@@ -526,6 +509,8 @@ function StepOne() {
                         isLoading={isFinancierLoading}
                         resetKey={values.investmentVehicleId} 
                         selectAllcondition={true}
+                        isEdit={isEdit && check? true : false}
+                        names={isEdit && check ? (sponsors || undefined) : undefined}
                          />
                          {showSponsorError && !values.investmentVehicleId && (
                             <div className="text-red-500 text-sm mt-1">
@@ -559,17 +544,6 @@ function StepOne() {
                                                         currentTarget: { blur: () => string; };
                                                     }) => e.currentTarget.blur()}
                                                     onChange={handleLoanProductSizeChange}
-                                                    // onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                                                    //     let rawValue = e.target.value.replace(/,/g, "");
-                                                    //     if (/^(?!0$)\d*$/.test(rawValue)) {
-                                                    //         rawValue = parseInt(rawValue).toString();
-                                                    //         let formattedValue = Number(rawValue).toLocaleString();
-                                                    //         formattedValue += ".00";
-                                                    //         setFieldValue("loanProductSize", rawValue,true);
-                                                    //         e.target.value = formattedValue;
-                                                            
-                                                    //     }
-                                                    // }}
                                                     onFocus={(e: React.FocusEvent<HTMLInputElement>) => {
                                                         setFieldTouched("loanProductSize", true, true);
                                                         setFieldValue("loanProductSize", e.target.value, true);
@@ -594,56 +568,6 @@ function StepOne() {
                                             </div>
                                         </div>
                                     </div>
-                        
-                            
-                             {/* <div className={`relative bottom-4`}>
-                                        <Label htmlFor="minimumRepaymentAmount"
-                                               style={{display: 'inline-block', WebkitOverflowScrolling: 'touch'}}>Minimum
-                                            repayment amount</Label>
-
-                                        <div className={`flex flex-row gap-2 w-full`}>
-                                            <div className={`pt-1`}>
-                                                <CurrencySelectInput readOnly={false}
-                                                                     selectedcurrency={selectCurrency}
-                                                                     setSelectedCurrency={setSelectCurrency}
-                                                                     className={`h-12`}/>
-                                            </div>
-
-                                            <div className={`pt-4 w-full`}>
-                                                <Field
-                                                    id="minimumRepaymentAmount"
-                                                    data-testid="minimumRepaymentAmount"
-                                                    name="minimumRepaymentAmount"
-                                                    type={"number"}
-                                                    className="w-full p-3 border rounded focus:outline-none text-sm"
-                                                    component={CustomInputField}
-                                                    placeholder="0.00"
-                                                    onWheel={(e: {
-                                                        currentTarget: { blur: () => string; };
-                                                    }) => e.currentTarget.blur()}
-                                                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                                                        let rawValue = e.target.value.replace(/,/g, "");
-                                                        if (/^(?!0$)\d*$/.test(rawValue)) {
-                                                            rawValue = parseInt(rawValue).toString();
-                                                            let formattedValue = Number(rawValue).toLocaleString();
-                                                            formattedValue += ".00";
-                                                            setFieldValue("minimumRepaymentAmount", rawValue);
-                                                            e.target.value = formattedValue;
-                                                        }
-                                                    }}
-                                                />
-                                                  {
-                                            errors.minimumRepaymentAmount && touched.minimumRepaymentAmount && (
-                                                <ErrorMessage
-                                                    name="minimumRepaymentAmount"
-                                                    id='minimumRepaymentAmount'
-                                                    component="div"
-                                                    className="text-red-500 text-sm"
-                                                />)
-                                        }
-                                            </div>
-                                        </div>
-                                    </div> */}
 
                                     <div className={`relative bottom-5`}>
                                         <Label htmlFor="obligorLimit">Obligor limit</Label>
