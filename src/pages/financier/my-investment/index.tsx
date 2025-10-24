@@ -134,8 +134,6 @@ const MyInvestment = () => {
         }
     }
 
-    // console.log('myInvestmentVehicles', myInvestmentVehicles)
-
 
     return (
         <main
