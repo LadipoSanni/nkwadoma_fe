@@ -23,8 +23,8 @@ interface CohortState {
    backOfficeAdmin: string
   selectedCohortInOrganizationType: string;
   createCohortField: CreateCohortField | null;
-  loanBreakDowns: LoanBreakDowns[] | null;
   numberOfLoanees: number;
+  programName: string
 }
 
 const initialState: CohortState = {
@@ -37,8 +37,8 @@ const initialState: CohortState = {
   backOfficeAdmin: "",
   selectedCohortInOrganizationType: '',
   createCohortField: null,
-  loanBreakDowns: null,
-  numberOfLoanees: 0
+  numberOfLoanees: 0,
+  programName: ""
 };
 
 const cohortSlice = createSlice({
@@ -82,16 +82,16 @@ const cohortSlice = createSlice({
     setCreateCohortField: (state, action: PayloadAction<CreateCohortField>) => {
       state.createCohortField = action.payload;
     },
-    setLoanBreakdown: (state, action: PayloadAction<LoanBreakDowns[]>) => {
-      state.loanBreakDowns = action.payload;
-    },
     resetCreateCohortField: (state) => {
       state.createCohortField = null
-      state.loanBreakDowns = null
       state.numberOfLoanees = 0
+      state.programName = ""
     },
     setTotalNumberOfLoanee: (state, action: PayloadAction<number>) => {
       state.numberOfLoanees = action.payload;
+    },
+    setSelectedProgramName(state, action: PayloadAction<string >) {
+      state.programName = action.payload;
     },
   },
 
@@ -104,6 +104,6 @@ export const {resetSelectedCohortInOrganization,
   setUploadedUrl,setcohortStatusTab,
   resetcohortId,setcohortId,setBackOfficeAdmin, 
   setCreateCohortField,resetCreateCohortField,setTotalNumberOfLoanee,
-  setLoanBreakdown
+  setSelectedProgramName
 } = cohortSlice.actions;
 export default cohortSlice.reducer;
