@@ -1,6 +1,7 @@
-import React from "react"
+import React from "react";
 import {cabinetGrotesk, inter} from "@/app/fonts";
 import Image, {StaticImageData} from 'next/image';
+import { toSentenceCase } from "@/utils/GlobalMethods";
 import { CurrentMyInvestmentVehicleDetails} from "@/types/Component.type";
 
 
@@ -20,19 +21,19 @@ interface InvestmentCardProps {
 }
 
 const Card = ({
-                                                           status,
-                                                           backgroundColor,
-                                                           investmentVehicleType,
-                                                           imageSrc,
-                                                           investmentVehicleName,
-                                                           statusValue,
-                                                           percentage,
-                                                           HandleCardDetails,
-                                                           statusClass,
-                                                           borderClass,
-                                                           // typeTextColor,
-                                                           vehicleDetails,
-                                                       }: InvestmentCardProps) => {
+    status,
+    backgroundColor,
+    investmentVehicleType,
+    imageSrc,
+    investmentVehicleName,
+    statusValue,
+    percentage,
+    HandleCardDetails,
+    statusClass,
+    borderClass,
+    // typeTextColor,
+    vehicleDetails,
+    }: InvestmentCardProps) => {
 
     return (
         <div id={`investment-card`} data-testid="investment-card"
@@ -65,17 +66,17 @@ const Card = ({
                 <div id={"minidetailsId"} className="flex bg-[#F6F6F6] items-center gap-2 rounded-lg px-2 py-1 w-fit">
                     <span id={"fundrasingId"}
                           className="font-normal text-black text-sm flex items-center justify-center">
-                        {status}
+                        {toSentenceCase(status)}
                     </span>
                     <div id={"statusDivId"} className={`bg-meedlWhite p-1 border rounded-lg ${borderClass}`}>
                         <span id={"statusId"}
                               className={`text-sm font-medium px-1 py-1 rounded-lg lowercase ${statusClass}`}>
-                            {statusValue}
+                            {toSentenceCase(statusValue)}
                         </span>
                     </div>
                 </div>
-                <div id={"investmentVehicleNameId"} className={`${cabinetGrotesk.className} pt-3 font-medium text-xl text-[#212221] capitalize `}>
-                    {investmentVehicleName}
+                <div id={"investmentVehicleNameId"} className={`${cabinetGrotesk.className} pt-3 font-medium text-xl text-[#212221] `}>
+                    {toSentenceCase(investmentVehicleName)}
                 </div>
                 <div id={"percentageId"} className={`${inter.className} text-[#4D4E4D] font-normal text-sm`}>
                     {percentage}% interest
