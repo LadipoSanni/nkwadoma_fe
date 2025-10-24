@@ -3,7 +3,6 @@ import {inter, inter500, inter600, inter700} from "@/app/fonts";
 import {formatSentence} from "@/utils/GlobalMethods";
 import {formatAmount} from "@/utils/Format";
 import clsx from "clsx";
-import {AdminViewLoanType} from "@/types/loanee";
 
 interface Props {
     organizationName: string,
@@ -20,7 +19,7 @@ const OrganizationLoan = ({organizationName, loanAmountRepaid,id, handleClick, l
         <div id={'LoanCard'+ id} className={` w-full h-fit pb-4 px-4  bg-[#F9F9F9] rounded-md `}>
             <div className={` flex gap-2   py-4  `}>
                 <div className="rounded-full aspect-square flex items-center bg-[#ECECEC]  h-[2rem] w-[2rem]   ">
-                    <p className={` w-fit h-fit mr-auto ml-auto  `}> {organizationName?.at(0)}</p>
+                    <p id={'organizationName'} data-testid={'organizationName'} className={` w-fit h-fit mr-auto ml-auto  `}> {organizationName?.at(0)}</p>
                 </div>
                 <p id={'loaneeProgram'} data-testid={'loaneeProgram'}
                    className={`${inter600.className} mt-auto mb-auto text-black text-[16px] `}>{formatSentence(organizationName)}</p>

@@ -1,6 +1,6 @@
 'use client'
 import React, {useCallback, useEffect, useRef, useState} from 'react';
-import {useViewAllLoanDisbursalQuery, useViewLoansTotalCalculationQuery} from "@/service/admin/loan/Loan-disbursal-api";
+import {useViewLoaneeLoansQuery, useViewLoansTotalCalculationQuery} from "@/service/admin/loan/Loan-disbursal-api";
 import {useRouter} from "next/navigation";
 import { setClickedLoanId } from '@/redux/slice/loan/selected-loan';
 import { store } from '@/redux/store';
@@ -8,7 +8,7 @@ import Details from "@/components/loanee-my-profile/Details";
 import styles from '@/features/Overview/index.module.css';
 import GeneralEmptyState from "@/reuseable/emptyStates/General-emptystate";
 import {MdPersonOutline} from "react-icons/md";
-import {AdminViewLoanType} from "@/types/loanee";
+import { LoanType} from "@/types/loanee";
 import OrganizationLoan from "@/reuseable/cards/OrganizationLoan";
 
 interface LoanGridProps  {
@@ -27,7 +27,7 @@ const Myloans = () => {
     }
     const router = useRouter()
     const observer = useRef<IntersectionObserver | null>(null);
-    const {data: loaneeLoans, isLoading , isFetching } = useViewAllLoanDisbursalQuery(request)
+    const {data: loaneeLoans, isLoading , isFetching } = useViewLoaneeLoansQuery(request)
     const {data:loansTotalCalculations,isLoading:loansTotalCalculationsLoading } = useViewLoansTotalCalculationQuery({})
     const [hasMore, setHasMore] = useState(true);
     const [fetchData, setFetchData] = useState<AdminViewLoanType[]>([]);
@@ -97,16 +97,16 @@ const Myloans = () => {
 
     const LoanGrid = ({ data, lastCardObserver, isLoading, handleClick }: LoanGridProps) => (
         <div className="w-full h-full grid gap-4 md:grid-cols-3">
-            {data.map((loan:AdminViewLoanType) => (
-                <div key={loan.id} ref={lastCardObserver}>
+            {data.map((loan:LoanType) => (
+                <div key={loan.loanProgressId} ref={lastCardObserver}>
                     <OrganizationLoan
-                        id={loan.id}
+                        id={loan.loanProgressId}
                         isLoading={isLoading}
-                        loanAmountApproved={loan.loanAmountApproved?.toString()}
-                        loanAmountOutstanding={loan.loanAmountOutstanding?.toString()}
-                        loanAmountRepaid={loan.loanAmountRepaid?.toString()}
+                        loanAmountApproved={loan.loanAmount?.toString()}
+                        loanAmountOutstanding={loan.amountOutstanding?.toString()}
+                        loanAmountRepaid={loan.amountRepaid?.toString()}
                         organizationName={loan.organizationName}
-                        handleClick={() => {handleClick(loan.id)}}
+                        handleClick={() => {handleClick(loan.loanProgressId)}}
                     />
                 </div>
             ))}

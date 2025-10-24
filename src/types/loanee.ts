@@ -116,6 +116,15 @@ export interface LoanProduct {
     "sponsors": null,
     "availableAmountToBeOffered": 0,
 }
+
+export interface LoanType {
+    "loanProgressId": "b8b8c978-04c7-413e-b633-0d39d17e712b",
+    "loanAmount": 580000,
+    "amountOutstanding": 104902.59151956,
+    "amountRepaid": 500000,
+    "organizationName": "Walter",
+    "loanType": "LOAN_DISBURSAL"
+}
 export interface AdminViewLoanType {
     "id": "",
     "firstName": "",
