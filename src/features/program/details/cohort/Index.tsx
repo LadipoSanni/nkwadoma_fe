@@ -5,7 +5,6 @@ import SearchEmptyState from "@/reuseable/emptyStates/SearchEmptyState";
 import {MdOutlinePerson, MdSearch} from "react-icons/md";
 import {formatAmount} from "@/utils/Format";
 import {useAppSelector} from "@/redux/store";
-import CreateCohortInProgram from "@/components/program/create-cohort/Index";
 import {useGetAllCohortByAParticularProgramQuery} from "@/service/admin/cohort_query";
 import { store } from '@/redux/store'
 import {setcohortId} from '@/redux/slice/create/cohortSlice'
@@ -19,6 +18,7 @@ import Modal from '@/reuseable/modals/TableModal';
 import {Cross2Icon} from "@radix-ui/react-icons";
 import { Button } from '@/components/ui/button';
 import { inter } from '@/app/fonts';
+import CreateCohort from '@/components/cohort/CreateCohort';
 
 interface loanDetails {
     totalAmountRepaid?: number;
@@ -194,7 +194,7 @@ const ProgramCohortDetails= ()=> {
                 icon={Cross2Icon}
                 headerTitle='Create cohort'
                  >
-                 <CreateCohortInProgram  setIsOpen={setIsOpen}/>
+                 <CreateCohort setIsOpen={setIsOpen}/>
                  </Modal>
                 </div>
             </div>

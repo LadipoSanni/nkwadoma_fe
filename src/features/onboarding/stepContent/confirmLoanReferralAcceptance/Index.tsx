@@ -112,7 +112,7 @@ const ConfirmLoanReferralAcceptance = () => {
                 type='submit'
             >
                 {
-                    isLoading? <Isloading/> : "Submit"
+                    isLoading? <Isloading/> : "Confirm"
                 }
             </Button>
             </div>

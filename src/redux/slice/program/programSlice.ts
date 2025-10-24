@@ -1,14 +1,38 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
+interface InitialProgramFormValue {
+    id: string,
+    programName: string,
+    deliveryType: string,
+    programMode: string,
+    programDuration: string,
+    programDescription: string,
+
+}
+
+interface  CurrentProgramDetailData {
+    programName?: string,
+    isLoading?: boolean,
+    numberOfLoanee?: number
+}
+
 
 interface ProgramSliceState {
     currentProgramId:  string | undefined;
-    cohortOrProgramRoute: string | undefined
+    cohortOrProgramRoute: string | undefined;
+    initialProgramFormValue: InitialProgramFormValue | null;
+    totalNumberOfLoanee: number,
+    currentProgramDetailData: CurrentProgramDetailData | null;
+    programDetail: string
 }
 
 const initialState: ProgramSliceState = {
     currentProgramId: "",
-    cohortOrProgramRoute: ""
+    cohortOrProgramRoute: "",
+    initialProgramFormValue: null,
+    totalNumberOfLoanee: 0,
+    currentProgramDetailData: null,
+    programDetail: ""
 }
 
 export const programSlice = createSlice({
@@ -21,8 +45,36 @@ export const programSlice = createSlice({
          setcohortOrProgramRoute: ( state, action: PayloadAction<undefined | string >) => {
             state.cohortOrProgramRoute = action.payload;
         },
+        resetCurrentProgramId: ( state ) => {
+            state.currentProgramId = "";
+        },
+        setInitialProgramFormValue: ( state, action: PayloadAction<InitialProgramFormValue>) => {
+            state.initialProgramFormValue = action.payload;
+        },
+        resetInitialProgramFormValue: ( state) => {
+            state.initialProgramFormValue = null;
+            state.totalNumberOfLoanee = 0;
+            state.currentProgramDetailData = null
+        },
+        setTotalNumberOfLoanee: ( state, action: PayloadAction<number>) => {
+            state.totalNumberOfLoanee = action.payload;
+        },
+        setCurrentProgramDetailData: ( state, action: PayloadAction<CurrentProgramDetailData>) => {
+            state.currentProgramDetailData = action.payload;
+        },
+        resetCurrentProgramDetailData: ( state) => {
+            state.currentProgramDetailData = null
+        },
+        setProgramDetail: ( state, action: PayloadAction<string>) => {
+            state.programDetail = action.payload;
+        },
+        resetProgramDetail: ( state) => {
+            state.programDetail = ""
+        },
     }
 })
 
-export const {setCurrentProgramId,setcohortOrProgramRoute } = programSlice.actions;
+export const {setCurrentProgramId,setcohortOrProgramRoute,resetCurrentProgramId,resetCurrentProgramDetailData,resetProgramDetail,
+    setInitialProgramFormValue,resetInitialProgramFormValue,setTotalNumberOfLoanee, setCurrentProgramDetailData,setProgramDetail
+} = programSlice.actions;
 export default programSlice.reducer;

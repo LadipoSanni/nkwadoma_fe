@@ -3,21 +3,22 @@ import React,{useState} from 'react'
 import TabSwitch from '../tabLayoutTwo';
 import BackButton from "@/components/back-button";
 import { useRouter } from 'next/navigation'
-import { loanProductTab } from "@/types/tabDataTypes";
+import {programDetailTab} from "@/types/tabDataTypes";
 import {useAppSelector,store} from "@/redux/store";
 import { cabinetGrotesk } from '@/app/fonts';
 import Kebab from "@/reuseable/Kebab/Kebab";
 import { Cross2Icon } from "@radix-ui/react-icons";
 import { FiMoreVertical } from 'react-icons/fi';
 import TruncatedTextWithTooltip from '@/reuseable/tool-tip/Truncated-textWith-tooltip';
-import {setIsEdit } from "@/redux/slice/loan-product/Loan-product";
 import Modal from '@/reuseable/modals/TableModal';
-import Image from 'next/image';
-import { inter } from '@/app/fonts';
+import CreateProgram from "@/components/program/create-program";
 import DeleteModal from '@/reuseable/modals/Delete-modal';
-import  DeleteLoanProduct  from '@/reuseable/details/DeleteCohort';
-import { useDeleteLoanProductMutation } from '@/service/admin/loan_product';
+import {useDeleteProgramMutation} from '@/service/admin/program_query';
+import Delete from "@/reuseable/details/DeleteCohort";
 import {useToast} from "@/hooks/use-toast"
+import DeletionRestrictionMessageProps from "@/components/cohort/DeletionRestrictionMessageProps";
+import {Skeleton} from '@/components/ui/skeleton'
+import { resetInitialProgramFormValue } from '@/redux/slice/program/programSlice';
 
 interface props {
     children: React.ReactNode;
@@ -31,21 +32,21 @@ interface ApiError {
   };
 }
 
-function LoanProductDetailsLayout({children}:props) {
-    const loanProductName = useAppSelector(state => (state?.loanProduct?.loanProductName))
-    const loanProductId = useAppSelector(state => (state?.loanProduct?.loanProductId))
-    const totalNumberOfLoaneesInLoanProduct = useAppSelector(state => (state?.loanProduct?.totalNumberOfLoaneess))
+function ProgramLayout({children}:props) {
+    const programId = useAppSelector(state => (state.program.currentProgramId))
+    const programCurrentDetail = useAppSelector(state => (state?.program?.currentProgramDetailData))
     const [modalIsOpen,setIsModalOpen] = useState(false)
     const [isDeleteModal, setIsDeleteModal] = useState(false)
     const [modalType,setModalType] = useState("")
     const [error, setError] = useState("")
     const router = useRouter()
-    const [deleteLoanProduct,{isLoading}] = useDeleteLoanProductMutation()
+    const [deleteItem, {isLoading}] = useDeleteProgramMutation()
 
     const {toast} = useToast()
 
     const handleBackButtonClick=()=> {
-        router.push("/loan-product")
+        store.dispatch(resetInitialProgramFormValue())
+        router.push("/program")
    }
 
    const dropDownOption = [
@@ -64,15 +65,16 @@ function LoanProductDetailsLayout({children}:props) {
 
   const handleDropdownClick = (id:string) => {
       if(id === "1") {
-        if(totalNumberOfLoaneesInLoanProduct === 0){
-          store.dispatch(setIsEdit(true))
-          router.push("/loan-product/step-one")
-        }else {
+        if(programCurrentDetail?.numberOfLoanee === 0){
+          setIsModalOpen(true)
+          setModalType("update")
+        } else {
           setIsModalOpen(true)
           setModalType("update")
         }
+        
    } else if(id === "3"){
-     if(totalNumberOfLoaneesInLoanProduct === 0){
+     if(programCurrentDetail?.numberOfLoanee === 0){
       setIsDeleteModal(true)
      }else{
       setIsModalOpen(true)
@@ -82,38 +84,35 @@ function LoanProductDetailsLayout({children}:props) {
     
     }
 
-   const handleDelete = async (id: string) => {
-      const param = {
-        loanProductId: loanProductId || id
-      }
+    const handleDeleteAProgram = async (id: string) => {
+
       try {
-         const result= await deleteLoanProduct(param).unwrap()
-         if(result){
-           toast({
-            description: result?.message,
-            status: "success",
-            duration: 1500
-           })
-           setError("")
-           setIsDeleteModal(false)
-           router.push('/loan-product')
-         }
-        
+          const itemDeleted = await deleteItem({id}).unwrap();
+          if (itemDeleted) {
+            setIsDeleteModal(false)
+                  toast({
+                      description: itemDeleted?.message,
+                      status: "success",
+                      duration: 2000
+                  })
+              router.push('/program')
+          }
+
       } catch (error) {
-        const err = error as ApiError;
-        setError(err?.data?.message)
+          const err = error as ApiError;
+          setError(err?.data?.message  )
       }
-   }
+  }
 
   return (
     <div>
        <div className='px-6 md:px-8 md:py-3  py-4'>
         <BackButton id={'backorganizations'} textColor={'meedlBlue'} text={'Back'} iconBeforeLetters={true} handleClick={handleBackButtonClick}/> 
         </div> 
-        <div className='flex justify-between items-center pr-8'>
+       { programCurrentDetail?.isLoading === true ? <Skeleton className="h-12 w-[100px] bg-[#F6F6F6] "/> : <div className='flex justify-between items-center pr-8'>
         <div className={`md:px-10 px-8 text-[28px] font-medium ${cabinetGrotesk.className}`}>
          <TruncatedTextWithTooltip
-         text= {loanProductName}
+         text= {programCurrentDetail?.programName || ""}
          className="max-w-[258px] md:max-w-[600px] "
          />
         </div>
@@ -126,9 +125,9 @@ function LoanProductDetailsLayout({children}:props) {
            className='relative bottom-[1px] mt-1'
            />
          </div>
-        </div>
+        </div>}
         <div>
-        <TabSwitch tabData={loanProductTab} defaultTab='/loan-product/loan-product-details'>
+        <TabSwitch tabData={programDetailTab} defaultTab='/organizations/detail' backClickRoutePath="/program" >
    {children}
     </TabSwitch>
         </div>
@@ -137,29 +136,25 @@ function LoanProductDetailsLayout({children}:props) {
            isOpen={modalIsOpen}
            closeOnOverlayClick={true}
            icon={Cross2Icon}
-            headerTitle=''
+            headerTitle={modalType === "update" && programCurrentDetail?.numberOfLoanee === 0? "Edit program" : ""}
            closeModal={() => {
              setIsModalOpen(false)
            }}
-           styeleType="styleBodyTwo"
+           styeleType={ modalType === "delete" || (modalType === "update" && programCurrentDetail?.numberOfLoanee && programCurrentDetail?.numberOfLoanee > 0)? "styleBodyTwo" : "styleBody"}
           >
-          <div className={`${inter.className}`}>
-            <div>
-            <Image
-             src={modalType === "update"? "/Icon - Warning.svg" : "/Inner circle (1).png"}
-             alt='image'
-             width={30}
-             height={30}
-             className={` ${modalType === "update"? "w-14" : "w-11"} `}
-            />
-            </div>
-            <p className='mt-4 mb-5 text-[14px] text-[#475467]'> 
-              {
-                modalType === "update"? "Updates are restricted for loan products associated with existing loanees." : "Deletion is restricted for loan products associated with existing loanees."
-              }
-              
-              </p>
-          </div>
+          
+          { programCurrentDetail?.numberOfLoanee && programCurrentDetail?.numberOfLoanee > 0 && modalType === "update"?  <DeletionRestrictionMessageProps 
+                     image= "/Icon - Warning.svg"
+                    message={`This program can not be updated because it has Cohort that contains ${programCurrentDetail?.numberOfLoanee && programCurrentDetail?.numberOfLoanee > 1? "loanees" : "loanee"}`}
+                    /> :
+             modalType === "update"? <CreateProgram
+             setIsOpen={setIsModalOpen}
+             isEdit={true}
+         /> : 
+             <DeletionRestrictionMessageProps 
+             message={`This program can not be deleted because it has Cohort that contains ${programCurrentDetail?.numberOfLoanee && programCurrentDetail?.numberOfLoanee > 1? "loanees" : "loanee"}`}
+             /> 
+          }
           </Modal>
         </div>
           <div>
@@ -174,15 +169,15 @@ function LoanProductDetailsLayout({children}:props) {
             }
             }
            >
-            <DeleteLoanProduct
+            <Delete
             setIsOpen={() =>{ 
               setIsDeleteModal(false)
               setError("")
             }}
-            headerTitle='loan product'
-            title='loan product'
-            id={loanProductId}
-            handleDelete={handleDelete}
+            headerTitle={'Program'}
+            title={'program'}
+            id={programId}
+            handleDelete={handleDeleteAProgram}
             isLoading={isLoading}
             errorDeleting={error}
             />
@@ -194,4 +189,4 @@ function LoanProductDetailsLayout({children}:props) {
   )
 }
 
-export default LoanProductDetailsLayout
+export default ProgramLayout

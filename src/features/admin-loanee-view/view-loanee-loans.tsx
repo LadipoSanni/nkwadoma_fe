@@ -1,5 +1,5 @@
 'use client'
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 import BackButton from "@/components/back-button";
 import { cabinetGroteskMediumBold, inter, inter500, inter600, inter700} from '@/app/fonts'
 import styles from '@/features/Overview/index.module.css';
@@ -22,6 +22,7 @@ import GeneralEmptyState from '@/reuseable/emptyStates/General-emptystate';
 import {MdSearch,MdPersonOutline} from 'react-icons/md';
 import {getItemSessionStorage} from "@/utils/storage";
 import {MEEDLE_ORG_ADMIN} from "@/types/roles";
+import {setOrganizationFrom, setUnderlineTabCurrentTab} from "@/redux/slice/layout/adminLayout";
 
 const ViewLoaneeLoans = () => {
     const [searchTerm, setSearchTerm] = useState('');
@@ -32,10 +33,11 @@ const ViewLoaneeLoans = () => {
     const selectedLoanFullName = selectedLoanFirstName ? `${selectedLoanFirstName} ` + `${selectedLoanLastName} `  :   '';
     const router = useRouter()
     const [fetchData, setFetchData] = useState<AdminViewLoanType[]>([]);
-    const [pageNumber,
-    ] = useState<number>(0);
-    const [pageSize] = useState<number>(10);
+    const [pageNumber,setPageNumber] = useState<number>(0);
+    const [pageSize, setPageSize] = useState<number>(10);
     const userRole  = getItemSessionStorage("user_role")
+    const observer = useRef<IntersectionObserver | null>(null);
+    const [hasMore, setHasMore] = useState(true);
 
     const [debouncedSearchTerm] = useDebounce(searchTerm, 1000);
 
@@ -58,17 +60,26 @@ const ViewLoaneeLoans = () => {
     useEffect(() => {
         if (debouncedSearchTerm){
             setFetchData(searchData?.data?.body)
-            // setTotalPage(searchData?.data?.totalPages)
+            setHasMore(searchData?.data?.hasNextPage)
+            if (searchData?.data?.totalPage){
+                setPageSize(searchData?.data?.totalPages)
+            }
             // setPageNumber(searchData?.data?.pageNumber)
         }else {
             setFetchData(viewAllLoans?.data?.body)
-            // setTotalPage(viewAllLoans?.data?.totalPages)
+            setHasMore(viewAllLoans?.data?.hasNextPage)
+            if (viewAllLoans?.data?.totalPages){
+                setPageSize(viewAllLoans?.data?.totalPages)
+            }
             // setPageNumber(viewAllLoans?.data?.pageNumber)
         }
 
     }, [viewAllLoans, debouncedSearchTerm,searchData ])
 
     const onBackButtonClick = () => {
+        if (MEEDLE_ORG_ADMIN?.includes?.(userRole ? userRole : '')){
+            store.dispatch(setOrganizationFrom('FromLoans'))
+        }
         router.push('/loanees')
     }
     const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -80,9 +91,34 @@ const ViewLoaneeLoans = () => {
         store.dispatch(setcohortId(item?.cohortId))
         store.dispatch(setLoaneeId(item?.loaneeId))
         store.dispatch(setClickedLoanId(item?.id))
+        store.dispatch(setUnderlineTabCurrentTab('Details'))
+        store.dispatch(setOrganizationFrom('FromLoans'))
         router.push(`${LoaneeLoannDetails(item.id)}`);
 
     }
+
+    const lastCardObserver = useCallback(
+        (node: HTMLDivElement | null) => {
+            if (isLoadingViewAll || isFetchingViewAll || isLoadingSearch || isFetchingSearch ) return;
+
+            if (observer.current) observer.current.disconnect();
+
+            observer.current = new IntersectionObserver(
+                entries => {
+                    if (entries[0].isIntersecting && hasMore) {
+                        setPageNumber(prevPage => prevPage + 1);
+                    }
+                },
+                {
+                    rootMargin: "100px",
+                }
+            );
+
+            if (node) observer.current.observe(node);
+        },
+        [isLoadingViewAll, isFetchingViewAll,isLoadingSearch,isFetchingSearch, hasMore]
+    );
+
 
 
     return (
@@ -119,16 +155,10 @@ const ViewLoaneeLoans = () => {
                    className={`h-full   grid  bg-white py-4 w-full `}
                >
                    { isLoadingViewAll  || isFetchingViewAll || isLoadingSearch || isFetchingSearch?
-                   <div className={` grid grid-cols-3 h-[50vh] `}>
-                       <div className={` w-full h-[10rem] animate-pulse bg-[#f4f4f5]  `}>
-
-                       </div>
-                       <div className={` w-full h-[10rem] animate-pulse bg-[#f4f4f5]  `}>
-
-                       </div>
-                       <div className={` w-full h-[10rem] animate-pulse bg-[#f4f4f5]  `}>
-
-                       </div>
+                   <div className={` grid grid-cols-3 gap-4 h-[50vh] `}>
+                       <div className={` w-full h-[20rem] px-4 py-8  animate-pulse bg-[#f4f4f5]  `}></div>
+                       <div className={` w-full h-[20rem] px-4 py-8  animate-pulse bg-[#f4f4f5]  `}></div>
+                       <div className={` w-full h-[20rem] px-4 py-8  animate-pulse bg-[#f4f4f5]  `}></div>
                    </div>
 
                                : (debouncedSearchTerm && searchData?.data?.body?.length === 0) || viewAllLoans?.data?.body?.length === 0 ?
@@ -153,7 +183,7 @@ const ViewLoaneeLoans = () => {
                                :
                                <div className={` grid gap-4 md:grid md:grid-cols-3 `}>
                                    {fetchData?.map((loan : AdminViewLoanType) => (
-                                       <div  key={"key"+loan?.id} className={` w-full h-fit pb-4 px-4  bg-[#F9F9F9] rounded-md `}>
+                                       <div  key={"key"+loan?.id} ref={lastCardObserver} className={` w-full h-fit pb-4 px-4  bg-[#F9F9F9] rounded-md `}>
                                            <div className={` flex gap-2   py-4  `}>
                                                <Badge className={`h-[40px] w-[40px] hover:bg-[#F6F6F6]    bg-[#F6F6F6] rounded-full `}>
 

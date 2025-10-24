@@ -7,6 +7,7 @@ import { ElementType} from "react";
 interface Props {
     isOpen: boolean;
     closeModal?: () => void;
+    reset?: () => void;
     className?: string;
     children: React.ReactNode;
     style?: React.CSSProperties;
@@ -20,7 +21,13 @@ interface Props {
 
 
 
-export default function TableModal({isOpen, children, closeModal, closeOnOverlayClick,className,style, headerTitle,icon:Icon,description,width,styeleType = "styleBody"}: Props) {
+export default function TableModal({isOpen, children, closeModal, closeOnOverlayClick,className,style, headerTitle,icon:Icon,description,width,styeleType = "styleBody",reset}: Props) {
+
+
+  const handleCloseClick = () => {
+    closeModal?.();
+    reset?.();
+  };
 
   
   return (
@@ -44,7 +51,7 @@ export default function TableModal({isOpen, children, closeModal, closeOnOverlay
          <Dialog.Close asChild>
             <div
               className="absolute top-6 right-5 text-gray-500 hover:text-gray-800 border-none cursor-pointer"
-              onClick={closeModal}
+              onClick={handleCloseClick}
             >
              { 
               Icon && <Icon className="h-5 w-5 text-grey400" />

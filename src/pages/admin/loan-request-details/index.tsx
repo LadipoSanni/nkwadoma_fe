@@ -109,10 +109,11 @@ function LoanDetails() {
     };
 
      const userFirstLetter = data?.data?.userIdentity?.firstName ?  getInitial(data?.data?.userIdentity?.firstName,data?.data?.userIdentity?.lastName) : ""
+     const fullName = capitalizeFirstLetters(data?.data?.userIdentity?.firstName + " " + data?.data?.userIdentity?.lastName)
 
     useEffect(() => {
         store.dispatch(setLoaneeAmountRequested(data?.data?.loanAmountRequested))
-        store.dispatch(setLoaneeName(data?.data?.userIdentity?.firstName + " " + data?.data?.userIdentity?.lastName))
+        store.dispatch(setLoaneeName(fullName))
       },[data])
 
       
@@ -282,9 +283,7 @@ function LoanDetails() {
                                     <p id={'loaneeNameOnLoanRequestDetails'}
                                          data-testid={'loaneeNameOnLoanRequestDetails'}
                                          className={`${cabinetGroteskMediumBold.className} text-black break-all  flex text-xl gap-2 md:flex md:gap-2 md:text-[28px]  `}>
-                                        {data?.data?.userIdentity?.firstName}
-                                        &ensp;
-                                        {data?.data?.userIdentity?.lastName}
+                                        {fullName}
                                     </p>
                                     <div
                                         className={`flex gap-2  ${inter.className}  break-all   text-sm text-black400  `}

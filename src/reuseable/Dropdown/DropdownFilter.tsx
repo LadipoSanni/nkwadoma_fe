@@ -54,7 +54,7 @@ const DropdownFilter = ({title,sx, handleFilter,clearFilter,setSelectItem,items,
                             ))}
                         </div>
                         :
-                        <div>
+                        <div className={` mb-4 mr-auto ml-auto  text-[13px] `}>
                             {emptyState}
                         </div>
                     }

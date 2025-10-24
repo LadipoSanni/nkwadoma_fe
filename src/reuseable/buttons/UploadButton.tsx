@@ -9,6 +9,9 @@ import {useToast} from "@/hooks/use-toast";
 import {setItemToLocalStorage} from "@/utils/storage";
 import { store } from '@/redux/store';
 import {setUser2faState} from "@/redux/slice/id/slice-ids";
+import Modal from "@/reuseable/modals/TableModal";
+import {Cross2Icon} from "@radix-ui/react-icons";
+import Image from "next/image";
 
 interface Props {
     whose: 'company' | 'user',
@@ -30,6 +33,7 @@ const UploadButton = ({whose, url} : Props) => {
     const [ updateOrg, {isLoading:isLoadingOrg} ] = useAddOrganizationImageLogoMutation()
     const supportedFileTypes = ["image/svg+xml", "image/png", "image/jpg", "image/jpeg", "image/webp"];
     const ee = error + fileName
+    const [modalIsOpen, setModalIsOpen] = useState(false)
 
     const {upload} = useUploadImageToCloudinary();
 
@@ -69,16 +73,14 @@ const UploadButton = ({whose, url} : Props) => {
         const selectedFile = event.target.files?.[0];
         if (!selectedFile) return;
         const fileSizeInMB = selectedFile.size / (1024 * 1024);
-        // console.log("File size:", fileSizeInMB.toFixed(2), "MB");
 
         if (fileSizeInMB > 2) {
-            alert("File size exceeds 2 MB limit");
-            // selectedFile.current.value = null;
+            setModalIsOpen(true)
             setLoading(false);
             setError(`File size exceeds 2 MB limit`);
+            event.target.value = '';
             return ;
         }
-
         setLoading(true);
         if (!validateFile(selectedFile)) {
             setLoading(false);
@@ -94,6 +96,7 @@ const UploadButton = ({whose, url} : Props) => {
             setError("Failed to upload image");
             console.error(uploadError);
         } finally {
+            event.target.value = '';
             setLoading(false);
         }
     };
@@ -193,6 +196,36 @@ const UploadButton = ({whose, url} : Props) => {
                     }
                 </div>
             </div>
+            <div>
+                <Modal
+                    isOpen={modalIsOpen}
+                    closeOnOverlayClick={true}
+                    icon={Cross2Icon}
+                    headerTitle=''
+                    closeModal={() => {
+                        setModalIsOpen(false)
+                    }}
+                    styeleType="styleBodyTwo"
+                >
+                    <div className={`${inter.className}`}>
+                        <div>
+                            <Image
+                                // src={modalType === "update"? "/Icon - Warning.svg" : "/Inner circle (1).png"}
+                                src={`/Icon - Warning.svg`}
+                                alt='image'
+                                width={30}
+                                height={30}
+                                className={`w-14`}
+                                // className={` ${modalType === "update"? "w-14" : "w-11"} `}
+                            />
+                        </div>
+                        <p className='mt-4 mb-5 text-[14px] text-[#475467]'>
+                            {error}
+                        </p>
+                    </div>
+                </Modal>
+            </div>
+
 
         </div>
 

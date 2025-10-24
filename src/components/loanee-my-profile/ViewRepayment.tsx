@@ -136,31 +136,21 @@ const ViewRepayment = ({loanId}: Props) => {
     };
 
     const  getRepaymentYears = (firstRepaymentYear: number,lastRepaymentYear: number) => {
-        if (firstRepaymentYear === 0 || lastRepaymentYear === 0) {
+        if (!firstRepaymentYear || !lastRepaymentYear) {
+            if (firstRepaymentYear) return [firstRepaymentYear];
+            if (lastRepaymentYear) return [lastRepaymentYear];
             return [];
-        }else{
-            if (!lastRepaymentYear) {
-                const repaymentYears : number[] = [firstRepaymentYear]
-                const currentYear = new Date().getFullYear();
-                for (const element of repaymentYears) {
-                    if (element < currentYear){
-                        repaymentYears.push(element + 1 )
-                    }
-                }
-                return repaymentYears;
-            }else if (!firstRepaymentYear) {
-                const currentYear = new Date().getFullYear();
-                return [currentYear]
-            }else {
-                const repaymentYears : number[] = [firstRepaymentYear]
-                for (const element of repaymentYears) {
-                    if (element < lastRepaymentYear){
-                        repaymentYears.push(element + 1 )
-                    }
-                }
-                return repaymentYears;
-            }
         }
+
+        const start = Math.min(firstRepaymentYear, lastRepaymentYear);
+        const end = Math.max(firstRepaymentYear, lastRepaymentYear);
+
+        const repaymentYears: number[] = [];
+        for (let year = start; year <= end; year++) {
+            repaymentYears.push(year);
+        }
+
+        return repaymentYears;
     }
 
     const handleFilterYear = () => {
@@ -220,7 +210,7 @@ const ViewRepayment = ({loanId}: Props) => {
                             title={'Filter by year'}
                             selectedItem={selectedYear}
                             handleFilter={handleFilterYear}
-                            items={getYears}
+                            items={getYears ? getYears : []}
                             setSelectItem={setYearItem}
                             clearFilter={clearYearFilter}
                             placeholder={'Year'}
@@ -290,8 +280,8 @@ const ViewRepayment = ({loanId}: Props) => {
                                     // searchEmptyState={!isTyping && debouncedSearchTerm?.length > 0 && searchData?.data?.body?.length < 1 }
                                     sideBarTabName={'repayment'}
                                     icon={MdOutlineLibraryBooks}
-                                    staticHeader={"Name"}
-                                    staticColunm={'name'}
+                                    staticHeader={"Payment date"}
+                                    staticColunm={'paymentDate'}
                                     hasNextPage={hasNextPage}
                                     pageNumber={pageNumber}
                                     setPageNumber={setPageNumber}
