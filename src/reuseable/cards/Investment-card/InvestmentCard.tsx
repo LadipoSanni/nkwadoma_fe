@@ -135,11 +135,3 @@ const InvestmentCard: React.FC<InvestmentCardProps> = ({
 
 export default InvestmentCard;
 
-
-
-fix sentense case bug for Financier dashboard on the investment vehicles and the Investment marketplace
-
-Fix: Apply sentence case to investment vehicle names in the investment marketplace
-
-Removed the capitalize CSS class from the InvestmentCard component
-Applied the toSentenceCase helper function to the investmentVehicleName prop in investmentMarketPlace
