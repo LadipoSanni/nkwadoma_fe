@@ -1,17 +1,20 @@
-import CryptoJS from "crypto-js";
-
-export  function  encryptText  (text: string){
+'use server'
+import CryptoJS from 'crypto-js';
+export async function encryptText(text: string):  Promise<string> {
     const encryptionKey = process.env.APP_DEV_IV_ENCRYPTION_SECRET_KEY;
     const ivKey = process.env.APP_DEV_IV_KEY;
-    let iv;
-    if (ivKey) {
-        iv = CryptoJS.enc.Utf8.parse(ivKey);
+
+    console.log('encryptionKey: ',encryptionKey)
+    console.log('ivKey: ',ivKey)
+    if (!encryptionKey || !ivKey) {
+        throw new Error('Missing encryption environment variables.');
     }
 
-    let secretKey;
-    if (encryptionKey) {
-        secretKey = CryptoJS.enc.Utf8.parse(encryptionKey.padEnd(16, " "));
-        text = CryptoJS.AES.encrypt(text, secretKey, {iv: iv}).toString();
-        return text;
-    }
+    // AES requires both key and IV to be WordArrays
+    const iv = CryptoJS.enc.Utf8.parse(ivKey);
+    const secretKey = CryptoJS.enc.Utf8.parse(encryptionKey.padEnd(16, ' '));
+
+    const encrypted = CryptoJS.AES.encrypt(text, secretKey, { iv });
+    console.log('encrypted: ',encrypted?.toString());
+    return encrypted.toString(); // returns base64 string
 }

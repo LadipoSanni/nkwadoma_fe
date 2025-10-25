@@ -124,6 +124,17 @@ const Login: React.FC = () => {
         }
     }
 
+    const encryptInputtedPassword = async (inputedPassword: string) => {
+        const res = await fetch('/api/encrypt', {
+            method: 'POST',
+            body: JSON.stringify({ text: inputedPassword }),
+            headers: { 'Content-Type': 'application/json' },
+        });
+        const { encrypted } = await res.json();
+        console.log(encrypted);
+    }
+
+
 
     const routeUserToTheirDashboard = async (userRole?: string) => {
         switch (userRole) {
@@ -203,14 +214,18 @@ const Login: React.FC = () => {
     const {toast} = useToast()
     const handleLogin = async (e?:React.MouseEvent<HTMLButtonElement>) => {
         e?.preventDefault()
+        const sss = await encryptInputtedPassword(password)
+        console.log('password: ',password)
+        console.log('ss: ', sss)
         if (!navigator.onLine) {
                 toast({
                     description: "No internet connection",
                     status: "error",
                 })
         } else {
+            console.log('{email:email, password:encryptedPassword} :',{email:email, password:''})
                 try {
-                    const response = await login({email:email, password:encryptedPassword}).unwrap()
+                    const response = await login({email:email, password:''}).unwrap()
                     if (response?.data) {
                         const  {
                             access_token,
