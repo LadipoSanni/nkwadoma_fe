@@ -39,7 +39,6 @@ const LoaneeDetails = ({isViewingOrganizationLoaneeLoansThrowCohortFlow}: IndexP
     }
     const  {data, isLoading, isFetching} = useViewLoaneeInACohortDetailsQuery(props, {skip:!isViewingOrganizationLoaneeLoansThrowCohortFlow || isLoanee})
     const {data:loanLoanProgressDetails, isLoading: isLoadingLoaneeLoanProgressDetails, isFetching: isFetchingLoaneeLoanProgressDetails} = useViewLoaneeLoanDetailsQuery({loanProgressId:selectedLoanId}, {skip:isViewingOrganizationLoaneeLoansThrowCohortFlow })
-    console.log('loanLoanProgressDetails:',loanLoanProgressDetails)
     const userName = isViewingOrganizationLoaneeLoansThrowCohortFlow ?   data?.data?.firstName + ' '+ data?.data?.lastName :  viewLoaneeDisbursedLoanDetails?.data?.firstName + ' '+ viewLoaneeDisbursedLoanDetails?.data?.lastName ;
     const nextOfFullName = isViewingOrganizationLoaneeLoansThrowCohortFlow ? data?.data?.nextOfKinFirstName + '' + data?.data?.nextOfKinLatName : ''  + ' ' + viewLoaneeDisbursedLoanDetails?.data?.nextOfKin?.firstName ? viewLoaneeDisbursedLoanDetails?.data?.nextOfKin?.lastName : '';
 
@@ -95,10 +94,11 @@ const LoaneeDetails = ({isViewingOrganizationLoaneeLoansThrowCohortFlow}: IndexP
 
     ]
     const loaneeBioDataTab :  {name: string; displayValue: React.ReactNode} = {name: 'Bio details', displayValue: <div className={` md:max-h-[60vh]  grid gap-4 w-full  ${styles.container}`}>{loaneeBioDa()}</div>}
+    const viewRepaymentId = isViewingOrganizationLoaneeLoansThrowCohortFlow ? data?.data?.loanId : userRole === 'LOANEE' ? loanLoanProgressDetails?.data?.id  : viewLoaneeDisbursedLoanDetails?.data?.id ;
     const tab:  {name: string; displayValue: React.ReactNode}[] = [
         {name: 'Details',  displayValue: <LoaneeLoanDetails isViewingOrganizationLoaneeLoans={isViewingOrganizationLoaneeLoansThrowCohortFlow}  data={isViewingOrganizationLoaneeLoansThrowCohortFlow ?  data?.data : userRole === 'LOANEE' ? loanLoanProgressDetails?.data : viewLoaneeDisbursedLoanDetails?.data } isLoading={isViewingOrganizationLoaneeLoansThrowCohortFlow ? isLoading || isFetching :isFetchingLoaneeLoanDetails || isLoadingLoaneeLoanDetails } />},
-        {name: 'Repayment',  displayValue:<ViewRepayment loanId={ isViewingOrganizationLoaneeLoansThrowCohortFlow ? data?.data?.loanId ? userRole === 'LOANEE' ? loanLoanProgressDetails?.data?.data?.id  : viewLoaneeDisbursedLoanDetails?.data?.id } />},
-        {name: 'Repayment schedule',  displayValue:<ViewRepaymentSchedule loanId={isViewingOrganizationLoaneeLoansThrowCohortFlow ? userRole === 'LOANEE' ? loanLoanProgressDetails?.data?.data?.loanOfferId :   data?.data?.loanId : viewLoaneeDisbursedLoanDetails?.data?.id }/>},
+        {name: 'Repayment',  displayValue:<ViewRepayment loanId={ viewRepaymentId } />},
+        {name: 'Repayment schedule',  displayValue:<ViewRepaymentSchedule loanId={isViewingOrganizationLoaneeLoansThrowCohortFlow ? data?.data?.loanId : userRole === 'LOANEE' ? loanLoanProgressDetails?.data?.loanOfferId  : viewLoaneeDisbursedLoanDetails?.data?.id }/>},
         ...(userRole !== "LOANEE" ? [loaneeBioDataTab] : []),
 
 

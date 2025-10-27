@@ -97,7 +97,7 @@ export const loanRequestApi = createApi({
         }),
         viewGeneratedRepaymentSchedule: builder.query({
             query: (loanId)=> ({
-                url: `/repayment/history/generate/repayment/schedule?loanId=${loanId}`,
+                url: `/repayment/history/generate/repayment/schedule?loanOfferId=${loanId}`,
                 method: 'GET'
             }),
         })
