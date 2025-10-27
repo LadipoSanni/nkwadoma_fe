@@ -48,10 +48,17 @@ export const loanDisbursalApi = createApi({
                 params: data
             })
         }),
+        searchLoaneeLoan: builder.query({
+            query: (data:{pageNumber: number, pageSize: number, organizationName: string}) =>({
+                url : `/loan/search/all/progress`,
+                method: 'GET',
+                params: data
+            })
+        })
 
     })
 })
 export const { useViewDisbursedLoanDetailsQuery,useViewLoaneeLoansQuery,
     useViewLoansTotalCalculationQuery, useViewAllLoanDisbursalQuery,
-    useViewLoaneeLoanDetailsQuery,
+    useViewLoaneeLoanDetailsQuery, useSearchLoaneeLoanQuery,
 } = loanDisbursalApi

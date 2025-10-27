@@ -1,6 +1,6 @@
 'use client'
 import React, {useCallback, useEffect, useRef, useState} from 'react';
-import {useViewLoaneeLoansQuery, useViewLoansTotalCalculationQuery} from "@/service/admin/loan/Loan-disbursal-api";
+import {useViewLoaneeLoansQuery, useViewLoansTotalCalculationQuery, useSearchLoaneeLoanQuery} from "@/service/admin/loan/Loan-disbursal-api";
 import {useRouter} from "next/navigation";
 import { setClickedLoanId } from '@/redux/slice/loan/selected-loan';
 import { store } from '@/redux/store';
@@ -10,6 +10,8 @@ import GeneralEmptyState from "@/reuseable/emptyStates/General-emptystate";
 import {MdPersonOutline} from "react-icons/md";
 import { LoanType} from "@/types/loanee";
 import OrganizationLoan from "@/reuseable/cards/OrganizationLoan";
+import SearchInput from "@/reuseable/Input/SearchInput";
+import {useDebounce} from "@/hooks/useDebounce";
 
 interface LoanGridProps  {
     data: LoanType[];
@@ -31,14 +33,26 @@ const Myloans = () => {
     const {data:loansTotalCalculations,isLoading:loansTotalCalculationsLoading } = useViewLoansTotalCalculationQuery({})
     const [hasMore, setHasMore] = useState(true);
     const [fetchData, setFetchData] = useState<LoanType[]>([]);
+    const [searchTerm, setSearchTerm] = useState('');
+    const [debouncedSearchTerm] = useDebounce(searchTerm, 1000);
+    const searchParameter = {
+        pageNumber: pageNumber,
+        pageSize: pageSize,
+        organizationName:debouncedSearchTerm,
+    }
 
+    const {data: searchData, isLoading: isSearching, isFetching: isFetchingSearchedData} = useSearchLoaneeLoanQuery(searchParameter , {skip: !debouncedSearchTerm})
     useEffect(() => {
-        if (loaneeLoans){
+        if (!debouncedSearchTerm){
             setFetchData((prev) =>[...prev, ...(loaneeLoans?.data?.body || [])])
             setHasMore(loaneeLoans?.data?.hasNextPage)
             setPageSize(loaneeLoans?.data?.pageSize)
+        }else{
+            setFetchData(searchData?.data?.body )
+            setHasMore(searchData?.data?.hasNextPage)
+            setPageSize(searchData?.data?.pageSize)
         }
-    }, [loaneeLoans]);
+    }, [loaneeLoans, searchData,debouncedSearchTerm]);
     const handleClick = (loanId:string) => {
         store.dispatch(setClickedLoanId(loanId))
         router.push('/my-loan-profile');
@@ -85,7 +99,11 @@ const Myloans = () => {
                 iconContainerClass="w-[50px] h-[50px]"
                 message={
                     <div className="relative bottom-2">
-                        <p>Loanee does not have loan</p>
+                        <p>
+                            {searchTerm
+                                ? "No matching loan found for the organization you searched."
+                                : "Loanee does not have loan"}
+                        </p>
                     </div>
                 }
                 className="h-14"
@@ -97,8 +115,8 @@ const Myloans = () => {
 
     const LoanGrid = ({ data, lastCardObserver, isLoading, handleClick }: LoanGridProps) => (
         <div className="w-full h-full grid gap-4 md:grid-cols-3">
-            {data.map((loan:LoanType) => (
-                <div key={loan.loanProgressId} ref={lastCardObserver}>
+            {data.map((loan:LoanType, index) => (
+                <div key={ "key"+loan.loanProgressId + index} ref={lastCardObserver}>
                     <OrganizationLoan
                         id={loan.loanProgressId}
                         isLoading={isLoading}
@@ -116,6 +134,10 @@ const Myloans = () => {
     const RenderIf = ({ condition, children }: { condition: boolean; children: React.ReactNode }) =>
         condition ? <>{children}</> : null;
 
+    const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setSearchTerm(event.target.value);
+    };
+
 
     return (
         <main className={` w-full h-[85vh]  grid gap-8   pt-3 `}>
@@ -124,15 +146,24 @@ const Myloans = () => {
                 <Details isLoading={loansTotalCalculationsLoading} sx={` w-[20em] md:w-full `} id={'loaneeTotalLoaneOutstanding'} showAsWholeNumber={false}   maxWidth={'100%'} name={'Total amount outstanding '} value={loansTotalCalculations?.data?.totalAmountOutstanding} valueType={'currency'}  />
                 <Details isLoading={loansTotalCalculationsLoading} sx={` w-[20em] md:w-full `} id={'loaneeTotalAmountRepaid'} showAsWholeNumber={false}   maxWidth={'100%'} name={'Total amount repaid '} value={loansTotalCalculations?.data?.totalAmountRepaid} valueType={'currency'}  />
             </div>
+            <div className={` px-4 `}>
+                <SearchInput
+                    id={'searchField'}
+                    data-testid={'searchField'}
+                    placeholder={'Search by organization'}
+                    value={searchTerm}
+                    onChange={handleSearchChange}
+                />
+            </div>
             <section
-                className={` max-h-[58vh] overflow-y-auto  pl-4 pr-1 `}>
-                <RenderIf condition={isLoading || isFetching}>
+                className={` max-h-[48vh] overflow-y-auto  pl-4 pr-1 `}>
+                <RenderIf condition={isLoading || isFetching || isSearching || isFetchingSearchedData}>
                     <LoadingSkeleton />
                 </RenderIf>
-                <RenderIf condition={!isLoading && !isFetching && fetchData?.length === 0}>
+                <RenderIf condition={!isLoading && !isFetching && !isSearching && !isFetchingSearchedData && fetchData?.length === 0}>
                     <EmptyState />
                 </RenderIf>
-                <RenderIf condition={!isLoading && !isFetching && fetchData?.length > 0}>
+                <RenderIf condition={!isLoading && !isFetching && !isSearching && !isFetchingSearchedData && fetchData?.length > 0}>
                     <LoanGrid
                         data={fetchData}
                         lastCardObserver={lastCardObserver}

@@ -63,7 +63,7 @@ const ViewLoaneeLoans = () => {
 
     useEffect(() => {
         if (debouncedSearchTerm){
-            setFetchData((prev) => [...prev, ...(searchData?.data?.body || [])]);
+            setFetchData( searchData?.data?.body );
             setHasMore(searchData?.data?.hasNextPage)
             if (searchData?.data?.totalPage){
                 setPageSize(searchData?.data?.totalPages)
@@ -157,8 +157,8 @@ const ViewLoaneeLoans = () => {
 
     const LoanGrid = ({ data, lastCardObserver, isLoading }: LoanGridProps) => (
         <div className="w-full h-full grid gap-4 md:grid-cols-3">
-            {data.map((loan:AdminViewLoanType) => (
-                <div key={"key"+loan.id} ref={lastCardObserver}>
+            {data.map((loan:AdminViewLoanType, index) => (
+                <div key={"key"+loan.id + index} ref={lastCardObserver}>
                     <OrganizationLoan
                         id={loan.id}
                         isLoading={isLoading}
