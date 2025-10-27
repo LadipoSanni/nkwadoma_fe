@@ -12,7 +12,7 @@ import { LoanType} from "@/types/loanee";
 import OrganizationLoan from "@/reuseable/cards/OrganizationLoan";
 
 interface LoanGridProps  {
-    data: AdminViewLoanType[];
+    data: LoanType[];
     lastCardObserver: React.RefCallback<HTMLDivElement>;
     isLoading: boolean;
     handleClick: (id: string) => void;
@@ -30,7 +30,7 @@ const Myloans = () => {
     const {data: loaneeLoans, isLoading , isFetching } = useViewLoaneeLoansQuery(request)
     const {data:loansTotalCalculations,isLoading:loansTotalCalculationsLoading } = useViewLoansTotalCalculationQuery({})
     const [hasMore, setHasMore] = useState(true);
-    const [fetchData, setFetchData] = useState<AdminViewLoanType[]>([]);
+    const [fetchData, setFetchData] = useState<LoanType[]>([]);
 
     useEffect(() => {
         if (loaneeLoans){

@@ -18,6 +18,7 @@ const LoaneeLoanDetails = ({data, isLoading ,isViewingOrganizationLoaneeLoans}:p
 
 
     const userRole  = getItemSessionStorage("user_role")
+    console.log('data ;',data)
 
     const documentData = [
         {label:"Loan terms and condition",value:data?.loanTermsAndCondition},
