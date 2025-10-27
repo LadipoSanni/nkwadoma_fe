@@ -45,7 +45,7 @@ const IdentityVerificationModal: React.FC<IdentityVerificationModalProps> = ({
     const methods = useForm<FormData>({ mode: 'onChange' });
     const [isBVNOpen, setIsBVNOpen] = useState(false);
     const [isNINOpen, setIsNINOpen] = useState(false);
-    const [isDataError, setDataError] = useState("");
+    const [isDataError, setIsDataError] = useState("");
     const [loaneeIdentityData, setLoaneeIdentityData] = useState<FormData>({
         imageUrl: "",
         loanReferralId: "",
@@ -109,7 +109,7 @@ const IdentityVerificationModal: React.FC<IdentityVerificationModalProps> = ({
             setIsSecondModalOpen(true);
             onClose();
         } else {
-            setDataError("Unable to encrypt data. Please try again later.");
+            setIsDataError("Unable to encrypt data. Please try again later.");
         }
     };
 
@@ -118,7 +118,6 @@ const IdentityVerificationModal: React.FC<IdentityVerificationModalProps> = ({
         if (stream) {
             stream.getTracks().forEach((track) => {
                 track.stop() });
-            // dispatch(clearCameraStream());
             setStream(null)
             if (videoRef.current) {
                 videoRef.current.srcObject = null;        }
@@ -127,7 +126,6 @@ const IdentityVerificationModal: React.FC<IdentityVerificationModalProps> = ({
     return (
         <>
             <Dialog open={isOpen} onOpenChange={onClose}>
-                {/*<DialogOverlay className="bg-[rgba(52,64,84,0.70)] " />*/}
                 <DialogContent className={'max-w-[425px] md:max-w-[533px] [&>button]:hidden gap-6 py-5 pl-5 pr-2'}>
                     <DialogHeader className={'flex py-3'} id="createCohortDialogHeader">
                         <DialogTitle
