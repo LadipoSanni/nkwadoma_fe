@@ -90,7 +90,8 @@ const ProgramView = () => {
         { refetchOnMountOrArgChange: true }
     );
     const [deleteItem,{isLoading: isDeleteLoading}] = useDeleteProgramMutation();
-    const { data: searchResults, isFetching: isSearchFetching, error: searchError } = useSearchProgramQuery(searchTerm, { skip: !searchTerm});
+    const { data: searchResults, isFetching: isSearchFetching, error: searchError } = useSearchProgramQuery({name:searchTerm,pageSize,
+        pageNumber: view === 'grid' ? pageNumber : 0}, { skip: !searchTerm});
     const { data: program, isLoading: loading, refetch } = useGetProgramByIdQuery(
         { id: programId },
         {

@@ -14,12 +14,12 @@ import { formatPlaceName } from "@/utils/GlobalMethods";
 import { setInitialProgramFormValue,resetInitialProgramFormValue } from '@/redux/slice/program/programSlice';
 import { useAppSelector,store } from '@/redux/store';
 import { useToast } from "@/hooks/use-toast";
-import { programApi } from '@/service/admin/program_query';
+// import { programApi } from '@/service/admin/program_query';
 
 type Props = {
     isEdit?: boolean,
    setIsOpen? : (e:boolean) => void;
-   
+   onSuccess? : () => void
 }
 
 interface ApiError {
@@ -29,7 +29,7 @@ interface ApiError {
   };
 }
 
-function CreateProgram({setIsOpen,isEdit}:Props) {
+function CreateProgram({setIsOpen,isEdit,onSuccess}:Props) {
   const initialProgramValue = useAppSelector((state) => state?.program?.initialProgramFormValue)
   const programDetail  = useAppSelector((state) => state?.program?.programDetail)
   const [createProgram,{isLoading}] = useCreateProgramMutation();
@@ -160,10 +160,13 @@ function CreateProgram({setIsOpen,isEdit}:Props) {
       }else {
         const update = await updateProgram({  data: payload }).unwrap();
         if(update) {
-          store.dispatch(
-            programApi.util.prefetch('getProgramById', { id: values.id }, { force: true })
-          );
+          // store.dispatch(
+          //   programApi.util.prefetch('getProgramById', { id: values.id }, { force: true })
+          // );
           handleCloseModal()
+          if(onSuccess){
+            onSuccess()
+          }
         toast({
           description: update.message,
           status: "success",
