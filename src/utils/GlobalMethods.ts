@@ -1,6 +1,6 @@
-import {jwtDecode} from "jwt-decode";
-import {ROLES} from "@/types/roles";
 import {isAfter} from "date-fns";
+import {ROLES} from "@/types/roles";
+import {jwtDecode} from "jwt-decode";
 import {StaticImageData} from "next/image";
 
 export function capitalizeFirstLetters(word: string | null | undefined): string {
@@ -12,6 +12,7 @@ export function capitalizeFirstLetters(word: string | null | undefined): string 
         .map(word => word.charAt(0).toUpperCase() + word.slice(1))
         .join(' '); 
 }
+
 export function removeSpecialCharacterFromString(str: string | undefined): string {
     if (!str) return "";
 
@@ -115,6 +116,7 @@ export const validateRcNumber = (name: string) : boolean | string  => {
     return /^\d{7}$/.test(name)
 
 }
+
 export const validateEntityOwnership = (ownership: string) : boolean | string => {
     if (/[a-zA-Z]/.test(ownership)) {
         return  'ownership can not contain letters'
@@ -173,7 +175,7 @@ export const getInitials = (name: string): string => {
     const firstNameInitial = nameParts[0]?.charAt(0).toUpperCase() || "";
     const lastNameInitial = nameParts.length > 1 ? nameParts[nameParts.length - 1]?.charAt(0).toUpperCase() : "";
     return `${firstNameInitial}${lastNameInitial}`;
-  };
+};
 
 //   export function getInitial(firstName: string, lastName: string) {
 //     if (!firstName || !lastName || typeof firstName !== 'string' || typeof lastName !== 'string') {
@@ -228,14 +230,14 @@ export const ensureHttpsUrl = (url: string | null | undefined): string | undefin
     if (!url) return undefined;
     const cleaned = url.trim().replace(/^(https?:\/\/)?/i, '');
     return cleaned ? `https://${cleaned}` : undefined;
-  };
+};
 
-  export const toTitleCase = (str: string) => {
+export const toTitleCase = (str: string) => {
     return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
-  };
+};
 
 
-  export function convertRole(roleKey: string) {
+export function convertRole(roleKey: string) {
     if (!roleKey) return 'Unknown';
   
     const roleMap = {
@@ -255,10 +257,9 @@ export const ensureHttpsUrl = (url: string | null | undefined): string | undefin
     type RoleKey = keyof typeof roleMap;
   
     return roleMap[roleKey as RoleKey] || 'Unknown Role';
-  }
+}
 
-
-  export function formatSentence(sentence: string | null | undefined): string {
+export function formatSentence(sentence: string | null | undefined): string {
     if (!sentence) return "";
     
     return sentence
@@ -273,10 +274,10 @@ export const safeDecodeURI = (url: string) => {
     } catch {
       return url;
     }
-  };
+};
 
 
-  export const formatPlaceName = (value: string, condition?: boolean) => {
+export const formatPlaceName = (value: string, condition?: boolean) => {
     let cleanedValue = condition === false 
         ? value.replace(/[^a-zA-Z\s'_-]/g, '') 
         : value.replace(/[^a-zA-Z0-9\s'_\-&]/g, ''); 
@@ -292,10 +293,10 @@ export const safeDecodeURI = (url: string) => {
         .replace(/&{2,}/g, '&') 
         .replace(/['_-]{2,}/g, "'");
     
-const maxLength = condition === false ? 50 : 200;
-        if (cleanedValue.length > maxLength) {
-            cleanedValue = cleanedValue.substring(0, maxLength);
-        }
+    const maxLength = condition === false ? 50 : 200;
+    if (cleanedValue.length > maxLength) {
+        cleanedValue = cleanedValue.substring(0, maxLength);
+    }
     
     return cleanedValue;
 };
@@ -312,9 +313,18 @@ export const getLoanStatusDisplay = (row: string): string => {
       default:
         return row; 
     }
-  };
-  
-  
-  
-  
+};
+
+export const toSentenceCase = (value: unknown): string => {
+    if (typeof value === 'string' && value.length > 0) {
+        const lower = value.toLowerCase();
+        return lower.charAt(0).toUpperCase() + lower.slice(1);
+    }
+
+    if (typeof value === 'number') {
+        return String(value);
+    }
+
+    return "";
+};
   

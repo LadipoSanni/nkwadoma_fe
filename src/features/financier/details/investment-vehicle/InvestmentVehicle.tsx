@@ -1,18 +1,18 @@
 'use client'
-import React,{useState,useEffect} from 'react'
-import SearchInput from "@/reuseable/Input/SearchInput";
-import {inter} from '@/app/fonts'
-import { formatAmount } from '@/utils/Format';
-import { useRouter } from 'next/navigation'
-import {useAppSelector} from "@/redux/store";
-import {useViewFinancierVehiclesQuery} from '@/service/admin/financier';
-import {useSearchFinancierVehicleQuery} from '@/service/admin/financier';
-import Table from '@/reuseable/table/Table';
-import { capitalizeFirstLetters } from "@/utils/GlobalMethods";
-import {setFinancierInvestmentVehicleId, setFinancierMode} from '@/redux/slice/financier/financier';
+import {inter} from '@/app/fonts';
 import {store} from "@/redux/store";
-import SearchEmptyState from "@/reuseable/emptyStates/SearchEmptyState";
+import { useRouter } from 'next/navigation';
+import Table from '@/reuseable/table/Table';
+import {useAppSelector} from "@/redux/store";
+import { formatAmount } from '@/utils/Format';
+import React,{useState,useEffect} from 'react';
+import SearchInput from "@/reuseable/Input/SearchInput";
 import {MdOutlinePayments, MdSearch} from "react-icons/md";
+import {useViewFinancierVehiclesQuery} from '@/service/admin/financier';
+import SearchEmptyState from "@/reuseable/emptyStates/SearchEmptyState";
+import {useSearchFinancierVehicleQuery} from '@/service/admin/financier';
+import { capitalizeFirstLetters, toSentenceCase } from "@/utils/GlobalMethods";
+import {setFinancierInvestmentVehicleId, setFinancierMode} from '@/redux/slice/financier/financier';
 
 interface TableRowData {
     [key: string]: string | number | null | React.ReactNode;
@@ -33,11 +33,9 @@ interface financials {
 type viewAllfinancier = financials & TableRowData
 
 
-
-
 function InvestmentVehicle() {
-    const [searchTerm, setSearchTerm] = useState('');
     const router = useRouter()
+    const [searchTerm, setSearchTerm] = useState('');
     const activeAndInvitedFinancierId = useAppSelector(state => (state.financier.activeAndInvitedFinancierId))
     const [hasNextPage,setNextPage] = useState(false)
     const [totalPage,setTotalPage] = useState(0)
@@ -94,7 +92,7 @@ function InvestmentVehicle() {
     }
 
     const financierHeader = [
-        { title: 'Name', sortable: true, id: 'name', selector: (row:viewAllfinancier ) => row?.investmentVehicleName},
+        { title: 'Name', sortable: true, id: 'name', selector: (row:viewAllfinancier ) => toSentenceCase(row?.investmentVehicleName)},
         // { title: 'Type', sortable: true, id: 'type', selector: (row:viewAllfinancier) => <div className='w-full flex justify-center items-center '><div className={`${row.financierType === "INDIVIDUAL"? "text-[#68442E] bg-warning50 ": "text-[#142854] bg-[#EEF5FF]"} px-2 rounded-xl relative md:right-[12px]  `}>{capitalizeFirstLetters(row.financierType)}</div></div> },
         { title: <div className='relative md:left-4'>Type</div>, id: 'type', selector: (row:viewAllfinancier) => (
                 <span className={`${row.investmentVehicleType ===  "ENDOWMENT" ? 'text-[#66440A] bg-[#FEF6E8]' : 'text-[#142854] bg-[#EEF5FF]'} rounded-[32px] px-2 h-5`}>
@@ -147,3 +145,4 @@ function InvestmentVehicle() {
 }
 
 export default InvestmentVehicle
+
