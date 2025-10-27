@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import CreateProgram from "@/components/program/create-program";
 import TableModal from "@/reuseable/modals/TableModal";
 import {Cross2Icon} from "@radix-ui/react-icons";
-import {setCurrentProgramId,setInitialProgramFormValue,resetInitialProgramFormValue,setTotalNumberOfLoanee,resetCurrentProgramDetailData,resetProgramDetail,setProgramView} from "@/redux/slice/program/programSlice";
+import {setCurrentProgramId,setInitialProgramFormValue,resetInitialProgramFormValue,setTotalNumberOfLoanee,resetCurrentProgramDetailData,setProgramView} from "@/redux/slice/program/programSlice";
 import { store,useAppSelector } from '@/redux/store';
 import {MdGridView, MdOutlineViewList} from "react-icons/md";
 import {useGetAllProgramsQuery,useDeleteProgramMutation,useSearchProgramQuery} from '@/service/admin/program_query';
