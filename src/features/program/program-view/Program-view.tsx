@@ -388,14 +388,18 @@ function ProgramView() {
                     isOpen={isModalOpen}
                     closeModal={() => {
                         setModalOpen(false)
-                        modalType === "edit" && store.dispatch(resetInitialProgramFormValue())
+                        if (modalType === "edit") {
+                            store.dispatch(resetInitialProgramFormValue());
+                        }
                         store.dispatch(setTotalNumberOfLoanee(0))
                     }}
                     closeOnOverlayClick={true} 
                     icon={Cross2Icon}
                     headerTitle={modalType === "create" ? "Create program" : "Edit program"}
                     reset={()=> { 
-                        modalType === "edit" && store.dispatch(resetInitialProgramFormValue())
+                        if (modalType === "edit") {
+                            store.dispatch(resetInitialProgramFormValue());
+                        }
                         store.dispatch(setTotalNumberOfLoanee(0))
                     }}
                 >

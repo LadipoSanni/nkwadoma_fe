@@ -5,7 +5,6 @@ import { MdOutlineDateRange, MdOutlinePeopleAlt, MdPersonOutline} from "react-ic
 import { Button } from '../ui/button';
 import { Menubar, MenubarTrigger,MenubarContent,MenubarMenu,MenubarItem} from "@/components/ui/menubar";
 import { DotsVerticalIcon } from "@radix-ui/react-icons";
-import SafeHTMLRenderer from "@/reuseable/display/Safe-html-Renderer";
 import {TagButton} from "@/reuseable/tagButton/TagButton";
 import SkeletonForGrid from '@/reuseable/Skeleton-loading-state/Skeleton-for-grid';
 import InfiniteScroll from "react-infinite-scroll-component";
