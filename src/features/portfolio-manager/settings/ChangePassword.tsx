@@ -3,7 +3,7 @@ import {inter, inter500, inter700} from "@/app/fonts";
 import AuthInput from "@/reuseable/Input/AuthInputField";
 import {Button} from "@/components/ui/button";
 import AuthButton from "@/reuseable/buttons/AuthButton";
-import {encryptText} from "@/utils/encrypt";
+import {encryptText} from "@/server/encrypt";
 import PasswordCriteria from '@/components/passwordCriteria/Index';
 import { useChangePasswordMutation } from '@/service/users/api';
 import {useToast} from "@/hooks/use-toast";

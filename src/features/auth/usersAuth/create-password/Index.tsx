@@ -14,7 +14,7 @@ import {persistor, store} from "@/redux/store";
 import {setCurrentNavbarItem,setCurrentNavBottomItem} from "@/redux/slice/layout/adminLayout";
 import {clearData} from "@/utils/storage";
 import { setMarketInvestmentVehicleId } from '@/redux/slice/investors/MarketPlaceSlice';
-import {encryptText} from "@/utils/encrypt";
+import {encryptText} from "@/server/encrypt";
 import {setLoanReferralId,setCohortLoaneeId } from "@/redux/slice/loan/selected-loan";
 import Link from 'next/link'
 

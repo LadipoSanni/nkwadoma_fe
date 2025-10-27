@@ -6,7 +6,7 @@ import {useRouter, useSearchParams} from "next/navigation";
 import {useResetPasswordMutation} from "@/service/auths/api";
 import {useToast} from "@/hooks/use-toast"
 import {inter} from "@/app/fonts";
-import {encryptText} from "@/utils/encrypt";
+import {encryptText} from "@/server/encrypt";
 
 const Step3 = () => {
 

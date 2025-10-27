@@ -16,8 +16,9 @@ import {persistor, store} from "@/redux/store";
 import {setCurrentNavbarItem} from "@/redux/slice/layout/adminLayout";
 import {clearData} from "@/utils/storage";
 import {setMarketInvestmentVehicleId} from "@/redux/slice/investors/MarketPlaceSlice";
-import {encryptText} from "@/utils/encrypt";
+import {encryptText} from "@/server/encrypt";
 import {setCurrentStep} from "@/service/users/loanRerralSlice";
+import { encryptAction } from "@/app/encrypt/action";
 
 
 interface CustomJwtPayload {
@@ -45,7 +46,6 @@ const Login: React.FC = () => {
     const router = useRouter()
     const searchParams = useSearchParams()
     const [showEmailMessage, setShowEmailMessage] = useState(false)
-    const encryptedPassword =  encryptText(password)
 
     const getVariableFromRoute = (name: string) => {
         if (searchParams){
@@ -124,14 +124,11 @@ const Login: React.FC = () => {
         }
     }
 
-    const encryptInputtedPassword = async (inputedPassword: string) => {
-        const res = await fetch('/api/encrypt', {
-            method: 'POST',
-            body: JSON.stringify({ text: inputedPassword }),
-            headers: { 'Content-Type': 'application/json' },
-        });
-        const { encrypted } = await res.json();
-        console.log(encrypted);
+
+    async function handleEncrypt(inputedPassword: string) {
+        const result = await encryptAction(inputedPassword);
+        console.log("Encrypted:", result);
+        return result;
     }
 
 
@@ -214,18 +211,16 @@ const Login: React.FC = () => {
     const {toast} = useToast()
     const handleLogin = async (e?:React.MouseEvent<HTMLButtonElement>) => {
         e?.preventDefault()
-        const sss = await encryptInputtedPassword(password)
-        console.log('password: ',password)
-        console.log('ss: ', sss)
+        const encrypted = await handleEncrypt(password)
         if (!navigator.onLine) {
                 toast({
                     description: "No internet connection",
                     status: "error",
                 })
         } else {
-            console.log('{email:email, password:encryptedPassword} :',{email:email, password:''})
+            const parameters = {email:email, password:encrypted}
                 try {
-                    const response = await login({email:email, password:''}).unwrap()
+                    const response = await login(parameters).unwrap()
                     if (response?.data) {
                         const  {
                             access_token,
