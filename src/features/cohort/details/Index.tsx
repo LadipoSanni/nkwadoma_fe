@@ -14,7 +14,7 @@ import TableModal from "@/reuseable/modals/TableModal";
 import {useToast} from "@/hooks/use-toast";
 import DeleteModal from "@/reuseable/modals/Delete-modal";
 import DeleteCohort from "@/reuseable/details/DeleteCohort";
-import { setCreateCohortField,resetCreateCohortField } from "@/redux/slice/create/cohortSlice";
+import { setCreateCohortField,resetCreateCohortField,setSelectedProgramName } from "@/redux/slice/create/cohortSlice";
 import EditCohortForm from '@/components/cohort/CreateCohort';
 import { LoanBreakDowns } from '@/components/cohort/CreateCohort';
 import DeletionRestrictionMessageProps from '@/components/cohort/DeletionRestrictionMessageProps';
@@ -45,40 +45,12 @@ const CohortDetails = () => {
     const [openEditModal, setOpenEditModal] = React.useState(false);
     const [openDeleteModal, setOpenDeleteModal] = React.useState(false);
     const [hasLoanee, setHasLoanee] = React.useState(false);
-    // const [details, setDetails] = React.useState({
-    //     id: "",
-    //     programId: "",
-    //     organizationId: "",
-    //     cohortDescription: "",
-    //     name: "",
-    //     activationStatus: "",
-    //     cohortStatus: "",
-    //     tuitionAmount: 0,
-    //     totalCohortFee: 0,
-    //     imageUrl: "",
-    //     startDate: "",
-    //     expectedEndDate: "",
-    // })
 
     const totalNumberOfLoanee = cohortDetails?.data?.numberOfLoanees as number
 
     const editCohort = ( ) => {
         setOpenEditModal(true);
-        // setDetails({
-        //     id: cohortDetails?.data?.id || "",
-        //     programId: cohortDetails?.data?.programId || "",
-        //     organizationId: cohortDetails?.data?.organizationId || "",
-        //     cohortDescription: cohortDetails?.data?.cohortDescription || "",
-        //     name: cohortDetails?.data?.name || "",
-        //     activationStatus: cohortDetails?.data?.activationStatus || "",
-        //     cohortStatus: cohortDetails?.data?.cohortStatus || "",
-        //     tuitionAmount: cohortDetails?.data?.tuitionAmount || "",
-        //     totalCohortFee: cohortDetails?.data?.totalCohortFee || "",
-        //     imageUrl: cohortDetails?.data?.imageUrl || "",
-        //     startDate: cohortDetails?.data?.startDate || "",
-        //     expectedEndDate: cohortDetails?.data?.expectedEndDate || "",
-        // })
-
+       const programName =cohortDetails?.data?.programName
         const details = {
               id: cohortDetails?.data?.id ,
               name: cohortDetails?.data?.name,
@@ -90,6 +62,7 @@ const CohortDetails = () => {
               programName: ""
         }
         store.dispatch(setCreateCohortField(details))
+        store.dispatch(setSelectedProgramName(programName))
     }
 
 
@@ -193,7 +166,6 @@ const CohortDetails = () => {
                 icon={Cross2Icon}
 
             >
-                {/* <EditCohortForm setIsOpen={()=>{setOpenEditModal(false)}} cohortDetail={details}/> */}
                 <EditCohortForm setIsOpen={()=>{setOpenEditModal(false)}} isEdit={true}/>
             </TableModal>
            {hasLoanee? 

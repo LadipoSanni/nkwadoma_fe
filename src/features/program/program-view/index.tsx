@@ -90,7 +90,8 @@ const ProgramView = () => {
         { refetchOnMountOrArgChange: true }
     );
     const [deleteItem,{isLoading: isDeleteLoading}] = useDeleteProgramMutation();
-    const { data: searchResults, isFetching: isSearchFetching, error: searchError } = useSearchProgramQuery(searchTerm, { skip: !searchTerm});
+    const { data: searchResults, isFetching: isSearchFetching, error: searchError } = useSearchProgramQuery({name:searchTerm,pageSize,
+        pageNumber: view === 'grid' ? pageNumber : 0}, { skip: !searchTerm});
     const { data: program, isLoading: loading, refetch } = useGetProgramByIdQuery(
         { id: programId },
         {
@@ -535,7 +536,7 @@ const ProgramView = () => {
                     { numberOfLoanee > 0?
                     <DeletionRestrictionMessageProps 
                      image= "/Icon - Warning.svg"
-                    message={`This program can not be edited because it has Cohort that contains ${numberOfLoanee > 0? "loanees" : "loanee"}`}
+                    message={`This program can not be updated because it has Cohort that contains ${numberOfLoanee > 1? "loanees" : "loanee"}`}
                     />
                 : 
               <CreateProgram setIsOpen={setEditOpen} isEdit={true}/>}

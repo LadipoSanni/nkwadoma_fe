@@ -1,20 +1,19 @@
 "use client";
-import React, {useState, useEffect, useCallback, useRef} from "react";
-import { store } from "@/redux/store";
-import SearchInput from "@/reuseable/Input/SearchInput";
-import CustomSelect from "@/reuseable/Input/Custom-select";
-import { useRouter } from "next/navigation";
-import { setCurrentMyInvestmentVehicleDetails } from "@/redux/slice/financier/financier";
-import {useFilterMyInvestmentQuery, useSearchMyInvestmentQuery} from '@/service/financier/api'
 import dynamic from "next/dynamic";
-import {
-     CurrentMyInvestmentVehicleDetails,
-} from "@/types/Component.type";
+import { store } from "@/redux/store";
+import { useRouter } from "next/navigation";
+import { toSentenceCase } from "@/utils/GlobalMethods";
+import SearchInput from "@/reuseable/Input/SearchInput";
 import Card from "@/pages/financier/my-investment/card";
-import MarketPlaceInvestmentGrid from "@/reuseable/Skeleton-loading-state/Skeleton-for-MarketPlace";
 import {MdOutlinePayments, MdSearch} from "react-icons/md";
 import LoanEmptyState from "@/reuseable/emptyStates/Index";
+import CustomSelect from "@/reuseable/Input/Custom-select";
+import React, {useState, useEffect, useCallback, useRef} from "react";
 import SearchEmptyState from "@/reuseable/emptyStates/SearchEmptyState";
+import { CurrentMyInvestmentVehicleDetails } from "@/types/Component.type";
+import { setCurrentMyInvestmentVehicleDetails } from "@/redux/slice/financier/financier";
+import { useFilterMyInvestmentQuery, useSearchMyInvestmentQuery } from '@/service/financier/api';
+import MarketPlaceInvestmentGrid from "@/reuseable/Skeleton-loading-state/Skeleton-for-MarketPlace";
 
 
 const MyInvestmentContent = dynamic(
@@ -135,8 +134,6 @@ const MyInvestment = () => {
         }
     }
 
-    // console.log('myInvestmentVehicles', myInvestmentVehicles)
-
 
     return (
         <main
@@ -222,11 +219,9 @@ const MyInvestment = () => {
                         const statusClass = getStatusColor(statusValue)
                         const borderClass = getStatusBorderColor(statusValue)
 
+                        const formattedName = toSentenceCase(vehicle.name);
                         const truncatedTitle =
-                            vehicle?.name?.length > 20
-                                ? vehicle?.name?.slice(0, 20) + "..."
-                                : vehicle?.name;
-
+                            formattedName.length > 20 ? formattedName.slice(0, 20) + '...' : formattedName;
 
                         // if (myInvestmentVehicles?.length === index + 1) {
                             return (

@@ -48,7 +48,8 @@ interface ApiError {
 
 function CreateCohort({ setIsOpen,isEdit }: Props) {
     const createCohortField = useAppSelector(state => (state?.cohort?.createCohortField))
-    const currentProgramId = useAppSelector(state => (state.program.currentProgramId))
+    const currentProgramId = useAppSelector(state => (state?.program?.currentProgramId))
+    const currentProgramName = useAppSelector(state => (state?.cohort?.programName))
      
     const initialFormValue = {
          id: createCohortField?.id || "",
@@ -73,6 +74,8 @@ function CreateCohort({ setIsOpen,isEdit }: Props) {
     const { toast } = useToast();
     const [createCohort, { isLoading }] = useCreateCohortMutation();
     const [editCohort, { isLoading:editIsloading }] = useEditCohortMutation();
+    
+    const maxChars = 2500;
 
     const { data, isLoading: programIsLoading, isFetching } = useGetAllProgramsQuery(
         { pageSize: size, pageNumber: pageNumber },
@@ -137,6 +140,15 @@ function CreateCohort({ setIsOpen,isEdit }: Props) {
         }
     };
 
+    const extractPlainText = (html: string): string => {
+        if (!html) return '';
+        const tempDiv = document.createElement('div');
+        tempDiv.innerHTML = html;
+        const text = tempDiv.textContent || tempDiv.innerText || '';
+        return text.replace(/\s+/g, ' ').trim();
+      };
+    
+
     const validationSchema = Yup.object().shape({
         name: Yup.string()
             .trim()
@@ -148,7 +160,11 @@ function CreateCohort({ setIsOpen,isEdit }: Props) {
             .nullable(),
         cohortDescription: Yup.string()
             .trim()
-            .max(2500, "Cohort description must be 2500 characters or less"),
+            .test('maxChars', 'Cohort description must be 2500 characters or less', (value) => {
+                if (!value) return true; 
+                const textContent = extractPlainText(value);
+                return textContent.length <= maxChars;
+              }),
         tuitionAmount: Yup.string().optional()
     });
 
@@ -161,6 +177,8 @@ function CreateCohort({ setIsOpen,isEdit }: Props) {
         
         return errors;
     };
+
+
    
     const validateItemName = (itemName: string, index: number, loanBreakDowns: LoanBreakDowns[]) => {
         const isDuplicate = loanBreakDowns.some((item, i) => 
@@ -348,7 +366,7 @@ function CreateCohort({ setIsOpen,isEdit }: Props) {
                                 <div className={`grid  gap-4 ${!currentProgramId? "md:grid-cols-2" : ""}`}>
                                   { !currentProgramId &&  <div>
                                         <ProgramSelect
-                                            selectedProgram={selectedProgramName }
+                                            selectedProgram={selectedProgramName  || currentProgramName}
                                             setSelectedProgram={handleProgramSelect}
                                             isSelectOpen={isSelectOpen}
                                             setIsSelectOpen={setIsSelectOpen}
@@ -406,7 +424,7 @@ function CreateCohort({ setIsOpen,isEdit }: Props) {
                                    
                                     <QuillFieldEditor
                                         name="cohortDescription"
-                                        errorMessage="Cohort description must be 2500 characters or less"
+                                        errorMessage=""
                                         errors={{ cohortDescription: errors.cohortDescription }}
                                         touched={{ cohortDescription: touched.cohortDescription }}
                                         onExternalChange={(value) => handleFormChange("cohortDescription", value)}

@@ -4,6 +4,7 @@ import {MdOutlinePeople} from "react-icons/md";
 import Table from '@/reuseable/table/Table';
 import {useRouter} from "next/navigation";
 import {useViewAllLoanRequestQuery,useSearchLoanRequestQuery} from "@/service/admin/loan/loan-request-api";
+import { resetAll } from "@/redux/slice/create/createLoanOfferSlice";
 import {formatAmount} from "@/utils/Format";
 import dayjs from "dayjs";
 import {capitalizeFirstLetters} from "@/utils/GlobalMethods";
@@ -89,6 +90,7 @@ const Index = () => {
         //eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-expect-error
         store.dispatch(setSelectedLoanRequestId(String(ID?.id)))
+        store.dispatch(resetAll())
     };
 
 
@@ -116,6 +118,7 @@ const Index = () => {
                             setPageNumber={hasSearchTerm ? setPageSearchNumber : setPageNumber}
                             condition={true}
                             searchEmptyState={hasSearchTerm && searchResult?.data?.body?.length < 1}
+                            tableCellStyle="h-12"
                         />
                     </div>
         </div>
