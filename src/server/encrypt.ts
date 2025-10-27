@@ -3,9 +3,6 @@ import CryptoJS from 'crypto-js';
 export async function encryptText(text: string):  Promise<string> {
     const encryptionKey = process.env.APP_DEV_IV_ENCRYPTION_SECRET_KEY;
     const ivKey = process.env.APP_DEV_IV_KEY;
-
-    console.log('encryptionKey: ',encryptionKey)
-    console.log('ivKey: ',ivKey)
     if (!encryptionKey || !ivKey) {
         throw new Error('Missing encryption environment variables.');
     }
@@ -15,7 +12,5 @@ export async function encryptText(text: string):  Promise<string> {
     const secretKey = CryptoJS.enc.Utf8.parse(encryptionKey.padEnd(16, ' '));
 
     const encrypted = CryptoJS.AES.encrypt(text, secretKey, { iv });
-    console.log('text before encrypting ', text)
-    console.log('encrypted: ',encrypted?.toString());
     return encrypted.toString(); // returns base64 string
 }

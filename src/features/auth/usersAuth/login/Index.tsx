@@ -16,7 +16,6 @@ import {persistor, store} from "@/redux/store";
 import {setCurrentNavbarItem} from "@/redux/slice/layout/adminLayout";
 import {clearData} from "@/utils/storage";
 import {setMarketInvestmentVehicleId} from "@/redux/slice/investors/MarketPlaceSlice";
-import {encryptText} from "@/server/encrypt";
 import {setCurrentStep} from "@/service/users/loanRerralSlice";
 import { encryptAction } from "@/app/encrypt/action";
 
@@ -125,10 +124,8 @@ const Login: React.FC = () => {
     }
 
 
-    async function handleEncrypt(inputedPassword: string) {
-        const result = await encryptAction(inputedPassword);
-        console.log("Encrypted:", result);
-        return result;
+    async  function  handleEncrypt(inputedPassword: string) {
+        return  await encryptAction(inputedPassword);
     }
 
 
@@ -192,9 +189,6 @@ const Login: React.FC = () => {
         const user_email = decode_access_token?.email
         const user_roles = decode_access_token?.realm_access?.roles
         const user_role = user_roles.filter(getUserRoles).at(0)
-        // console.log('access_token: ', access_token, 'decode_access_token:', decode_access_token)
-        // const decoded_re = jwtDecode<CustomJwtPayload>(refresh_token)
-        // console.log('user_roles: ', user_roles,'user_role: ', user_role)
         return {
             access_token,
             refresh_token,

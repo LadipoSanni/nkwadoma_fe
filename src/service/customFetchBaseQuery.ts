@@ -6,7 +6,6 @@ import {getItemSessionStorage} from "@/utils/storage";
 
 
 const baseUrl = process.env.NEXT_PUBLIC_APP_DEV_AUTH_URL;
-console.log('baseUrl', baseUrl);
 export const customFetchBaseQuery = fetchBaseQuery({
     baseUrl,
     // mode: 'no-cors',
