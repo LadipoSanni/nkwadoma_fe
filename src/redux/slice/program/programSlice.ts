@@ -23,7 +23,8 @@ interface ProgramSliceState {
     initialProgramFormValue: InitialProgramFormValue | null;
     totalNumberOfLoanee: number,
     currentProgramDetailData: CurrentProgramDetailData | null;
-    programDetail: string
+    programDetail: string,
+    programView: string
 }
 
 const initialState: ProgramSliceState = {
@@ -32,7 +33,8 @@ const initialState: ProgramSliceState = {
     initialProgramFormValue: null,
     totalNumberOfLoanee: 0,
     currentProgramDetailData: null,
-    programDetail: ""
+    programDetail: "",
+    programView: "grid"
 }
 
 export const programSlice = createSlice({
@@ -71,10 +73,13 @@ export const programSlice = createSlice({
         resetProgramDetail: ( state) => {
             state.programDetail = ""
         },
+        setProgramView: ( state, action: PayloadAction<string>) => {
+            state.programView = action.payload;
+        },
     }
 })
 
 export const {setCurrentProgramId,setcohortOrProgramRoute,resetCurrentProgramId,resetCurrentProgramDetailData,resetProgramDetail,
-    setInitialProgramFormValue,resetInitialProgramFormValue,setTotalNumberOfLoanee, setCurrentProgramDetailData,setProgramDetail
+    setInitialProgramFormValue,resetInitialProgramFormValue,setTotalNumberOfLoanee, setCurrentProgramDetailData,setProgramDetail,setProgramView
 } = programSlice.actions;
 export default programSlice.reducer;
