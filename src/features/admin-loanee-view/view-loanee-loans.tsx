@@ -43,7 +43,7 @@ const ViewLoaneeLoans = () => {
     const observer = useRef<IntersectionObserver | null>(null);
     const [hasMore, setHasMore] = useState(true);
 
-    const [debouncedSearchTerm] = useDebounce(searchTerm, 1000);
+    const [debouncedSearchTerm] = useDebounce(searchTerm, 100);
 
     const data = {
         loaneeId: selectedLoaneeId,

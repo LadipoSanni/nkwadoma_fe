@@ -34,7 +34,7 @@ const Myloans = () => {
     const [hasMore, setHasMore] = useState(true);
     const [fetchData, setFetchData] = useState<LoanType[]>([]);
     const [searchTerm, setSearchTerm] = useState('');
-    const [debouncedSearchTerm] = useDebounce(searchTerm, 1000);
+    const [debouncedSearchTerm] = useDebounce(searchTerm, 100);
     const searchParameter = {
         pageNumber: pageNumber,
         pageSize: pageSize,
