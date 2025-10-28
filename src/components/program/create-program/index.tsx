@@ -151,6 +151,9 @@ function CreateProgram({setIsOpen,isEdit,onSuccess}:Props) {
         const create = await createProgram(payload).unwrap();
         if(create) {
          handleCloseModal()
+         if(onSuccess){
+          onSuccess()
+        }
        toast({
          description: create.message,
          status: "success",
