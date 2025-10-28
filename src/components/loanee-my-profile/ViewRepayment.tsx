@@ -188,13 +188,7 @@ const ViewRepayment = ({loanId}: Props) => {
                 className={` w-full grid gap-4 h-full px-2 py-6 `}
             >
                 <div id="searchDiv" className="px-2 flex md:flex-row flex-col gap-3">
-                    {/*<SearchInput*/}
-                    {/*    id="searchRepayment"*/}
-                    {/*    data-testid={'searchRepayment'}*/}
-                    {/*    value={searchTerm}*/}
-                    {/*    onChange={(e) => setSearchTerm(e.target.value)}*/}
-                    {/*    style="md:w-20 w-full"*/}
-                    {/*/>*/}
+                    { data?.data?.body?.length > 0 &&
                     <div className={` flex h-fit sm:w-full gap-2 sm:grid sm:grid-cols-2 w-fit md:w-fit lg:w-fit  `}>
                         <DropdownFilter
                             title={'Filter by month'}
@@ -218,6 +212,7 @@ const ViewRepayment = ({loanId}: Props) => {
                             emptyState={'No repayment has been made'}
                         />
                     </div>
+                    }
                 </div>
                 <div>
                     { selectedMonth  && data?.data?.body?.length === 0 ?

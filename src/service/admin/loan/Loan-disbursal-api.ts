@@ -34,7 +34,31 @@ export const loanDisbursalApi = createApi({
             }),
             providesTags: ['upload-repayment']
         }),
+        viewLoaneeLoans: builder.query({
+            query: (data:{pageNumber: number, pageSize: number}) => ({
+                url : `/loan/track/all/progress`,
+                method: 'GET',
+                params: data
+            })
+        }),
+        viewLoaneeLoanDetails: builder.query({
+            query: (data:{loanProgressId: string}) => ({
+                url: `/loan/view/progress`,
+                method: 'GET',
+                params: data
+            })
+        }),
+        searchLoaneeLoan: builder.query({
+            query: (data:{pageNumber: number, pageSize: number, organizationName: string}) =>({
+                url : `/loan/search/all/progress`,
+                method: 'GET',
+                params: data
+            })
+        })
 
     })
 })
-export const { useViewDisbursedLoanDetailsQuery, useViewLoansTotalCalculationQuery, useViewAllLoanDisbursalQuery} = loanDisbursalApi
+export const { useViewDisbursedLoanDetailsQuery,useViewLoaneeLoansQuery,
+    useViewLoansTotalCalculationQuery, useViewAllLoanDisbursalQuery,
+    useViewLoaneeLoanDetailsQuery, useSearchLoaneeLoanQuery,
+} = loanDisbursalApi

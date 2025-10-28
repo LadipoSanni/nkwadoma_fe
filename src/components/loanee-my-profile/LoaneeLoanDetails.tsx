@@ -21,7 +21,6 @@ const LoaneeLoanDetails = ({data, isLoading ,isViewingOrganizationLoaneeLoans}:p
 
     const documentData = [
         {label:"Loan terms and condition",value:data?.loanTermsAndCondition},
-        // {label:"Loan disbursement terms",value:loanProduct?.data?.disbursementTerms }
     ]
 
 
