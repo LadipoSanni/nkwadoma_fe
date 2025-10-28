@@ -347,8 +347,9 @@ function ProgramView() {
                     handleRowClick={handleRowOrCardClick}
                     kirkBabDropdownOption={dropDownOption}
                     handleDropDownClick={handleDropdownClick}
-                    isLoading={isLoading || isSearchloading || isSearchFetching}
+                    isLoading={isLoading || isSearchloading }
                     searchTerm={debouncedSearchTerm}
+                    isSearchFetching={isSearchFetching}
                     infinityScroll={{
                         hasMore: gridHasNextPage,
                         loadMore: loadMoreGrid,
@@ -411,7 +412,8 @@ function ProgramView() {
                                 setGridPageNumber(0);
                                 setGridPageSearchNumber(0);
                                 setGridHasNextPage(true);
-                                setProgramViews([]);
+                               setProgramViews([]);
+                           
                             } else {
                                 setListPageNumber(0);
                                 setListPageSearchNumber(0);
@@ -437,7 +439,7 @@ function ProgramView() {
                 >
                     <DeletionRestrictionMessageProps 
                         image={ "/Icon - Warning.svg" }
-                        message={`This program can not be updated because it has Cohort that contains ${numberOfLoanee > 1? "loanees" : "loanee"}` }
+                        message={`This program can not be edited because it has Cohort that contains ${numberOfLoanee > 1? "loanees" : "loanee"}` }
                     />    
                 </TableModal>
             }

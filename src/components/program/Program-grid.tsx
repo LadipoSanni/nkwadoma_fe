@@ -47,12 +47,22 @@ interface Props {
     handleDropDownClick?: (id: string, row: ViewAllProgramProps) => void;
     infinityScroll: InfiniteScrollProps;
     isLoading?: boolean;
-    searchTerm?: string
+    searchTerm?: string;
+    isSearchFetching?: boolean
 }
 
-function ProgramGrid({viewAllProgram,handleRowClick,kirkBabDropdownOption,handleDropDownClick,infinityScroll,isLoading,searchTerm}:Props) {
+function ProgramGrid({viewAllProgram,handleRowClick,kirkBabDropdownOption,handleDropDownClick,infinityScroll,isLoading,searchTerm,isSearchFetching}:Props) {
     const containerRef = useRef<HTMLDivElement>(null);
     const [scrollHeight, setScrollHeight] = useState(500);
+    const [prevSearchTerm, setPrevSearchTerm] = useState(searchTerm);
+
+    useEffect(() => {
+        if (prevSearchTerm !== searchTerm) {
+            if (!isSearchFetching) {
+                setPrevSearchTerm(searchTerm);
+            }
+        }
+    }, [searchTerm, isSearchFetching, prevSearchTerm]);
 
     useEffect(() => {
         if (typeof window === 'undefined' || typeof document === 'undefined') {
@@ -104,7 +114,7 @@ function ProgramGrid({viewAllProgram,handleRowClick,kirkBabDropdownOption,handle
     
   return (
     <div >
-   { isLoading? <SkeletonForGrid /> : searchTerm &&  viewAllProgram.length === 0 ? (
+   { isLoading || (isSearchFetching && prevSearchTerm !== searchTerm) ? <SkeletonForGrid /> : searchTerm &&  viewAllProgram.length === 0 ? (
     <TableEmptyState
     name={"program"}
      icon={<MagnifyingGlassIcon/>}
@@ -120,7 +130,7 @@ function ProgramGrid({viewAllProgram,handleRowClick,kirkBabDropdownOption,handle
       dataLength={viewAllProgram.length}
       next={infinityScroll.loadMore}
       hasMore={infinityScroll.hasMore}
-      loader={infinityScroll.loader ? <SkeletonForGrid /> : null}
+      loader={infinityScroll.loader ? <div className='flex items-center justify-center mt-3'>Loading more...</div> : null}
       height={scrollHeight} 
       className="w-full"
     >
