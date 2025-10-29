@@ -64,13 +64,13 @@ function ProgramView() {
     const router = useRouter()
 
     const getAllProgramsParams = {
-        pageSize: 10,
+        pageSize: programViewType === 'grid' ? 12 : 10,
         pageNumber: programViewType === 'grid' ? gridPageNumber : listPageNumber
     };
 
     const searchParams = {
         name: debouncedSearchTerm,
-        pageSize: 10,
+        pageSize: programViewType === 'grid' ? 12 : 10,
         pageNumber: programViewType === 'grid' ? gridPageSearchNumber : listPageSearchNumber
     };
 
@@ -412,7 +412,7 @@ function ProgramView() {
                                 setGridPageNumber(0);
                                 setGridPageSearchNumber(0);
                                 setGridHasNextPage(true);
-                               setProgramViews([]);
+                                setProgramViews([]);
                            
                             } else {
                                 setListPageNumber(0);

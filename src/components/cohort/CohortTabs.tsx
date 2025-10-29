@@ -20,7 +20,7 @@ import {
     setcohortId,
     setSelectedCohortInOrganization,
     setSelectedCohortInOrganizationType,
-    resetCreateCohortField, setCreateCohortField, setTotalNumberOfLoanee,setSelectedProgramName
+    resetCreateCohortField, setCreateCohortField, setTotalNumberOfLoanee,setSelectedProgramName,setTotalRefferedNumberOfLoanee
 } from '@/redux/slice/create/cohortSlice'
 import {capitalizeFirstLetters} from "@/utils/GlobalMethods";
 import { setcohortOrProgramRoute } from '@/redux/slice/program/programSlice';
@@ -82,9 +82,10 @@ const CohortTabs = (
               setDeleteProgram}:cohortList)  => {
   const [cohortId, setCohortId] =  React.useState("")
   const [isOpen, setIsOpen] = React.useState(false);
- const organizationTabStatus = useAppSelector(store => store?.organization?.organizationDetailTabStatus)
- const totalNumberOfLoanee = useAppSelector(store => store?.cohort?.numberOfLoanees)
+  const organizationTabStatus = useAppSelector(store => store?.organization?.organizationDetailTabStatus)
+  const totalNumberOfLoanee = useAppSelector(store => store?.cohort?.numberOfLoanees)
   const currentProgramId = useAppSelector(state => (state.program.currentProgramId))
+  const totalNumberOfRefferdLoanee = useAppSelector(store => store?.cohort?.numberOfRefferedLoanees)
     // const cohortTab = useAppSelector(state => state?.cohort?.cohortStatusTab)
 
   useEffect(() => {
@@ -174,8 +175,10 @@ const CohortTabs = (
  
   const programName =  row?.programName as string
   const totalNumberOfLoanee = row?.numberOfLoanees as number
+  const totalNumberOfRefferedLoanee = row?.numberOfReferredLoanee as number
    store.dispatch(setTotalNumberOfLoanee(totalNumberOfLoanee))
-    store.dispatch(setSelectedProgramName(programName))
+   store.dispatch(setSelectedProgramName(programName))
+   store.dispatch(setTotalRefferedNumberOfLoanee(totalNumberOfRefferedLoanee))
 
     const cohortDetails = {
              id: row?.id as string ,
@@ -312,7 +315,25 @@ const CohortTabs = (
 
       </Tabs>
       <div>
-        { (
+        { totalNumberOfRefferdLoanee > 0? 
+        <TableModal
+         styeleType="styleBodyTwo"
+         isOpen={isOpen}
+         icon={Cross2Icon}
+         closeModal={() => {
+           setIsOpen(false)
+           setCohortId('')
+           store.dispatch(resetCreateCohortField())
+         }}
+         closeOnOverlayClick={true}
+        >
+         <DeletionRestrictionMessageProps
+          totalNumberOfLoanee={totalNumberOfRefferdLoanee}
+          image={ "/Icon - Warning.svg" }
+          message={`This program can not be edited because it has Cohort that contains ${totalNumberOfRefferdLoanee > 1? "loanees" : "loanee"} that has been referred` }
+          />
+        </TableModal>
+         : (
         <TableModal
         isOpen={isOpen}
         closeModal={() => {
