@@ -10,6 +10,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { MdKeyboardArrowDown } from "react-icons/md";
 import {inter} from "@/app/fonts";
+import clsx from "clsx";
 
 interface StringDropdownProps {
     label?: string;
@@ -24,12 +25,15 @@ const StringDropdown: React.FC<StringDropdownProps> = ({ label = "Select Item", 
     return (
         <DropdownMenu open={open} onOpenChange={setOpen}>
             <DropdownMenuTrigger asChild>
-                <Button variant="outline" className={`flex border ${inter.className} text-[#6A6B6A] border-[#D7D7D7]  ${height ? height : 'h-[3rem] '}  items-center gap-1`}>
-                    <p className={ clsx{``, '':label?.le}}>{label}</p>
+                {/*${height ? height : 'h-[3rem] '}*/}
+                <div  className={`flex justify-between  min-h-[3.1rem] max-h-fit    w-[13em] border break-all px-2  ${inter.className} rounded-md  text-[#6A6B6A] border-[#D7D7D7]    gap-1`}>
+                    {/*<p className={ clsx("break-all", {' break-all bg-red-200 ': label?.length > 20})}>*/}
+                        {label}
+                    {/*</p>*/}
                     <MdKeyboardArrowDown
                         className={`w-4 h-4 transition-transform duration-200 ${open ? "rotate-180" : "rotate-0"}`}
                     />
-                </Button>
+                </div>
             </DropdownMenuTrigger>
             <DropdownMenuContent className={` max-h-[30vh] overflow-y-auto `}>
                 {items.map((item, idx) => (

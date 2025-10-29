@@ -297,13 +297,7 @@ function AddTraineeForm({setIsOpen, tuitionFee,cohortId, isEdit,loaneeBasicDetai
         const selectedItemArray: cohortBreakDown[] =  cohortBreakDown?.filter(item => item?.itemName === selectedItemName);
         const itemsOnSelectedArray = selectedCohortItem?.filter(item => item?.itemName === currentItemName );
 
-        //eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-expect-error
-        const itemsS : cohortBreakDown = itemsOnSelectedArray?.at(0) ? itemsOnSelectedArray?.at(0 ) : {    currency: '',
-            itemAmount: '',
-            itemName: '',
-            loanBreakdownId: '',
-        };
+
 
         //eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-expect-error
@@ -551,14 +545,14 @@ function AddTraineeForm({setIsOpen, tuitionFee,cohortId, isEdit,loaneeBasicDetai
                                         msOverflowStyle: 'none',
 
                                     }}
-                                    className={` max-h-[45vh] h-[45vh] bg-amber-100 overflow-y-scroll   `}
+                                    className={` max-h-[45vh] h-[45vh]  overflow-y-scroll   `}
                                 >
                                     <div
                                         className={` w-full flex gap-2    `}
                                     >
-                                        <div className={` max-w-[50%] w-[50%] bg-red-800 `}>
+                                        <div className={` max-w-[50%] w-[50%]  `}>
                                             <div className={` text-[14px] h-fit py-2   ${inter500.className}  `}>Item</div>
-                                            <div className={` w bg-red-200 max- w-full  grid gap-4 `}>
+                                            <div className={` w  max- w-full  grid gap-4 `}>
                                                 <div className={` mt-auto mb-auto bg-[#F9F9F9] border border-[#D7D7D7] rounded-md w-full  h-fit p-3  text-black  `}>
                                                     Tuition
                                                 </div>
@@ -589,7 +583,7 @@ function AddTraineeForm({setIsOpen, tuitionFee,cohortId, isEdit,loaneeBasicDetai
                                             </div>
                                         </div>
 
-                                        <div className={` w-full bg-purple-600  grid    `}>
+                                        <div className={` w-full   grid    `}>
                                             <div className={` text-[14px] h-fit py-2  ${inter500.className} `}>Amount</div>
                                            <div className={` grid gap-4 `}>
                                                <div
