@@ -11,6 +11,7 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import TableEmptyState from '@/reuseable/emptyStates/TableEmptyState';
 import {Book} from 'lucide-react';
 import {MagnifyingGlassIcon} from "@radix-ui/react-icons";
+import { toSentenceCase } from '@/utils/GlobalMethods';
 
 export interface ViewAllProgramProps {
     id?: string;
@@ -180,7 +181,7 @@ const tagButtonData = [
             <Card  id={`allProgramsCard-${index}`} data-testid="allProgramsCard"  className="w-full md:max-w-lg h-[13.8125rem]  border border-grey50 rounded-lg cursor-pointer pt-0" onClick={() => handleRowClick(program)}>
             <CardHeader id={`header-${index}`} data-testid="header" className="flex flex-row justify-between items-center" >
                  <CardTitle id={`title`} data-testid="title" className={`${inter500.className} text-lg font-medium text-[#101828]`} >
-                 {shortTitle}
+                 {toSentenceCase(shortTitle)}
             {program.name && program.name.length > 90 && (
              <span
                 id={`readMore-${index}`}

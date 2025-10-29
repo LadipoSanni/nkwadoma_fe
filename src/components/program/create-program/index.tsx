@@ -141,6 +141,8 @@ function CreateProgram({setIsOpen,isEdit,onSuccess}:Props) {
     id: values.id,
     programName: values.programName,
     ...(isEdit?{name: values.programName} : {}),
+    ...(isEdit?{mode: values.programMode} : {}),
+    ...(isEdit?{duration: values.programDuration} : {}),
     programDescription: values.programDescription,
     programDuration: values.programDuration,
     deliveryType: values.deliveryType,

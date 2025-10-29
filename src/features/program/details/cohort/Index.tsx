@@ -62,13 +62,13 @@ const ProgramCohortDetails= ()=> {
 
     const [debouncedSearchTerm, isTyping] = useDebounce(searchTerm, 1000);
     
-    const {data, isLoading} = useGetAllCohortByAParticularProgramQuery({
+    const {data, isLoading,isFetching} = useGetAllCohortByAParticularProgramQuery({
         programId: programId,
         pageSize: size,
         pageNumber: page
     }, {refetchOnMountOrArgChange: true,skip: !programId});
 
-    const {data: searchResults, isLoading: isloading} = useSearchCohortByOrganisationQuery({
+    const {data: searchResults, isLoading: isloading,isFetching: isfetching} = useSearchCohortByOrganisationQuery({
         cohortName: debouncedSearchTerm,
         programId: programId,
         pageSize: size,
@@ -176,7 +176,7 @@ const ProgramCohortDetails= ()=> {
                             tableCellStyle={'h-12'}
                             condition={true}
                             sx='cursor-pointer'
-                            isLoading={isLoading || isloading}
+                            isLoading={isLoading || isloading || isFetching || isfetching}
                             hasNextPage={searchTerm? searchHasasNextPage : hasNextPage}
                             pageNumber={searchTerm? pageNumber : page}
                             setPageNumber={searchTerm? setSearchPageNumber : setPageNumber}

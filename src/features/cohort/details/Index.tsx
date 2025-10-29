@@ -14,7 +14,7 @@ import TableModal from "@/reuseable/modals/TableModal";
 import {useToast} from "@/hooks/use-toast";
 import DeleteModal from "@/reuseable/modals/Delete-modal";
 import DeleteCohort from "@/reuseable/details/DeleteCohort";
-import { setCreateCohortField,resetCreateCohortField,setSelectedProgramName } from "@/redux/slice/create/cohortSlice";
+import { setCreateCohortField,resetCreateCohortField,setSelectedProgramName,setTotalRefferedNumberOfLoanee} from "@/redux/slice/create/cohortSlice";
 import EditCohortForm from '@/components/cohort/CreateCohort';
 import { LoanBreakDowns } from '@/components/cohort/CreateCohort';
 import DeletionRestrictionMessageProps from '@/components/cohort/DeletionRestrictionMessageProps';
@@ -26,12 +26,12 @@ const CohortDetails = () => {
     const selectedCohortInOrganizationType = useAppSelector(store => store?.cohort?.selectedCohortInOrganizationType)
     const [loanBreakdowns, setBreakdowns] = useState<LoanBreakDowns[]>([])
     const [deleteItem,{isLoading:isDeleteLoading}] = useDeleteCohortMutation()
-     const currentProgramId = useAppSelector(state => (state.program.currentProgramId))
+    const currentProgramId = useAppSelector(state => (state.program.currentProgramId))
     const {data: cohortDetails} = useViewCohortDetailsQuery({
         cohortId: cohortId
     }, {refetchOnMountOrArgChange: true});
     const {toast} = useToast()
-
+    const totalNumberOfRefferdLoanee = useAppSelector(store => store?.cohort?.numberOfRefferedLoanees)
 
      useEffect(() => {
            const breakdowns = cohortDetails?.data.loanBreakdowns
@@ -51,6 +51,7 @@ const CohortDetails = () => {
     const editCohort = ( ) => {
         setOpenEditModal(true);
        const programName =cohortDetails?.data?.programName
+       const totalNumberOfRefferedLoanee = cohortDetails?.data?.numberOfReferredLoanee as number
         const details = {
               id: cohortDetails?.data?.id ,
               name: cohortDetails?.data?.name,
@@ -63,6 +64,7 @@ const CohortDetails = () => {
         }
         store.dispatch(setCreateCohortField(details))
         store.dispatch(setSelectedProgramName(programName))
+        store.dispatch(setTotalRefferedNumberOfLoanee(totalNumberOfRefferedLoanee))
     }
 
 
@@ -154,7 +156,24 @@ const CohortDetails = () => {
                     dropDownItems={dropD}
                 />}
             </div>
-            <TableModal
+           { totalNumberOfRefferdLoanee > 0? 
+        <TableModal
+         styeleType="styleBodyTwo"
+         isOpen={openEditModal}
+         closeModal={() => {
+             setOpenEditModal(false)
+             store.dispatch(resetCreateCohortField())
+         }}
+         closeOnOverlayClick={true}
+         icon={Cross2Icon}
+        >
+         <DeletionRestrictionMessageProps
+          totalNumberOfLoanee={totalNumberOfRefferdLoanee}
+          image={ "/Icon - Warning.svg" }
+          message={`This cohort can not be edited because it has Cohort that contains ${totalNumberOfRefferdLoanee > 1? "loanees" : "loanee"} that has been referred` }
+          />
+        </TableModal>
+         :  <TableModal
                 isOpen={openEditModal}
                 closeModal={() => {
                     setOpenEditModal(false)
@@ -167,7 +186,7 @@ const CohortDetails = () => {
 
             >
                 <EditCohortForm setIsOpen={()=>{setOpenEditModal(false)}} isEdit={true}/>
-            </TableModal>
+            </TableModal>}
            {hasLoanee? 
            <TableModal
             isOpen={openDeleteModal}
