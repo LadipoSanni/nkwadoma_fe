@@ -548,135 +548,47 @@ function AddTraineeForm({setIsOpen, tuitionFee,cohortId, isEdit,loaneeBasicDetai
                                     className={` max-h-[45vh] h-[45vh]  overflow-y-scroll   `}
                                 >
                                     <div
-                                        className={` w-full flex gap-2    `}
+                                        className={` w-full flex gap-4 h-fit    `}
                                     >
-                                        <div className={` max-w-[50%] w-[50%]  `}>
-                                            <div className={` text-[14px] h-fit py-2   ${inter500.className}  `}>Item</div>
-                                            <div className={` w  max- w-full  grid gap-4 `}>
-                                                <div className={` mt-auto mb-auto bg-[#F9F9F9] border border-[#D7D7D7] rounded-md w-full  h-fit p-3  text-black  `}>
-                                                    Tuition
+                                        {openEmptyField &&
+                                            <div  className={`flex gap-3  mt-auto mb-auto `}>
+                                                <div className={` text-[14px] ${inter.className}  mt-auto mb-auto  w-full  h-fit text-black  `}>
+                                                    <StringDropdown
+                                                        label={'Select item mt-auto mb-auto bg-white border border-[#D7D7D7] rounded-md  '}
+                                                        items={names}
+                                                        onSelect={handleSelect}
+                                                    />
+                                                </div>
+                                            </div>
+                                        }
+                                        {openEmptyField &&
+                                            <div
+
+                                                className={` w-full  flex  gap-2  `}
+                                            >
+                                                <div className={` mt-auto mb-auto bg-white border border-[#D7D7D7] rounded-md  h-full  p-3  text-black  `}>
+                                                    <p className={`mt-auto mb-auto `}>NGN</p>
                                                 </div>
 
-                                                {selectedCohortItem?.map((detail: cohortBreakDown, index: number) => (
-                                                    <div key={'item'+ index}  className={` text-[14px] ${inter.className}   mt-auto mb-auto  w-full   h-full text-black  `}>
-                                                        <StringDropdown
-                                                            height={' h-[3.2rem]  '}
-                                                            label={detail?.itemName}
-                                                            items={names}
-                                                            onSelect={ (value) => changeSelectedItem(index, detail?.itemName, value)
+                                                <NumericFormat
+                                                    id={`detail-01`}
+                                                    name={`detail-01`}
+                                                    type="text"
+                                                    thousandSeparator=","
+                                                    decimalScale={2}
+                                                    fixedDecimalScale={true}
+                                                    // value={detail?.itemAmount?.toLocaleString() || ''}
+                                                    // placeholder={`${detail?.itemAmount || ''}`}
+                                                    className=" w-[70%] p-3 h-full border rounded focus:outline-none"
+                                                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                                                        const rawValue = e.target.value.replace(/,/g, '');
+                                                        if (!isNaN(Number(rawValue))) {
+                                                            setCurrentSelectedItemAmount(rawValue)
                                                         }
-                                                        />
-                                                    </div>
-                                                ))}
-                                                {openEmptyField &&
-                                                    <div  className={`flex gap-3  mt-auto mb-auto `}>
-                                                        <div className={` text-[14px] ${inter.className}  mt-auto mb-auto  w-full  h-fit text-black  `}>
-                                                            <StringDropdown
-                                                                height={' h-[3.2rem]  '}
-                                                                label={'Select item'}
-                                                                items={names}
-                                                                onSelect={handleSelect}
-                                                            />
-                                                        </div>
-                                                    </div>
-                                                }
+                                                    }}
+                                                />
                                             </div>
-                                        </div>
-
-                                        <div className={` w-full   grid    `}>
-                                            <div className={` text-[14px] h-fit py-2  ${inter500.className} `}>Amount</div>
-                                           <div className={` grid gap-4 `}>
-                                               <div
-                                                   className={`  flex gap-2  h-fit  `}
-                                               >
-                                                   <div className={` mt-auto mb-auto bg-[#F9F9F9] h-[3.2rem] p-3 border border-[#D7D7D7] rounded-md  text-black  `}>
-                                                       NGN
-                                                   </div>
-
-                                                   <Field
-                                                       id="detail-"
-                                                       name="detail-"
-                                                       type="text"
-                                                       decimalScale={2}
-                                                       defaultValue={formatAmount(tuitionFee?.toLocaleString() || '')}
-                                                       readOnly
-                                                       className=" p-3 w-[80%]  h-[3.2rem] border rounded bg-grey105 focus:outline-none"
-                                                   />
-
-                                               </div>
-                                               {selectedCohortItem?.map((detail: cohortBreakDown, index: number) => (
-                                                   <div
-                                                       key={'index' + index}
-                                                       className={`   grid  `}
-                                                   >
-                                                       <div
-                                                           className={` w-full h-fit  flex  gap-2  `}
-                                                       >
-                                                           <div className={` mt-auto mb-auto bg-white border border-[#D7D7D7] rounded-md  h-fit p-3  text-black  `}>
-                                                               NGN
-                                                           </div>
-
-                                                           <NumericFormat
-                                                               id={`detail-${index}`}
-                                                               name={`detail-${index}`}
-                                                               type="text"
-                                                               thousandSeparator=","
-                                                               decimalScale={2}
-                                                               fixedDecimalScale={true}
-                                                               value={detail?.itemAmount?.toLocaleString() || ''}
-                                                               placeholder={`${detail?.itemAmount || ''}`}
-                                                               className=" w-[70%] p-3 h-[3.2rem] border rounded focus:outline-none"
-                                                               onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                                                                   const rawValue = e.target.value.replace(/,/g, '');
-                                                                   if (!isNaN(Number(rawValue))) {
-                                                                       editCohortBreakDown(
-                                                                           {target: {value: rawValue}} as React.ChangeEvent<HTMLInputElement>,
-                                                                           index,
-                                                                       );
-                                                                   }
-                                                               }}
-                                                           />
-                                                           <MdOutlineDelete id={`deleteItemButton${index}}`}
-                                                                            className={'text-blue200 mt-auto mb-auto  h-6 w-4 cursor-pointer'}
-                                                                            onClick={()=> {deleteItem( Number(detail.itemAmount), detail?.loanBreakdownId,detail?.itemName)}}
-                                                           />
-
-                                                       </div>
-                                                       {amountError?.index === index && <div
-                                                           className={`text-error500 place-self-start  text-sm text-center`}>{amountError?.error}</div>}
-
-                                                   </div>
-                                               ))}
-                                               {openEmptyField &&
-                                                   <div
-
-                                                       className={` w-full h-fit  flex  gap-2  `}
-                                                   >
-                                                       <div className={` mt-auto mb-auto bg-white border border-[#D7D7D7] rounded-md  h-[3.2rem] p-3  text-black  `}>
-                                                           NGN
-                                                       </div>
-
-                                                       <NumericFormat
-                                                           id={`detail-01`}
-                                                           name={`detail-01`}
-                                                           type="text"
-                                                           thousandSeparator=","
-                                                           decimalScale={2}
-                                                           fixedDecimalScale={true}
-                                                           // value={detail?.itemAmount?.toLocaleString() || ''}
-                                                           // placeholder={`${detail?.itemAmount || ''}`}
-                                                           className=" w-[70%] p-3 h-[3.2rem] border rounded focus:outline-none"
-                                                           onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                                                               const rawValue = e.target.value.replace(/,/g, '');
-                                                               if (!isNaN(Number(rawValue))) {
-                                                                   setCurrentSelectedItemAmount(rawValue)
-                                                               }
-                                                           }}
-                                                       />
-                                                   </div>
-                                               }
-                                           </div>
-                                        </div>
+                                        }
                                     </div>
                                     {names?.length !== 0 &&
                                     <div

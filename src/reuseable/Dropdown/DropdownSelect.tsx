@@ -25,13 +25,10 @@ const StringDropdown: React.FC<StringDropdownProps> = ({ label = "Select Item", 
     return (
         <DropdownMenu open={open} onOpenChange={setOpen}>
             <DropdownMenuTrigger asChild>
-                {/*${height ? height : 'h-[3rem] '}*/}
-                <div  className={`flex justify-between  min-h-[3.1rem] max-h-fit    w-[13em] border break-all px-2  ${inter.className} rounded-md  text-[#6A6B6A] border-[#D7D7D7]    gap-1`}>
-                    {/*<p className={ clsx("break-all", {' break-all bg-red-200 ': label?.length > 20})}>*/}
-                        {label}
-                    {/*</p>*/}
+                <div  className={`flex justify-between  min-h-[3.1rem] max-h-fit    w-[13em] border break-normal px-2  ${inter.className} rounded-md  text-[#6A6B6A] border-[#D7D7D7]    gap-1`}>
+                    <p className={`mt-auto mb-auto `}>{label}</p>
                     <MdKeyboardArrowDown
-                        className={`w-4 h-4 transition-transform duration-200 ${open ? "rotate-180" : "rotate-0"}`}
+                        className={`w-4 h-4 mt-auto mb-auto transition-transform duration-200 ${open ? "rotate-180" : "rotate-0"}`}
                     />
                 </div>
             </DropdownMenuTrigger>
