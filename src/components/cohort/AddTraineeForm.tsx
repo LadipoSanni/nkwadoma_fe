@@ -1,23 +1,28 @@
 'use client'
-import React, {useState, useEffect, useRef} from 'react';
-import { ErrorMessage, Field, Form, Formik } from 'formik';
+import React, {useEffect, useRef, useState} from 'react';
+import {ErrorMessage, Field, Form, Formik} from 'formik';
 import * as Yup from 'yup';
-import { Label } from '@/components/ui/label';
-import { Button } from '@/components/ui/button';
+import {Label} from '@/components/ui/label';
+import {Button} from '@/components/ui/button';
 import loadingLoop from '@iconify/icons-line-md/loading-loop';
-import { Icon } from '@iconify/react';
+import {Icon} from '@iconify/react';
 import {inter} from '@/app/fonts';
 import CurrencySelectInput from '@/reuseable/Input/CurrencySelectInput';
 import ToastPopUp from '@/reuseable/notification/ToastPopUp';
-import { useAddLoaneeToCohortMutation, useGetCohortLoanBreakDownQuery, useEditAddLoaneeToCohortMutation } from "@/service/admin/cohort_query";
+import {
+    useAddLoaneeToCohortMutation,
+    useEditAddLoaneeToCohortMutation,
+    useGetCohortLoanBreakDownQuery
+} from "@/service/admin/cohort_query";
 import TotalInput from "@/reuseable/display/TotalInput";
-import { NumericFormat } from 'react-number-format';
-import {MdOutlineDelete, MdAdd,MdOutlineErrorOutline} from "react-icons/md";
+import {NumericFormat} from 'react-number-format';
+import {MdAdd, MdOutlineDelete, MdOutlineErrorOutline} from "react-icons/md";
 import CenterMultistep from "@/reuseable/multiStep-component/Center-multistep";
 import StringDropdown from "@/reuseable/Dropdown/DropdownSelect";
-import { store } from '@/redux/store';
+import {store} from '@/redux/store';
 import {setCohortBreakdownText} from "@/redux/slice/cohort/unpersist-slice";
 import {formatAmount} from "@/utils/Format";
+
 interface Props {
     tuitionFee?: string;
     setIsOpen?: (e: boolean | undefined) => void;
@@ -249,9 +254,13 @@ function AddTraineeForm({setIsOpen, tuitionFee,cohortId, isEdit,loaneeBasicDetai
     };
 
 
-    const editCohortBreakDown = (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
+    const editCohortBreakDown = (e: React.ChangeEvent<HTMLInputElement>, index: number, itemLoanBreakDownId: string) => {
         const itemAmountFromCohort = Number(item?.at(index)?.itemAmount)
+        const kk = item.filter((ite) => ite.loanBreakDownId === itemLoanBreakDownId);
+        console.log('items from cohort: ', item)
         const userInput =  Number(e.target.value)
+        console.log('itemAmountFromCohort:',itemAmountFromCohort)
+        console.log('userInput: ',userInput)
 
         if (userInput < itemAmountFromCohort || userInput  === itemAmountFromCohort) {
             const { value } = e.target;
@@ -260,12 +269,13 @@ function AddTraineeForm({setIsOpen, tuitionFee,cohortId, isEdit,loaneeBasicDetai
             );
             setSelectedCohortItem(updatedData)
             calculateTotal(updatedData, tuitionFee);
-            setAmountError({error:'', index:0})
+            setAmountsError((prev) => {
+                return prev.filter((item) => item.index !== index);
+            });
             setDisableAddLoaneeButton(false)
 
         }else {
             setDisableAddLoaneeButton(true)
-            setAmountError({error:'amount can not be greater than cohort amount', index})
             setAmountsError((prev) => {
                 const filtered = prev.filter((item) => item.index !== index);
                 return [...filtered, { error: "Amount cannot be greater than cohort amount", index }];
@@ -320,8 +330,9 @@ function AddTraineeForm({setIsOpen, tuitionFee,cohortId, isEdit,loaneeBasicDetai
             itemName: '',
             loanBreakdownId: '',
         };
-
-
+        setAmountsError((prev) => {
+            return prev.filter((item) => item.index !== currentItemIndex);
+        });
         setSelectedCohortItem((prev: cohortBreakDown[]) =>
             prev?.map((item: cohortBreakDown, i) => (i === currentItemIndex ? selectedItem : item))
         );
@@ -333,6 +344,8 @@ function AddTraineeForm({setIsOpen, tuitionFee,cohortId, isEdit,loaneeBasicDetai
 
 
     }
+
+    console.log('amountErors: ', amountsError)
 
 
     const handleSelect = (value: string) => {
@@ -361,11 +374,18 @@ function AddTraineeForm({setIsOpen, tuitionFee,cohortId, isEdit,loaneeBasicDetai
             if (parseFloat(currentSelectedItemAmount) < parseFloat(currentItem?.itemAmount ? currentItem?.itemAmount : '') || parseFloat(currentSelectedItemAmount) === parseFloat(currentItem?.itemAmount ? currentItem?.itemAmount : '') ){
                     const totalWithInitialDepositDeducted  = totalItemAmount + ( currentSelectedItemAmount ? parseFloat(currentSelectedItemAmount) : 0);
                     setTotalItemAmount(totalWithInitialDepositDeducted);
-                    setAmountError({error:'',index: 0 })
+                    // setAmountError({error:'',index: 0 })
+                setAmountsError((prev) => {
+                    return prev.filter((item) => item.index !== index);
+                });
                 setDisableAddLoaneeButton(false)
             }else{
                 setDisableAddLoaneeButton(true)
-                setAmountError({error:'amount can not be greater than cohort amount', index:index })
+                // setAmountError({error:'amount can not be greater than cohort amount', index:index })
+                setAmountsError((prev) => {
+                    const filtered = prev.filter((item) => item.index !== index);
+                    return [...filtered, { error: "Amount cannot be greater than cohort amount", index }];
+                });
 
             }
         }else{
@@ -389,6 +409,8 @@ function AddTraineeForm({setIsOpen, tuitionFee,cohortId, isEdit,loaneeBasicDetai
         setOpenEmptyField(true)
     }
 
+    const getError = (index: number) =>
+        amountsError.find((err) => err.index === index)?.error;
 
 
     return (
@@ -621,6 +643,7 @@ function AddTraineeForm({setIsOpen, tuitionFee,cohortId, isEdit,loaneeBasicDetai
                                                                     editCohortBreakDown(
                                                                         {target: {value: rawValue}} as React.ChangeEvent<HTMLInputElement>,
                                                                         index,
+                                                                        detail?.loanBreakdownId
                                                                     );
                                                                 }
                                                             }}
@@ -631,8 +654,12 @@ function AddTraineeForm({setIsOpen, tuitionFee,cohortId, isEdit,loaneeBasicDetai
                                                         />
                                                     </div>
                                                 </div>
-                                                {amountError?.index === index && <div
-                                                    className={`text-error500 place-self-start  text-sm text-center`}>{amountError?.error}</div>}
+                                                {getError(index) && (
+                                                    <div className="text-error500 place-self-start text-sm text-center">
+                                                        {getError(index)}
+                                                    </div>
+                                                )}
+
                                             </div>
                                         ))}
                                         <div
