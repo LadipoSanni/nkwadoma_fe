@@ -61,7 +61,7 @@ function AddTraineeForm({setIsOpen, tuitionFee,cohortId, isEdit,loaneeBasicDetai
 
     const containerRef = useRef<HTMLDivElement | null>(null);
     const prevLength = useRef(selectedCohortItem.length);
-
+    const [amountsError, setAmountsError] = useState<{ error: string; index: number }[]>([]);
 
     useEffect(() => {
         if (data?.data) {
@@ -119,7 +119,6 @@ function AddTraineeForm({setIsOpen, tuitionFee,cohortId, isEdit,loaneeBasicDetai
 
 
     const calculateCohortItemsTotal = (cohortItems: cohortBreakDown[], tuitionFee: number)=> {
-        // const cohortItems: cohortBreakDown[] = data?.data;
         const total = cohortItems?.reduce((sum: number, item: cohortBreakDown) => sum + Number(item?.itemAmount) , 0)
         const totalPlusTuition = total + tuitionFee ;
         setCohortBreakDownTotal(totalPlusTuition)
@@ -267,6 +266,11 @@ function AddTraineeForm({setIsOpen, tuitionFee,cohortId, isEdit,loaneeBasicDetai
         }else {
             setDisableAddLoaneeButton(true)
             setAmountError({error:'amount can not be greater than cohort amount', index})
+            setAmountsError((prev) => {
+                const filtered = prev.filter((item) => item.index !== index);
+                return [...filtered, { error: "Amount cannot be greater than cohort amount", index }];
+            });
+
         }
     };
 
@@ -321,13 +325,6 @@ function AddTraineeForm({setIsOpen, tuitionFee,cohortId, isEdit,loaneeBasicDetai
         setSelectedCohortItem((prev: cohortBreakDown[]) =>
             prev?.map((item: cohortBreakDown, i) => (i === currentItemIndex ? selectedItem : item))
         );
-        // setSelectedCohortItem((prev) =>
-        //     prev.map((item) =>
-        //         item.itemName === selectedItem.itemName
-        //             ? { ...item, itemAmount: itemsS?.itemAmount }
-        //             : item
-        //     )
-        // );
         setNames(prevNames => {
             const updated = [...prevNames, currentItemName]
             return updated;
