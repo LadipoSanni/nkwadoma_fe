@@ -1,12 +1,12 @@
 'use client'
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import { ErrorMessage, Field, Form, Formik } from 'formik';
 import * as Yup from 'yup';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import loadingLoop from '@iconify/icons-line-md/loading-loop';
 import { Icon } from '@iconify/react';
-import {inter, inter500} from '@/app/fonts';
+import {inter} from '@/app/fonts';
 import CurrencySelectInput from '@/reuseable/Input/CurrencySelectInput';
 import ToastPopUp from '@/reuseable/notification/ToastPopUp';
 import { useAddLoaneeToCohortMutation, useGetCohortLoanBreakDownQuery, useEditAddLoaneeToCohortMutation } from "@/service/admin/cohort_query";
@@ -59,6 +59,10 @@ function AddTraineeForm({setIsOpen, tuitionFee,cohortId, isEdit,loaneeBasicDetai
 
     const [cohortBreakDownTotal, setCohortBreakDownTotal  ] = useState(0)
 
+    const containerRef = useRef<HTMLDivElement | null>(null);
+    const prevLength = useRef(selectedCohortItem.length);
+
+
     useEffect(() => {
         if (data?.data) {
             setCohortBreakDown(data?.data);
@@ -102,6 +106,16 @@ function AddTraineeForm({setIsOpen, tuitionFee,cohortId, isEdit,loaneeBasicDetai
 
     }, [isEdit, loaneeLoanBreakDown, initialDepositAmount, tuitionFee, data?.data]);
 
+    useEffect(() => {
+        if(selectedCohortItem?.length > prevLength.current){
+            if (containerRef.current) {
+                containerRef.current.scrollTo({
+                    top: containerRef.current.scrollHeight,
+                    behavior: "smooth",
+                });
+            }
+        }
+    }, [selectedCohortItem]);
 
 
     const calculateCohortItemsTotal = (cohortItems: cohortBreakDown[], tuitionFee: number)=> {
@@ -295,10 +309,6 @@ function AddTraineeForm({setIsOpen, tuitionFee,cohortId, isEdit,loaneeBasicDetai
 
     const changeSelectedItem = (currentItemIndex: number, currentItemName: string, selectedItemName: string)=> {
         const selectedItemArray: cohortBreakDown[] =  cohortBreakDown?.filter(item => item?.itemName === selectedItemName);
-        const itemsOnSelectedArray = selectedCohortItem?.filter(item => item?.itemName === currentItemName );
-
-
-
         //eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-expect-error
         const selectedItem: cohortBreakDown = selectedItemArray?.at(0) ? selectedItemArray?.at(0 ) : {    currency: '',
@@ -538,6 +548,7 @@ function AddTraineeForm({setIsOpen, tuitionFee,cohortId, isEdit,loaneeBasicDetai
                                 </div>
 
                                 <div
+                                    ref={containerRef}
                                     style={{
                                         overflowX: 'hidden',
                                         overflowY: 'auto',
@@ -545,50 +556,131 @@ function AddTraineeForm({setIsOpen, tuitionFee,cohortId, isEdit,loaneeBasicDetai
                                         msOverflowStyle: 'none',
 
                                     }}
-                                    className={` max-h-[45vh] h-[45vh]  overflow-y-scroll   `}
+                                    className={` max-h-[45vh] h-[45vh]   py-2   overflow-y-scroll   `}
                                 >
-                                    <div
-                                        className={` w-full flex gap-4 h-fit    `}
-                                    >
-                                        {openEmptyField &&
-                                            <div  className={`flex gap-3  mt-auto mb-auto `}>
-                                                <div className={` text-[14px] ${inter.className}  mt-auto mb-auto  w-full  h-fit text-black  `}>
-                                                    <StringDropdown
-                                                        label={'Select item mt-auto mb-auto bg-white border border-[#D7D7D7] rounded-md  '}
-                                                        items={names}
-                                                        onSelect={handleSelect}
-                                                    />
+                                    <div className={` h-fit grid gap-3   `}>
+                                        <div
+                                            className={` w-full flex gap-4  h-fit    `}
+                                        >
+                                            <div   className={` text-[14px] ${inter.className}   mt-auto mb-auto  w-fit   h-full text-black  `}>
+                                                <div className={` mt-auto mb-auto bg-[#F9F9F9] border border-[#D7D7D7] rounded-md  w-[13em]  h-fit p-3  text-black  `}>
+                                                    Tuition
                                                 </div>
                                             </div>
-                                        }
-                                        {openEmptyField &&
                                             <div
-
                                                 className={` w-full  flex  gap-2  `}
                                             >
-                                                <div className={` mt-auto mb-auto bg-white border border-[#D7D7D7] rounded-md  h-full  p-3  text-black  `}>
-                                                    <p className={`mt-auto mb-auto `}>NGN</p>
+                                                <div className={`  bg-[#F9F9F9] border grid place-items-center px-2 border-[#D7D7D7] rounded-md  h-full  text-black  `}>
+                                                    NGN
                                                 </div>
 
-                                                <NumericFormat
-                                                    id={`detail-01`}
-                                                    name={`detail-01`}
+                                                <Field
+                                                    id="detail-"
+                                                    name="detail-"
                                                     type="text"
-                                                    thousandSeparator=","
                                                     decimalScale={2}
-                                                    fixedDecimalScale={true}
-                                                    // value={detail?.itemAmount?.toLocaleString() || ''}
-                                                    // placeholder={`${detail?.itemAmount || ''}`}
-                                                    className=" w-[70%] p-3 h-full border rounded focus:outline-none"
-                                                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                                                        const rawValue = e.target.value.replace(/,/g, '');
-                                                        if (!isNaN(Number(rawValue))) {
-                                                            setCurrentSelectedItemAmount(rawValue)
-                                                        }
-                                                    }}
+                                                    defaultValue={formatAmount(tuitionFee?.toLocaleString() || '')}
+                                                    readOnly
+                                                    className=" p-3 w-[80%]  h-full border rounded bg-grey105 focus:outline-none"
                                                 />
+
                                             </div>
-                                        }
+                                        </div>
+                                        {selectedCohortItem?.map((detail: cohortBreakDown, index: number) => (
+
+                                            <div key={''+ index}>
+                                                <div
+                                                    className={` w-full flex gap-4  h-fit    `}
+                                                >
+                                                    <div key={'item'+ index}  className={` text-[14px] ${inter.className}   mt-auto mb-auto  w-fit   h-full text-black  `}>
+                                                        <StringDropdown
+                                                            height={' h-[3.2rem]  '}
+                                                            label={detail?.itemName}
+                                                            items={names}
+                                                            onSelect={ (value) => changeSelectedItem(index, detail?.itemName, value)
+                                                            }
+                                                        />
+                                                    </div>
+                                                    <div
+                                                        className={` w-full  flex  gap-2  `}
+                                                    >
+                                                        <div className={`  bg-white border grid place-items-center px-2 border-[#D7D7D7] rounded-md  h-full  text-black  `}>
+                                                            NGN
+                                                        </div>
+
+                                                        <NumericFormat
+                                                            id={`detail-${index}`}
+                                                            name={`detail-${index}`}
+                                                            type="text"
+                                                            thousandSeparator=","
+                                                            decimalScale={2}
+                                                            fixedDecimalScale={true}
+                                                            value={detail?.itemAmount?.toLocaleString() || ''}
+                                                            placeholder={`${detail?.itemAmount || ''}`}
+                                                            className=" w-[70%] p-3 h-full border rounded focus:outline-none"
+                                                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                                                                const rawValue = e.target.value.replace(/,/g, '');
+                                                                if (!isNaN(Number(rawValue))) {
+                                                                    editCohortBreakDown(
+                                                                        {target: {value: rawValue}} as React.ChangeEvent<HTMLInputElement>,
+                                                                        index,
+                                                                    );
+                                                                }
+                                                            }}
+                                                        />
+                                                        <MdOutlineDelete id={`deleteItemButton${index}}`}
+                                                                         className={'text-blue200 mt-auto mb-auto  h-6 w-4 cursor-pointer'}
+                                                                         onClick={()=> {deleteItem( Number(detail.itemAmount), detail?.loanBreakdownId,detail?.itemName)}}
+                                                        />
+                                                    </div>
+                                                </div>
+                                                {amountError?.index === index && <div
+                                                    className={`text-error500 place-self-start  text-sm text-center`}>{amountError?.error}</div>}
+                                            </div>
+                                        ))}
+                                        <div
+                                            className={` w-full flex gap-4 h-fit    `}
+                                        >
+                                            {openEmptyField &&
+                                                <div  className={`flex gap-3  mt-auto mb-auto `}>
+                                                    <div className={` text-[14px] ${inter.className}  mt-auto mb-auto  w-full  h-fit text-black  `}>
+                                                        <StringDropdown
+                                                            label={'Select item '}
+                                                            items={names}
+                                                            onSelect={handleSelect}
+                                                        />
+                                                    </div>
+                                                </div>
+                                            }
+                                            {openEmptyField &&
+                                                <div
+
+                                                    className={` w-full  flex  gap-2  `}
+                                                >
+                                                    <div className={`  bg-white border grid place-items-center px-2 border-[#D7D7D7] rounded-md  h-full  text-black  `}>
+                                                        NGN
+                                                    </div>
+
+                                                    <NumericFormat
+                                                        id={`detail-01`}
+                                                        name={`detail-01`}
+                                                        type="text"
+                                                        thousandSeparator=","
+                                                        decimalScale={2}
+                                                        fixedDecimalScale={true}
+                                                        // value={detail?.itemAmount?.toLocaleString() || ''}
+                                                        // placeholder={`${detail?.itemAmount || ''}`}
+                                                        className=" w-[70%] p-3 h-full border rounded focus:outline-none"
+                                                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                                                            const rawValue = e.target.value.replace(/,/g, '');
+                                                            if (!isNaN(Number(rawValue))) {
+                                                                setCurrentSelectedItemAmount(rawValue)
+                                                            }
+                                                        }}
+                                                    />
+                                                </div>
+                                            }
+                                        </div>
                                     </div>
                                     {names?.length !== 0 &&
                                     <div
