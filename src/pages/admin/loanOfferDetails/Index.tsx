@@ -47,6 +47,7 @@ const LoanOfferDetails = () => {
     const setOpenDeclineOffer = (value: boolean) => {
         setOpenDeclineLoanRequestModal(value)
     }
+
     const getLoaneeLoanBreakdown = () => {
         const loaneeLoanBreakDown = data?.data?.loaneeBreakdown
         const items: { itemAmount: string, itemName: string }[] = []
@@ -221,6 +222,8 @@ const LoanOfferDetails = () => {
         {label:"Loan terms and condition",value:data?.data?.termsAndCondition },
     ]
 
+
+
     return (
         <>{
             loading ? (
@@ -324,7 +327,7 @@ const LoanOfferDetails = () => {
                             </div>
                             <div
                                 className=" md:sticky md:bottom-0 py-3 px-3 md:py-3 md:bg-white md:flex grid md:justify-end gap-5 md:mt-0">
-                                {currentTab === 0 && (
+                                {currentTab === 0  && data?.data?.loanOfferStatus !== 'WITHDRAW' && (
                                     <Button
                                         className={`w-full ${inter600.className} md:w-fit md:px-6 md:py-3 h-fit py-4 text-meedlBlue border border-meedlBlue bg-meedlWhite hover:bg-meedlWhite`}
                                         onClick={openWithdraw} >Withdraw loan</Button>
@@ -335,7 +338,7 @@ const LoanOfferDetails = () => {
                                         onClick={handleBack} disabled={currentTab === 0}>Back</Button>
                                 )}
 
-                                <Button
+                                { ( data?.data?.loanOfferStatus !== 'WITHDRAW'  )  && <Button
                                     className={'w-full justify-center md:w-fit md:px-6 md:py-3 md:rounded-md text-white  md:text-meedlWhite rounded-md flex gap-2 h-fit py-4 bg-meedlBlue hover:bg-meedlBlue'}
                                     onClick={currentTab === 3 ? disburseLoanOffer : handleNext}
 
@@ -343,6 +346,15 @@ const LoanOfferDetails = () => {
                                     {isLoading && <Loader2 className="animate-spin"/>}
                                     {currentTab === 3 ? 'Start loan' : 'Continue'}
                                 </Button>
+                                }
+                                { ( data?.data?.loanOfferStatus === 'WITHDRAW' && currentTab !== 3 )  && <Button
+                                    className={'w-full justify-center md:w-fit md:px-6 md:py-3 md:rounded-md text-white  md:text-meedlWhite rounded-md flex gap-2 h-fit py-4 bg-meedlBlue hover:bg-meedlBlue'}
+                                    onClick={ handleNext}
+
+                                >
+                                    { 'Continue'}
+                                </Button>
+                                }
 
                             </div>
                         </div>
