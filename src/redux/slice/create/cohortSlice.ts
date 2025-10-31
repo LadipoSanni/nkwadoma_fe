@@ -24,7 +24,8 @@ interface CohortState {
   selectedCohortInOrganizationType: string;
   createCohortField: CreateCohortField | null;
   numberOfLoanees: number;
-  programName: string
+  programName: string;
+  numberOfRefferedLoanees: number;
 }
 
 const initialState: CohortState = {
@@ -38,7 +39,8 @@ const initialState: CohortState = {
   selectedCohortInOrganizationType: '',
   createCohortField: null,
   numberOfLoanees: 0,
-  programName: ""
+  programName: "",
+  numberOfRefferedLoanees: 0
 };
 
 const cohortSlice = createSlice({
@@ -86,12 +88,16 @@ const cohortSlice = createSlice({
       state.createCohortField = null
       state.numberOfLoanees = 0
       state.programName = ""
+      state.numberOfRefferedLoanees = 0
     },
     setTotalNumberOfLoanee: (state, action: PayloadAction<number>) => {
       state.numberOfLoanees = action.payload;
     },
     setSelectedProgramName(state, action: PayloadAction<string >) {
       state.programName = action.payload;
+    },
+    setTotalRefferedNumberOfLoanee: (state, action: PayloadAction<number>) => {
+      state.numberOfRefferedLoanees = action.payload;
     },
   },
 
@@ -104,6 +110,6 @@ export const {resetSelectedCohortInOrganization,
   setUploadedUrl,setcohortStatusTab,
   resetcohortId,setcohortId,setBackOfficeAdmin, 
   setCreateCohortField,resetCreateCohortField,setTotalNumberOfLoanee,
-  setSelectedProgramName
+  setSelectedProgramName,setTotalRefferedNumberOfLoanee
 } = cohortSlice.actions;
 export default cohortSlice.reducer;

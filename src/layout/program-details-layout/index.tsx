@@ -52,7 +52,7 @@ function ProgramLayout({children}:props) {
    const dropDownOption = [
   
     {
-      name: "Update",
+      name: "Edit",
       id: "1"
     },
    
@@ -145,7 +145,7 @@ function ProgramLayout({children}:props) {
           
           { programCurrentDetail?.numberOfLoanee && programCurrentDetail?.numberOfLoanee > 0 && modalType === "update"?  <DeletionRestrictionMessageProps 
                      image= "/Icon - Warning.svg"
-                    message={`This program can not be updated because it has Cohort that contains ${programCurrentDetail?.numberOfLoanee && programCurrentDetail?.numberOfLoanee > 1? "loanees" : "loanee"}`}
+                    message={`This program can not be edited because it has Cohort that contains ${programCurrentDetail?.numberOfLoanee && programCurrentDetail?.numberOfLoanee > 1? "loanees" : "loanee"}`}
                     /> :
              modalType === "update"? <CreateProgram
              setIsOpen={setIsModalOpen}

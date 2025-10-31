@@ -11,6 +11,7 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import TableEmptyState from '@/reuseable/emptyStates/TableEmptyState';
 import {Book} from 'lucide-react';
 import {MagnifyingGlassIcon} from "@radix-ui/react-icons";
+import { toSentenceCase } from '@/utils/GlobalMethods';
 
 export interface ViewAllProgramProps {
     id?: string;
@@ -47,12 +48,22 @@ interface Props {
     handleDropDownClick?: (id: string, row: ViewAllProgramProps) => void;
     infinityScroll: InfiniteScrollProps;
     isLoading?: boolean;
-    searchTerm?: string
+    searchTerm?: string;
+    isSearchFetching?: boolean
 }
 
-function ProgramGrid({viewAllProgram,handleRowClick,kirkBabDropdownOption,handleDropDownClick,infinityScroll,isLoading,searchTerm}:Props) {
+function ProgramGrid({viewAllProgram,handleRowClick,kirkBabDropdownOption,handleDropDownClick,infinityScroll,isLoading,searchTerm,isSearchFetching}:Props) {
     const containerRef = useRef<HTMLDivElement>(null);
     const [scrollHeight, setScrollHeight] = useState(500);
+    const [prevSearchTerm, setPrevSearchTerm] = useState(searchTerm);
+
+    useEffect(() => {
+        if (prevSearchTerm !== searchTerm) {
+            if (!isSearchFetching) {
+                setPrevSearchTerm(searchTerm);
+            }
+        }
+    }, [searchTerm, isSearchFetching, prevSearchTerm]);
 
     useEffect(() => {
         if (typeof window === 'undefined' || typeof document === 'undefined') {
@@ -104,7 +115,7 @@ function ProgramGrid({viewAllProgram,handleRowClick,kirkBabDropdownOption,handle
     
   return (
     <div >
-   { isLoading? <SkeletonForGrid /> : searchTerm &&  viewAllProgram.length === 0 ? (
+   { isLoading || (isSearchFetching && prevSearchTerm !== searchTerm) ? <SkeletonForGrid /> : searchTerm &&  viewAllProgram.length === 0 ? (
     <TableEmptyState
     name={"program"}
      icon={<MagnifyingGlassIcon/>}
@@ -120,7 +131,7 @@ function ProgramGrid({viewAllProgram,handleRowClick,kirkBabDropdownOption,handle
       dataLength={viewAllProgram.length}
       next={infinityScroll.loadMore}
       hasMore={infinityScroll.hasMore}
-      loader={infinityScroll.loader ? <SkeletonForGrid /> : null}
+      loader={infinityScroll.loader ? <div className='flex items-center justify-center mt-3'>Loading more...</div> : null}
       height={scrollHeight} 
       className="w-full"
     >
@@ -170,7 +181,7 @@ const tagButtonData = [
             <Card  id={`allProgramsCard-${index}`} data-testid="allProgramsCard"  className="w-full md:max-w-lg h-[13.8125rem]  border border-grey50 rounded-lg cursor-pointer pt-0" onClick={() => handleRowClick(program)}>
             <CardHeader id={`header-${index}`} data-testid="header" className="flex flex-row justify-between items-center" >
                  <CardTitle id={`title`} data-testid="title" className={`${inter500.className} text-lg font-medium text-[#101828]`} >
-                 {shortTitle}
+                 {toSentenceCase(shortTitle)}
             {program.name && program.name.length > 90 && (
              <span
                 id={`readMore-${index}`}
