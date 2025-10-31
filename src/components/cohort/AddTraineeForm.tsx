@@ -50,8 +50,7 @@ function AddTraineeForm({setIsOpen, tuitionFee,cohortId, isEdit,loaneeBasicDetai
     const [totalItemAmount, setTotalItemAmount] = useState(0);
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
     const [initialDepositAmount, setInitialDepositAmount] = useState('');
-    const [amountError, setAmountError] = useState<{error: string, index: number}>()
-    const item = data?.data
+    const itemss = data?.data
     const [disableAddLoaneeButton, setDisableAddLoaneeButton] = useState(false)
     const [initialDepositError, setInitialDepositError] = useState('')
     const [currentSelectedItemAmount , setCurrentSelectedItemAmount] = useState("")
@@ -255,14 +254,13 @@ function AddTraineeForm({setIsOpen, tuitionFee,cohortId, isEdit,loaneeBasicDetai
 
 
     const editCohortBreakDown = (e: React.ChangeEvent<HTMLInputElement>, index: number, itemLoanBreakDownId: string) => {
-        const itemAmountFromCohort = Number(item?.at(index)?.itemAmount)
-        const kk = item.filter((ite) => ite.loanBreakDownId === itemLoanBreakDownId);
-        console.log('items from cohort: ', item)
+        const foundItem = itemss.find(
+            (ite: cohortBreakDown) => ite.loanBreakdownId === itemLoanBreakDownId
+        );
+        const foundItemAmount = Number(foundItem?.itemAmount);
         const userInput =  Number(e.target.value)
-        console.log('itemAmountFromCohort:',itemAmountFromCohort)
-        console.log('userInput: ',userInput)
 
-        if (userInput < itemAmountFromCohort || userInput  === itemAmountFromCohort) {
+        if (userInput < foundItemAmount || userInput  === foundItemAmount) {
             const { value } = e.target;
             const updatedData = selectedCohortItem.map((item, i) =>
                 i === index ? { ...item, itemAmount: value } : item
@@ -322,10 +320,10 @@ function AddTraineeForm({setIsOpen, tuitionFee,cohortId, isEdit,loaneeBasicDetai
     }
 
     const changeSelectedItem = (currentItemIndex: number, currentItemName: string, selectedItemName: string)=> {
-        const selectedItemArray: cohortBreakDown[] =  cohortBreakDown?.filter(item => item?.itemName === selectedItemName);
-        //eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-expect-error
-        const selectedItem: cohortBreakDown = selectedItemArray?.at(0) ? selectedItemArray?.at(0 ) : {    currency: '',
+        const foundItem = cohortBreakDown.find(
+            (ite: cohortBreakDown) => ite.itemName === selectedItemName
+        );
+        const selectedItem: cohortBreakDown = foundItem ? foundItem : {    currency: '',
             itemAmount: '',
             itemName: '',
             loanBreakdownId: '',
@@ -345,12 +343,13 @@ function AddTraineeForm({setIsOpen, tuitionFee,cohortId, isEdit,loaneeBasicDetai
 
     }
 
-    console.log('amountErors: ', amountsError)
 
 
     const handleSelect = (value: string) => {
-       const currentItemArray =  cohortBreakDown?.filter(item => item?.itemName === value);
-        const currentItem = currentItemArray?.at(0) ? currentItemArray?.at(0 ) : {    currency: '',
+        const foundItem = cohortBreakDown.find(
+            (ite: cohortBreakDown) => ite.itemName === value
+        );
+        const currentItem = foundItem ? foundItem : {    currency: '',
             itemAmount: '',
             itemName: '',
             loanBreakdownId: '',
@@ -389,9 +388,6 @@ function AddTraineeForm({setIsOpen, tuitionFee,cohortId, isEdit,loaneeBasicDetai
 
             }
         }else{
-
-            //eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-expect-error
             setSelectedCohortItem(prev => {
                 return [...prev, currentItem];
             });
@@ -404,9 +400,11 @@ function AddTraineeForm({setIsOpen, tuitionFee,cohortId, isEdit,loaneeBasicDetai
 
     };
 
-    const handleAddButton = (e:React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-        e?.preventDefault()
-        setOpenEmptyField(true)
+    const handleAddButton = (e:React.MouseEvent<HTMLDivElement, MouseEvent>, isDisabled: boolean) => {
+        if (!isDisabled){
+            e?.preventDefault()
+            setOpenEmptyField(true)
+        }
     }
 
     const getError = (index: number) =>
@@ -579,17 +577,17 @@ function AddTraineeForm({setIsOpen, tuitionFee,cohortId, isEdit,loaneeBasicDetai
                                 >
                                     <div className={` h-fit grid gap-3   `}>
                                         <div
-                                            className={` w-full flex gap-4  h-fit    `}
+                                            className={` w-full grid  md:flex gap-4  h-fit    `}
                                         >
-                                            <div   className={` text-[14px] ${inter.className}   mt-auto mb-auto  w-fit   h-full text-black  `}>
-                                                <div className={` mt-auto mb-auto bg-[#F9F9F9] border border-[#D7D7D7] rounded-md  w-[13em]  h-fit p-3  text-black  `}>
+                                            <div   className={` text-[14px] ${inter.className}   mt-auto mb-auto w-full  md:w-fit   h-full text-black  `}>
+                                                <div className={` mt-auto mb-auto bg-[#F9F9F9] border border-[#D7D7D7] rounded-md w-full md:w-[13em] h-full md:h-fit p-3  text-black  `}>
                                                     Tuition
                                                 </div>
                                             </div>
                                             <div
-                                                className={` w-full  flex  gap-2  `}
+                                                className={` w-full h-fit  flex  gap-2  `}
                                             >
-                                                <div className={`  bg-[#F9F9F9] border grid place-items-center px-2 border-[#D7D7D7] rounded-md  h-full  text-black  `}>
+                                                <div className={`  bg-[#F9F9F9] border grid place-items-center px-2 border-[#D7D7D7] rounded-md  h-full p-3  text-black  `}>
                                                     NGN
                                                 </div>
 
@@ -609,9 +607,9 @@ function AddTraineeForm({setIsOpen, tuitionFee,cohortId, isEdit,loaneeBasicDetai
 
                                             <div key={''+ index}>
                                                 <div
-                                                    className={` w-full flex gap-4  h-fit    `}
+                                                    className={` w-full grid  md:flex gap-4  h-fit    `}
                                                 >
-                                                    <div key={'item'+ index}  className={` text-[14px] ${inter.className}   mt-auto mb-auto  w-fit   h-full text-black  `}>
+                                                    <div key={'item'+ index}  className={` text-[14px] ${inter.className}   mt-auto mb-auto  w-full md:w-fit   h-full text-black  `}>
                                                         <StringDropdown
                                                             height={' h-[3.2rem]  '}
                                                             label={detail?.itemName}
@@ -663,7 +661,7 @@ function AddTraineeForm({setIsOpen, tuitionFee,cohortId, isEdit,loaneeBasicDetai
                                             </div>
                                         ))}
                                         <div
-                                            className={` w-full flex gap-4 h-fit    `}
+                                            className={` w-full grid md:flex gap-4 h-fit    `}
                                         >
                                             {openEmptyField &&
                                                 <div  className={`flex gap-3  mt-auto mb-auto `}>
@@ -708,8 +706,8 @@ function AddTraineeForm({setIsOpen, tuitionFee,cohortId, isEdit,loaneeBasicDetai
                                     </div>
                                     {names?.length !== 0 &&
                                     <div
-                                        onClick={(e) => {handleAddButton(e)}}
-                                        className={` flex gap-2 text-[14px] ${inter.className} pt-2  text-meedlBlue  `}>
+                                        onClick={(e) => {handleAddButton(e,amountsError?.length > 0)}}
+                                        className={` ${amountsError?.length > 0 ? `text-[#A8A8A8]` : ` text-meedlBlue`} flex gap-2 text-[14px] ${inter.className} pt-2   `}>
                                         <MdAdd className={` w-6 h-6  `}/>
                                         Add another
                                     </div>
@@ -741,10 +739,10 @@ function AddTraineeForm({setIsOpen, tuitionFee,cohortId, isEdit,loaneeBasicDetai
                                         <Button
                                             //eslint-disable-next-line @typescript-eslint/ban-ts-comment
                                             // @ts-expect-error
-                                            type={disableAddLoaneeButton || totalItemAmount < 0 || totalItemAmount === 0 ? "" : 'submit' }
-                                            className={`w-full md:w-36 h-[3rem] ${disableAddLoaneeButton || totalItemAmount < 0 || totalItemAmount === 0 ? 'hover:bg-[#D0D5DD] bg-[#D0D5DD]' : ' hover:bg-meedlBlue bg-meedlBlue '}  `}>
+                                            type={amountsError?.length > 0 || disableAddLoaneeButton || totalItemAmount < 0 || totalItemAmount === 0 ? "" : 'submit' }
+                                            className={`w-full md:w-36 h-[3rem] ${amountsError?.length > 0 || disableAddLoaneeButton || totalItemAmount < 0 || totalItemAmount === 0 ? 'hover:bg-[#D0D5DD] bg-[#D0D5DD]' : ' hover:bg-meedlBlue bg-meedlBlue '}  `}>
 
-                                            {disableAddLoaneeButton || totalItemAmount < 0 || totalItemAmount === 0  ?
+                                            {amountsError?.length > 0 || disableAddLoaneeButton || totalItemAmount < 0 || totalItemAmount === 0  ?
                                                 'Confirm'
                                                 :
                                                 <div>

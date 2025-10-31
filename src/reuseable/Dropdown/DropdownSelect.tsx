@@ -7,7 +7,6 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Button } from "@/components/ui/button";
 import { MdKeyboardArrowDown } from "react-icons/md";
 import {inter} from "@/app/fonts";
 interface StringDropdownProps {
@@ -17,13 +16,13 @@ interface StringDropdownProps {
     height?: string;
 }
 
-const StringDropdown: React.FC<StringDropdownProps> = ({ label = "Select Item", items, onSelect , height}) => {
+const StringDropdown: React.FC<StringDropdownProps> = ({ label = "Select Item", items, onSelect }) => {
     const [open, setOpen] = React.useState(false);
 
     return (
         <DropdownMenu open={open} onOpenChange={setOpen}>
             <DropdownMenuTrigger asChild>
-                <div  className={`flex justify-between  min-h-[3.1rem] max-h-fit    w-[13em] border break-normal px-2  ${inter.className} rounded-md  text-[#6A6B6A] border-[#D7D7D7]    gap-1`}>
+                <div  className={`flex justify-between  min-h-[3.1rem] max-h-fit w-full   md:w-[13em] border break-normal px-2  ${inter.className} rounded-md  text-[#6A6B6A] border-[#D7D7D7]    gap-1`}>
                     <p className={`mt-auto mb-auto `}>{label}</p>
                     {items?.length > 0 &&
                         <MdKeyboardArrowDown
