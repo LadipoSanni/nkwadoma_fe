@@ -12,6 +12,7 @@ interface Props {
     isLoading: boolean,
     id: string,
     handleClick: () => void,
+
 }
 
 const OrganizationLoan = ({organizationName, loanAmountRepaid,id, handleClick, loanAmountOutstanding, loanAmountApproved,isLoading}:Props) => {
