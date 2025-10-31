@@ -60,6 +60,7 @@ const ViewLoaneeLoans = () => {
     const {data: viewAllLoans, isLoading: isLoadingViewAll, isFetching: isFetchingViewAll} = useViewLoaneeLoansByAdminQuery(data)
     const {data: searchData, isLoading: isLoadingSearch, isFetching: isFetchingSearch} = useSearchLoaneeLoansByAdminQuery(searchProps, {skip: !debouncedSearchTerm})
     const {data: loanCounts, isLoading: isLoadingLoanCounts, isFetching: isFetchingCounts} = useViewAllLoansTotalCountsByAdminsQuery(selectedLoaneeId)
+    const [loadedData, setLoadedData] = useState<AdminViewLoanType[]>([]);
 
     useEffect(() => {
         if (debouncedSearchTerm){
@@ -69,7 +70,16 @@ const ViewLoaneeLoans = () => {
                 setPageSize(searchData?.data?.totalPages)
             }
         }else {
-            setFetchData((prev) => [...prev, ...(viewAllLoans?.data?.body || [])]);
+
+            setFetchData((prev) => {
+                const combined = [...prev, ...(loadedData || []), ...(viewAllLoans?.data?.body || [])];
+                const seen = new Set<number>();
+                return combined.filter((item) => {
+                    if (seen.has(item.id)) return false;
+                    seen.add(item.id);
+                    return true;
+                });
+            });
             setHasMore(viewAllLoans?.data?.hasNextPage)
             if (viewAllLoans?.data?.pageSize){
                 setPageSize(viewAllLoans?.data?.pageSize)
@@ -85,6 +95,9 @@ const ViewLoaneeLoans = () => {
         router.push('/loanees')
     }
     const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        if (event?.target?.value !== ''){
+            setLoadedData(fetchData)
+        }
         setSearchTerm(event.target.value);
     };
 

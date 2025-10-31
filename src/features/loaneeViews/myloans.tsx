@@ -9,7 +9,6 @@ import styles from '@/features/Overview/index.module.css';
 import GeneralEmptyState from "@/reuseable/emptyStates/General-emptystate";
 import {MdPersonOutline} from "react-icons/md";
 import { LoanType} from "@/types/loanee";
-import OrganizationLoan from "@/reuseable/cards/OrganizationLoan";
 import SearchInput from "@/reuseable/Input/SearchInput";
 import {useDebounce} from "@/hooks/useDebounce";
 import LoaneeViewLoan from "@/reuseable/cards/LoaneeViewLoan";
@@ -42,11 +41,28 @@ const Myloans = () => {
         pageSize: pageSize,
         organizationName:debouncedSearchTerm,
     }
+    const [loadedData, setLoadedData] = useState<LoanType[]>([]);
 
     const {data: searchData, isLoading: isSearching, isFetching: isFetchingSearchedData} = useSearchLoaneeLoanQuery(searchParameter , {skip: !debouncedSearchTerm})
     useEffect(() => {
         if (!debouncedSearchTerm){
-            setFetchData((prev) =>[...prev, ...(loaneeLoans?.data?.body || [])])
+            // setFetchData((prev) => {
+            //     const combined = [...prev, ...(loaneeLoans?.data?.body || [])];
+            //     const unique = Array.from(
+            //         new Map(combined.map((item) => [item.loanProgressId, item])).values()
+            //     );
+            //     return unique;
+            // });
+            setFetchData((prev) => {
+                // const combined = [...prev, ...[loadedData ,(loaneeLoans?.data?.body || [])]];
+                const combined = [...prev, ...(loadedData || []), ...(loaneeLoans?.data?.body || [])];
+                const seen = new Set<number>();
+                return combined.filter((item) => {
+                    if (seen.has(item.loanProgressId)) return false;
+                    seen.add(item.loanProgressId);
+                    return true;
+                });
+            });
             setHasMore(loaneeLoans?.data?.hasNextPage)
             setPageSize(loaneeLoans?.data?.pageSize)
         }else{
@@ -83,8 +99,8 @@ const Myloans = () => {
     );
 
     const LoadingSkeleton = () => (
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-4 h-[50vh] px-4">
-            {[...Array(3)].map((_, i) => (
+        <div className="grid grid-cols-2 md:grid-cols-2 gap-4 h-[50vh] px-4">
+            {[...Array(4)].map((_, i) => (
                 <div
                     key={i}
                     className="w-full h-[20rem] px-4 py-8 animate-pulse bg-[#f4f4f5] rounded-lg"
@@ -133,6 +149,9 @@ const Myloans = () => {
         condition ? <>{children}</> : null;
 
     const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        if (event?.target?.value !== ''){
+            setLoadedData(fetchData)
+        }
         setSearchTerm(event.target.value);
     };
 

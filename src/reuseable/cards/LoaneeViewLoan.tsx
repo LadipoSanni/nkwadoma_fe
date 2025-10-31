@@ -5,13 +5,12 @@ import {capitalizeFirstLetters} from "@/utils/GlobalMethods";
 import { formatAmount } from '@/utils/Format';
 
 interface Props {
-    isLoading: boolean,
+    isLoading?: boolean,
     handleClick: () => void,
     data: LoanType
 }
 
 const LoaneeViewLoan: React.FC<Props> = ({
-    isLoading,
     handleClick,
     data
                                          }) => {
@@ -51,7 +50,7 @@ const LoaneeViewLoan: React.FC<Props> = ({
     //     }
     // }
     function getWordAfterLoan(status: string): string {
-        const word =status.split('_')[1] || ''
+        const word =status?.split('_')[1] || ''
         return word?.replace('AL', 'ED');
     }
     const loanInfo = [
