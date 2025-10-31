@@ -12,6 +12,8 @@ import { LoanType} from "@/types/loanee";
 import OrganizationLoan from "@/reuseable/cards/OrganizationLoan";
 import SearchInput from "@/reuseable/Input/SearchInput";
 import {useDebounce} from "@/hooks/useDebounce";
+import LoaneeViewLoan from "@/reuseable/cards/LoaneeViewLoan";
+import {inter500} from "@/app/fonts";
 
 interface LoanGridProps  {
     data: LoanType[];
@@ -114,17 +116,13 @@ const Myloans = () => {
 
 
     const LoanGrid = ({ data, lastCardObserver, isLoading, handleClick }: LoanGridProps) => (
-        <div className="w-full h-full grid gap-4 md:grid-cols-3">
+        <div className="w-full h-full grid gap-4 md:grid-cols-2">
             {data.map((loan:LoanType, index) => (
                 <div key={ "key"+loan.loanProgressId + index} ref={lastCardObserver}>
-                    <OrganizationLoan
-                        id={loan.loanProgressId}
+                    <LoaneeViewLoan
                         isLoading={isLoading}
-                        loanAmountApproved={loan.loanAmount?.toString()}
-                        loanAmountOutstanding={loan.amountOutstanding?.toString()}
-                        loanAmountRepaid={loan.amountRepaid?.toString()}
-                        organizationName={loan.organizationName}
                         handleClick={() => {handleClick(loan.loanProgressId)}}
+                        data={loan}
                     />
                 </div>
             ))}
@@ -146,7 +144,8 @@ const Myloans = () => {
                 <Details isLoading={loansTotalCalculationsLoading} sx={` w-[20em] md:w-full `} id={'loaneeTotalLoaneOutstanding'} showAsWholeNumber={false}   maxWidth={'100%'} name={'Total amount outstanding '} value={loansTotalCalculations?.data?.totalAmountOutstanding} valueType={'currency'}  />
                 <Details isLoading={loansTotalCalculationsLoading} sx={` w-[20em] md:w-full `} id={'loaneeTotalAmountRepaid'} showAsWholeNumber={false}   maxWidth={'100%'} name={'Total amount repaid '} value={loansTotalCalculations?.data?.totalAmountRepaid} valueType={'currency'}  />
             </div>
-            <div className={` px-4 `}>
+            <div className={` px-4 flex justify-between  `}>
+                <p className={` hidden lg:flex md:flex text-base mt-auto mb-auto  ${inter500.className} text-black `}>Loan portfolio</p>
                 <SearchInput
                     id={'searchField'}
                     data-testid={'searchField'}
