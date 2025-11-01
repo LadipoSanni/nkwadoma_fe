@@ -97,7 +97,7 @@ const LoaneeViewLoan: React.FC<Props> = ({
             </section>
             <button id={'viewLoanDetails' +data?.loanProgressId}
                     onClick={handleClick}
-                    className={` hover:bg-[#E8EAEE]  mt-3 flex justify-center w-full h-fit py-2 text-sm ${inter700.className} rounded-md border border-meedlBlue text-meedlBlue  `}>View details</button>
+                    className={` hover:bg-[#E8EAEE] px-4  mt-3 flex justify-center w-full h-fit py-2 text-sm ${inter700.className} rounded-md border border-meedlBlue text-meedlBlue  `}>View details</button>
 
         </main>
     );
