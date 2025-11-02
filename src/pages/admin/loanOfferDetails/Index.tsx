@@ -47,6 +47,7 @@ const LoanOfferDetails = () => {
     const setOpenDeclineOffer = (value: boolean) => {
         setOpenDeclineLoanRequestModal(value)
     }
+
     const getLoaneeLoanBreakdown = () => {
         const loaneeLoanBreakDown = data?.data?.loaneeBreakdown
         const items: { itemAmount: string, itemName: string }[] = []
@@ -80,28 +81,28 @@ const LoanOfferDetails = () => {
 
 
     const basicDetails = [
-        {label: 'Gender', value: data?.data?.gender ? data?.data?.gender : '' },
-        {label: 'Email address', value: data?.data?.email ? data?.data?.email : ''},
-        {label: 'Phone number', value: data?.data?.phoneNumer ? data?.data?.phoneNumer : ''},
-        {label: 'Date of birth', value: data?.data?.dateOfBirth ? formatMonthInDate(data?.data?.dateOfBirth) : ''},
-        {label: 'Marital status', value: data?.data?.maritalStatus ? data?.data?.maritalStatus : ''},
-        {label: 'Nationality', value: data?.data?.nationality ? data?.data?.nationality : ''},
-        {label: 'State of origin ', value: data?.data?.stateOfOrigin ? capitalizeFirstLetters(data?.data?.stateOfOrigin) : ''},
-        {label: 'State of residence', value: data?.data?.stateOfResidence ? capitalizeFirstLetters(data?.data?.stateOfResidence) : ''},
-        {label: "Residential address", value: data?.data?.residentialAddress ? data?.data?.residentialAddress : ''},
+        {label: 'Gender', value: data?.data?.gender || '' },
+        {label: 'Email address', value: data?.data?.email || ''},
+        {label: 'Phone number', value: data?.data?.phoneNumer || ''},
+        {label: 'Date of birth', value:  formatMonthInDate(data?.data?.dateOfBirth) || ''},
+        {label: 'Marital status', value: data?.data?.maritalStatus || ''},
+        {label: 'Nationality', value: data?.data?.nationality || ''},
+        {label: 'State of origin ', value:  capitalizeFirstLetters(data?.data?.stateOfOrigin) || ''},
+        {label: 'State of residence', value: capitalizeFirstLetters(data?.data?.stateOfResidence) || ''},
+        {label: "Residential address", value: data?.data?.residentialAddress || ''},
     ];
 
     const additionalDetails = [
-        {label: 'Alternate email address', value: data?.data?.alternateEmail ? data?.data?.alternateEmail : ''},
-        {label: 'Alternate phone number', value: data?.data?.alternatePhoneNumber ? data?.data?.alternatePhoneNumber : ''},
-        {label: 'Alternate residential address', value: data?.data?.alternateContactAddress ? data?.data?.alternateContactAddress : ''},
+        {label: 'Alternate email address', value: data?.data?.alternateEmail || ''},
+        {label: 'Alternate phone number', value: data?.data?.alternatePhoneNumber || ''},
+        {label: 'Alternate residential address', value: data?.data?.alternateContactAddress || ''},
         {
             label: 'Next of kin name',
             value: capitalizeFirstLetters(data?.data?.nextOfKinFirstName) + " " + capitalizeFirstLetters(data?.data?.nextOfKinLastName)
         },
-        {label: 'Next of kin email address', value: data?.data?.nextOfKinEmail ?  data?.data?.nextOfKinEmail : ''},
-        {label: 'Next of kin phone number', value: data?.data?.nextOfKinPhoneNumber ? data?.data?.nextOfKinPhoneNumber : '' },
-        {label: 'Next of kin relationship ', value: data?.data?.nextOfKinRelationship ? capitalizeFirstLetters(data?.data?.nextOfKinRelationship) : ''},
+        {label: 'Next of kin email address', value: data?.data?.nextOfKinEmail || ''},
+        {label: 'Next of kin phone number', value: data?.data?.nextOfKinPhoneNumber || '' },
+        {label: 'Next of kin relationship ', value:  capitalizeFirstLetters(data?.data?.nextOfKinRelationship) || ''},
     ];
 
     const loanDetails = [
@@ -119,8 +120,7 @@ const LoanOfferDetails = () => {
             />
         },
         {
-            label: "Start date", value:
-            data?.data?.startDate ?  dayjs(data?.data?.startDate?.toString()).format('MMMM D, YYYY') : ''
+            label: "Start date", value: dayjs(data?.data?.startDate?.toString()).format('MMMM D, YYYY') || ''
         },
         {
             label: "Loan amount requested", value: <NumericFormat
@@ -221,6 +221,8 @@ const LoanOfferDetails = () => {
         {label:"Loan terms and condition",value:data?.data?.termsAndCondition },
     ]
 
+
+
     return (
         <>{
             loading ? (
@@ -307,7 +309,7 @@ const LoanOfferDetails = () => {
                                                     <div
                                                         className={` ${inter.className} md:max-w-[40%] text-black300 text-[14px] `}>{item.label}</div>
                                                     <div
-                                                        className={` ${inter.className} md:max-w-[50%] text-black500 text-[14px] leading-6  break-all  `}> {item.value ? item.value : 'Not provided'}</div>
+                                                        className={` ${inter.className} md:max-w-[50%] text-black500 text-[14px] leading-6  break-all  `}> {item.value || 'Not provided'}</div>
                                                 </div>
                                             </li>
                                         ))
@@ -324,7 +326,7 @@ const LoanOfferDetails = () => {
                             </div>
                             <div
                                 className=" md:sticky md:bottom-0 py-3 px-3 md:py-3 md:bg-white md:flex grid md:justify-end gap-5 md:mt-0">
-                                {currentTab === 0 && (
+                                {currentTab === 0  && data?.data?.loanOfferStatus !== 'WITHDRAW' && (
                                     <Button
                                         className={`w-full ${inter600.className} md:w-fit md:px-6 md:py-3 h-fit py-4 text-meedlBlue border border-meedlBlue bg-meedlWhite hover:bg-meedlWhite`}
                                         onClick={openWithdraw} >Withdraw loan</Button>
@@ -335,7 +337,7 @@ const LoanOfferDetails = () => {
                                         onClick={handleBack} disabled={currentTab === 0}>Back</Button>
                                 )}
 
-                                <Button
+                                { ( data?.data?.loanOfferStatus !== 'WITHDRAW'  )  && <Button
                                     className={'w-full justify-center md:w-fit md:px-6 md:py-3 md:rounded-md text-white  md:text-meedlWhite rounded-md flex gap-2 h-fit py-4 bg-meedlBlue hover:bg-meedlBlue'}
                                     onClick={currentTab === 3 ? disburseLoanOffer : handleNext}
 
@@ -343,6 +345,15 @@ const LoanOfferDetails = () => {
                                     {isLoading && <Loader2 className="animate-spin"/>}
                                     {currentTab === 3 ? 'Start loan' : 'Continue'}
                                 </Button>
+                                }
+                                { ( data?.data?.loanOfferStatus === 'WITHDRAW' && currentTab !== 3 )  && <Button
+                                    className={'w-full justify-center md:w-fit md:px-6 md:py-3 md:rounded-md text-white  md:text-meedlWhite rounded-md flex gap-2 h-fit py-4 bg-meedlBlue hover:bg-meedlBlue'}
+                                    onClick={ handleNext}
+
+                                >
+                                    { 'Continue'}
+                                </Button>
+                                }
 
                             </div>
                         </div>

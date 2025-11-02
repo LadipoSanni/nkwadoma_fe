@@ -118,12 +118,12 @@ export interface LoanProduct {
 }
 
 export interface LoanType {
-    "loanProgressId": "b8b8c978-04c7-413e-b633-0d39d17e712b",
-    "loanAmount": 580000,
-    "amountOutstanding": 104902.59151956,
-    "amountRepaid": 500000,
-    "organizationName": "Walter",
-    "loanType": "LOAN_DISBURSAL"
+    "loanProgressId": string,
+    "loanAmount": number,
+    "amountOutstanding": number,
+    "amountRepaid": number,
+    "organizationName": string,
+    "loanType": string
 }
 export interface AdminViewLoanType {
     "id": "",
