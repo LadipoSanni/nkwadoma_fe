@@ -1,9 +1,10 @@
 import React from 'react';
+import Wallet from "@/pages/loanee/Wallet";
 
 const Page = () => {
     return (
-        <div className={'font-normal md:px-10'}>
-            wallet
+        <div >
+            <Wallet/>
         </div>
     );
 };
