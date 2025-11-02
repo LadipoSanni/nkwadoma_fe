@@ -64,7 +64,7 @@ const LoaneeViewLoan: React.FC<Props> = ({
         <main
             id={`loan` + data?.loanProgressId}
             data-testid={`loan` + data?.loanProgressId}
-            className={` w-full h-fit px-2 py-2 border border-[#C9C9D4] rounded-md   `}
+            className={` w-full min-h-fit h-full grid content-between px-2 py-2 border border-[#C9C9D4] rounded-md   `}
         >
             <header
                 id={`cardHeader${data?.loanProgressId}`}
@@ -80,7 +80,7 @@ const LoaneeViewLoan: React.FC<Props> = ({
                         {capitalizeFirstLetters(data?.organizationName?.at(0))}
                     </div>
                     <div className={` grid `}>
-                        <span id={'organizationName'+data?.loanProgressId} data-testid={'organizationName'+data?.loanProgressId} className={` ${inter500.className} text-[#4D4E4D] text-lg  `}>{data?.organizationName}</span>
+                        <span id={'organizationName'+data?.loanProgressId} data-testid={'organizationName'+data?.loanProgressId} className={` ${inter500.className} text-[#4D4E4D] text-lg break-normal `}>{data?.organizationName} nternational Coalition for Sustainable Development and Environmental Innovation</span>
                         <span className={` text-sm ${inter.className} w-fit h-fit py-0 px-1 rounded-full bg-[${loanStatusColors?.textBackgroundColor}] text-[${loanStatusColors?.textColor}]  `}>{capitalizeFirstLetters(getWordAfterLoan(data?.loanType))}</span>
                     </div>
                 </section>
@@ -95,10 +95,9 @@ const LoaneeViewLoan: React.FC<Props> = ({
                     </div>
                 ))}
             </section>
-            <button id={'viewLoanDetails' +data?.loanProgressId}
-                    onClick={handleClick}
-                    className={` hover:bg-[#E8EAEE] px-4  mt-3 flex justify-center w-full h-fit py-2 text-sm ${inter700.className} rounded-md border border-meedlBlue text-meedlBlue  `}>View details</button>
-
+                <button id={'viewLoanDetails' +data?.loanProgressId}
+                        onClick={handleClick}
+                        className={` hover:bg-[#E8EAEE]   flex justify-center w-full h-fit py-2 text-sm ${inter700.className} rounded-md border border-meedlBlue text-meedlBlue  `}>View details</button>
         </main>
     );
 };
