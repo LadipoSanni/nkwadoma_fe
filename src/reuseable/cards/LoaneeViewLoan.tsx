@@ -80,7 +80,7 @@ const LoaneeViewLoan: React.FC<Props> = ({
                         {capitalizeFirstLetters(data?.organizationName?.at(0))}
                     </div>
                     <div className={` grid `}>
-                        <span id={'organizationName'+data?.loanProgressId} data-testid={'organizationName'+data?.loanProgressId} className={` ${inter500.className} text-[#4D4E4D] text-lg break-normal `}>{data?.organizationName} nternational Coalition for Sustainable Development and Environmental Innovation</span>
+                        <span id={'organizationName'+data?.loanProgressId} data-testid={'organizationName'+data?.loanProgressId} className={` ${inter500.className} text-[#4D4E4D] text-lg break-normal `}>{data?.organizationName} </span>
                         <span className={` text-sm ${inter.className} w-fit h-fit py-0 px-1 rounded-full bg-[${loanStatusColors?.textBackgroundColor}] text-[${loanStatusColors?.textColor}]  `}>{capitalizeFirstLetters(getWordAfterLoan(data?.loanType))}</span>
                     </div>
                 </section>
