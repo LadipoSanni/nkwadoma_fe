@@ -14,20 +14,18 @@ interface Props {
 
 const useIsMobile = (breakpoint = 960) => {
     const [isMobile, setIsMobile] = useState(false);
-  
+
     useEffect(() => {
-        if (typeof window !== "undefined") {
-            const checkScreenSize = () => {
-                setIsMobile(window.innerWidth < breakpoint);
-            };
+        const checkScreenSize = () => {
+            setIsMobile(window.innerWidth < breakpoint);
+        };
 
-            checkScreenSize();
-            window.addEventListener('resize', checkScreenSize);
+        checkScreenSize();
+        window.addEventListener('resize', checkScreenSize);
 
-            return () => window.removeEventListener('resize', checkScreenSize);
-        }
+        return () => window.removeEventListener('resize', checkScreenSize);
     }, [breakpoint]);
-  
+
     return isMobile;
 };
 
@@ -54,30 +52,24 @@ function ViewDocument({ listOfDocument }: Props) {
     };
 
     const handleViewDocument = async (docUrl: string, event: React.MouseEvent) => {
-        event.preventDefault(); 
-        
+        event.preventDefault();
+
         if (!docUrl) return;
         setDocError(null);
         setCurrentDocUrl(docUrl);
-        
+
         const fileExtension = getFileExtension(docUrl);
 
         try {
-            if (fileExtension !== 'pdf' && fileExtension !== 'docx') {
-                setDocError('Invalid document format');
-                return;
-            }
-
-            if (!isCloudinaryUrl) {
-                const docExists = await verifyDocumentExists(docUrl);
-                if (!docExists) {
-                    setDocError('Document not found');
-                    return;
+            if(typeof window !== 'undefined') {
+                if (fileExtension === 'pdf') {
+                    window.open(docUrl, '_blank', 'noopener,noreferrer');
+                } else if (fileExtension === 'docx' || fileExtension === 'doc') {
+                    const viewerUrl = getGoogleDocsViewerUrl(docUrl);
+                    window.open(viewerUrl, '_blank', 'noopener,noreferrer,width=800,height=600');
+                } else {
+                    setDocError('Unsupported document format');
                 }
-            }
-            if (typeof window !== "undefined") {
-                window.open(docUrl, '_blank', 'noopener,noreferrer');
-
             }
         } catch (error) {
             setDocError('Error opening document');
@@ -85,28 +77,40 @@ function ViewDocument({ listOfDocument }: Props) {
         }
     };
 
-    };
+    // const handleDownloadDocument = (docUrl: string, event: React.MouseEvent) => {
+    //     event.preventDefault();
+    //     event.stopPropagation();
+
+    //     const filename = getFilenameFromUrl(docUrl);
+    //     const link = document.createElement('a');
+    //     link.href = docUrl;
+    //     link.download = filename;
+    //     link.target = '_blank';
+    //     document.body.appendChild(link);
+    //     link.click();
+    //     document.body.removeChild(link);
+    // };
 
     const truncateFilename = (filename: string, maxLength: number = 25): string => {
         if (filename.length <= maxLength) return filename;
-        
+
         const extensionIndex = filename.lastIndexOf('.');
         if (extensionIndex === -1) {
             return filename.substring(0, maxLength - 3) + '...';
         }
-        
+
         const name = filename.substring(0, extensionIndex);
         const extension = filename.substring(extensionIndex);
-        
+
         if (name.length <= 3) {
-            return filename; 
+            return filename;
         }
-        
+
         const maxNameLength = maxLength - extension.length - 3;
         if (maxNameLength <= 3) {
             return filename.substring(0, maxLength - 3) + '...' + extension;
         }
-        
+
         return name.substring(0, maxNameLength) + '...' + extension;
     };
 
@@ -123,16 +127,16 @@ function ViewDocument({ listOfDocument }: Props) {
 
                     return (
                         <div
-                            id={`data-item-${index}`} 
+                            id={`data-item-${index}`}
                             data-testid={`data-item-${index}`}
                             key={index}
                             className='border-[#D7D7D7] border-solid border-[1px] rounded-md  mb-5 pb-8'
                         >
-                           
+
                             <p className='bg-[#F9F9F9] text-[14px] font-semibold text-[#212221] py-3 px-3 rounded-t-sm mb-3'>
                                 {data.label}
                             </p>
-                            
+
                             <div className='flex items-start text-[14px] relative top-3 px-3'>
                                 <FileText className="w-10 h-5 text-[#667085] flex-shrink-0" />
                                 <div className='flex-1 min-w-0 flex justify-between items-center'>
