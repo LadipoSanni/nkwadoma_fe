@@ -95,9 +95,24 @@ const LoaneeViewLoan: React.FC<Props> = ({
                     </div>
                 ))}
             </section>
+            <div
+                className={` grid gap-4 px-4  md:flex md:justify-between md:gap-8  `}
+            >
                 <button id={'viewLoanDetails' +data?.loanProgressId}
                         onClick={handleClick}
-                        className={` hover:bg-[#E8EAEE]   flex justify-center w-full h-fit py-2 text-sm ${inter700.className} rounded-md border border-meedlBlue text-meedlBlue  `}>View details</button>
+                        className={` hover:bg-[#E8EAEE]   flex items-center  justify-center w-full  h-[37px] text-sm ${inter700.className} rounded-md border border-meedlBlue text-meedlBlue  `}>View details</button>
+
+                {getWordAfterLoan(data?.loanType) === 'DISBURSED' &&
+                    <button id={'makePayment' + data?.loanProgressId}
+                    // onClick={handleClick}
+                         className={` hover:bg-[#626F8C]   flex items-center justify-center w-full h-[37px]  text-sm ${inter700.className} rounded-md  bg-meedlBlue text-white  `}>Make
+                           payment
+                    </button>
+                }
+
+
+            </div>
+
         </main>
     );
 };

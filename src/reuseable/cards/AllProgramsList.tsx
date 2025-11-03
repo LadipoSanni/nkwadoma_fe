@@ -30,9 +30,11 @@ const AllProgramsCard: React.FC<ProgramList> = ({id, title, description, tagButt
     };
 
     const stripHtmlTags = (html: string) => {
-        const div = document.createElement('div');
-        div.innerHTML = html.replace(/<\/p><p>/g, ' ');
-        return div.textContent || div.innerText || '';
+        if (typeof window !== 'undefined'){
+            const div = document.createElement('div');
+            div.innerHTML = html.replace(/<\/p><p>/g, ' ');
+            return div.textContent || div.innerText || '';
+        }else return '';
     };
 
     const plainTextDescription = stripHtmlTags(description);

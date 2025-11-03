@@ -16,8 +16,8 @@ import {persistor, store} from "@/redux/store";
 import {setCurrentNavbarItem} from "@/redux/slice/layout/adminLayout";
 import {clearData} from "@/utils/storage";
 import {setMarketInvestmentVehicleId} from "@/redux/slice/investors/MarketPlaceSlice";
-import {encryptText} from "@/utils/encrypt";
 import {setCurrentStep} from "@/service/users/loanRerralSlice";
+import { encryptAction } from "@/app/encrypt/action";
 
 
 interface CustomJwtPayload {
@@ -45,7 +45,6 @@ const Login: React.FC = () => {
     const router = useRouter()
     const searchParams = useSearchParams()
     const [showEmailMessage, setShowEmailMessage] = useState(false)
-    const encryptedPassword =  encryptText(password)
 
     const getVariableFromRoute = (name: string) => {
         if (searchParams){
@@ -125,6 +124,12 @@ const Login: React.FC = () => {
     }
 
 
+    async  function  handleEncrypt(inputedPassword: string) {
+        return  await encryptAction(inputedPassword);
+    }
+
+
+
     const routeUserToTheirDashboard = async (userRole?: string) => {
         switch (userRole) {
             case 'LOANEE' :
@@ -184,9 +189,6 @@ const Login: React.FC = () => {
         const user_email = decode_access_token?.email
         const user_roles = decode_access_token?.realm_access?.roles
         const user_role = user_roles.filter(getUserRoles).at(0)
-        // console.log('access_token: ', access_token, 'decode_access_token:', decode_access_token)
-        // const decoded_re = jwtDecode<CustomJwtPayload>(refresh_token)
-        // console.log('user_roles: ', user_roles,'user_role: ', user_role)
         return {
             access_token,
             refresh_token,
@@ -203,14 +205,16 @@ const Login: React.FC = () => {
     const {toast} = useToast()
     const handleLogin = async (e?:React.MouseEvent<HTMLButtonElement>) => {
         e?.preventDefault()
+        const encrypted = await handleEncrypt(password)
         if (!navigator.onLine) {
                 toast({
                     description: "No internet connection",
                     status: "error",
                 })
         } else {
+            const parameters = {email:email, password:encrypted}
                 try {
-                    const response = await login({email:email, password:encryptedPassword}).unwrap()
+                    const response = await login(parameters).unwrap()
                     if (response?.data) {
                         const  {
                             access_token,

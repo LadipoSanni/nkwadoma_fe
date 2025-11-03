@@ -35,9 +35,12 @@ const CustomQuillField: React.FC<CustomQuillFieldProps> = ({ description, setDes
     }, [value]);
 
     const sanitizeContent = (content: string) => {
-        const tempDiv = document.createElement('div');
-        tempDiv.innerHTML = content;
-        return tempDiv.textContent || tempDiv.innerText || '';
+        if (typeof window !== 'undefined'){
+            const tempDiv = document.createElement('div');
+            tempDiv.innerHTML = content;
+            return tempDiv.textContent || tempDiv.innerText || '';
+        }else return '';
+
     };
 
     const handleChange = (value: string) => {

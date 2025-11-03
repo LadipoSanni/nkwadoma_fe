@@ -1,7 +1,7 @@
 import { createApi  } from '@reduxjs/toolkit/query/react'
 import { fetchBaseQuery } from '@reduxjs/toolkit/query';
 
-const baseUrl = process.env.APP_DEV_AUTH_URL;
+const baseUrl = process.env.NEXT_PUBLIC_APP_DEV_AUTH_URL;
 
 export const authApi = createApi({
 

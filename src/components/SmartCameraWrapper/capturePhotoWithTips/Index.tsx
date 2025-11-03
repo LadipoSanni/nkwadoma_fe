@@ -227,17 +227,7 @@ const CapturePhotoWithTips: React.FC<CapturePhotoWithTipsProps> = ({ onCapture }
         setHasFaceBeenDetected(false);
         setStep("right");
 
-        // const startCamera = async () => {
-        //     try {
-        //         const stream = await navigator.mediaDevices.getUserMedia({ video: {} });
-        //         if (videoRef.current) {
-        //             videoRef.current.srcObject = stream;
-        //         }
-        //     } catch (error) {
-        //         console.error("Error restarting camera:", error);
-        //         setModelLoadingError("Could not restart camera");
-        //     }
-        // };
+
 
         const startCamera = async () => {
             try {

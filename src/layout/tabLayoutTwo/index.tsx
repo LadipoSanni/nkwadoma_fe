@@ -31,14 +31,15 @@ function TabSwitch({ children, tabData, defaultTab,backClickName,backClickRouteP
     const handleRouteChange = (url: string) => {
       setActiveTab(url);
     };
+    if (typeof window !== "undefined") {
+      setActiveTab(window.location.pathname);
+      window.addEventListener('popstate', () => handleRouteChange(window.location.pathname));
 
-    setActiveTab(window.location.pathname);
+      return () => {
+        window.removeEventListener('popstate', () => handleRouteChange(window.location.pathname));
+      };
+    }
 
-    window.addEventListener('popstate', () => handleRouteChange(window.location.pathname));
-
-    return () => {
-      window.removeEventListener('popstate', () => handleRouteChange(window.location.pathname));
-    };
   }, []);
 
   useEffect(() => {
