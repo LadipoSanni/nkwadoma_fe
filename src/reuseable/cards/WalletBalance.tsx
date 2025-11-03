@@ -5,6 +5,10 @@ import {formatAmount} from "@/utils/Format";
 import { FiEye ,FiEyeOff } from "react-icons/fi";
 import { GoDotFill } from "react-icons/go";
 import { Button } from '@/components/ui/button';
+import WalletButton from "@/reuseable/buttons/WalletButton";
+import CircleArrow from "@/components/icons/CircleArrow";
+import FundWallet from "@/components/icons/FundWallet";
+import Withdraw from "@/components/icons/Withdraw";
 
 const WalletBalance = () => {
     const [isEyeOpen,setIsEyeOpen] = React.useState(false);
@@ -14,7 +18,7 @@ const WalletBalance = () => {
             // className={`relative w-full h-[12rem] rounded-md bg-red-200 `}
         >
             <div
-                className={` w-full grid mt-auto mb-auto   pl-4 h-fit    `}
+                className={` w-full grid gap-3  mt-auto mb-auto   pl-4 h-fit    `}
             >
                 <div>
                     <p className={` ${inter.className} text-white text-xs `}>Wallet balance</p>
@@ -27,7 +31,6 @@ const WalletBalance = () => {
                                 <GoDotFill className={` text-white `} />
                                 <GoDotFill className={` text-white `} />
                                 <GoDotFill className={` text-white `} />
-
                             </div>
                         }
                         {isEyeOpen ?
@@ -38,17 +41,19 @@ const WalletBalance = () => {
 
                     </div>
                 </div>
-                <div>
-                    <Button
-                        className={` flex  `}
-                    >
-                        <HugeiconsIcon
-                            icon={CircleArrowDataTransferHorizontalIcon}
-                            size={24}
-                            color="#142854"
-                            strokeWidth={1.5}
-                        />
-                    </Button>
+                <div className={` flex gap-4 `}>
+                    <WalletButton
+                        text={'Make payment'}
+                        icon={<CircleArrow height={'20'} width={'20'}/>}
+                    />
+                    <WalletButton
+                        text={'Fund wallet'}
+                        icon={<FundWallet height={'20'} width={'20'}/>}
+                    />
+                    <WalletButton
+                        text={'Withdraw'}
+                        icon={<Withdraw height={'20'} width={'20'}/>}
+                    />
                 </div>
             </div>
             <div className={` relative w-[23%] mt-auto h-[80%] b `}>
