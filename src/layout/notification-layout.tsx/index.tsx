@@ -102,8 +102,8 @@ function NotificationLayout({children}: Props) {
        const {data: searchData, refetch, isLoading:isSearchLoading,isFetching} = useSearchNotificationQuery({param},{skip: !debouncedSearchTerm})
 
        useEffect(() => {
-        if (typeof window === "undefined") return
-        const mediaQuery = window.matchMedia('(max-width: 959px)'); 
+           if (typeof window === "undefined") return;
+           const mediaQuery = window.matchMedia('(max-width: 959px)');
         setIsMobile(mediaQuery.matches);
 
         const handleResize = () => setIsMobile(mediaQuery.matches);
@@ -234,7 +234,7 @@ function NotificationLayout({children}: Props) {
                         duration: 1000
                     })
                     })
-                
+
                     router.push("/notifications/notification")
                   } else 
                    if(deleteNotifications){

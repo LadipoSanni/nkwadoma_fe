@@ -3,19 +3,17 @@ import {inter, inter500, inter700} from "@/app/fonts";
 import AuthInput from "@/reuseable/Input/AuthInputField";
 import {Button} from "@/components/ui/button";
 import AuthButton from "@/reuseable/buttons/AuthButton";
-import {encryptText} from "@/utils/encrypt";
 import PasswordCriteria from '@/components/passwordCriteria/Index';
 import { useChangePasswordMutation } from '@/service/users/api';
 import {useToast} from "@/hooks/use-toast";
 import styles from '@/components/loanee-my-profile/index.module.css'
+import {encryptAction} from "@/app/encrypt/action";
 const ChangePassword = () => {
     const [currentPassword, setCurrentPassword] = useState("")
     const [password, setPassword] = useState("")
     const [confirmPassword, setConfirmPassword] = useState("")
     // const [disableButton, setDisableButton] = useState(true)
     const [criteriaStatus, setCriteriaStatus] = useState([false, false, false, false]);
-    const encryptedPassword =  encryptText(password) ? encryptText(password) : '';
-    const encryptedCurrentPassword = encryptText(currentPassword) ? encryptText(currentPassword): ''
 
     const [changePassword, {isLoading}] = useChangePasswordMutation()
 
@@ -65,9 +63,14 @@ const ChangePassword = () => {
     }
     const remainingCriteria = criteriaMessages.filter((_, index) => !criteriaStatus[index]);
 
+    async function  handleEncrypt(inputedPassword: string) {
+        return  await encryptAction(inputedPassword);
+    }
 
     const handlePasswordChanged = async (e?:React.MouseEvent<HTMLButtonElement> | React.FormEvent<HTMLFormElement>) => {
         e?.preventDefault();
+        const encryptedCurrentPassword = await handleEncrypt(password)
+        const encryptedPassword = await handleEncrypt(currentPassword)
         const props = {password: encryptedCurrentPassword,newPassword:encryptedPassword};
         const response =  await changePassword(props);
         if (response?.error){

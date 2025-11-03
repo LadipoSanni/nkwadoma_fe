@@ -32,14 +32,16 @@ function TabSwitch({ children, tabData,triggerStyle, defaultTab,backClickName,ba
     const handleRouteChange = (url: string) => {
       setActiveTab(url);
     };
+    if (typeof window !== "undefined") {
+      setActiveTab(window.location.pathname);
 
-    setActiveTab(window.location.pathname);
-    if (typeof window === "undefined") return;
-    window.addEventListener('popstate', () => handleRouteChange(window.location.pathname));
+      window.addEventListener('popstate', () => handleRouteChange(window.location.pathname));
 
-    return () => {
-      window.removeEventListener('popstate', () => handleRouteChange(window.location.pathname));
-    };
+      return () => {
+        window.removeEventListener('popstate', () => handleRouteChange(window.location.pathname));
+      };
+    }
+
   }, []);
 
   useEffect(() => {
