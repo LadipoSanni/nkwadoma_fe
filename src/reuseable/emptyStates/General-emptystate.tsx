@@ -8,10 +8,10 @@ type Props = {
     message?: string | ReactNode
     iconSize?: string 
     iconContainerClass?: string 
-    
+    color?: string
 }
 
-function GeneralEmptyState({name,icon: Icon,className,isSearch,message,iconSize = "2.0rem",iconContainerClass}: Props) {
+function GeneralEmptyState({name,icon: Icon,className,isSearch,message,iconSize = "2.0rem",iconContainerClass, color}: Props) {
   
   return (
     <div className={`px-4  mt-20 ${className}`}>
@@ -21,7 +21,8 @@ function GeneralEmptyState({name,icon: Icon,className,isSearch,message,iconSize 
          {Icon && 
           <div id='emptyStateIconId' data-testid="icon-container" className={`bg-lightBlue500 w-[70px] h-[70px] flex justify-center items-center rounded-full mb-5 ${iconContainerClass}`}>
          <Icon 
-         style={{fontSize:iconSize,color:"#142854"}}
+         style={{fontSize:iconSize,color: color? color: "#142854"}}
+         className=""
          />
          </div>
          }
