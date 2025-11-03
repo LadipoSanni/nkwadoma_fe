@@ -1,5 +1,5 @@
 import React from 'react';
-import ProgramView from '@/features/program/program-view'
+import ProgramView from '@/features/program/program-view/Program-view'
 import CustomAuthorization from "@/features/auth/authorization";
 
 const Page = () => {

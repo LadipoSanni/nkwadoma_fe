@@ -23,10 +23,11 @@ const ChangePassword = () => {
     const validatePassword = (password: string) => {
         const criteria = [
             password.length >= 8,
-            /[!@#$%^&*(),.?":{}|<>]/.test(password),
+            // /[!@#$%^&*(),.?":{}|<>]/.test(password),
+            /[`~!@#$%^&*()_\-+=|{}[\]:'";?/>.<,]/.test(password),
             /[A-Z]/.test(password),
             /[a-z]/.test(password),
-            /\d/.test(password)
+            // /\d/.test(password)
         ];
         setCriteriaStatus(criteria);
     };
@@ -43,7 +44,7 @@ const ChangePassword = () => {
         "Must contain one special character",
         "Must contain one uppercase character",
         "Must contain one lowercase character",
-        "Must contain one digit"
+        // "Must contain one digit"
     ];
 
 
@@ -113,7 +114,7 @@ const ChangePassword = () => {
                            mediumHeight={true}
                            onChange={handlePassword}
                            endAdornment={'Hide'}
-                           errorMessage={remainingCriteria.length === 1 ? remainingCriteria[0] : ''}
+                           // errorMessage={remainingCriteria.length === 1 ? remainingCriteria[0] : ''}
                            placeholder={'Enter password'}></AuthInput>
                 {remainingCriteria.length !== 0  && <PasswordCriteria id={'createPasswordCriteria'} criteriaStatus={criteriaStatus}/>}
                 <AuthInput value={confirmPassword} type={'password'} data-testid={'resetConfirmPasswordInput'}

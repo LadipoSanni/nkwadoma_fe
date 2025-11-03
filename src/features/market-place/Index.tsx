@@ -1,18 +1,19 @@
 "use client";
-import React, { useEffect, useState, useRef, useCallback } from "react";
-import InvestmentCard from "@/reuseable/cards/Investment-card/InvestmentCard";
 import { store } from "@/redux/store";
-import SearchInput from "@/reuseable/Input/SearchInput";
-import CustomSelect from "@/reuseable/Input/Custom-select";
 import { useRouter } from "next/navigation";
-import { setMarketInvestmentVehicleId } from "@/redux/slice/investors/MarketPlaceSlice";
-import MarketPlaceInvestmentGrid from "@/reuseable/Skeleton-loading-state/Skeleton-for-MarketPlace";
+import { toSentenceCase } from "@/utils/GlobalMethods";
+import SearchInput from "@/reuseable/Input/SearchInput";
 import {MdOutlinePayments, MdSearch} from "react-icons/md";
-import {useGetMarketplaceInvestmentVehiclesByTypeAndStatusQuery, useSearchInvestmentVehiclesQuery} from "@/service/financier/marketplace";
-import SearchEmptyState from "@/reuseable/emptyStates/SearchEmptyState";
+import CustomSelect from "@/reuseable/Input/Custom-select";
 import { clearAll } from "@/redux/slice/investors/MarketPlaceSlice";
 import TableEmptyState from "@/reuseable/emptyStates/TableEmptyState";
+import SearchEmptyState from "@/reuseable/emptyStates/SearchEmptyState";
+import React, { useEffect, useState, useRef, useCallback } from "react";
 import { resetNotification } from '@/redux/slice/notification/notification';
+import InvestmentCard from "@/reuseable/cards/Investment-card/InvestmentCard";
+import { setMarketInvestmentVehicleId } from "@/redux/slice/investors/MarketPlaceSlice";
+import MarketPlaceInvestmentGrid from "@/reuseable/Skeleton-loading-state/Skeleton-for-MarketPlace";
+import {useGetMarketplaceInvestmentVehiclesByTypeAndStatusQuery, useSearchInvestmentVehiclesQuery} from "@/service/financier/marketplace";
 
 interface InvestmentVehicle {
     id: string;
@@ -289,10 +290,9 @@ const MarketPlaceView = () => {
                         // fundRaising = `${statusKey}`;
                         const typeTextColor = vehicle.investmentVehicleType === "COMMERCIAL" ? "text-[#142854]" : "text-[#045620]";
 
+                        const formattedName = toSentenceCase(vehicle.name);
                         const truncatedTitle =
-                            vehicle.name.length > 20
-                                ? vehicle.name.slice(0, 20) + "..."
-                                : vehicle.name;
+                            formattedName.length > 20 ? formattedName.slice(0, 20) + '...' : formattedName;
 
                         const cardProps = {
                             id: vehicle.id,
@@ -301,7 +301,7 @@ const MarketPlaceView = () => {
                             imageSrc,
                             investmentVehicleName: truncatedTitle,
                             statusClass,
-                            status:  statusKeyAndValue().value,
+                            status: toSentenceCase(statusKeyAndValue().value),
                             statuses: statusKeyAndValue().key,
                             borderClass,
                             percentage: vehicle.rate || 0,

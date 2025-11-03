@@ -45,7 +45,8 @@ interface LoanProduct {
     totalNumberOfLoaneess: number,
     isEdit: boolean,
     fundProductId: string,
-    loanProductSize: string
+    loanProductSize: string,
+    sponsors: SponsorsObj[] | null,
 }
 
 const initialState: LoanProduct = {
@@ -57,7 +58,8 @@ const initialState: LoanProduct = {
     totalNumberOfLoaneess: 0,
     isEdit: false,
     fundProductId: "",
-    loanProductSize: ""
+    loanProductSize: "",
+    sponsors: null
 }
 
 export const LoanProductSlice = createSlice({
@@ -77,7 +79,8 @@ export const LoanProductSlice = createSlice({
             state.createLoanProductField= null;
             state.createLoanProductFieldStepTwo = null;
             state.fundProductId= "";
-            state.loanProductSize = ""
+            state.loanProductSize = "";
+            state.sponsors = null
         },
         setLoanProductFieldStepTwo: (state, action: PayloadAction<CreateLoanProductFieldStepTwo>) => {
             state.createLoanProductFieldStepTwo = action.payload;
@@ -102,12 +105,17 @@ export const LoanProductSlice = createSlice({
         setLoanProductSize: (state, action: PayloadAction<string>) => {
             state.loanProductSize = action.payload;
         },
+        setSponsors: (state, action: PayloadAction<SponsorsObj[]>) => {
+            state.sponsors = action.payload;
+        },
     }})
 
     export const {setLoanProductId,setLoanProductName,
         setLoanProductField,clearLoanProductField, 
         setLoanProductFieldStepTwo,markStepCompleted,
         resetCompletedSteps,setTotalNumberOfLoanees,
-        setIsEdit,setFundroductId,setLoanProductSize} = LoanProductSlice.actions;
+        setIsEdit,setFundroductId,setLoanProductSize,
+        setSponsors
+    } = LoanProductSlice.actions;
 
     export default LoanProductSlice.reducer;

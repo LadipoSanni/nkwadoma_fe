@@ -296,10 +296,6 @@ const Index = () => {
                             <p className={` text-[#6A6B6A] text-[14px] ${inter.className} `}>Loan product size</p>
                             <p className={` text-[#212221] text-[14px] ${inter.className} `} >{formatAmount(selectedLoanProduct?.loanProductSize)}</p>
                         </div>
-                        {/* <div className={ ` grid gap-3 `} >
-                            <p className={` text-[#6A6B6A] text-[14px] ${inter.className} `} >Actual amount available</p>
-                            <p className={` text-[#212221] text-[14px] ${inter.className} `} >{formatAmount(selectedLoanProduct?.totalAmountAvailable)}</p>
-                        </div> */}
                         <div className={ ` grid gap-3 `} >
                             <p className={` text-[#6A6B6A] text-[14px] ${inter.className} `} >Amount available to be offered</p>
                             <p className={` text-[#212221] text-[14px] ${inter.className} `} >{formatAmount(selectedLoanProduct?.availableAmountToBeOffered)}</p>

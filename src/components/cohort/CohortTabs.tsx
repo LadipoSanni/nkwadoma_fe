@@ -15,12 +15,22 @@ import { setItemSessionStorage } from '@/utils/storage';
 import SearchEmptyState from '@/reuseable/emptyStates/SearchEmptyState'
 import { MdSearch } from 'react-icons/md'
 import { store,useAppSelector } from '@/redux/store'
-import {setcohortStatusTab, setcohortId, setSelectedCohortInOrganization, setSelectedCohortInOrganizationType} from '@/redux/slice/create/cohortSlice'
+import {
+    setcohortStatusTab,
+    setcohortId,
+    setSelectedCohortInOrganization,
+    setSelectedCohortInOrganizationType,
+    resetCreateCohortField, setCreateCohortField, setTotalNumberOfLoanee,setSelectedProgramName,setTotalRefferedNumberOfLoanee
+} from '@/redux/slice/create/cohortSlice'
 import {capitalizeFirstLetters} from "@/utils/GlobalMethods";
 import { setcohortOrProgramRoute } from '@/redux/slice/program/programSlice';
-import { resetNotificationCohortId,setCreateCohortField,resetCreateCohortField } from '@/redux/slice/create/cohortSlice';
+import { resetNotificationCohortId } from '@/redux/slice/create/cohortSlice'
+import {setUnderlineTabCurrentTab} from "@/redux/slice/layout/adminLayout";
+
 import EditCohort from './CreateCohort'
 import { LoanBreakDowns } from './CreateCohort'
+import DeletionRestrictionMessageProps from './DeletionRestrictionMessageProps'
+import { resetCurrentProgramId } from '@/redux/slice/program/programSlice'
 
 interface allCohortsProps extends TableRowData {
   name:string,
@@ -72,13 +82,18 @@ const CohortTabs = (
               setDeleteProgram}:cohortList)  => {
   const [cohortId, setCohortId] =  React.useState("")
   const [isOpen, setIsOpen] = React.useState(false);
- const organizationTabStatus = useAppSelector(store => store?.organization?.organizationDetailTabStatus)
-
+  const organizationTabStatus = useAppSelector(store => store?.organization?.organizationDetailTabStatus)
+  const totalNumberOfLoanee = useAppSelector(store => store?.cohort?.numberOfLoanees)
+  const currentProgramId = useAppSelector(state => (state.program.currentProgramId))
+  const totalNumberOfRefferdLoanee = useAppSelector(store => store?.cohort?.numberOfRefferedLoanees)
     // const cohortTab = useAppSelector(state => state?.cohort?.cohortStatusTab)
 
   useEffect(() => {
+       if(currentProgramId){
+         store.dispatch(resetCurrentProgramId())
+       }
         store.dispatch(resetNotificationCohortId())
-     })
+     },[currentProgramId])
 
   const router = useRouter()
 
@@ -125,7 +140,8 @@ const CohortTabs = (
 
   const handleRowClick = (row: TableRowData) => {
     store.dispatch(setcohortId(String(row.id)))
-     if(["PORTFOLIO_MANAGER","MEEDL_SUPER_ADMIN","MEEDL_ADMIN","MEEDL_ASSOCIATE"].includes(userRole|| "")){
+      store.dispatch(setUnderlineTabCurrentTab('Details'))
+      if(["PORTFOLIO_MANAGER","MEEDL_SUPER_ADMIN","MEEDL_ADMIN","MEEDL_ASSOCIATE"].includes(userRole|| "")){
          const cohort = {name: String(row?.name),id: String(row?.id)}
          store.dispatch(setSelectedCohortInOrganization(cohort))
          if(organizationTabStatus === "cohort"){
@@ -151,11 +167,18 @@ const CohortTabs = (
 
   const handleDropdownClick = async (id:string,row: rowData) => {
     const breakdown = row?.loanBreakDowns as LoanBreakDowns[]
-    
+
     const formattedBreakdowns = breakdown?.map((item: LoanBreakDowns) => ({
       ...item,
       itemAmount: String(item.itemAmount)
   })) || [];
+ 
+  const programName =  row?.programName as string
+  const totalNumberOfLoanee = row?.numberOfLoanees as number
+  const totalNumberOfRefferedLoanee = row?.numberOfReferredLoanee as number
+   store.dispatch(setTotalNumberOfLoanee(totalNumberOfLoanee))
+   store.dispatch(setSelectedProgramName(programName))
+   store.dispatch(setTotalRefferedNumberOfLoanee(totalNumberOfRefferedLoanee))
 
     const cohortDetails = {
              id: row?.id as string ,
@@ -167,7 +190,7 @@ const CohortTabs = (
             loanBreakDowns: formattedBreakdowns || [],
             programName: ""
         };
-    
+
     if(id === "1") {
       setItemSessionStorage("programsId", String(row.programId))
       store.dispatch(setcohortId(String(row.id)))
@@ -184,7 +207,7 @@ const CohortTabs = (
       setCohortId(String(row.id))
       store.dispatch(setCreateCohortField(cohortDetails))
       if(cohortId){
-        setTimeout(()=>{ setIsOpen(true)},800)
+        setTimeout(()=>{setIsOpen(true)},800)
       }
       setTimeout(()=>{ setIsOpen(true)},800)
       
@@ -292,7 +315,25 @@ const CohortTabs = (
 
       </Tabs>
       <div>
-        { (
+        { totalNumberOfRefferdLoanee > 0? 
+        <TableModal
+         styeleType="styleBodyTwo"
+         isOpen={isOpen}
+         icon={Cross2Icon}
+         closeModal={() => {
+           setIsOpen(false)
+           setCohortId('')
+           store.dispatch(resetCreateCohortField())
+         }}
+         closeOnOverlayClick={true}
+        >
+         <DeletionRestrictionMessageProps
+          totalNumberOfLoanee={totalNumberOfRefferdLoanee}
+          image={ "/Icon - Warning.svg" }
+          message={`This program can not be edited because it has Cohort that contains ${totalNumberOfRefferdLoanee > 1? "loanees" : "loanee"} that has been referred` }
+          />
+        </TableModal>
+         : (
         <TableModal
         isOpen={isOpen}
         closeModal={() => {
@@ -306,11 +347,26 @@ const CohortTabs = (
         icon={Cross2Icon}
        
         >
-          <EditCohort setIsOpen={()=>{setIsOpen(false); setCohortId("")}} isEdit={true}/>  
+          <EditCohort setIsOpen={()=>{setIsOpen(false); setCohortId("")}} isEdit={true}/>
          
         </TableModal>
         )
            }
+
+       { totalNumberOfLoanee > 0?
+       <TableModal
+         isOpen={isDeleteOpen}
+          closeOnOverlayClick={true}
+          icon={Cross2Icon}
+          headerTitle=''
+          closeModal={() => {
+          setIsDeleteOpen(false)
+          }}
+           styeleType="styleBodyTwo"
+       >
+          <DeletionRestrictionMessageProps totalNumberOfLoanee={totalNumberOfLoanee}/>
+       </TableModal>
+        :
         <DeleteModal
         isOpen={isDeleteOpen}
         closeModal={() => {
@@ -329,11 +385,11 @@ const CohortTabs = (
         headerTitle='Cohort' 
         title='cohort'
         handleDelete={handleDelete}
-        id={cohortId}
+         id={cohortId}
         errorDeleting={errorDeleted}
         isLoading={isDeleteLoading}
         />
-        </DeleteModal>
+        </DeleteModal>}
 
       </div>
     </div>

@@ -15,7 +15,6 @@ import TableModal from "@/reuseable/modals/TableModal";
 import DeleteModal from '@/reuseable/modals/Delete-modal';
 import {useRouter} from 'next/navigation'
 import DeleteProgram from '@/reuseable/details/DeleteCohort'
-import EditProgramForm from '@/components/program/edit-program-form';
 import {useGetAllProgramsQuery} from '@/service/admin/program_query';
 import {useDeleteProgramMutation} from '@/service/admin/program_query';
 import {useGetProgramByIdQuery} from '@/service/admin/program_query';
@@ -27,9 +26,9 @@ import {useToast} from "@/hooks/use-toast"
 import { capitalizeFirstLetters } from '@/utils/GlobalMethods';
 import SearchEmptyState from '@/reuseable/emptyStates/SearchEmptyState'
 import { MdSearch } from 'react-icons/md'
-import {store} from "@/redux/store";
-import {setCurrentProgramId} from "@/redux/slice/program/programSlice";
-
+import {store,useAppSelector} from "@/redux/store";
+import {setCurrentProgramId,setInitialProgramFormValue,resetInitialProgramFormValue,setTotalNumberOfLoanee,resetCurrentProgramDetailData,resetProgramDetail} from "@/redux/slice/program/programSlice";
+import DeletionRestrictionMessageProps from '@/components/cohort/DeletionRestrictionMessageProps';
 
 interface TableRowData {
     [key: string]: string | number | null | React.ReactNode;
@@ -72,29 +71,16 @@ const ProgramView = () => {
     const {toast} = useToast()
 
     const router = useRouter()
+    const numberOfLoanee = useAppSelector((state) => state?.program?.totalNumberOfLoanee)
 
     const [programView, setProgramView] = useState<viewAllProgramProps[]>([])
-    const [progamDetail, setProgramDetail] = useState({
-            id: "",
-            programDescription: "",
-            name: "",
-            durationType: "",
-            programStartDate: "",
-            duration: 0,
-            mode: "",
-            deliveryType: "",
-            totalAmountRepaid: 0,
-            totalAmountDisbursed: 0,
-            totalAmountOutstanding: 0,
-        }
-    )
+  
 
     const [programId, setProgramId] = useState("");
     const [isDeleteOpen, setIsDeleteOpen] = useState(false);
     const [editOpen, setEditOpen] = useState(false);
     const [deleteProgram, setDeleteProgram] = useState("");
 
-    // Conditional pageSize based on view
     const pageSize = view === 'grid' ? 10 : 100;
 
     const { data, isLoading, isFetching } = useGetAllProgramsQuery(
@@ -104,12 +90,12 @@ const ProgramView = () => {
         { refetchOnMountOrArgChange: true }
     );
     const [deleteItem,{isLoading: isDeleteLoading}] = useDeleteProgramMutation();
-    const { data: searchResults, isFetching: isSearchFetching, error: searchError } = useSearchProgramQuery(searchTerm, { skip: !searchTerm});
+    const { data: searchResults, isFetching: isSearchFetching, error: searchError } = useSearchProgramQuery({name:searchTerm,pageSize,
+        pageNumber: view === 'grid' ? pageNumber : 0}, { skip: !searchTerm});
     const { data: program, isLoading: loading, refetch } = useGetProgramByIdQuery(
         { id: programId },
         {
             skip: !programId,
-            refetchOnMountOrArgChange: true
         }
     );
 
@@ -119,6 +105,8 @@ const ProgramView = () => {
         setPageNumber(0);
         setProgramView([]);
         setHasNextPage(true);
+        store.dispatch(resetCurrentProgramDetailData())
+        store.dispatch(resetProgramDetail())
     }, [searchTerm, view]);
 
     useEffect(() => {
@@ -196,7 +184,6 @@ const ProgramView = () => {
 
     const handleProgramDetailsOnclick = (id: string) => {
         store.dispatch(setCurrentProgramId(id))
-        setProgramId(id)
         router.push('/program/program-details')
     }
 
@@ -277,8 +264,17 @@ const ProgramView = () => {
 
 
         } else {
-            setIsDeleteOpen(true)
-            setProgramId(String(row.id))
+            setProgramId(String(row.id));
+            if(programId){
+                await refetch();
+                setTimeout(() => {
+                    setIsDeleteOpen(true);
+                }, 700)
+            }
+            setTimeout(() => {
+                setIsDeleteOpen(true);
+            }, 700)
+
         }
     }
 
@@ -300,7 +296,15 @@ const ProgramView = () => {
             }, 700)
         } else if (optionId === "3") {
             setProgramId(id);
-            setIsDeleteOpen(true);
+            if(programId){
+                await refetch();
+                setTimeout(() => {
+                    setIsDeleteOpen(true);
+                }, 700)
+            }
+            setTimeout(() => {
+                setIsDeleteOpen(true);
+            }, 700)
 
         }
     };
@@ -323,8 +327,9 @@ const ProgramView = () => {
             const deletePro = await deleteItem({id}).unwrap();
             if (deletePro) {
                 setProgramView((prevData) => prevData.filter((item) => item.id !== id))
-                // setTimeout(() => {
                     setDeleteProgram("")
+                    setProgramId(""); 
+                    store.dispatch(resetInitialProgramFormValue())
                     setIsDeleteOpen(false)
                     toast({
                         description: deletePro?.message,
@@ -332,42 +337,33 @@ const ProgramView = () => {
                         duration: 1000
                     })
                 }
-                // , 600);
             
 
         } catch (error) {
             const err = error as ApiError;
             setDeleteProgram(err?.data?.message || "Program with loanee cannot be deleted")
-            // setTimeout(() => {
-            //     toast({
-            //         description: deleteProgram || "Program with loanee cannot be deleted",
-            //         status: "error",
-            //     })
-            // }, 600);
         }
     }
 
 
     useEffect(() => {
-        if (editOpen && program?.data) {
+        if ((editOpen || isDeleteOpen) && program?.data) {
             const detail = program?.data
-            setProgramDetail({
-                id: detail?.id || "",
-                programDescription: detail?.programDescription || "",
-                name: detail?.name || "",
-                durationType: detail?.durationType || "",
-                programStartDate: detail?.programStartDate || "",
-                duration: detail?.duration || 0,
-                mode: detail?.mode || "",
-                deliveryType: detail?.deliveryType || "",
-                totalAmountRepaid: detail?.totalAmountRepaid || 0,
-                totalAmountDisbursed: detail?.totalAmountDisbursed || 0,
-                totalAmountOutstanding: detail?.totalAmountOutstanding || 0,
-            });
-        }
-        // saveObjectItemToSessionStorage("programDetail",progamDetail)
+            const numberOfLoanee = program?.data?.numberOfLoanees
+            const programDetail = {
+                id: detail?.id  || "",
+                programName: detail?.name || "",
+                deliveryType: detail?.deliveryType ||  "",
+                programMode: detail?.mode ||  "",
+                programDuration:  String(detail?.duration)  ||  "",
+                programDescription: detail?.programDescription ||  "",
+            }
 
-    }, [editOpen, program])
+            store.dispatch(setInitialProgramFormValue(programDetail))
+            store.dispatch(setTotalNumberOfLoanee(numberOfLoanee))
+        }
+
+    }, [editOpen, program,isDeleteOpen])
 
 
 
@@ -415,15 +411,11 @@ const ProgramView = () => {
                                 headerTitle={"Create program"}
                                 className={"w-full"}
                                 icon={Cross2Icon}
-
+                                reset={()=> {store.dispatch(resetInitialProgramFormValue())}}
                         // width={`32%`}
                     >
 
                         <CreateProgram setIsOpen={setIsOpen}
-                            //  programDeliveryTypes={["ONSITE", "ONLINE","HYBRID"]}
-                            //  programModes={["PART_TIME", "FULL_TIME"]}
-                            //  programDurations={["3", "4"]}
-                            //  submitButtonText={"Create"}
                         />
 
                     </TableModal>
@@ -533,31 +525,54 @@ const ProgramView = () => {
                     <TableModal
                         isOpen={editOpen}
                         closeOnOverlayClick={true}
-                        closeModal={() => setEditOpen(!editOpen)}
+                        closeModal={() => {
+                            setEditOpen(!editOpen)
+                            store.dispatch(resetInitialProgramFormValue())
+                        }}
                         icon={Cross2Icon}
-                        headerTitle='Edit Program'
+                        headerTitle={numberOfLoanee > 0? '' : 'Edit Program'}
+                         styeleType={numberOfLoanee > 0? "styleBodyTwo" : "styleBody"}
                     >
-
-                        <EditProgramForm
-                            setIsOpen={setEditOpen}
-                            programDetail={progamDetail}
-                        />
+                    { numberOfLoanee > 0?
+                    <DeletionRestrictionMessageProps 
+                     image= "/Icon - Warning.svg"
+                    message={`This program can not be updated because it has Cohort that contains ${numberOfLoanee > 1? "loanees" : "loanee"}`}
+                    />
+                : 
+              <CreateProgram setIsOpen={setEditOpen} isEdit={true}/>}
                     </TableModal>
                 )
                 }
-                <DeleteModal
+              { numberOfLoanee > 0? 
+              <TableModal
+              isOpen={isDeleteOpen}
+              closeOnOverlayClick={true}
+              closeModal={() => {
+                  setIsDeleteOpen(false)
+                  setDeleteProgram("")
+                  store.dispatch(resetInitialProgramFormValue())
+              }}
+              icon={Cross2Icon}
+               styeleType="styleBodyTwo"
+              >
+              <DeletionRestrictionMessageProps 
+              message={`This program can not be deleted because it has Cohort that contains ${numberOfLoanee > 0? "loanees" : "loanee"}`}
+              /> 
+              </TableModal> : 
+              <DeleteModal
                     isOpen={isDeleteOpen}
                     closeOnOverlayClick={true}
                     closeModal={() => {
                         setIsDeleteOpen(false)
-                        setDeleteProgram("")
+                         setDeleteProgram("")
+                         setProgramId(""); 
+                         store.dispatch(resetInitialProgramFormValue())
                     }}
                     icon={Cross2Icon}
                     width='auto'
                 >
                     <DeleteProgram
                         setIsOpen={() =>{ setIsDeleteOpen(false)
-                            setDeleteProgram("")
                                         }}
                         headerTitle='Program'
                         title='program'
@@ -566,7 +581,7 @@ const ProgramView = () => {
                         errorDeleting={deleteProgram}
                         isLoading={isDeleteLoading}
                     />
-                </DeleteModal>
+                </DeleteModal>}
             </div>
 
         </main>

@@ -1,14 +1,15 @@
 import React from 'react';
-import {cabinetGrotesk, inter, inter500} from '@/app/fonts'
 import {Icon} from "@iconify/react";
-import {useRouter} from 'next/navigation';
-import GeneralEmptyState from "@/reuseable/emptyStates/General-emptystate";
-import { useViewFinancierDashboardQuery } from '@/service/financier/api';
-import InvestmentCard from "@/reuseable/cards/Investment-card/InvestmentCard";
-import {CurrentMyInvestmentVehicleDetails} from "@/types/Component.type";
 import { store } from "@/redux/store";
-import { setCurrentMyInvestmentVehicleDetails } from "@/redux/slice/financier/financier";
+import {useRouter} from 'next/navigation';
+import { toSentenceCase } from '@/utils/GlobalMethods';
+import {cabinetGrotesk, inter, inter500} from '@/app/fonts';
 import { setCurrentNavbarItem } from "@/redux/slice/layout/adminLayout";
+import { useViewFinancierDashboardQuery } from '@/service/financier/api';
+import {CurrentMyInvestmentVehicleDetails} from "@/types/Component.type";
+import GeneralEmptyState from "@/reuseable/emptyStates/General-emptystate";
+import InvestmentCard from "@/reuseable/cards/Investment-card/InvestmentCard";
+import { setCurrentMyInvestmentVehicleDetails } from "@/redux/slice/financier/financier";
 import MarketPlaceInvestmentGrid from "@/reuseable/Skeleton-loading-state/Skeleton-for-MarketPlace";
 
 const MyInvestments = () => {
@@ -127,10 +128,8 @@ const MyInvestments = () => {
                         const statusClass = getStatusColor(statusValue ?? "")
                         const borderClass = getStatusBorderColor(statusValue ?? "")
 
-                        const truncatedTitle =
-                            vehicle.name.length > 20
-                                ? vehicle.name.slice(0, 20) + "..."
-                                : vehicle.name;
+                        const formattedName = toSentenceCase(vehicle.name);
+                        const truncatedTitle = formattedName.length > 20 ? formattedName.slice(0, 20) + '...' : formattedName;
 
                         const typeTextColor = vehicle?.investmentVehicleType === "COMMERCIAL" ? "text-[#142854]" : "text-[#045620]";
 
@@ -141,7 +140,7 @@ const MyInvestments = () => {
                             imageSrc,
                             investmentVehicleName: truncatedTitle,
                             statusClass,
-                            status: statusValue,
+                            status: toSentenceCase(statusValue),
                             statuses: status,
                             borderClass,
                             percentage: vehicle.rate || 0,

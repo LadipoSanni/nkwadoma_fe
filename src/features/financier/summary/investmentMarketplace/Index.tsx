@@ -1,13 +1,14 @@
 import React from 'react';
-import {cabinetGrotesk, inter, inter500} from '@/app/fonts'
-import {useRouter} from 'next/navigation';
-import InvestmentCard from '@/reuseable/cards/Investment-card/InvestmentCard';
-import {useGetMarketplaceInvestmentVehiclesByTypeAndStatusQuery} from '@/service/financier/marketplace';
 import {store} from '@/redux/store';
-import {setMarketInvestmentVehicleId} from '@/redux/slice/investors/MarketPlaceSlice';
+import {useRouter} from 'next/navigation';
+import {MdOutlineAccountBalance} from 'react-icons/md';
+import { toSentenceCase } from '@/utils/GlobalMethods';
+import {cabinetGrotesk, inter, inter500} from '@/app/fonts';
 import {setCurrentNavbarItem} from '@/redux/slice/layout/adminLayout';
 import GeneralEmptyState from "@/reuseable/emptyStates/General-emptystate";
-import {MdOutlineAccountBalance} from 'react-icons/md';
+import InvestmentCard from '@/reuseable/cards/Investment-card/InvestmentCard';
+import {setMarketInvestmentVehicleId} from '@/redux/slice/investors/MarketPlaceSlice';
+import {useGetMarketplaceInvestmentVehiclesByTypeAndStatusQuery} from '@/service/financier/marketplace';
 
 type investmentVehicleType = {
     id: string;
@@ -95,7 +96,7 @@ const InvestmentMarketplace = () => {
                     className={`${cabinetGrotesk.className} font-medium text-black500 md:text-[24px] text-[20px] leading-[150%]`}
                     id={'investmentMarketplaceTitle'}
                 >
-                    Investment Marketplace
+                    Investment marketplace
                 </h5>
                 <p
                     onClick={handleRoute}
@@ -136,8 +137,9 @@ const InvestmentMarketplace = () => {
                         const borderClass = getStatusBorderColor(statusValue ?? '');
                         const typeTextColor =
                             vehicle.investmentVehicleType === 'COMMERCIAL' ? 'text-[#142854]' : 'text-[#045620]';
+                        const formattedName = toSentenceCase(vehicle.name);
                         const truncatedTitle =
-                            vehicle.name.length > 20 ? vehicle.name.slice(0, 20) + '...' : vehicle.name;
+                            formattedName.length > 20 ? formattedName.slice(0, 20) + '...' : formattedName;
                         const cardProps = {
                             id: vehicle.id,
                             backgroundColor,
@@ -145,7 +147,7 @@ const InvestmentMarketplace = () => {
                             imageSrc,
                             investmentVehicleName: truncatedTitle,
                             statusClass,
-                            status: statusValue,
+                            status: toSentenceCase(statusValue),
                             statuses: status,
                             borderClass,
                             percentage: vehicle.rate || 0,

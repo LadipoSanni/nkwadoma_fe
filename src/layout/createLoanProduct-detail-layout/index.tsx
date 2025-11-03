@@ -42,7 +42,6 @@ function LoanProductDetailsLayout({children}:props) {
     const router = useRouter()
     const [deleteLoanProduct,{isLoading}] = useDeleteLoanProductMutation()
 
-
     const {toast} = useToast()
 
     const handleBackButtonClick=()=> {
@@ -129,7 +128,7 @@ function LoanProductDetailsLayout({children}:props) {
          </div>
         </div>
         <div>
-        <TabSwitch tabData={loanProductTab} defaultTab='/organizations/detail'>
+        <TabSwitch tabData={loanProductTab} defaultTab='/loan-product/loan-product-details'>
    {children}
     </TabSwitch>
         </div>

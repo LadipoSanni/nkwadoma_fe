@@ -1,69 +1,196 @@
 'use client'
-import React from 'react';
-import {useViewAllLoanDisbursalQuery, useViewLoansTotalCalculationQuery} from "@/service/admin/loan/Loan-disbursal-api";
-import { capitalizeFirstLetters } from '@/utils/GlobalMethods';
-import {inter, inter600,inter700, inter500} from '@/app/fonts';
-import {LoanType} from "@/types/loan/loan-request.type";
+import React, {useCallback, useEffect, useRef, useState} from 'react';
+import {useViewLoaneeLoansQuery, useViewLoansTotalCalculationQuery, useSearchLoaneeLoanQuery} from "@/service/admin/loan/Loan-disbursal-api";
 import {useRouter} from "next/navigation";
 import { setClickedLoanId } from '@/redux/slice/loan/selected-loan';
 import { store } from '@/redux/store';
 import Details from "@/components/loanee-my-profile/Details";
 import styles from '@/features/Overview/index.module.css';
-import {formatAmount} from "@/utils/Format";
+import GeneralEmptyState from "@/reuseable/emptyStates/General-emptystate";
+import {MdPersonOutline} from "react-icons/md";
+import { LoanType} from "@/types/loanee";
+import SearchInput from "@/reuseable/Input/SearchInput";
+import {useDebounce} from "@/hooks/useDebounce";
+import LoaneeViewLoan from "@/reuseable/cards/LoaneeViewLoan";
+import {inter500} from "@/app/fonts";
+
+interface LoanGridProps  {
+    data: LoanType[];
+    lastCardObserver: React.RefCallback<HTMLDivElement>;
+    isLoading: boolean;
+    handleClick: (id: string) => void;
+}
 
 const Myloans = () => {
-
+    const [pageNumber,setPageNumber] = useState<number>(0);
+    const [pageSize, setPageSize] = useState<number>(10);
     const request = {
-        pageSize: 400,
-        pageNumber: 0,
+        pageSize: pageSize,
+        pageNumber: pageNumber,
     }
     const router = useRouter()
-    const {data: loaneeLoans, isLoading  } = useViewAllLoanDisbursalQuery(request)
+    const observer = useRef<IntersectionObserver | null>(null);
+    const {data: loaneeLoans, isLoading , isFetching } = useViewLoaneeLoansQuery(request)
     const {data:loansTotalCalculations,isLoading:loansTotalCalculationsLoading } = useViewLoansTotalCalculationQuery({})
+    const [hasMore, setHasMore] = useState(true);
+    const [fetchData, setFetchData] = useState<LoanType[]>([]);
+    const [searchTerm, setSearchTerm] = useState('');
+    const [debouncedSearchTerm] = useDebounce(searchTerm, 100);
+    const searchParameter = {
+        pageNumber: pageNumber,
+        pageSize: pageSize,
+        organizationName:debouncedSearchTerm,
+    }
+    const [loadedData, setLoadedData] = useState<LoanType[]>([]);
+
+    const {data: searchData, isLoading: isSearching, isFetching: isFetchingSearchedData} = useSearchLoaneeLoanQuery(searchParameter , {skip: !debouncedSearchTerm})
+    useEffect(() => {
+        if (!debouncedSearchTerm){
+            // setFetchData((prev) => {
+            //     const combined = [...prev, ...(loaneeLoans?.data?.body || [])];
+            //     const unique = Array.from(
+            //         new Map(combined.map((item) => [item.loanProgressId, item])).values()
+            //     );
+            //     return unique;
+            // });
+            setFetchData((prev) => {
+                // const combined = [...prev, ...[loadedData ,(loaneeLoans?.data?.body || [])]];
+                const combined = [...prev, ...(loadedData || []), ...(loaneeLoans?.data?.body || [])];
+                const seen = new Set<number>();
+                return combined.filter((item) => {
+                    if (seen.has(item.loanProgressId)) return false;
+                    seen.add(item.loanProgressId);
+                    return true;
+                });
+            });
+            setHasMore(loaneeLoans?.data?.hasNextPage)
+            setPageSize(loaneeLoans?.data?.pageSize)
+        }else{
+            setFetchData(searchData?.data?.body )
+            setHasMore(searchData?.data?.hasNextPage)
+            setPageSize(searchData?.data?.pageSize)
+        }
+    }, [loaneeLoans, searchData,debouncedSearchTerm]);
     const handleClick = (loanId:string) => {
         store.dispatch(setClickedLoanId(loanId))
         router.push('/my-loan-profile');
     }
+
+    const lastCardObserver = useCallback(
+        (node: HTMLDivElement | null) => {
+            if (isLoading || isFetching) return;
+
+            if (observer.current) observer.current.disconnect();
+
+            observer.current = new IntersectionObserver(
+                entries => {
+                    if (entries[0].isIntersecting && hasMore) {
+                        setPageNumber(prevPage => prevPage + 1);
+                    }
+                },
+                {
+                    rootMargin: "100px",
+                }
+            );
+
+            if (node) observer.current.observe(node);
+        },
+        [isLoading, isFetching, hasMore]
+    );
+
+    const LoadingSkeleton = () => (
+        <div className="grid grid-cols-2 md:grid-cols-2 gap-4 h-[50vh] px-4">
+            {[...Array(4)].map((_, i) => (
+                <div
+                    key={i}
+                    className="w-full h-[20rem] px-4 py-8 animate-pulse bg-[#f4f4f5] rounded-lg"
+                />
+            ))}
+        </div>
+    );
+
+    const EmptyState = () => (
+        <div className="h-60 relative bottom-3">
+            <GeneralEmptyState
+                icon={MdPersonOutline}
+                iconSize="1.8rem"
+                iconContainerClass="w-[50px] h-[50px]"
+                message={
+                    <div className="relative bottom-2">
+                        <p>
+                            {searchTerm
+                                ? "No matching loan found for the organization you searched."
+                                : "Loanee does not have loan"}
+                        </p>
+                    </div>
+                }
+                className="h-14"
+            />
+        </div>
+    );
+
+
+
+    const LoanGrid = ({ data, lastCardObserver, isLoading, handleClick }: LoanGridProps) => (
+        <div className="w-full h-full grid gap-4 md:grid-cols-2">
+            {data.map((loan:LoanType, index) => (
+                <div key={ "key"+loan.loanProgressId + index} ref={lastCardObserver}>
+                    <LoaneeViewLoan
+                        isLoading={isLoading}
+                        handleClick={() => {handleClick(loan.loanProgressId)}}
+                        data={loan}
+                    />
+                </div>
+            ))}
+        </div>
+    );
+
+    const RenderIf = ({ condition, children }: { condition: boolean; children: React.ReactNode }) =>
+        condition ? <>{children}</> : null;
+
+    const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        if (event?.target?.value !== ''){
+            setLoadedData(fetchData)
+        }
+        setSearchTerm(event.target.value);
+    };
+
+
     return (
-        <div className={` w-full h-full grid gap-8 px-4 py-4  md:px-8 md:py-6`}>
-            <div className={`w-full flex gap-4  md:gap-6 ${styles.overviewCard}   `}>
+        <main className={` w-full h-[85vh]  grid gap-8   pt-3 `}>
+            <div className={`w-full flex gap-4  md:gap-6 ${styles.overviewCard} px-4  `}>
                 <Details isLoading={loansTotalCalculationsLoading} sx={`  w-[20em] md:w-full  `} name={'Total loan amount'} valueType={"currency"}  id={'loaneeTotalLoan'} showAsWholeNumber={false}   maxWidth={'100%'}  value={loansTotalCalculations?.data?.totalAmountReceived}/>
                 <Details isLoading={loansTotalCalculationsLoading} sx={` w-[20em] md:w-full `} id={'loaneeTotalLoaneOutstanding'} showAsWholeNumber={false}   maxWidth={'100%'} name={'Total amount outstanding '} value={loansTotalCalculations?.data?.totalAmountOutstanding} valueType={'currency'}  />
                 <Details isLoading={loansTotalCalculationsLoading} sx={` w-[20em] md:w-full `} id={'loaneeTotalAmountRepaid'} showAsWholeNumber={false}   maxWidth={'100%'} name={'Total amount repaid '} value={loansTotalCalculations?.data?.totalAmountRepaid} valueType={'currency'}  />
             </div>
-
-          <div className={`w-full h-full grid  gap-4 md:grid md:grid-cols-3 `}>
-              {loaneeLoans?.data?.body?.map((loan:LoanType) => (
-                  <div  key={"key"+loan?.cohortName} className={` w-full h-fit pb-4 px-4  bg-[#F9F9F9] rounded-md `}>
-                      <div className={` flex gap-2   py-4  `}>
-                          <div className="rounded-full bg-[#ECECEC] flex py-1 px-2  ">
-                                  {loan?.organizationName?.at(0)}
-                          </div>
-                          <p id={'loaneeProgram'} data-testid={'loaneeProgram'}
-                             className={`${inter600.className} mt-auto mb-auto text-black text-[16px] `}>{capitalizeFirstLetters(loan?.organizationName)}</p>
-                      </div>
-                      <div
-                          className={`grid justify-items-start pl-3 py-3  rounded-md gap-4 ${isLoading ? `bg-white h-[10em] animate-pulse` : `bg-white `}    `}>
-                              <div className={`${isLoading ? `h-6 rounded bg-gray-200 animated_pulse w-[90%]  bg-[#F9F9F9]` : ``}`}>
-                                  <p className={` ${inter.className} ${isLoading ? `hidden` : ``} text-[#6A6B6A] text-[14px] `}>Loan amount</p>
-                                  <p className={`${inter500.className} ${isLoading ? `hidden` : `flex`} text-black text-[14px]`}>{formatAmount(Number(loan?.loanAmountApproved),false)}</p>
-                              </div>
-                              <div className={`${isLoading ? `h-6 rounded bg-gray-200 animated_pulse w-[90%]  bg-[#F9F9F9]` : ``}`}>
-                                  <p className={` ${inter.className} ${isLoading ? `hidden` : ``} text-[#6A6B6A] text-[14px] `}>Amount outstanding</p>
-                                  <div className={`${inter500.className} ${isLoading ? `hidden` : `flex `} text-black text-[14px]`}>{formatAmount(Number(loan?.loanAmountOutstanding),false)}</div>
-                              </div>
-                              <div className={`${isLoading ? `h-6 rounded bg-gray-200 animated_pulse w-[90%]  bg-[#F9F9F9]` : ``}`} >
-                                  <p className={` ${inter.className} ${isLoading ? `hidden` : ``}  text-[#6A6B6A] text-[14px] `}>Amount repaid</p>
-                                  <p className={`${inter500.className} ${isLoading ? `hidden` : `flex`}  text-black text-[14px]`}>{formatAmount(Number(loan?.loanAmountRepaid),false)}</p>
-                              </div>
-                      </div>
-                      <div className={`flex w-full  pt-3 pb-1 justify-end`}>
-                          <button onClick={() => {handleClick(loan?.id)}} className={`text-[14px] hover:bg-[#E8EAEE] focus:bg-[#E8EAEE] ${inter700.className} border border-meedlBlue w-fit h-fit px-4 py-2 rounded-md text-meedlBlue `}>View details</button>
-                      </div>
-                  </div>
-              ))}
-          </div>
-        </div>
+            <div className={` px-4 flex justify-between  `}>
+                <p className={` hidden lg:flex md:flex text-base mt-auto mb-auto  ${inter500.className} text-black `}>Loan portfolio</p>
+                <SearchInput
+                    id={'searchField'}
+                    data-testid={'searchField'}
+                    placeholder={'Search by organization'}
+                    value={searchTerm}
+                    onChange={handleSearchChange}
+                />
+            </div>
+            <section
+                className={` max-h-[48vh] overflow-y-auto  pl-4 pr-1 `}>
+                <RenderIf condition={isLoading || isFetching || isSearching || isFetchingSearchedData}>
+                    <LoadingSkeleton />
+                </RenderIf>
+                <RenderIf condition={!isLoading && !isFetching && !isSearching && !isFetchingSearchedData && fetchData?.length === 0}>
+                    <EmptyState />
+                </RenderIf>
+                <RenderIf condition={!isLoading && !isFetching && !isSearching && !isFetchingSearchedData && fetchData?.length > 0}>
+                    <LoanGrid
+                        data={fetchData}
+                        lastCardObserver={lastCardObserver}
+                        isLoading={isFetching || isLoading}
+                        handleClick={handleClick}
+                    />
+                </RenderIf>
+            </section>
+        </main>
     );
 };
 
