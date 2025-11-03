@@ -235,13 +235,14 @@ const FileUpload: React.FC<FileUploadProps> = ({
     useEffect(() => {
         if (file) {
             setFileName(truncateFileName(file.name, 13));
+            if (typeof window !== 'undefined'){
+                const handleResize = () => {
+                    setFileName(truncateFileName(file.name, window.innerWidth >= 768 ? 40 : 13));
+                };
 
-            const handleResize = () => {
-                setFileName(truncateFileName(file.name, window.innerWidth >= 768 ? 40 : 13));
-            };
-
-            window.addEventListener("resize", handleResize);
-            return () => window.removeEventListener("resize", handleResize);
+                window.addEventListener("resize", handleResize);
+                return () => window.removeEventListener("resize", handleResize);
+            }
         }
     }, [file]);
 

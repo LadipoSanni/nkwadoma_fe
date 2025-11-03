@@ -51,7 +51,6 @@ interface ApiError {
 
 function EditProgramForm({setIsOpen,programDetail}: Props) {
   const [updateProgram, { isLoading }] = useUpdateProgramMutation();
-  // const queryClient = useQueryClient();
   const [error, setError] =  useState('');
 
     const initialFormValue = {
