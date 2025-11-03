@@ -1,7 +1,7 @@
 import React from 'react';
 import {inter, inter500} from "@/app/fonts";
-import styles from './index.module.css'
 import UploadButton from "@/reuseable/buttons/UploadButton";
+import styles from '@/features/portfolio-manager/settings/index.module.css';
 
 interface ProfileProps {
     whoseProfile: "company" | "user",
@@ -11,7 +11,7 @@ interface ProfileProps {
     isLoading?: boolean;
 }
 
-const Profile = ({whoseProfile ,isLoading, userEmail, userName,companyUrl}: ProfileProps) => {
+const LoaneeProfile = ({whoseProfile ,isLoading, userEmail, userName,companyUrl}: ProfileProps) => {
 
 
     const userDetails = [
@@ -38,7 +38,7 @@ const Profile = ({whoseProfile ,isLoading, userEmail, userName,companyUrl}: Prof
                          id={item.id} data-testid={item.id}>
                         <p className={` ${inter500.className} text-[14px] `}>{item.details}</p>
                         <div
-                            className={`w-full ${isLoading ? 'bg-[#D7D7D7] animate-pulse  py-6 '  : 'border py-3 border-[#D7D7D7] '} pl-3 h-fit  text-[14px] ${inter.className}  rounded-md `}
+                            className={`w-full ${isLoading ? 'bg-[#D7D7D7] animate-pulse  py-6 '  : 'border py-3 border-[#D7D7D7] '} pl-3 mo  h-fit  text-[14px] ${inter.className}  rounded-md `}
                         >
                             {item.value}
                         </div>
@@ -50,4 +50,4 @@ const Profile = ({whoseProfile ,isLoading, userEmail, userName,companyUrl}: Prof
     );
 };
 
-export default Profile;
+export default LoaneeProfile;
