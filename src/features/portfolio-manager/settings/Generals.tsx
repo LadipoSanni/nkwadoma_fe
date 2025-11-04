@@ -30,11 +30,9 @@ export const Generals = () => {
 
     const getCurrentDataList = () => {
         switch (currentTab) {
-            case 0: <div> 
-                        { userRole === 'LOANEE' ? <LoaneeProfile whoseProfile={'user'} userEmail={userEmail} userName={userFullName} /> :
-                            <Profile  whoseProfile={'user'} userEmail={userEmail} userName={userFullName}/>
-                        }
-                    </div>
+            case 0:
+                return userRole === 'LOANEE' ? <LoaneeProfile whoseProfile={'user'} userEmail={userEmail} userName={userFullName} /> :
+                    <Profile  whoseProfile={'user'} userEmail={userEmail} userName={userFullName}/>;
             case 1:
                 return <ChangePassword/>;
             case 2:
@@ -59,4 +57,3 @@ export const Generals = () => {
         </div>
     );
 };
-
