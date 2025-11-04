@@ -15,12 +15,14 @@ interface Props {
 
 const WalletBalance = ({balance}:Props) => {
     const [isEyeOpen,setIsEyeOpen] = React.useState(false);
+
+
     return (
         <div
-            className={` w-full h-[13rem] flex justify-between rounded-md bg-gradient-to-r from-[#142854] to-[#093086] `}
+            className={` w-full h-[13rem] grid md:flex md:justify-between rounded-md bg-gradient-to-r from-[#142854] to-[#093086] `}
         >
             <div
-                className={` w-full grid gap-5  mt-auto mb-10   pl-10 h-fit    `}
+                className={` w-full  grid gap-5 pl-2  md:mt-auto md:mb-10   md:pl-10 md:h-fit  h-full   `}
             >
                 <div>
                     <p className={` ${inter.className} text-white text-xs `}>Wallet balance</p>
@@ -43,7 +45,9 @@ const WalletBalance = ({balance}:Props) => {
 
                     </div>
                 </div>
-                <div className={` flex gap-4 `}>
+                <div
+                    style={{msOverflowStyle: 'none'}}
+                    className={`  mb-0 mt-auto h-fit  md:bg-none bg-red-200 overflow-x-auto md:w-fit w-full flex gap-4 `}>
                     <WalletButton
                         text={'Make payment'}
                         icon={<CircleArrow height={'20'} width={'20'}/>}
@@ -59,7 +63,7 @@ const WalletBalance = ({balance}:Props) => {
                 </div>
             </div>
             <div
-                className={`  mt-auto  `}
+                className={` mb-auto mt-0  md:mt-auto md:mb-0 lg:mb-0 lg:mt-auto  `}
             >
                 <WalletConnect/>
             </div>
