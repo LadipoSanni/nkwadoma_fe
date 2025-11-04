@@ -21,7 +21,7 @@ const Wallet = () => {
                 text={'Back'}
                 textColor={'meedlBlue'}
             />
-            <WalletBalance/>
+            <WalletBalance balance={200000}/>
         </div>
     );
 };
