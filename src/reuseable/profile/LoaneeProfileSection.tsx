@@ -8,11 +8,11 @@ interface ProfileSectionProps {
   children: ReactNode
 }
 
-const ProfileSection: React.FC<ProfileSectionProps> = ({ title, children }) => {
+const ProfileSection = ({ title, children }: ProfileSectionProps) => {
   return (
-    <div className="bg-card rounded-lg border border-border overflow-hidden">
-      <div className="bg-secondary/50 px-4 sm:px-6 py-3 sm:py-4 border-b border-border">
-        <h2 className="text-sm sm:text-base font-semibold text-foreground">{title}</h2>
+    <div className="rounded-lg overflow-hidden">
+      <div className="px-4 sm:px-6 py-3 sm:py-4">
+        <h2 className="text-sm sm:text-base py-3 px-2 font-semibold text-[#4D4E4D] bg-[#F2F2F2]">{title}</h2>
       </div>
       <div className="px-4 sm:px-6 py-4 sm:py-6">{children}</div>
     </div>

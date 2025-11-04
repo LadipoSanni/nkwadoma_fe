@@ -1,5 +1,6 @@
 import React from "react";
 import { Providers } from "@/app/provider";
+import { ConfigProvider } from "@/app/config-context";
 import { render, screen, fireEvent } from "@testing-library/react";
 import LoaneeProfileSetting from "@/features/portfolio-manager/settings/loanee-profile-settings/loaneeProfile";
 
@@ -25,9 +26,7 @@ jest.mock("@/reuseable/buttons/LoaneeUploadButton", () => {
   return UploadButton;
 });
 
-jest.mock(
-  "@/features/portfolio-manager/settings/loanee-profile-settings/update-profile/updateProfile",
-  () => {
+jest.mock( "@/features/portfolio-manager/settings/loanee-profile-settings/update-profile-modal/updateProfile", () => {
     const UpdateProfile = ({ isOpen }: { isOpen: boolean }) => {
       if (!isOpen) {
         return null;
@@ -39,38 +38,71 @@ jest.mock(
   }
 );
 
-describe("LoaneeProfileSetting Component", () => {
+jest.mock("@/service/users/Loanee_query", () => ({
+  loaneeApi: {
+    reducerPath: 'loaneeApi',
+    reducer: (state = {}, action) => state,
+    middleware: jest.fn(() => (next) => (action) => next(action))
+  },
+  useViewUserDetailQuery: jest.fn(() => ({
+    data: {
+      userIdentity: {
+        dateOfBirth: "1990-01-01",
+        gender: "Male",
+        stateOfOrigin: "Lagos",
+        stateOfResidence: "Lagos",
+        email: "test@example.com",
+        phoneNumber: "1234567890",
+        residentialAddress: "123 Test St",
+        avatar: "test-avatar.jpg"
+      },
+      highestLevelOfEducation: "Bachelor's Degree",
+      institutionName: "Test University",
+      nextOfKin: {
+        firstName: "John",
+        lastName: "Doe",
+        email: "john@example.com",
+        nextOfKinRelationship: "Brother",
+        contactAddress: "456 Test Ave"
+      }
+    },
+    isLoading: false,
+    error: null
+  }))
+}));
+
+describe("LoaneeProfileComponent", () => {
   beforeEach(() => {
     render(
-      <Providers>
-        <LoaneeProfileSetting
-          whoseProfile='user'
-          userName='user_name'
-          userEmail='user_email'
-        />
-      </Providers>
+      <ConfigProvider config={{
+        uploadPreset: 'test-preset',
+        cloudName: 'test-cloud',
+        googleMapsApiKey: 'test-key',
+        countryCodeUrl: 'test-url',
+        backendBaseUrl: 'test-backend'
+      }}>
+        <Providers>
+          <LoaneeProfileSetting
+            whoseProfile='user'
+          />
+        </Providers>
+      </ConfigProvider>
     );
   });
 
   test("renders the profile header and sections on page loading", () => {
     expect(screen.getByText("Profile")).toBeInTheDocument();
-    expect(
-      screen.getByText("Manage and update your personal details")
-    ).toBeInTheDocument();
+    expect(screen.getByText("Manage and update your personal details")).toBeInTheDocument();
     expect(screen.getByText("Basic details")).toBeInTheDocument();
     expect(screen.getByText("Contact")).toBeInTheDocument();
     expect(screen.getByText("Education")).toBeInTheDocument();
-    expect(screen.getByText("Next of kin")).toBeInTheDocument();
+    expect(screen.getByText("Next of Kin")).toBeInTheDocument();
   });
 
-  test('opens the modal when "Update profile" is clicked', () => {
-    expect(
-      screen.queryByTestId("update-profile-modal")
-    ).not.toBeInTheDocument();
+  test('should opens the modal when "Update profile" is clicked', () => {
+    expect(screen.queryByTestId("update-profile-modal")).not.toBeInTheDocument();
 
-    const updateButton = screen.getByRole("button", {
-      name: /Update profile/i
-    });
+    const updateButton = screen.getByRole("button", { name: /Update profile/i });
     fireEvent.click(updateButton);
 
     expect(screen.getByTestId("update-profile-modal")).toBeInTheDocument();

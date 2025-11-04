@@ -127,6 +127,12 @@ export const loaneeApi = createApi({
                 method: 'GET'
             }),
         }),
+        viewUserDetail: builder.query({
+            query: () => ({
+                url: `/auth/userDetail`,
+                method: 'GET'
+            })
+        })
     })
 })
 
@@ -134,7 +140,7 @@ export const loaneeApi = createApi({
 
 export const {
     useSearchLoaneeLoansByAdminQuery,
-    // useIsIdentityVerifiedQuery,
+    useViewUserDetailQuery,
     useSearchLoaneeByAdminsQuery,
     useViewLoaneeLoansByAdminQuery,
     useViewAllLoansTotalCountsByAdminsQuery,

@@ -1,7 +1,7 @@
 'use client'
 import React, {useEffect, useState} from 'react';
 import SettingTabs from "@/reuseable/tabs/settingTabs";
-import Profile from "@/features/portfolio-manager/settings/Profile";
+import Profile from "@/features/portfolio-manager/settings/profile";
 import BankDetails from "@/features/portfolio-manager/settings/bankDetails";
 import {store, useAppSelector} from '@/redux/store';
 import {setSelectedCompanyTab} from "@/redux/slice/loan/selected-loan";

@@ -63,7 +63,7 @@ describe("UpdateLoaneeProfile", () => {
     expect(onClose).toHaveBeenCalledTimes(1);
   });
 
-  test("update button loading state calls onUpdateSuccess with user new data", () => {
+  test("update button loading state calls onUpdateSuccess with user new data", async () => {
     render(<UpdateLoaneeProfile {...profileUpdateProps} />);
 
     const residenceInput = screen.getByLabelText(/State of residence/i);
@@ -74,10 +74,12 @@ describe("UpdateLoaneeProfile", () => {
 
     jest.advanceTimersByTime(1000);
 
-    expect(onUpdateSuccess).toHaveBeenCalledTimes(1);
-    expect(onUpdateSuccess).toHaveBeenCalledWith({
-      education: "M.Sc. Education",
-      stateOfResidence: "Abuja"
+    await waitFor(() => {
+      expect(onUpdateSuccess).toHaveBeenCalledTimes(1);
+      expect(onUpdateSuccess).toHaveBeenCalledWith({
+        education: "M.Sc. Education",
+        stateOfResidence: "Abuja"
+      });
     });
     expect(screen.getByRole("button", { name: /Update/i })).toBeEnabled();
   });

@@ -3,7 +3,6 @@ import styles from './index.module.css'
 import LoaneeProfile from './loaneeProfile';
 import React, {useEffect, useState} from 'react';
 import {store, useAppSelector} from '@/redux/store';
-import {getItemSessi""onStorage} from "@/utils/storage";
 import TwoFAa from "@/features/portfolio-manager/settings/TwoFAa";
 import LoaneeSettingTabs from '@/reuseable/tabs/loaneeSettingTabs';
 import { setSelectedGeneralTab } from '@/redux/slice/loan/selected-loan';
@@ -17,8 +16,6 @@ export const LoaneeProfilePage = () => {
     ]
     const selectedCompanyTab = useAppSelector(state => state.selectedLoan.selectedGeneralTab)
     const [currentTab, setCurrentTab] = useState(selectedCompanyTab)
-    const  userFullName = getItemSessionStorage('user_name')
-    const userEmail = getItemSessionStorage('user_email')
 
     useEffect(() => {
         store.dispatch(setSelectedGeneralTab(currentTab))
@@ -27,7 +24,7 @@ export const LoaneeProfilePage = () => {
     const getCurrentDataList = () => {
         switch (currentTab) {
             case 0:
-                return <LoaneeProfile  whoseProfile={'user'} userEmail={userEmail} userName={userFullName}/>;
+                return <LoaneeProfile  whoseProfile={'user'} />;
             case 1:
                 return <ChangePassword/>;
             case 2:
@@ -49,4 +46,3 @@ export const LoaneeProfilePage = () => {
         </div>
     );
 };
-
