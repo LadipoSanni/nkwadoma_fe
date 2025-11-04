@@ -37,6 +37,9 @@ const setMonthItem = (value: string | number) => {
     }else {
         setSelectedMonth(value)
     }
+    if(displayedMonth && selectedIndex && year && displayedYear) {
+       return ""
+    }
 }
 
 const clearMonthFilter = () => {
