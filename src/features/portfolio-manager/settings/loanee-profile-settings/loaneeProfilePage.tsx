@@ -3,7 +3,7 @@ import styles from './index.module.css'
 import LoaneeProfile from './loaneeProfile';
 import React, {useEffect, useState} from 'react';
 import {store, useAppSelector} from '@/redux/store';
-import {getItemSessionStorage} from "@/utils/storage";
+import {getItemSessi""onStorage} from "@/utils/storage";
 import TwoFAa from "@/features/portfolio-manager/settings/TwoFAa";
 import LoaneeSettingTabs from '@/reuseable/tabs/loaneeSettingTabs';
 import { setSelectedGeneralTab } from '@/redux/slice/loan/selected-loan';

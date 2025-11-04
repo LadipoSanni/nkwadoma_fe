@@ -8,6 +8,7 @@ export type Config = {
     cloudName?: string
     googleMapsApiKey?: string
     countryCodeUrl?: string
+    backendBaseUrl?:string
 
 }
 

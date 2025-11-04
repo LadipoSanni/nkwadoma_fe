@@ -27,7 +27,8 @@ async function getConfig() {
         uploadPreset: process.env.UPLOAD_PRESET,
         cloudName: process.env.CLOUD_NAME,
         googleMapsApiKey: process.env.GOOGLE_MAPS_API_KEY,
-        countryCodeUrl: process.env.COUNTRY_CODE_URL
+        countryCodeUrl: process.env.COUNTRY_CODE_URL,
+        backendBaseUrl:process.env.APP_DEV_AUTH_URL,
     }
 }
 

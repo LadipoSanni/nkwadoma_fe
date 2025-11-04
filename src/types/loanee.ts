@@ -235,6 +235,15 @@ export interface LoaneetDetails {
         "nextOfKinResponse": string,
         "identityVerified": boolean
     },
+    "nextOfKin": {
+        "id": string,
+        "firstName": string,
+        "lastName": string,
+        "email": string,
+        "phoneNumber": string,
+        "nextOfKinRelationship": string,
+        "contactAddress": string
+    },
     "loaneeLoanDetail": {
         "id": string,
         "tuitionAmount": string,

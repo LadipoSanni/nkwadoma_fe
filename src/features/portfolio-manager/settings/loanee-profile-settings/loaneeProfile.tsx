@@ -131,8 +131,8 @@ const LoaneeProfileSetting = ({whoseProfile, companyUrl}: ProfileProps) => {
     onClose={() => setIsModalOpen(false)}
     onUpdateSuccess={handleUpdateSuccess}
     currentData={{
-     education: profileData?.education || '',
-     stateOfResidence: profileData?.stateOfResidence || ''
+     education: profileData?.highestLevelOfEducation || '',
+     stateOfResidence: profileData?.userIdentity?.stateOfResidence || ''
     }}
    />
   </div>
