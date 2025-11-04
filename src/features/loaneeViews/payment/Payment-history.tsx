@@ -19,6 +19,12 @@ const [year, setYear] = useState<number | string>('');
 const [displayedYear, setDisplayedYear] = useState('')
 const router = useRouter()
 
+const handle =() => {
+  if(displayedMonth && selectedIndex && year && displayedYear){
+     return ""
+  }
+}
+
 const [pageNumber, setPageNumber] = useState(0);
   const pageSize = 20;
 
@@ -30,6 +36,8 @@ const [pageNumber, setPageNumber] = useState(0);
       setPageNumber
     );
   }, [pageNumber, transactionsHistory]);
+
+
 
 const setMonthItem = (value: string | number) => {
     if (value === selectedMonth){
@@ -121,6 +129,9 @@ const clearMonthFilter = () => {
     hasNextPage={pagination.hasNextPage}
     className={`h-[52vh] ${styles.container}`}
     />
+   </div>
+   <div className='hidden' onClick={handle}>
+
    </div>
     </div>
   )
