@@ -16,19 +16,43 @@ interface Props {
 const WalletBalance = ({balance}:Props) => {
     const [isEyeOpen,setIsEyeOpen] = React.useState(false);
 
+    const renderWalletButton = (style: string) => {
+        return(
+            <div
+                style={{
+                    msOverflowStyle: 'none',
+                    scrollbarWidth: 'none'
+                }}
+                className={`  px-3  md:px-0  mt-auto h-fit  ${style}  overflow-x-auto md:w-fit w-full  gap-4 `}>
+                <WalletButton
+                    text={'Make payment'}
+                    icon={<CircleArrow height={'20'} width={'20'}/>}
+                />
+                <WalletButton
+                    text={'Fund wallet'}
+                    icon={<FundWallet height={'20'} width={'20'}/>}
+                />
+                <WalletButton
+                    text={'Withdraw'}
+                    icon={<Withdraw height={'20'} width={'20'}/>}
+                />
+            </div>
+        )
+    }
+
 
     return (
         <div
-            className={` w-full h-[13rem] grid md:flex md:justify-between rounded-md bg-gradient-to-r from-[#142854] to-[#093086] `}
+            className={` w-full h-fit py-4 md:py-0   md:h-[13rem] grid md:flex md:justify-between rounded-md bg-gradient-to-r from-[#142854] to-[#093086] `}
         >
             <div
-                className={` w-full  grid gap-5 pl-2  md:mt-auto md:mb-10   md:pl-10 md:h-fit  h-full   `}
+                className={` w-full flex justify-between   md:grid gap-5 pl-2  md:mt-auto md:mb-10   md:pl-10 md:h-fit  h-full   `}
             >
-                <div>
+                <div className={` mt-auto mb-auto  `}>
                     <p className={` ${inter.className} text-white text-xs `}>Wallet balance</p>
                     <div className={` flex gap-2  w-fit  ${inter600.className} text-white   `}>
                         {isEyeOpen ?
-                            <p id={'balance'} data-testid={'balance'} className={` ${inter600.className} text-white text-3xl  `}>{formatAmount(balance)}</p>
+                            <p id={'balance'} data-testid={'balance'} className={` ${inter600.className} text-xl  text-white md:text-3xl  `}>{formatAmount(balance)}</p>
                             :
                             <div id={'closeIcon'} data-testid={'closeIcon'} className={` flex gap-2 `}>
                                 <GoDotFill className={` text-white `} />
@@ -45,28 +69,19 @@ const WalletBalance = ({balance}:Props) => {
 
                     </div>
                 </div>
+                {renderWalletButton(` md:flex hidden `)}
                 <div
-                    style={{msOverflowStyle: 'none'}}
-                    className={`  mb-0 mt-auto h-fit  md:bg-none bg-red-200 overflow-x-auto md:w-fit w-full flex gap-4 `}>
-                    <WalletButton
-                        text={'Make payment'}
-                        icon={<CircleArrow height={'20'} width={'20'}/>}
-                    />
-                    <WalletButton
-                        text={'Fund wallet'}
-                        icon={<FundWallet height={'20'} width={'20'}/>}
-                    />
-                    <WalletButton
-                        text={'Withdraw'}
-                        icon={<Withdraw height={'20'} width={'20'}/>}
-                    />
+                    className={` md:hidden flex mb-auto mt-0  md:mt-auto md:mb-0 lg:mb-0 lg:mt-auto  `}
+                >
+                    <WalletConnect/>
                 </div>
             </div>
             <div
-                className={` mb-auto mt-0  md:mt-auto md:mb-0 lg:mb-0 lg:mt-auto  `}
+                className={` hidden md:flex  mb-auto mt-0  md:mt-auto md:mb-0 lg:mb-0 lg:mt-auto  `}
             >
                 <WalletConnect/>
             </div>
+            {renderWalletButton(` md:hidden flex `)}
         </div>
     );
 };
