@@ -9,10 +9,12 @@ interface props {
     text: string,
     handleClick: ()=> void,
     sx?: string,
+    className?: string,
+    isShow?: boolean
 
 }
 
-const BackButton = ({id,text,sx, textColor, handleClick, iconBeforeLetters}: props) => {
+const BackButton = ({id,text,sx, textColor, handleClick, iconBeforeLetters,className,isShow = true}: props) => {
     return (
         <button
             id={id}
@@ -20,13 +22,13 @@ const BackButton = ({id,text,sx, textColor, handleClick, iconBeforeLetters}: pro
             className={`w-fit h-fit md:w-fit md:flex items-center  ${sx} text-${textColor} md:fit flex gap-1`}
             onClick={handleClick}
         >
-            {iconBeforeLetters &&
+            {iconBeforeLetters && isShow &&
                 <MdArrowBack  className={` h-4 w-4 ${textColor ? `text-[#142854]` : `hover:text-[#435376]`} `} style={{color: `${textColor}`}}/>
             }
             <span
                 style={{color: `${textColor}`}}
-                id={ text+`id`} data-testid={ text+`id`} className={` ${inter500.className} text-[11px] ${textColor ? `text-[#142854]` : `hover:text-[#435376]`}   text-${textColor} `}>{text}</span>
-            {!iconBeforeLetters &&
+                id={ text+`id`} data-testid={ text+`id`} className={` ${inter500.className} ${className} text-[11px] ${textColor ? `text-[#142854]` : `hover:text-[#435376]`}   text-${textColor} `}>{text}</span>
+            {!iconBeforeLetters && isShow &&
                 <MdArrowForward  className={`${textColor ? `text-[#142854]` : `hover:text-[#435376]`} `} style={{color: `${textColor}`}}/>
             }
 

@@ -8,11 +8,11 @@ import { MdClose, MdHorizontalRule, MdOutlineAdd, MdOutlineCameraAlt } from "rea
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { Button } from '@/components/ui/button';
 import CapturePhotoWithTips from "@/components/SmartCameraWrapper/capturePhotoWithTips/Index";
-import CryptoJS from "crypto-js";
 import { useUploadImageToCloudinary } from "@/utils/UploadToCloudinary";
 import { useVerifyIdentityMutation } from "@/service/users/Loanee_query";
 import WarningModal from "@/reuseable/modals/WarningDialog/WarningModal";
 import {useAppSelector} from "@/redux/store";
+import {encryptAction} from "@/app/encrypt/action";
 
 interface IdentityVerificationModalProps {
     isOpen: boolean;
@@ -45,7 +45,7 @@ const IdentityVerificationModal: React.FC<IdentityVerificationModalProps> = ({
     const methods = useForm<FormData>({ mode: 'onChange' });
     const [isBVNOpen, setIsBVNOpen] = useState(false);
     const [isNINOpen, setIsNINOpen] = useState(false);
-    const [isDataError, setDataError] = useState("");
+    const [isDataError, setIsDataError] = useState("");
     const [loaneeIdentityData, setLoaneeIdentityData] = useState<FormData>({
         imageUrl: "",
         loanReferralId: "",
@@ -95,24 +95,21 @@ const IdentityVerificationModal: React.FC<IdentityVerificationModalProps> = ({
         setIsSecondModalOpen(false);
     };
 
-    const onSubmit: SubmitHandler<FormData> = (data) => {
-        const encryptionKey = process.env.APP_DEV_IV_ENCRYPTION_SECRET_KEY;
-        const ivKey = process.env.APP_DEV_IV_KEY;
-        let iv;
-        if (ivKey) {
-            iv = CryptoJS.enc.Utf8.parse(ivKey);
-        }
+    async  function  handleEncrypt(text: string) {
+        return  await encryptAction(text);
+    }
 
-        let secretKey;
-        if (encryptionKey) {
-            secretKey = CryptoJS.enc.Utf8.parse(encryptionKey.padEnd(16, " "));
-            data.bvn = CryptoJS.AES.encrypt(data.bvn, secretKey, { iv: iv }).toString();
-            data.nin = CryptoJS.AES.encrypt(data.nin, secretKey, { iv: iv }).toString();
+    const onSubmit: SubmitHandler<FormData> = async (data) => {
+        const encryptedBvn = await handleEncrypt(data.bvn);
+        const encryptedNin = await handleEncrypt(data.nin);
+        if (encryptedBvn && encryptedNin ){
+            data.bvn = encryptedBvn;
+            data.nin = encryptedNin;
             setLoaneeIdentityData(data);
             setIsSecondModalOpen(true);
             onClose();
         } else {
-            setDataError("Unable to encrypt data. Please try again later.");
+            setIsDataError("Unable to encrypt data. Please try again later.");
         }
     };
 
@@ -121,7 +118,6 @@ const IdentityVerificationModal: React.FC<IdentityVerificationModalProps> = ({
         if (stream) {
             stream.getTracks().forEach((track) => {
                 track.stop() });
-            // dispatch(clearCameraStream());
             setStream(null)
             if (videoRef.current) {
                 videoRef.current.srcObject = null;        }
@@ -130,7 +126,6 @@ const IdentityVerificationModal: React.FC<IdentityVerificationModalProps> = ({
     return (
         <>
             <Dialog open={isOpen} onOpenChange={onClose}>
-                {/*<DialogOverlay className="bg-[rgba(52,64,84,0.70)] " />*/}
                 <DialogContent className={'max-w-[425px] md:max-w-[533px] [&>button]:hidden gap-6 py-5 pl-5 pr-2'}>
                     <DialogHeader className={'flex py-3'} id="createCohortDialogHeader">
                         <DialogTitle

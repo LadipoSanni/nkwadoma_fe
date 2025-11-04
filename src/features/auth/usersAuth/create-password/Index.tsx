@@ -14,9 +14,9 @@ import {persistor, store} from "@/redux/store";
 import {setCurrentNavbarItem,setCurrentNavBottomItem} from "@/redux/slice/layout/adminLayout";
 import {clearData} from "@/utils/storage";
 import { setMarketInvestmentVehicleId } from '@/redux/slice/investors/MarketPlaceSlice';
-import {encryptText} from "@/utils/encrypt";
 import {setLoanReferralId,setCohortLoaneeId } from "@/redux/slice/loan/selected-loan";
 import Link from 'next/link'
+import {encryptAction} from "@/app/encrypt/action";
 
 interface ApiError {
     status: number;
@@ -34,7 +34,6 @@ const CreatePassword = () => {
     const searchParams = useSearchParams()
     const [disableButton, setDisableButton] = useState(false)
     const [createPassword, { isLoading}] = useCreatePasswordMutation()
-    const encryptedPassword =  encryptText(password)
     const [errorMessage, setErrorMessage] = useState("")
     const disable = !criteriaStatus.every(Boolean) || password !== confirmPassword || disableButton;
 
@@ -205,11 +204,16 @@ const CreatePassword = () => {
         }
     }
 
+    async  function  handleEncrypt(inputedPassword: string) {
+        return  await encryptAction(inputedPassword);
+    }
+
 
     const handleCreatePassword = async (e?:React.MouseEvent<HTMLButtonElement>) => {
         e?.preventDefault()
         setDisableButton(true)
         const { token } = getUserToken();
+        const encryptedPassword = await handleEncrypt(password)
         try {
             const response = await createPassword({token: token
                 , password: encryptedPassword}).unwrap()
