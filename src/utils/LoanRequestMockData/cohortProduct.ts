@@ -1,13 +1,13 @@
 export const transactionsHistory = [
   {
-    "date": "2 May, 2025",
+    "date": "9 May, 2025",
     "description": "This is an example of when a description is getting very long and lommmnnnng",
     "status": "Successful",
     "type": "Paid via wallet",
     "amount": "N5,000,000.00"
   },
   {
-    "date": "2 May, 2025",
+    "date": "7 May, 2025",
     "description": "Load Repayment",
     "status": "Failed",
     "type": "",
@@ -21,7 +21,7 @@ export const transactionsHistory = [
     "amount": "N5,000,000.00"
   },
   {
-    "date": "2 May, 2025",
+    "date": "7 May, 2025",
     "description": "Utility Bill Payment - Electricity",
     "status": "Successful",
     "type": "Paid via linked account",
@@ -208,5 +208,216 @@ export const transactionsHistory = [
     "status": "Pending",
     "type": "Paid via linked account",
     "amount": "N95,000.00"
+  },
+  // Additional 30 transactions
+  {
+    "date": "29 May, 2025",
+    "description": "Rent Payment",
+    "status": "Successful",
+    "type": "Paid via linked account",
+    "amount": "N300,000.00"
+  },
+  {
+    "date": "29 May, 2025",
+    "description": "Insurance Premium",
+    "status": "Pending",
+    "type": "Paid via wallet",
+    "amount": "N45,000.00"
+  },
+  {
+    "date": "29 May, 2025",
+    "description": "Credit Card Payment",
+    "status": "Successful",
+    "type": "Paid via linked account",
+    "amount": "N120,000.00"
+  },
+  {
+    "date": "29 May, 2025",
+    "description": "Investment - Stocks",
+    "status": "Failed",
+    "type": "",
+    "amount": "N200,000.00"
+  },
+  {
+    "date": "29 May, 2025",
+    "description": "Home Appliances",
+    "status": "Successful",
+    "type": "Paid via wallet",
+    "amount": "N85,000.00"
+  },
+  {
+    "date": "5 June, 2025",
+    "description": "Loan Disbursement",
+    "status": "Successful",
+    "type": "Paid via linked account",
+    "amount": "N2,000,000.00"
+  },
+  {
+    "date": "5 June, 2025",
+    "description": "Tax Payment",
+    "status": "Pending",
+    "type": "Paid via wallet",
+    "amount": "N150,000.00"
+  },
+  {
+    "date": "5 June, 2025",
+    "description": "Business Supplies",
+    "status": "Successful",
+    "type": "Paid via linked account",
+    "amount": "N75,000.00"
+  },
+  {
+    "date": "5 June, 2025",
+    "description": "Online Course Payment",
+    "status": "Failed",
+    "type": "",
+    "amount": "N50,000.00"
+  },
+  {
+    "date": "5 June, 2025",
+    "description": "Pet Care Expenses",
+    "status": "Successful",
+    "type": "Paid via wallet",
+    "amount": "N25,000.00"
+  },
+  {
+    "date": "12 June, 2025",
+    "description": "Salary Credit",
+    "status": "Successful",
+    "type": "Paid via linked account",
+    "amount": "N750,000.00"
+  },
+  {
+    "date": "12 June, 2025",
+    "description": "Freelance Payment",
+    "status": "Pending",
+    "type": "Paid via wallet",
+    "amount": "N180,000.00"
+  },
+  {
+    "date": "12 June, 2025",
+    "description": "Bonus Payment",
+    "status": "Successful",
+    "type": "Paid via linked account",
+    "amount": "N100,000.00"
+  },
+  {
+    "date": "12 June, 2025",
+    "description": "Contract Work",
+    "status": "Failed",
+    "type": "",
+    "amount": "N250,000.00"
+  },
+  {
+    "date": "12 June, 2025",
+    "description": "Consultation Fee",
+    "status": "Successful",
+    "type": "Paid via wallet",
+    "amount": "N80,000.00"
+  },
+  {
+    "date": "19 June, 2025",
+    "description": "Property Investment",
+    "status": "Successful",
+    "type": "Paid via linked account",
+    "amount": "N1,500,000.00"
+  },
+  {
+    "date": "19 June, 2025",
+    "description": "Mutual Funds",
+    "status": "Pending",
+    "type": "Paid via wallet",
+    "amount": "N300,000.00"
+  },
+  {
+    "date": "19 June, 2025",
+    "description": "Fixed Deposit",
+    "status": "Successful",
+    "type": "Paid via linked account",
+    "amount": "N500,000.00"
+  },
+  {
+    "date": "19 June, 2025",
+    "description": "Treasury Bills",
+    "status": "Failed",
+    "type": "",
+    "amount": "N1,000,000.00"
+  },
+  {
+    "date": "19 June, 2025",
+    "description": "Bond Purchase",
+    "status": "Successful",
+    "type": "Paid via wallet",
+    "amount": "N750,000.00"
+  },
+  {
+    "date": "26 June, 2025",
+    "description": "Emergency Fund Transfer",
+    "status": "Successful",
+    "type": "Paid via linked account",
+    "amount": "N200,000.00"
+  },
+  {
+    "date": "26 June, 2025",
+    "description": "Family Support",
+    "status": "Pending",
+    "type": "Paid via wallet",
+    "amount": "N150,000.00"
+  },
+  {
+    "date": "26 June, 2025",
+    "description": "Friend Loan Repayment",
+    "status": "Successful",
+    "type": "Paid via linked account",
+    "amount": "N80,000.00"
+  },
+  {
+    "date": "26 June, 2025",
+    "description": "Emergency Medical",
+    "status": "Failed",
+    "type": "",
+    "amount": "N120,000.00"
+  },
+  {
+    "date": "26 June, 2025",
+    "description": "Urgent Travel",
+    "status": "Successful",
+    "type": "Paid via wallet",
+    "amount": "N95,000.00"
+  },
+  {
+    "date": "4 July, 2025",
+    "description": "Business Expansion",
+    "status": "Successful",
+    "type": "Paid via linked account",
+    "amount": "N2,500,000.00"
+  },
+  {
+    "date": "4 July, 2025",
+    "description": "Equipment Purchase",
+    "status": "Pending",
+    "type": "Paid via wallet",
+    "amount": "N450,000.00"
+  },
+  {
+    "date": "5 July, 2025",
+    "description": "Office Rent",
+    "status": "Successful",
+    "type": "Paid via linked account",
+    "amount": "N350,000.00"
+  },
+  {
+    "date": "5 July, 2025",
+    "description": "Staff Salary",
+    "status": "Failed",
+    "type": "",
+    "amount": "N800,000.00"
+  },
+  {
+    "date": "4 July, 2025",
+    "description": "Marketing Campaign",
+    "status": "Successful",
+    "type": "Paid via wallet",
+    "amount": "N200,000.00"
   }
-]
+];
