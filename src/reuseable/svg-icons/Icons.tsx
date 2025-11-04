@@ -63,3 +63,33 @@ export const WalletAddIcon = ({ className = "w-6 h-6", ...props }) => (
       />
     </svg>
   );
+
+  export const PaymentVerifiedIcon = ({ className = "w-6 h-6", ...props }) => (
+    <svg
+      width="60"
+      height="60"
+      viewBox="0 0 60 60"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      className={className}
+      {...props}
+    >
+      <path
+        d="M8.36328 40.4942L40.4358 8.42188M46.578 27.6392L41.0793 33.138M36.3863 37.775L33.9395 40.2217"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+      />
+      <path
+        d="M7.93668 40.3528C4.02111 36.4373 4.02111 30.0888 7.93668 26.1733L26.1733 7.93668C30.0888 4.02111 36.4373 4.02111 40.3528 7.93668L52.0633 19.6473C55.979 23.5629 55.979 29.9113 52.0633 33.8268L33.8268 52.0633C29.9113 55.979 23.5629 55.979 19.6473 52.0633L7.93668 40.3528Z"
+        stroke="currentColor"
+        strokeWidth="2"
+      />
+      <path
+        d="M10 55H50"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+      />
+    </svg>
+  );

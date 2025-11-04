@@ -7,6 +7,8 @@ import { BankAccount } from '@/components/loanee/Bank-account-item';
 import { Button } from '../ui/button';
 import styles from "@/features/loaneeViews/payment/index.module.css"
 import {useToast} from "@/hooks/use-toast";
+import GeneralEmptyState from '@/reuseable/emptyStates/General-emptystate';
+import { MdOutlineAccountBalanceWallet } from 'react-icons/md';
 
 interface Props {
     setIsOpen?: (isOpen: boolean) => void
@@ -54,7 +56,20 @@ function AddAccount({ setIsOpen}:Props) {
       </div>
       
       <div className={`w-full mt-7 space-y-4 h-[30vh] ${styles.container}`}>
-        {bankAccounts.map((account, index) => (
+        {
+        bankAccounts.length === 0? 
+        <div className='relative bottom-6'>
+        <GeneralEmptyState
+      icon={MdOutlineAccountBalanceWallet}
+      iconSize='1.7rem'
+      iconContainerClass='bg-[#F9FAFB]'
+      color='#A8A8A8'
+      message={<div className='relative bottom-2 text-[#4D4E4D] text-[14px] lg:px-16 font-normal'>
+         They are currently no bank account associated with your BVN
+      </div>}
+     />
+        </div> :
+        bankAccounts.map((account, index) => (
             <div key={index}>
              <BankAccountItem
             key={account.accountNumber}
