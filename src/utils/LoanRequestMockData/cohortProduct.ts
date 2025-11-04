@@ -421,4 +421,3 @@ export const transactionsHistory = [
     "amount": "N200,000.00"
   }
 ];
-
