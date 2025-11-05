@@ -1,4 +1,4 @@
-import { IBM_Plex_Sans, Inter} from 'next/font/google';
+import { IBM_Plex_Sans, Inter,Hanken_Grotesk } from 'next/font/google';
 import localFont from "next/font/local";
 
 
@@ -88,3 +88,12 @@ export const cabinetGroteskMediumBold600 = localFont({
     weight: "600",
     preload: false
 });
+
+export const hankenGrotesk = Hanken_Grotesk({
+    subsets: ['latin'],
+    display: 'swap',
+    style: 'normal',
+    weight: '400',
+    preload: false
+});
+
