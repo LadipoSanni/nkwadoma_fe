@@ -31,7 +31,7 @@ const persistConfig = {
     whitelist: ['adminLayout', 'selectedLoan', 'adminLayout', 'vehicle',
         'program','vehicleMultistep','financier', `marketPlace`, 'kycMultistep',
         'loanReferral', 'kycForm','notification','organization','cohort','csv','loanOffer',
-        'staff', 'loanees','request', 'ids','loanProduct', 'createLoanOffer','cohortBreakDownSlice'],
+        'staff', 'loanees','request', 'ids','loanProduct', 'createLoanOffer','cohortBreakDownSlice','payment'],
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

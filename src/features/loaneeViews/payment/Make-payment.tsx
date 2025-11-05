@@ -8,6 +8,10 @@ import { formatAmount } from '@/utils/Format';
 import PaymentTabs from '@/reuseable/tabs/paymentTabs';
 import { setCurrentPaymentTypeTab } from '@/redux/slice/make-payment/payment';
 import { store,useAppSelector } from '@/redux/store';
+import LinkedAccount from '@/components/loanee/payment-type/Linked-account';
+import Wallet from '@/components/loanee/payment-type/Wallet';
+import Paystack from '@/components/loanee/payment-type/Paystack';
+import { setWalletTab } from '@/redux/slice/make-payment/payment';
 
 function MakePayment() {
     const router = useRouter()
@@ -18,6 +22,7 @@ function MakePayment() {
     ]
 
     const selectPaymentTab = useAppSelector(state => state?.payment?.paymentTab)
+     const currentState = useAppSelector(state => state?.payment?.walletTab)
     const [currentTab, setCurrentTab] = useState(selectPaymentTab)
 
     useEffect(() => {
@@ -27,13 +32,21 @@ function MakePayment() {
         const getCurrentDataList = () => {
             switch (currentTab) {
                 case 0:
-                    return <div></div>
+                    return <Wallet/>
                 case 1:
-                    return <div></div>
+                    return <Paystack/>
                 case 2:
-                    return <div></div>
+                    return <LinkedAccount/>
                 default:
                     return [];
+            }
+        }
+
+        const handleBackRoute = () => {
+            if(currentTab === 0 && currentState === 1){
+               store.dispatch(setWalletTab(0))
+            }else {
+              router.push("/payment")
             }
         }
 
@@ -44,7 +57,7 @@ function MakePayment() {
     textColor={'meedlBlue'}
     text={'Back'} 
     iconBeforeLetters={true}
-    handleClick={()=>{router.push("/payment")}}
+    handleClick={handleBackRoute}
     className='font-normal text-[14px]'
    />
     <section className='mt-5 md:px-10'>
@@ -63,7 +76,7 @@ function MakePayment() {
         </div>
         </div>
         
-        <div className=' w-full  bg-00 py-4 grid md:gap-[10vw]  md:flex md:justify-between  gap-6'>
+        <div className=' w-full  bg-00 py-4 grid md:gap-[10vw]  md:flex md:justify-between  gap-6 lg:px-8'>
          <PaymentTabs
          tabCurrentTabIndex={currentTab}
          setTabCurrentTabIndex={setCurrentTab}
@@ -72,7 +85,7 @@ function MakePayment() {
          header='Make payment via'
          width='lg:w-[30%]'
          />
-         <div className='w-full'>
+         <div className='w-full relative bottom-5 md:bottom-0 md:top-4 lg:pr-16'>
          {getCurrentDataList()}
          </div>
         </div>
