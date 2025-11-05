@@ -103,8 +103,9 @@ export const AccountMultiSelectTrigger = React.forwardRef<
                     style={{ animationDuration: `${animation}s` }}
                   >
                     {IconComponent && <IconComponent className="h-4 w-4 mr-2" />}
-                    {  
-                      names?.find((n) => n.id === id)?.name || option?.bankName || id
+                    
+                    {
+                      option?.bankName
                    }
                     <XIcon
                       className="ml-2 h-4 w-4 cursor-pointer text-[#939CB0]"
