@@ -36,7 +36,7 @@ const DropdownFilter = ({title,sx, handleFilter,clearFilter,setSelectItem,items,
                 <MenubarTrigger
                     id={'dropdownTrigger'}
                     data-testid="dropdownTrigger"
-                    className={` px-2 h-fit flex justify-between 4 mt-2 w-fit sm:w-full  rounded-md py-2 ring-1 ring-[#D0D5DD] bg-[#F6F6F6] border-[#D0D5DD] `}>
+                    className={` px-2 h-fit flex justify-between 4 mt-2  w-full lg:w-fit md:w-fit sm:w-full  rounded-md py-2 ring-1 ring-[#D0D5DD] bg-[#F6F6F6] border-[#D0D5DD] `}>
                        {placeholder}
 
 

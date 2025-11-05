@@ -77,11 +77,11 @@ const WalletBalance = ({balance}:Props) => {
                 </div>
             </div>
             <div
-                className={` hidden md:flex  mb-auto mt-0  md:mt-auto md:mb-0 lg:mb-0 lg:mt-auto  `}
+                className={` hidden md:flex lg:flex mb-auto mt-0  md:mt-auto md:mb-0 lg:mb-0 lg:mt-auto  `}
             >
                 <WalletConnect/>
             </div>
-            {renderWalletButton(` md:hidden flex `)}
+            {renderWalletButton(` md:hidden lg:hidden flex `)}
         </div>
     );
 };

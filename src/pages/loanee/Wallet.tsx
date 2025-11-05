@@ -4,9 +4,13 @@ import React from 'react';
 import WalletBalance from "@/reuseable/cards/WalletBalance";
 import LinkAccount from "@/features/loaneeViews/payment/Link-account";
 import {bankAccounts} from "@/features/loaneeViews/payment/Payment";
+import Transaction from "@/pages/Transaction";
+import {generateMockData} from "@/types/ButtonTypes";
+import { useRouter } from 'next/navigation';
 
 const Wallet = () => {
 
+    const router = useRouter()
     const hah = () => {
 
     }
@@ -14,6 +18,10 @@ const Wallet = () => {
         bankName: "Access Bank Nigeria Limited",
         logo: "https://www.processmaker.com/wp-content/uploads/2019/10/Access_Bank_Logo.png",
         accountNumber: "0701234567",
+    }
+
+    const handkeViewAllTransactions = () => {
+        router.push("/transactions");
     }
     return (
         <div
@@ -28,10 +36,11 @@ const Wallet = () => {
                 text={'Back'}
                 textColor={'meedlBlue'}
             />
-            <WalletBalance balance={200000}/>
+            <WalletBalance balance={21000000}/>
             <LinkAccount bankAccount={bankAccount} numberOfAccounts={bankAccounts?.length} handleRouteClick={hah}/>
-
-
+            <div className={` max-h-[36vh] overflow-y-hidden  px-2 `}>
+                <Transaction onViewAllClick={handkeViewAllTransactions} viewLittle={true} data={generateMockData(4)}/>
+            </div>
         </div>
     );
 };
