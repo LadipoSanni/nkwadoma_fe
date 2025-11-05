@@ -96,17 +96,73 @@ export const AccountMultiSelect = React.forwardRef<HTMLButtonElement, MultiSelec
       if (isAlreadySelected) {
         newSelectedValues = selectedValues.filter(value => value.id !== optionId);
       } else {
-        newSelectedValues = [...selectedValues, { id: option.id, name: option.name }];
+        newSelectedValues = [...selectedValues, { id: option.id, bankName: option.bankName }];
       }
       
       setSelectedValues(newSelectedValues);
       onValueChange(newSelectedValues);
     };
 
+    const handleClear = () => {
+        setSelectedValues([]);
+        onValueChange([]);
+      };
+  
+      const toggleAll = () => {
+        if (selectedValues.length === options.length) {
+          handleClear();
+        } else {
+          const allValues = options.map(option => ({ id: option.id, bankName: option.bankName }));
+          setSelectedValues(allValues);
+          onValueChange(allValues);
+        }
+      };
+  
+      const selectedIds = selectedValues.map(value => value.id);
+  
+
   return (
-    <div>
-      
-    </div>
+     <Popover open={isPopoverOpen} onOpenChange={handleOpenChange} modal={modalPopover}>
+            <PopoverTrigger asChild id={"popoverId"}>
+              <AccountMultiSelectContent 
+                ref={triggerRef}
+                options={options}
+                selectedValues={selectedIds} 
+                variant={variant}
+                placeholder={placeholder}
+                animation={animation}
+                onToggleOption={toggleOption} 
+                isOpen={isPopoverOpen}
+                className={className}
+                selectButtonId={selcetButtonId}
+                horizontalScroll={horizontalScroll}
+                {...props}
+              />
+            </PopoverTrigger>
+            <PopoverContent
+              ref={contentRef}
+              className="w-full p-0"
+              align="start"
+              onEscapeKeyDown={() => setIsPopoverOpen(false)}
+              tabIndex={-1}
+              id="selectedContentId"
+            >
+              < AccountMultiSelectTrigger
+                options={options}
+                selectedValues={selectedIds} 
+                onToggleOption={toggleOption} 
+                onClear={handleClear}
+                onClose={() => setIsPopoverOpen(false)}
+                onToggleAll={toggleAll}
+                id={id}
+                restrictedItems={restrictedItems}
+                infinityScroll={infinityScroll}
+                emptyState={emptyState}
+                isLoading={isLoading}
+                selectAllcondition={selectAllcondition}
+              />
+            </PopoverContent>
+          </Popover>
   )
 }
 
