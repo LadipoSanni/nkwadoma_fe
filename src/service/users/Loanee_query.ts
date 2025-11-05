@@ -137,7 +137,6 @@ export const loaneeApi = createApi({
 })
 
 
-
 export const {
     useSearchLoaneeLoansByAdminQuery,
     useViewUserDetailQuery,
@@ -159,4 +158,3 @@ export const {
     useGetLoaneeIdentityVerificationDetailsQuery,
     useViewAllLoanRefferalsQuery
 } = loaneeApi;
-

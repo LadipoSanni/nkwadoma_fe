@@ -46,6 +46,7 @@ function LinkAccount({numberOfAccounts,bankAccount,handleRouteClick}: Props ) {
           height={20}
           width={20}
           className="w-[27px] h-[27px] rounded-full"
+          unoptimized={true}
         /> : <div className="w-[27px] h-[27px] text-[12px] flex items-center justify-center rounded-full bg-[#F3F8FF]">
            {initials}
           </div>}
