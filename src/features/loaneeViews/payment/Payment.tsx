@@ -108,7 +108,7 @@ const router = useRouter()
     <div className='mt-4'>
       <Button
         variant={"outline"}
-        className='w-full rounded-full h-[40px] bg-[#F3F8FF] hover:bg-[#E8F2FF] text-[#142854] font-normal flex items-center justify-center'
+        className='w-full md:w-[289px] rounded-full h-[40px] bg-[#F3F8FF] hover:bg-[#E8F2FF] text-[#142854] font-normal flex items-center justify-center'
       >
         <WalletAddIcon className="w-5 h-5" /> 
         <span className='ml-2'>Fund wallet</span>

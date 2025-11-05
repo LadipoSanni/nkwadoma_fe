@@ -15,25 +15,19 @@ interface Props {
 }
 
 function AddAccount({ setIsOpen}:Props) {
-  const [selectedAccounts, setSelectedAccounts] = useState<Set<string>>(new Set());
+  const [selectedAccount, setSelectedAccount] = useState<string | null>(null);
   const {toast} = useToast();
 
   const handleAccountSelect = (account: BankAccount, isChecked: boolean) => {
-    setSelectedAccounts(prev => {
-      const newSet = new Set(prev);
-      if (isChecked) {
-        newSet.add(account.accountNumber);
-      } else {
-        newSet.delete(account.accountNumber);
-      }
-      return newSet;
-    });
+    if (isChecked) {
+      setSelectedAccount(account.accountNumber);
+    } else {
+      // If unchecking the currently selected account, clear selection
+      setSelectedAccount(null);
+    }
   };
 
- 
-  const selectedAccountsArray = Array.from(selectedAccounts);
-
-   const handleSubmit = () => {
+  const handleSubmit = () => {
     toast({
         description: "Added successfully",
         status: "success",
@@ -42,8 +36,8 @@ function AddAccount({ setIsOpen}:Props) {
     if(setIsOpen){
         setIsOpen(false)
     }
-    console.log(selectedAccountsArray)
-   }
+    console.log(selectedAccount)
+  }
 
   return (
     <div className={`${inter.className} w-full mb-7`}>
@@ -51,7 +45,7 @@ function AddAccount({ setIsOpen}:Props) {
       <div className='mt-2'>
         <p className='text-[#212221] text-[20px] font-medium'>Add new account</p>
         <p className='text-[#4D4E4D] text-[14px] mt-1 '>
-          Select one or more accounts to add
+          Select an account to add
         </p>
       </div>
       
@@ -75,7 +69,7 @@ function AddAccount({ setIsOpen}:Props) {
             key={account.accountNumber}
             account={account}
             showCheckmark={true}
-            isSelected={selectedAccounts.has(account.accountNumber)}
+            isSelected={selectedAccount === account.accountNumber}
             onSelect={handleAccountSelect}
             className='pb-3'
           />
@@ -86,7 +80,7 @@ function AddAccount({ setIsOpen}:Props) {
       <div className='mt-6 flex items-center justify-end'>
         <Button
           className='bg-meedlBlue text-white w-[140px] h-[44px] rounded-lg disabled:bg-[#D7D7D7]'
-          disabled={selectedAccounts.size === 0}
+          disabled={!selectedAccount} 
           onClick={handleSubmit}
           variant={"secondary"}
           id='addAccountId'

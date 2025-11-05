@@ -15,9 +15,10 @@ interface paymentData {
 interface Props {
     paymentObj: paymentData
     handleCloseModal: () => void
+    isSuccessful: boolean
 }
 
-function SuccessfulPayment({paymentObj,handleCloseModal}:Props) {
+function SuccessfulPayment({paymentObj,handleCloseModal, isSuccessful}:Props) {
     const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
 
     const formatAmountForPDF = (amount: string) => {

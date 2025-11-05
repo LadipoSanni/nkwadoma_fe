@@ -19,6 +19,7 @@ function Wallet() {
     const repaymentAmount = useAppSelector(state => state?.payment?.repaymentAmount)
     const [isOpen, setIsopen] = useState(false)
     const [formKey, setFormKey] = useState(0); 
+    const [isSuccessful, setIsSuccessful] = useState(false)
 
      const paymentData = {
         referenceNumber: "000085752257",
@@ -88,7 +89,7 @@ function Wallet() {
                         validateOnBlur={true} 
                      
                     >
-                        {({errors, isValid, touched, setFieldValue, values, handleSubmit}) => {
+                        {({errors, isValid,setFieldValue, values}) => {
                             const shouldShowError = showErrors || hasTyped || (submitted && errors.repaymentAmount);
                             
                             return (
@@ -200,6 +201,7 @@ function Wallet() {
             <SuccessfulPayment
             paymentObj={paymentData}
             handleCloseModal={handleModalClose}
+            isSuccessful={isSuccessful}
             />
              </Modal>
             </div>
