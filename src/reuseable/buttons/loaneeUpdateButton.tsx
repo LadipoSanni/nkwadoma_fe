@@ -109,12 +109,12 @@ const LoaneeUploadButton = ({ whose, url, onUploadSuccess }: Props) => {
   const image = whose === "company" ? url : uploadedImage;
 
   return (
-    <div className={` grid gap-2 `}>
+    <div className={` md:grid gap-2  `}>
       <div
         onClick={onClick}
         className={`relative ${
           !isBusy ? "cursor-pointer" : "cursor-wait"
-        } rounded-full group w-20 h-20`}
+        } rounded-full group md:w-20 w-12 md:h-20 h-12`}
         role='button'
         tabIndex={!isBusy ? 0 : -1}
         aria-label='Upload profile image'
@@ -123,21 +123,21 @@ const LoaneeUploadButton = ({ whose, url, onUploadSuccess }: Props) => {
         }
       >
         {image ? (
-          <Avatar className='w-20 h-20'>
+          <Avatar className='md:w-20 w-12 md:h-20 h-12'>
             <AvatarImage
-              className={`w-20 h-20 ${isBusy ? "opacity-50" : ""}`}
+              className={`md:w-20 w-12 md:h-20 h-12 ${isBusy ? "opacity-50" : ""}`}
               src={image}
               alt='userImage'
             />
           </Avatar>
         ) : (
           <FaCircleUser
-            className={`w-20 h-20 text-[#ececec] ${isBusy ? "opacity-50" : ""}`}
+            className={`md:w-20 w-12 md:h-20 h-12 text-[#ececec] ${isBusy ? "opacity-50" : ""}`}
           />
         )}
         {!isBusy ? (
           <div className='absolute -bottom-1 -right-1 bg-white rounded-full p-1 shadow-md border group-hover:bg-gray-100'>
-            <Edit2 size={16} className='text-gray-600' />
+            <Edit2 size={10} className='text-gray-600' />
           </div>
         ) : (
           <div className='absolute inset-0 flex items-center justify-center bg-black bg-opacity-40 rounded-full'>
