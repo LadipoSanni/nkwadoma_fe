@@ -17,11 +17,6 @@ export const multiSelectVariants = cva("m-1 bg-[#F6F6F6]", {
   },
 });
 
-interface Name {
-  id: string;
-  name: string
-}
-
 
 interface MultiSelectTriggerProps
   extends VariantProps<typeof multiSelectVariants> {
@@ -40,8 +35,7 @@ interface MultiSelectTriggerProps
   className?: string;
   selectButtonId?: string;
   horizontalScroll?: boolean;
-  isEdit?: boolean;
-  names?: Name[]
+  
 }
 
 export const AccountMultiSelectTrigger = React.forwardRef<
@@ -60,8 +54,6 @@ export const AccountMultiSelectTrigger = React.forwardRef<
       className,
       selectButtonId,
       horizontalScroll = false,
-      isEdit,
-      names,
       ...props
     },
     ref
