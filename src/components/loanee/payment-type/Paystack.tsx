@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import Border from './Border'
-import { Formik, Form } from "formik";
+import { Formik, Form,FormikHelpers } from "formik";
 import { Label } from '@/components/ui/label';
 import {NumericFormat} from 'react-number-format';
 import * as Yup from "yup";
@@ -26,7 +26,7 @@ function Paystack() {
                 }),
         })
 
-    function handleSubmit(values: typeof initialFormValue, { setSubmitting }: any) {
+    function handleSubmit(values: typeof initialFormValue, { setSubmitting }: FormikHelpers<typeof initialFormValue>) {
         setHasTyped(true);
         setSubmitted(true);
         console.log('Submitting:', values);

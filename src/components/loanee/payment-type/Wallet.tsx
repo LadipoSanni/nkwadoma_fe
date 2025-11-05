@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import Border from './Border'
 import { formatAmount } from '@/utils/Format';
-import { Formik, Form } from "formik";
+import { Formik, Form,FormikHelpers} from "formik";
 import * as Yup from "yup";
 import {NumericFormat} from 'react-number-format';
 import { Label } from '@/components/ui/label';
@@ -43,7 +43,7 @@ function Wallet() {
             }),
     })
 
-    function handleSubmit(values: typeof initialFormValue, { setSubmitting }: any) {
+    function handleSubmit(values: typeof initialFormValue, { setSubmitting }: FormikHelpers<typeof initialFormValue>) {
         setSubmitted(true);
         console.log('Submitting:', values);
         setIsopen(true)
