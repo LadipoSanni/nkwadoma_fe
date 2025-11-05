@@ -274,16 +274,6 @@ function StepTwo() {
             setError(error ? error?.data?.message : "Error occurred");
         }
     };
-
-
-    // const handleDrop = (event: React.DragEvent<HTMLDivElement>) => {
-    //     event.preventDefault();
-    // };
-
-    // const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
-    //     event.preventDefault();
-    // };
-
   
 
   return (
