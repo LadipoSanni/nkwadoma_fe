@@ -16,13 +16,13 @@ const SetAutoRepayment = () => {
     const handleBackClick = () => {
         router.push(`/my-loan-profile`)
     }
-    const  repaymentTimeButton = (text: string, isChecked: boolean, onClick: ()=> void) => {
+    const  repaymentTimeButton = (text: string, isChecked: boolean, onClick: ()=> void,size:string) => {
         return(
             <Button
                 onClick={onClick}
                 id={'ButtonFor' + text?.replace(' ', '')}
                 data-testid={'ButtonFor' + text?.replace(' ', '')}
-                className={clsx(`w-full  lg:w-fit lg:px-8 md:w-fit md:px-8 h-fit py-3   border border-[#C9C9D4] bg-[#F6F6F6] text-[14px] ${inter.className} text-black flex justify-center items-center  `, {[` lg:w-fit lg:px-8 md:w-fit md:px-8 h-fit py-3 w-full border border-[#FDE2D2] text-[14px] text-white ${inter700.className}  bg-meedlBlue  flex justify-center items-center  `]: isChecked})}
+                className={clsx(` ${size} lg:px-8  md:px-8 h-fit py-3   border border-[#C9C9D4] bg-[#F6F6F6] text-[14px] ${inter.className} text-black flex justify-center items-center  `, {[` ${size} lg:px-8  md:px-8 h-fit py-3  border border-[#FDE2D2] text-[14px] text-white ${inter700.className}  bg-meedlBlue  flex justify-center items-center  `]: isChecked})}
             >
                 {text}
             </Button>
@@ -76,17 +76,17 @@ const SetAutoRepayment = () => {
                         <p className={` md:text-[20px] text-meedlBlue ${inter500.className} `}>{formatAmount(300000000000)}</p>
                     </section>
                 </header>
-                <section>
+                <section className={` grid justify-items-center  `}>
                     <div className={` w-fit mr-auto ml-auto `}>
                         <p className={`  mr-auto ml-auto text-[#212221] md:text-[20px] ${inter500.className}  `}>Set auto repayment</p>
                         <p className={` mr-auto ml-auto text-[#4D4E4D] md:text-[12px] ${inter.className} `}>Automatically deduct repayments from your account</p>
                     </div>
                     <div className={` grid gap-3  `}>
-                        <div className={` w-fit mr-auto ml-auto `}>
+                        <div className={` w-fit  `}>
                             <p className={`  mr-auto ml-auto text-[#212221] md:text-[14px] ${inter500.className}  `}>How will you prefer to repay?</p>
                             <div>
-                                {repaymentTimeButton('Weekly', selectedTimePrefference === 'Weekly', () => {setSelectedTimePrefference('Weekly')})}
-                                {repaymentTimeButton('Monthly', selectedTimePrefference === 'Monthly', () => {setSelectedTimePrefference('Monthly')})}
+                                {repaymentTimeButton('Weekly', selectedTimePrefference === 'Weekly', () => {setSelectedTimePrefference('Weekly')}, ` w-[40%] `)}
+                                {repaymentTimeButton('Monthly', selectedTimePrefference === 'Monthly', () => {setSelectedTimePrefference('Monthly')}, ` w-[40%] `)}
 
                             </div>
                         </div>
