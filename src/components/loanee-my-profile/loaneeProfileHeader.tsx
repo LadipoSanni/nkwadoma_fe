@@ -88,7 +88,7 @@ const LoaneeProfileHeader = ({cohort ,userName,institutionName,loanStatus, progr
 
            <div id={'loaneeProfileHeader'}
                 data-testid={'loaneeProfileHeader'}
-                className={`w-full h-fit md:h-fit     mt-auto mb-auto grid gap-2  md:flex md:justify-between lg:flex lg:justify-between `}
+                className={`w-full h-fit md:h-fit     mt-auto mb-auto grid gap-4  md:flex md:justify-between lg:flex lg:justify-between `}
            >
 
                {isLoading ?
@@ -137,15 +137,15 @@ const LoaneeProfileHeader = ({cohort ,userName,institutionName,loanStatus, progr
                }
 
                {userRole === 'LOANEE' && loanStatus === 'LOAN_DISBURSAL' &&
-                   <div className={`h-full grid gap-2 md:flex md:w-fit md:gap-2  `}>
+                   <div className={`h-full grid gap-2 mb-4  md:flex md:w-fit md:gap-2  `}>
                        <button id={'setAutoRepayment'} data-testid={'setAutoRepayment'}
                            onClick={routerToSetAutoRepayment}
-                               className={` hover:bg-[#626F8C]   flex items-center justify-center  w-full   md:w-fit md:px-3  h-fit py-2  text-sm ${inter700.className} rounded-md border border-meedlBlue bg-white text-meedlBlue  `}>
+                               className={` hover:bg-[#E8EAEE]   flex items-center justify-center  w-full   md:w-fit md:px-4  h-fit py-2  text-sm ${inter700.className} rounded-md border border-meedlBlue bg-white text-meedlBlue  `}>
                            Set auto repayment
                        </button>
                        <button id={'makePayment'} data-tesid={'makePayment'}
                            // onClick={handleClick}
-                               className={` hover:bg-[#626F8C]   flex items-center justify-center  w-full md:w-fit md:px-3   h-fit py-2  text-sm ${inter700.className} rounded-md  bg-meedlBlue text-white  `}>Make
+                               className={` hover:bg-[#E8EAEE]   flex items-center justify-center  w-full md:w-fit md:px-4   h-fit py-2  text-sm ${inter700.className} rounded-md  bg-meedlBlue text-white  `}>Make
                            payment
                        </button>
                    </div>

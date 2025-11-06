@@ -73,7 +73,7 @@ const SetAutoRepayment = () => {
                     <div></div>
                     <section className={` `}>
                         <p className={` md:text-[14px] mr-0  text-meedlBlue ${inter.className} `}>Wallet balance</p>
-                        <p className={` md:text-[20px] text-meedlBlue ${inter500.className} `}>{formatAmount(300000000000)}</p>
+                        <p id={'walletBalanceAmount'} data-testid={'walletBalanceAmount'} className={` md:text-[20px] text-meedlBlue ${inter500.className} `}>{formatAmount(300000000000)}</p>
                     </section>
                 </header>
                 <section className={` grid justify-items-center  `}>
