@@ -34,11 +34,11 @@ const LoaneeProfileHeader = ({cohort ,userName,institutionName,loanStatus, progr
     // const [modalButtonText, setModalButtonText] = React.useState('');
     // const [modalTitle, setModalTitle] = React.useState('');
     const userRole  = getItemSessionStorage("user_role")
-    const router = useRouter()
     const searchParams = useSearchParams()
      const organizationTabStatus = useAppSelector(store => store?.organization?.organizationDetailTabStatus)
     const organizationAdminView = useAppSelector(store => store?.adminLayout?.organizationFrom)
 
+    const router = useRouter()
      
 
     // const handleOpenModal = (id: string, title: string, buttonText: string) => {
@@ -73,6 +73,9 @@ const LoaneeProfileHeader = ({cohort ,userName,institutionName,loanStatus, progr
         }else if(userRole === 'LOANEE') {
             router.push("/my-loans");
         }
+    }
+    const routerToSetAutoRepayment = () => {
+        router.push(`/set-auto-repayment`)
     }
 
     const providedInstitutionName = institutionName ? getFirstLetterOfWord(institutionName) ? getFirstLetterOfWord(institutionName) : institutionName?.at(0)?.toUpperCase() : ''
@@ -136,7 +139,7 @@ const LoaneeProfileHeader = ({cohort ,userName,institutionName,loanStatus, progr
                {userRole === 'LOANEE' && loanStatus === 'LOAN_DISBURSAL' &&
                    <div className={`h-full grid gap-2 md:flex md:w-fit md:gap-2  `}>
                        <button id={'setAutoRepayment'} data-testid={'setAutoRepayment'}
-                           // onClick={handleClick}
+                           onClick={routerToSetAutoRepayment}
                                className={` hover:bg-[#626F8C]   flex items-center justify-center  w-full   md:w-fit md:px-3  h-fit py-2  text-sm ${inter700.className} rounded-md border border-meedlBlue bg-white text-meedlBlue  `}>
                            Set auto repayment
                        </button>
