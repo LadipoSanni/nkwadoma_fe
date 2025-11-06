@@ -2,6 +2,7 @@ import React from "react";
 import { Providers } from "@/app/provider";
 import { ConfigProvider } from "@/app/config-context";
 import { render, screen, fireEvent } from "@testing-library/react";
+import { AnyAction } from "@reduxjs/toolkit";
 import LoaneeProfileSetting from "@/features/portfolio-manager/settings/loanee-profile-settings/loaneeProfile";
 
 jest.mock("next/navigation", () => ({
@@ -20,7 +21,7 @@ jest.mock("next/navigation", () => ({
   redirect: jest.fn()
 }));
 
-jest.mock("@/reuseable/buttons/LoaneeUploadButton", () => {
+jest.mock("@/reuseable/buttons/loaneeUpdateButton", () => {
   const UploadButton = () => <div data-testid='upload-button'></div>;
   UploadButton.displayName = "UploadButton";
   return UploadButton;
@@ -41,8 +42,8 @@ jest.mock( "@/features/portfolio-manager/settings/loanee-profile-settings/update
 jest.mock("@/service/users/Loanee_query", () => ({
   loaneeApi: {
     reducerPath: 'loaneeApi',
-    reducer: (state = {}, action) => state,
-    middleware: jest.fn(() => (next) => (action) => next(action))
+    reducer: (state = {}) => state,
+    middleware: jest.fn(() => (next: (action: AnyAction) => AnyAction) => (action: AnyAction)=> next(action))
   },
   useViewUserDetailQuery: jest.fn(() => ({
     data: {

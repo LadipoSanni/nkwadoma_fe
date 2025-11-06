@@ -12,7 +12,7 @@ interface ProfileProps {
 const LoaneeProfileSetting = ({whoseProfile, companyUrl}: ProfileProps) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const {data: profileData} = useViewUserDetailQuery({});
-    const handleUpdateSuccess = (_updatedData: { education: string, stateOfResidence: string }) => {
+    const handleUpdateSuccess = () => {
         setIsModalOpen(false);
     };
     
