@@ -113,28 +113,43 @@ const Repayment = () => {
         console.log(ID)
     };
 
-    const  getYea = (earlyYear: number,currentYear: number) => {
-        if (!currentYear) {
-            const aa : number[] = [earlyYear]
-            const today = new Date().getFullYear();
-            for (const element of aa) {
-                if (element < today){
-                    aa.push(element + 1 )
-                }
-            }
-            return aa;
-        }else if (!earlyYear) {
-            const currentYear = new Date().getFullYear();
-            return [currentYear]
-        }else {
-            const aa : number[] = [earlyYear]
-            for (const element of aa) {
-                if (element < currentYear){
-                    aa.push(element + 1 )
-                }
-            }
-            return aa;
+    const  getYea = (firstRepaymentYear: number,lastRepaymentYear: number) => {
+        // if (!currentYear) {
+        //     const aa : number[] = [earlyYear]
+        //     const today = new Date().getFullYear();
+        //     for (const element of aa) {
+        //         if (element < today){
+        //             aa.push(element + 1 )
+        //         }
+        //     }
+        //     return aa;
+        // }else if (!earlyYear) {
+        //     const currentYear = new Date().getFullYear();
+        //     return [currentYear]
+        // }else {
+        //     const aa : number[] = [earlyYear]
+        //     for (const element of aa) {
+        //         if (element < currentYear){
+        //             aa.push(element + 1 )
+        //         }
+        //     }
+        //     return aa;
+        // }
+        if (!firstRepaymentYear || !lastRepaymentYear) {
+            if (firstRepaymentYear) return [firstRepaymentYear];
+            if (lastRepaymentYear) return [lastRepaymentYear];
+            return [];
         }
+
+        const start = Math.min(firstRepaymentYear, lastRepaymentYear);
+        const end = Math.max(firstRepaymentYear, lastRepaymentYear);
+
+        const repaymentYears: number[] = [];
+        for (let year = start; year <= end; year++) {
+            repaymentYears.push(year);
+        }
+
+        return repaymentYears;
     }
 
     const handleFilterYear = () => {

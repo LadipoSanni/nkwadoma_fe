@@ -45,6 +45,14 @@ const setMonthItem = (value: string | number) => {
     }else {
         setSelectedMonth(value)
     }
+<<<<<<< HEAD
+=======
+
+    if(displayedMonth && selectedIndex && year && displayedYear) {
+       return ""
+    }
+
+>>>>>>> a4eb6cd56d22d59f636603f40c63339e822bc9aa
 }
 
 const clearMonthFilter = () => {
@@ -122,12 +130,21 @@ const clearMonthFilter = () => {
 
    <div className='mt-10'>
    <TransactionHistory
+<<<<<<< HEAD
     transactions={transactionsHistory}
     // currentPage={pagination.pageNumber}
     // totalPages={pagination.totalPages}
     // onPageChange={setPageNumber}
     // hasNextPage={pagination.hasNextPage}
     className={`h-[61vh] ${styles.container}`}
+=======
+    transactions={pagination.currentPageItems}
+    currentPage={pagination.pageNumber}
+    totalPages={pagination.totalPages}
+    onPageChange={setPageNumber}
+    hasNextPage={pagination.hasNextPage}
+    className={`h-[52vh] ${styles.container}`}
+>>>>>>> a4eb6cd56d22d59f636603f40c63339e822bc9aa
     />
    </div>
    <div className='hidden' onClick={handle}>

@@ -26,8 +26,11 @@ interface TransactionHistoryProps {
   handleViewAll?:() => void;
   className?: string;
   style?: React.CSSProperties; 
+<<<<<<< HEAD
   infinityScroll?: InfiniteScrollProps;
   infinityScrollHeight?: string
+=======
+>>>>>>> a4eb6cd56d22d59f636603f40c63339e822bc9aa
 }
 
 export const TransactionHistory: React.FC<TransactionHistoryProps> = ({ 
@@ -39,9 +42,13 @@ export const TransactionHistory: React.FC<TransactionHistoryProps> = ({
   isLoading,
   handleViewAll,
   className,
+<<<<<<< HEAD
   infinityScroll,
   style,
   infinityScrollHeight
+=======
+  style
+>>>>>>> a4eb6cd56d22d59f636603f40c63339e822bc9aa
 }) => {
   
   const groupedTransactions = transactions.reduce((acc, transaction) => {
@@ -63,6 +70,7 @@ export const TransactionHistory: React.FC<TransactionHistoryProps> = ({
   //   }
   // };
 
+<<<<<<< HEAD
   // const handlePreviousPage = () => {
   //   if (currentPage > 0) {
   //     onPageChange((prevPage) => prevPage - 1);
@@ -103,10 +111,17 @@ export const TransactionHistory: React.FC<TransactionHistoryProps> = ({
         </div>
       </div>
     ));
+=======
+  const handlePreviousPage = () => {
+    if (currentPage > 0) {
+      onPageChange((prevPage) => prevPage - 1);
+    }
+>>>>>>> a4eb6cd56d22d59f636603f40c63339e822bc9aa
   };
 
   return (
     <div className={`w-full `}>
+<<<<<<< HEAD
       <div className={`flex flex-col ${className}`} style={style}>
         {isLoading ? (
           <SkeletonForTransaction/>
@@ -121,6 +136,38 @@ export const TransactionHistory: React.FC<TransactionHistoryProps> = ({
                 Payment history will appear here
               </div>}
             />
+=======
+     <div className={`flex flex-col ${className}`} style={style}>
+      { isLoading? <SkeletonForTransaction/> : transactions.length === 0? 
+      <div>
+     <GeneralEmptyState
+      icon={MdOutlineAccountBalanceWallet}
+      iconSize='1.7rem'
+      iconContainerClass='bg-[#F9FAFB]'
+      color='#A8A8A8'
+      message={<div className='relative bottom-2 text-[#4D4E4D] font-medium'>
+          Payment history will appear hear
+      </div>}
+     />
+      </div> :
+      Object.entries(groupedTransactions).map(([date, dateTransactions]) => (
+        <div key={date} className="mb-8">
+          
+          <div className="mb-3 flex justify-between items-center">
+            <h3 className="text-[#212221] ">{date}</h3>
+         { handleViewAll &&  <div className='underline text-meedlBlue underline-offset-[3px]'>
+            <BackButton 
+            id='transactionRouteButton'
+            textColor={'meedlBlue'}
+            text={'View all'} 
+            iconBeforeLetters={false}
+            handleClick={handleViewAll}
+            className='font-medium text-[16px] mr-2 '
+            sx='text-[20px]'
+            isShow={false}
+        />
+            </div>}
+>>>>>>> a4eb6cd56d22d59f636603f40c63339e822bc9aa
           </div>
         ) : (
           <div>
@@ -139,10 +186,18 @@ export const TransactionHistory: React.FC<TransactionHistoryProps> = ({
               renderTransactionContent()
             )}
           </div>
+<<<<<<< HEAD
         )}
       </div>
 
       {/* {totalPages > 1 && (
+=======
+        </div>
+      ))}
+      </div>
+
+      {totalPages > 1 && (
+>>>>>>> a4eb6cd56d22d59f636603f40c63339e822bc9aa
         <div className="mt-auto">
           <Paginations
             page={currentPage + 1}
@@ -155,4 +210,5 @@ export const TransactionHistory: React.FC<TransactionHistoryProps> = ({
       )} */}
     </div>
   );
+
 };

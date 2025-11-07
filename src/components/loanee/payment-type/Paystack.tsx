@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import React, { useState } from 'react'
 import Border from './Border'
 import { Formik, Form,FormikHelpers } from "formik";
@@ -120,6 +121,15 @@ function Paystack() {
         </Formik> 
      
     </Border>
+=======
+import React from 'react'
+
+function Paystack() {
+  return (
+    <div>
+      
+    </div>
+>>>>>>> a4eb6cd56d22d59f636603f40c63339e822bc9aa
   )
 }
 

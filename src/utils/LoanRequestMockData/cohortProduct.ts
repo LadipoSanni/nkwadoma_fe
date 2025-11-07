@@ -420,4 +420,8 @@ export const transactionsHistory = [
     "type": "Paid via wallet",
     "amount": "N200,000.00"
   }
+<<<<<<< HEAD
 ];
+=======
+];
+>>>>>>> a4eb6cd56d22d59f636603f40c63339e822bc9aa

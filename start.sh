@@ -1,7 +1,5 @@
 #!/bin/bash
 
-
-
 AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
 AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
 AWS_REGION=${3:-us-east-1} # Default to us-east-1 if no region is provided

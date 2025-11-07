@@ -23,6 +23,7 @@ function MakePayment() {
 
     const selectPaymentTab = useAppSelector(state => state?.payment?.paymentTab)
      const currentState = useAppSelector(state => state?.payment?.walletTab)
+
      const linkedAccountCurrentState = useAppSelector(state => state?.payment?.linkedAccountTab)
     const [currentTab, setCurrentTab] = useState(selectPaymentTab)
 

@@ -15,7 +15,10 @@ interface BankAccountItemProps {
   logoSize?: string;
   showCheckmark?: boolean;
   isSelected?: boolean;
+<<<<<<< HEAD
   style?: string;
+=======
+>>>>>>> a4eb6cd56d22d59f636603f40c63339e822bc9aa
   onSelect?: (account: BankAccount, isChecked: boolean) => void;
 }
 
@@ -26,7 +29,10 @@ export const BankAccountItem: React.FC<BankAccountItemProps> = ({
   logoSize = 'w-[27px] h-[27px]',
   showCheckmark = false,
   isSelected = false,
+<<<<<<< HEAD
   style,
+=======
+>>>>>>> a4eb6cd56d22d59f636603f40c63339e822bc9aa
   onSelect
 }) => {
   const initials = getInitial(account.bankName);
@@ -73,7 +79,11 @@ export const BankAccountItem: React.FC<BankAccountItemProps> = ({
       )}
       
       
+<<<<<<< HEAD
       <div className={`flex items-center gap-2 flex-1 `}>
+=======
+      <div className='flex items-center gap-2 flex-1'>
+>>>>>>> a4eb6cd56d22d59f636603f40c63339e822bc9aa
         <div>
           {account.logo ? (
             <Image
@@ -82,7 +92,10 @@ export const BankAccountItem: React.FC<BankAccountItemProps> = ({
               height={20}
               width={20}
               className={`${logoSize} rounded-full object-cover`}
+<<<<<<< HEAD
               unoptimized={true}
+=======
+>>>>>>> a4eb6cd56d22d59f636603f40c63339e822bc9aa
             />
           ) : (
             <div className={`${logoSize} text-[12px] flex items-center justify-center rounded-full bg-[#F3F8FF]`}>
@@ -90,7 +103,11 @@ export const BankAccountItem: React.FC<BankAccountItemProps> = ({
             </div>
           )}
         </div>
+<<<<<<< HEAD
         <div className={`flex-1 ${style}`}>
+=======
+        <div className="flex-1">
+>>>>>>> a4eb6cd56d22d59f636603f40c63339e822bc9aa
           <p className='text-[#212221] font-medium text-[14px]'>{account.bankName}</p>
           <p className='text-[#4D4E4D] font-normal text-[12px]'>{account.accountNumber}</p>
         </div>

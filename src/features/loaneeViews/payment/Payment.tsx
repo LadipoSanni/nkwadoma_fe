@@ -126,7 +126,7 @@ const router = useRouter()
     textColor={'meedlBlue'}
     text={'View'} 
     iconBeforeLetters={false}
-    handleClick={()=>{}}
+    handleClick={() => {router.push('/wallet')}}
     className='font-medium text-[16px] mr-2'
     sx='text-[20px]'
    />
@@ -147,9 +147,15 @@ const router = useRouter()
     <div className={`${transactionsHistory.length === 0? "mb-24 md:mb-0 " : "mt-3"}`}>
       <TransactionHistory
        transactions={latestTransactions}
+<<<<<<< HEAD
       //  currentPage={0}
       //  totalPages={1}
       //  onPageChange={()=>{}}
+=======
+       currentPage={0}
+       totalPages={1}
+       onPageChange={()=>{}}
+>>>>>>> a4eb6cd56d22d59f636603f40c63339e822bc9aa
        handleViewAll={()=>{router.push("/payment/payment-history")}}
       />
     </div>
