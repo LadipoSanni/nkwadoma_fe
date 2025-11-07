@@ -13,12 +13,11 @@ const layout: React.FC<props> = ({ children }) => {
     const userRole = getItemSessionStorage('user_role');
     const display = getUserSettingTabContent(userRole ? userRole : '')
   return (
-
-           <TabSwitch triggerStyle={styles.switchTabStyle} tabData={display} defaultTab="/settings/general" disabledTabs={["/settings/profile","/settings/roles-&-permissions"]}>
-               {children}
-           </TabSwitch>
-
+    userRole === 'LOANEE' ? <div>{children}</div> :
+        <TabSwitch triggerStyle={styles.switchTabStyle} tabData={display} defaultTab="/settings/general" disabledTabs={["/settings/profile","/settings/roles-&-permissions"]}>
+            {children}
+        </TabSwitch>
   )
 }
 
-export default layout
+export default layout;
