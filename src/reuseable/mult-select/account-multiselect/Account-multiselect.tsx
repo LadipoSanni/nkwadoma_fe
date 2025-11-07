@@ -17,6 +17,9 @@ interface Option {
 interface SelectedValue {
   id: string;
   bankName: string;
+  logo: string;
+  accountNumber: string;
+
 }
 
 interface MultiSelectProps
@@ -34,7 +37,6 @@ interface MultiSelectProps
   restrictedItems?: string[];
   horizontalScroll?: boolean;
   infinityScroll?: InfiniteScrollProps;
-  canOpen: boolean;
   emptyState? : string;
   isLoading?: boolean;
   resetKey?: string;
@@ -58,7 +60,6 @@ export const AccountMultiSelect = React.forwardRef<HTMLButtonElement, MultiSelec
       restrictedItems,
       horizontalScroll,
       infinityScroll,
-      canOpen = true,
       emptyState,
       isLoading,
       resetKey,
@@ -79,9 +80,6 @@ export const AccountMultiSelect = React.forwardRef<HTMLButtonElement, MultiSelec
         }, [resetKey, defaultValue]);
     
         const handleOpenChange = (open: boolean) => {
-          if (open && !canOpen) {
-            return; 
-          }
           setIsPopoverOpen(open);
         };
 
@@ -96,27 +94,27 @@ export const AccountMultiSelect = React.forwardRef<HTMLButtonElement, MultiSelec
       if (isAlreadySelected) {
         newSelectedValues = selectedValues.filter(value => value.id !== optionId);
       } else {
-        newSelectedValues = [...selectedValues, { id: option.id, bankName: option.bankName }];
+        newSelectedValues = [...selectedValues, { id: option.id, bankName: option.bankName,logo: option.logo, accountNumber: option.accountNumber }];
       }
       
       setSelectedValues(newSelectedValues);
       onValueChange(newSelectedValues);
     };
 
-    const handleClear = () => {
-        setSelectedValues([]);
-        onValueChange([]);
-      };
+    // const handleClear = () => {
+    //     setSelectedValues([]);
+    //     onValueChange([]);
+    //   };
   
-      const toggleAll = () => {
-        if (selectedValues.length === options.length) {
-          handleClear();
-        } else {
-          const allValues = options.map(option => ({ id: option.id, bankName: option.bankName }));
-          setSelectedValues(allValues);
-          onValueChange(allValues);
-        }
-      };
+    //   const toggleAll = () => {
+    //     if (selectedValues.length === options.length) {
+    //       handleClear();
+    //     } else {
+    //       const allValues = options.map(option => ({ id: option.id, bankName: option.bankName }));
+    //       setSelectedValues(allValues);
+    //       onValueChange(allValues);
+    //     }
+    //   };
   
       const selectedIds = selectedValues.map(value => value.id);
   
@@ -124,7 +122,7 @@ export const AccountMultiSelect = React.forwardRef<HTMLButtonElement, MultiSelec
   return (
      <Popover open={isPopoverOpen} onOpenChange={handleOpenChange} modal={modalPopover}>
             <PopoverTrigger asChild id={"popoverId"}>
-              <AccountMultiSelectContent 
+              <AccountMultiSelectTrigger
                 ref={triggerRef}
                 options={options}
                 selectedValues={selectedIds} 
@@ -141,19 +139,23 @@ export const AccountMultiSelect = React.forwardRef<HTMLButtonElement, MultiSelec
             </PopoverTrigger>
             <PopoverContent
               ref={contentRef}
-              className="w-full p-0"
+              className="w-full p-0 "
               align="start"
               onEscapeKeyDown={() => setIsPopoverOpen(false)}
               tabIndex={-1}
               id="selectedContentId"
+              style={{ 
+                width: 'var(--radix-popover-trigger-width)',
+                maxWidth: 'none'
+              }}
             >
-              < AccountMultiSelectTrigger
+              <AccountMultiSelectContent 
                 options={options}
                 selectedValues={selectedIds} 
                 onToggleOption={toggleOption} 
-                onClear={handleClear}
-                onClose={() => setIsPopoverOpen(false)}
-                onToggleAll={toggleAll}
+                // onClear={handleClear}
+                // onClose={() => setIsPopoverOpen(false)}
+                // onToggleAll={toggleAll}
                 id={id}
                 restrictedItems={restrictedItems}
                 infinityScroll={infinityScroll}

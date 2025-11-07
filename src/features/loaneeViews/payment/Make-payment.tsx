@@ -11,7 +11,7 @@ import { store,useAppSelector } from '@/redux/store';
 import LinkedAccount from '@/components/loanee/payment-type/Linked-account';
 import Wallet from '@/components/loanee/payment-type/Wallet';
 import Paystack from '@/components/loanee/payment-type/Paystack';
-import { setWalletTab } from '@/redux/slice/make-payment/payment';
+import { setWalletTab,setLinkedAccountTab } from '@/redux/slice/make-payment/payment';
 
 function MakePayment() {
     const router = useRouter()
@@ -23,6 +23,7 @@ function MakePayment() {
 
     const selectPaymentTab = useAppSelector(state => state?.payment?.paymentTab)
      const currentState = useAppSelector(state => state?.payment?.walletTab)
+     const linkedAccountCurrentState = useAppSelector(state => state?.payment?.linkedAccountTab)
     const [currentTab, setCurrentTab] = useState(selectPaymentTab)
 
     useEffect(() => {
@@ -45,6 +46,8 @@ function MakePayment() {
         const handleBackRoute = () => {
             if(currentTab === 0 && currentState === 1){
                store.dispatch(setWalletTab(0))
+            }else if(currentTab === 2 &&  linkedAccountCurrentState === 1){
+                store.dispatch(setLinkedAccountTab(0))
             }else {
               router.push("/payment")
             }

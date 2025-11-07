@@ -120,7 +120,7 @@ export const AccountMultiSelectTrigger = React.forwardRef<
           </div>
         ) : (
           <div className="flex items-center justify-between w-full mx-auto">
-            <span className="text-sm text-muted-foreground mx-3">
+            <span className="text-sm text-muted-foreground text-[#4D4E4D] mx-3">
               {placeholder}
             </span>
             {isOpen ? (

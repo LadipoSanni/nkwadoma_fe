@@ -4,6 +4,8 @@ import { Button } from '@/components/ui/button';
 import { FiDownload } from 'react-icons/fi';
 import { store} from '@/redux/store';
 import { setWalletTab,setRepaymentAmount  } from '@/redux/slice/make-payment/payment';
+import { Cross2Icon } from "@radix-ui/react-icons";
+import { useRouter } from 'next/navigation';
 
 interface paymentData {
     referenceNumber: string,
@@ -16,10 +18,12 @@ interface Props {
     paymentObj: paymentData
     handleCloseModal: () => void
     isSuccessful: boolean
+    backButtonText?: string
 }
 
-function SuccessfulPayment({paymentObj,handleCloseModal, isSuccessful}:Props) {
+function SuccessfulPaymentAndFailure({paymentObj,handleCloseModal, isSuccessful,backButtonText = "Back to wallet"}:Props) {
     const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
+    const router = useRouter()
 
     const formatAmountForPDF = (amount: string) => {
         const numericPrice = parseFloat(amount.replace(/[^0-9.-]+/g, ""));
@@ -128,13 +132,15 @@ Thank you for your payment!
     };
 
     const handleBack = () => {
-        store.dispatch(setWalletTab(0))
-        store.dispatch(setRepaymentAmount(""))
+        if(isSuccessful){
+            router.push("/payment")
+        }
         handleCloseModal()
     }
 
     return (
-        <div className='py-2'>
+        <div>
+       { isSuccessful? <div className='py-2'>
             <section className='flex flex-col items-center justify-center'>
                 <div className='w-[70px] h-[70px] rounded-full bg-[#E6F2EA] flex items-center justify-center'>
                     <div className='w-[44px] h-[44px] rounded-full bg-[#045620] flex items-center justify-center'>
@@ -205,14 +211,55 @@ Thank you for your payment!
                     id='backButton'
                     type='button'
                     variant={"outline"}
-                    className='w-full h-[36px]'
+                    className='w-full h-[36px] text-[14px] font-medium border-[#142854] rounded-md text-[#142854]'
                     onClick={handleBack}
                 >
                     Back to payment
                 </Button>
             </section>
+        </div> :
+        <div className='py-2'>
+             <section className='flex flex-col items-center justify-center'>
+                <div className='w-[56px] h-[56px] rounded-full bg-[#FEECEB] flex items-center justify-center'>
+                    <div className='w-[24px] h-[24px] rounded-full bg-[#F04438] text-white flex items-center justify-center'>
+                         <Cross2Icon  className='w-[22px] h-[22px]'/>
+                    </div>
+                </div>
+
+                <p className='mt-3 text-[#121212] text-[18px] font-medium'>Insufficient fund!</p>
+            </section>
+            <section className='grid grid-cols-1 gap-y-3 mt-9' >
+
+                <div className='flex items-center justify-between'>
+                    <p className='text-[#707070] text-[14px] font-normal'>Date & Time</p>
+                    <p className='text-[#121212] text-[14px] font-medium pl-2 md:pl-0'>{paymentObj?.dateTime}</p>
+                </div>
+
+                <div className='flex items-center justify-between border-b border-dashed pb-3 border-[#667085] w-full'>
+                    <p className='text-[#707070] text-[14px] font-normal'>Payment Method</p>
+                    <p className='text-[#121212] text-[14px] font-medium'>{paymentObj?.paymentMethod}</p>
+                </div>
+                
+                <div className='flex items-center justify-between'>
+                    <p className='text-[#707070] text-[14px] font-normal'>Amount</p>
+                    <p className='text-[#121212] text-[14px] font-medium'>{formatAmount(paymentObj?.amount)}</p>
+                </div>
+            </section>
+            <section className='mt-10 grid grid-cols-1 gap-y-4 mb-10'>
+
+                <button
+                    id='backButton'
+                    type='button'
+                    className='w-full text-[14px] font-medium h-[36px] hover:bg-[#E8EAEE]   border-solid border-[1px] border-[#142854] rounded-md text-[#142854]'
+                    onClick={handleBack}
+                >
+                    {backButtonText}
+                </button>
+            </section>
+        </div>
+    }
         </div>
     )
 }
 
-export default SuccessfulPayment;
+export default SuccessfulPaymentAndFailure;

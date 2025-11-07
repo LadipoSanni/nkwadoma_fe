@@ -122,12 +122,12 @@ const clearMonthFilter = () => {
 
    <div className='mt-10'>
    <TransactionHistory
-    transactions={pagination.currentPageItems}
-    currentPage={pagination.pageNumber}
-    totalPages={pagination.totalPages}
-    onPageChange={setPageNumber}
-    hasNextPage={pagination.hasNextPage}
-    className={`h-[52vh] ${styles.container}`}
+    transactions={transactionsHistory}
+    // currentPage={pagination.pageNumber}
+    // totalPages={pagination.totalPages}
+    // onPageChange={setPageNumber}
+    // hasNextPage={pagination.hasNextPage}
+    className={`h-[61vh] ${styles.container}`}
     />
    </div>
    <div className='hidden' onClick={handle}>

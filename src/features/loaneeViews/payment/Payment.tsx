@@ -17,27 +17,32 @@ export const bankAccounts = [
   {
     "bankName": "Guaranty Trust Bank",
     "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/GTBank_logo.svg/1024px-GTBank_logo.svg.png",
-    "accountNumber": "0234567890"
+    "accountNumber": "0234567890",
+    "id" : "146534"
   },
   {
     "bankName": "First Bank of Nigeria",
     "logo": "https://upload.wikimedia.org/wikipedia/en/thumb/6/62/First_Bank_of_Nigeria_logo.png/250px-First_Bank_of_Nigeria_logo.png",
-    "accountNumber": "1234567890"
+    "accountNumber": "1234567890",
+    "id" : "876454"
   },
   {
     "bankName": "Access Bank",
     "logo": "https://www.processmaker.com/wp-content/uploads/2019/10/Access_Bank_Logo.png",
-    "accountNumber": "0701234567"
+    "accountNumber": "0701234567",
+    "id" : "8769084"
   },
   {
     "bankName": "Zenith Bank",
     "logo": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQTMKt8Moub0IgEgzazp20zubI8u-9pIJlV2A&s",
-    "accountNumber": "1012345678"
+    "accountNumber": "1012345678",
+    "id" : "87645684"
   },
   {
     "bankName": "United Bank for Africa",
     "logo": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSsmlHU9WtMqUjvqMVTfVK7T4EFYBHPHQvIEQ&s",
-    "accountNumber": "1001234567"
+    "accountNumber": "1001234567",
+    "id" : "8769865484"
   }
 ]
 
@@ -142,9 +147,9 @@ const router = useRouter()
     <div className={`${transactionsHistory.length === 0? "mb-24 md:mb-0 " : "mt-3"}`}>
       <TransactionHistory
        transactions={latestTransactions}
-       currentPage={0}
-       totalPages={1}
-       onPageChange={()=>{}}
+      //  currentPage={0}
+      //  totalPages={1}
+      //  onPageChange={()=>{}}
        handleViewAll={()=>{router.push("/payment/payment-history")}}
       />
     </div>

@@ -5,14 +5,19 @@ import { Label } from '@/components/ui/label';
 import {NumericFormat} from 'react-number-format';
 import * as Yup from "yup";
 import { Button } from '@/components/ui/button'
+import { store,useAppSelector } from '@/redux/store';
+import { setPaystackAmount } from '@/redux/slice/make-payment/payment';
 
 function Paystack() {
     const [showErrors, setShowErrors] = useState(false);
     const [submitted, setSubmitted] = useState(false);
+      const initialState = useAppSelector(state => state?.payment?.payStackAmount)
       const [hasTyped, setHasTyped] = useState(false);
 
+      console.log(initialState)
+
     const initialFormValue = {
-        repaymentAmount :  ""
+        repaymentAmount : initialState ||  ""
     }
 
       const validationSchema = Yup.object().shape({
@@ -71,13 +76,13 @@ function Paystack() {
                     
                     if (value === '' || value === '0.00') {
                         setFieldValue("repaymentAmount", "");
-                    //   store.dispatch(setRepaymentAmount("")); 
+                       store.dispatch(setPaystackAmount("")); 
                         return;
                     }
                     
                     const numericValue = value.replace(/[^\d.]/g, '');
                     setFieldValue("repaymentAmount", numericValue);
-                //   store.dispatch(setRepaymentAmount(numericValue)); 
+                    store.dispatch(setPaystackAmount(numericValue)); 
                 }}
                 onBlur={() => {
                     if (hasTyped) { 
