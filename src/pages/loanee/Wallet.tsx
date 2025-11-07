@@ -12,7 +12,7 @@ const Wallet = () => {
 
     const router = useRouter()
     const hah = () => {
-
+        router.push('/payment')
     }
     const bankAccount = {
         bankName: "Access Bank Nigeria Limited",
@@ -22,7 +22,6 @@ const Wallet = () => {
 
     const handkeViewAllTransactions = () => {
         router.push("/transactions");
-        router.push('/payment')
     }
     return (
         <div
@@ -38,7 +37,7 @@ const Wallet = () => {
                 textColor={'meedlBlue'}
             />
             <WalletBalance balance={21000000}/>
-            <LinkAccount bankAccount={bankAccount} numberOfAccounts={bankAccounts?.length} handleRouteClick={hah}/>
+            <LinkAccount bankAccount={bankAccount} numberOfAccounts={bankAccounts?.length} handleRouteClick={()=> {router.push("/payment/link-account")}}/>
             <div className={` max-h-[36vh] overflow-y-hidden  px-2 `}>
                 <Transaction onViewAllClick={handkeViewAllTransactions} viewLittle={true} data={generateMockData(4)}/>
             </div>
