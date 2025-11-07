@@ -816,6 +816,7 @@ function StepOne() {
                                         variant={"outline"}
                                         type={"button"}
                                         onClick={handleBackRoute}
+                                        id="backId"
                                     >
                                         Back
                                     </Button>
@@ -826,6 +827,7 @@ function StepOne() {
                                         variant={"secondary"}
                                         type={"submit"}
                                         disabled={!isFormValid}
+                                        id="continueId"
                                     >
                                            continue
                                     </Button>
