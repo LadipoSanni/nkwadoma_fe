@@ -161,8 +161,8 @@ const SetAutoRepayment = () => {
                         <p className={` mr-auto ml-auto text-[#4D4E4D] md:text-[12px] ${inter.className} `}>Automatically deduct repayments from your account</p>
                     </div>
                     <div className={` w-full grid gap-3  `}>
-                        <div className={` grid gap-4   md:w-fit lg:w-fit w-full md:grid md:gap-2 lg:grid lg:gap-2  `}>
-                            <p className={`   text-[#212221] md:text-[14px] ${inter500.className}  `}>How will you prefer to repay?</p>
+                        <div className={` grid gap-4 md:items-center   md:w-fit lg:w-fit w-full md:grid md:gap-2 lg:grid lg:gap-2  `}>
+                            <p className={`   md:flex md:items-center text-[#212221] md:text-[14px] ${inter500.className}  `}>How will you prefer to repay?</p>
                             <div className={` grid grid-cols-2 gap-2 md:gap-3 lg:gap-3 md:flex lg:flex `}>
                                 {repaymentTimeButton('Weekly', selectedTimePreference === 'Weekly', () => {setSelectedTimePreference('Weekly')}, ` w-full lg:w-[12rem] md:w-[12rem] `)}
                                 {repaymentTimeButton('Monthly', selectedTimePreference === 'Monthly', () => {setSelectedTimePreference('Monthly')}, ` w-full lg:w-[12rem] md:w-[12rem] `)}
