@@ -1,12 +1,12 @@
 'use client'
-import React, { useState, useMemo } from 'react'
+import React, { useState } from 'react'
 import BackButton from "@/components/back-button";
 import { useRouter } from 'next/navigation';
 import { inter } from '@/app/fonts';
 import DropdownFilter from "@/reuseable/Dropdown/DropdownFilter";
 import {months} from "@/utils/LoanProductMockData";
 import { transactionsHistory } from '@/utils/LoanRequestMockData/cohortProduct';
-import { getPaginatedData } from '@/utils/Mock-paginated-data';
+// import { getPaginatedData } from '@/utils/Mock-paginated-data';
 import { TransactionHistory } from '@/reuseable/transactions/Transaction-history';
 import styles from "./index.module.css"
 
@@ -25,17 +25,17 @@ const handle =() => {
   }
 }
 
-const [pageNumber, setPageNumber] = useState(0);
-  const pageSize = 20;
+// const [pageNumber, setPageNumber] = useState(0);
+//   const pageSize = 20;
 
-  const pagination = useMemo(() => {
-    return getPaginatedData(
-      pageNumber,
-      pageSize,
-      transactionsHistory,
-      setPageNumber
-    );
-  }, [pageNumber, transactionsHistory]);
+//   const pagination = useMemo(() => {
+//     return getPaginatedData(
+//       pageNumber,
+//       pageSize,
+//       transactionsHistory,
+//       setPageNumber
+//     );
+//   }, [pageNumber, transactionsHistory]);
 
 
 
@@ -45,14 +45,7 @@ const setMonthItem = (value: string | number) => {
     }else {
         setSelectedMonth(value)
     }
-<<<<<<< HEAD
-=======
 
-    if(displayedMonth && selectedIndex && year && displayedYear) {
-       return ""
-    }
-
->>>>>>> a4eb6cd56d22d59f636603f40c63339e822bc9aa
 }
 
 const clearMonthFilter = () => {
@@ -130,21 +123,13 @@ const clearMonthFilter = () => {
 
    <div className='mt-10'>
    <TransactionHistory
-<<<<<<< HEAD
     transactions={transactionsHistory}
     // currentPage={pagination.pageNumber}
     // totalPages={pagination.totalPages}
     // onPageChange={setPageNumber}
     // hasNextPage={pagination.hasNextPage}
     className={`h-[61vh] ${styles.container}`}
-=======
-    transactions={pagination.currentPageItems}
-    currentPage={pagination.pageNumber}
-    totalPages={pagination.totalPages}
-    onPageChange={setPageNumber}
-    hasNextPage={pagination.hasNextPage}
-    className={`h-[52vh] ${styles.container}`}
->>>>>>> a4eb6cd56d22d59f636603f40c63339e822bc9aa
+
     />
    </div>
    <div className='hidden' onClick={handle}>

@@ -147,15 +147,10 @@ const router = useRouter()
     <div className={`${transactionsHistory.length === 0? "mb-24 md:mb-0 " : "mt-3"}`}>
       <TransactionHistory
        transactions={latestTransactions}
-<<<<<<< HEAD
       //  currentPage={0}
       //  totalPages={1}
       //  onPageChange={()=>{}}
-=======
-       currentPage={0}
-       totalPages={1}
-       onPageChange={()=>{}}
->>>>>>> a4eb6cd56d22d59f636603f40c63339e822bc9aa
+
        handleViewAll={()=>{router.push("/payment/payment-history")}}
       />
     </div>

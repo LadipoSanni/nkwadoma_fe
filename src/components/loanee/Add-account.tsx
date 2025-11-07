@@ -15,7 +15,6 @@ interface Props {
 }
 
 function AddAccount({ setIsOpen}:Props) {
-<<<<<<< HEAD
   const [selectedAccount, setSelectedAccount] = useState<string | null>(null);
   const {toast} = useToast();
 
@@ -29,27 +28,7 @@ function AddAccount({ setIsOpen}:Props) {
   };
 
   const handleSubmit = () => {
-=======
-  const [selectedAccounts, setSelectedAccounts] = useState<Set<string>>(new Set());
-  const {toast} = useToast();
 
-  const handleAccountSelect = (account: BankAccount, isChecked: boolean) => {
-    setSelectedAccounts(prev => {
-      const newSet = new Set(prev);
-      if (isChecked) {
-        newSet.add(account.accountNumber);
-      } else {
-        newSet.delete(account.accountNumber);
-      }
-      return newSet;
-    });
-  };
-
- 
-  const selectedAccountsArray = Array.from(selectedAccounts);
-
-   const handleSubmit = () => {
->>>>>>> a4eb6cd56d22d59f636603f40c63339e822bc9aa
     toast({
         description: "Added successfully",
         status: "success",
@@ -58,13 +37,9 @@ function AddAccount({ setIsOpen}:Props) {
     if(setIsOpen){
         setIsOpen(false)
     }
-<<<<<<< HEAD
     console.log(selectedAccount)
   }
-=======
-    console.log(selectedAccountsArray)
-   }
->>>>>>> a4eb6cd56d22d59f636603f40c63339e822bc9aa
+
 
   return (
     <div className={`${inter.className} w-full mb-7`}>
@@ -72,11 +47,7 @@ function AddAccount({ setIsOpen}:Props) {
       <div className='mt-2'>
         <p className='text-[#212221] text-[20px] font-medium'>Add new account</p>
         <p className='text-[#4D4E4D] text-[14px] mt-1 '>
-<<<<<<< HEAD
           Select an account to add
-=======
-          Select one or more accounts to add
->>>>>>> a4eb6cd56d22d59f636603f40c63339e822bc9aa
         </p>
       </div>
       
@@ -100,11 +71,7 @@ function AddAccount({ setIsOpen}:Props) {
             key={account.accountNumber}
             account={account}
             showCheckmark={true}
-<<<<<<< HEAD
             isSelected={selectedAccount === account.accountNumber}
-=======
-            isSelected={selectedAccounts.has(account.accountNumber)}
->>>>>>> a4eb6cd56d22d59f636603f40c63339e822bc9aa
             onSelect={handleAccountSelect}
             className='pb-3'
           />
@@ -115,11 +82,7 @@ function AddAccount({ setIsOpen}:Props) {
       <div className='mt-6 flex items-center justify-end'>
         <Button
           className='bg-meedlBlue text-white w-[140px] h-[44px] rounded-lg disabled:bg-[#D7D7D7]'
-<<<<<<< HEAD
           disabled={!selectedAccount} 
-=======
-          disabled={selectedAccounts.size === 0}
->>>>>>> a4eb6cd56d22d59f636603f40c63339e822bc9aa
           onClick={handleSubmit}
           variant={"secondary"}
           id='addAccountId'
@@ -131,9 +94,4 @@ function AddAccount({ setIsOpen}:Props) {
   )
 }
 
-<<<<<<< HEAD
 export default AddAccount
-=======
-export default AddAccount
-
->>>>>>> a4eb6cd56d22d59f636603f40c63339e822bc9aa

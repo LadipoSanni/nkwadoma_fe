@@ -95,9 +95,5 @@ export const hankenGrotesk = Hanken_Grotesk({
     style: 'normal',
     weight: '400',
     preload: false
-<<<<<<< HEAD
-});
-=======
-});
 
->>>>>>> a4eb6cd56d22d59f636603f40c63339e822bc9aa
+});

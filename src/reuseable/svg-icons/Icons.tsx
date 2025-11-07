@@ -92,8 +92,6 @@ export const WalletAddIcon = ({ className = "w-6 h-6", ...props }) => (
         strokeLinecap="round"
       />
     </svg>
-<<<<<<< HEAD
-=======
 
->>>>>>> a4eb6cd56d22d59f636603f40c63339e822bc9aa
+
   );
