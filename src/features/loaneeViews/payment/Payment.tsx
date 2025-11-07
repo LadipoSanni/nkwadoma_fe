@@ -155,4 +155,3 @@ const router = useRouter()
 }
 
 export default Payment
-
