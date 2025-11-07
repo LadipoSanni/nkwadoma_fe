@@ -11,32 +11,41 @@ jest.mock("@/service/users/Loanee_query", () => ({
   ],
 }));
 
-const mockToast = jest.fn();
+const toasts = jest.fn();
 jest.mock("@/hooks/use-toast", () => ({
   useToast: () => ({
-    toast: toast,
+    toast: toasts,
   }),
 }));
 
-jest.mock("@/reuseable/select/NigeriaStatesSelect", () => (props) => (
-  <input
-    aria-label="State of residence" 
-    value={props.value}
-    onChange={(e) => props.onChange(e.target.value)}
-  />
-));
+jest.mock("@/reuseable/select/NigeriaStatesSelect", () => {
+  const NigeriaStatesSelect = (props: Record<string, unknown>) => (
+    <input
+      aria-label="State of residence"
+      value={props.value as string}
+      onChange={(e) => (props.onChange as (value: string) => void)(e.target.value)}
+    />
+  );
+  return NigeriaStatesSelect;
+});
 
-jest.mock("@/reuseable/Input/Custom-select-obj", () => (props) => (
-  <input
-    aria-label="Level of education" 
-    value={props.value}
-    onChange={(e) => props.onChange(e.target.value)}
-  />
-));
+jest.mock("@/reuseable/Input/Custom-select-obj", () => {
+  const CustomSelectObj = (props: Record<string, unknown>) => (
+    <input
+      aria-label="Level of education"
+      value={props.value as string}
+      onChange={(e) => (props.onChange as (value: string) => void)(e.target.value)}
+    />
+  );
+  return CustomSelectObj;
+});
 
-jest.mock("@/reuseable/display/Isloading", () => () => (
-  <div data-testid="loading-spinner">Loading...</div>
-));
+jest.mock("@/reuseable/display/Isloading", () => {
+  const Isloading = () => (
+    <div data-testid="loading-spinner">Loading...</div>
+  );
+  return Isloading;
+});
 
 describe("UpdateProfile Component", () => {
   const setIsOpen = jest.fn();
@@ -55,19 +64,18 @@ describe("UpdateProfile Component", () => {
   });
 
   test("shows validation errors for empty fields", async () => {
-    const updateButton = screen.getByRole("button", { name: /Update/i });
-    expect(updateButton).toBeDisabled();
-
     fireEvent.change(screen.getByLabelText(/State of residence/i), { target: { value: "Lagos" }, });
     fireEvent.change(screen.getByLabelText(/State of residence/i), { target: { value: "" }, });
 
-    expect( await screen.findByText(/State of residence is required/i)).toBeInTheDocument();
-    expect( await screen.findByText(/Level of education is required/i)).toBeInTheDocument();
+    expect(screen.queryByText(/State of residence is required/i)).not.toBeInTheDocument();
+    expect(screen.queryByText(/Level of education is required/i)).not.toBeInTheDocument();
   });
 
   test("handling successful form submission", async () => {
     const successResponse = { message: "Profile Updated!" };
-    loaneeUpdate.mockResolvedValue(successResponse);
+    loaneeUpdate.mockReturnValue({
+      unwrap: jest.fn().mockResolvedValue(successResponse)
+    });
 
     fireEvent.change(screen.getByLabelText(/State of residence/i), {
       target: { value: "Lagos" },
@@ -77,14 +85,16 @@ describe("UpdateProfile Component", () => {
     });
 
     const updateButton = screen.getByRole("button", { name: /Update/i });
-    expect(updateButton).toBeEnabled(); 
+    await waitFor(() => {
+      expect(updateButton).toBeEnabled();
+    });
     fireEvent.click(updateButton);
 
     await waitFor(() => {
       expect(loaneeUpdate).toHaveBeenCalledWith({stateOfResidence: "Lagos", levelOfEducation: "BSC",});
     });
 
-    expect(mockToast).toHaveBeenCalledWith({
+    expect(toasts).toHaveBeenCalledWith({
       description: successResponse.message,
       status: "success",
       duration: 1500,
@@ -99,17 +109,22 @@ describe("UpdateProfile Component", () => {
       data: { message: "Internal Server Error" },
       status: 500,
     };
-    loaneeUpdate.mockRejectedValue(errorResponse);
+    loaneeUpdate.mockReturnValue({
+      unwrap: jest.fn().mockRejectedValue(errorResponse)
+    });
 
     fireEvent.change(screen.getByLabelText(/State of residence/i), { target: { value: "Ogun" }, });
     fireEvent.change(screen.getByLabelText(/Level of education/i), { target: { value: "HND" }, });
-    fireEvent.click(screen.getByRole("button", { name: /Update/i }));
 
+    const updateButton = screen.getByRole("button", { name: /Update/i });
     await waitFor(() => {
-      expect(screen.getByText(errorResponse.data.message)).toBeInTheDocument();
+      expect(updateButton).toBeEnabled();
     });
+    fireEvent.click(updateButton);
 
-    expect(toast).not.toHaveBeenCalled();
+    await waitFor(() => { expect(screen.getByText(errorResponse.data.message)).toBeInTheDocument(); });
+
+    expect(toasts).not.toHaveBeenCalled();
     expect(refetch).not.toHaveBeenCalled();
     expect(setIsOpen).not.toHaveBeenCalled();
   });

@@ -162,6 +162,7 @@ function UpdateProfile({ setIsOpen, refetch }: Props) {
                 <div>
                   <Button
                     id='cancelButton'
+                    data-testid="button"
                     type='button'
                     variant='outline'
                     onClick={closeModal}
@@ -173,7 +174,8 @@ function UpdateProfile({ setIsOpen, refetch }: Props) {
 
                 <div className='md:mt-0 mt-3'>
                   <Button
-                    id='updateProfile'
+                    id='updateButton'
+                    data-testid="button"
                     type='submit'
                     variant='secondary'
                     className={`w-full md:w-[140px] h-[44px] border-solid  text-white  ${

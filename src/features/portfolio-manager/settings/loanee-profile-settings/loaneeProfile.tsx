@@ -43,8 +43,7 @@ const LoaneeProfileSetting = ({ whoseProfile, companyUrl }: ProfileProps) => {
             </p>
           </div>
 
-          <LoaneeUploadButton
-            whose={whoseProfile}
+          <LoaneeUploadButton         whose={whoseProfile}
             url={avatarUrl}
             onUploadSuccess={refetch}
           />
