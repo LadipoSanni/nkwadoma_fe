@@ -2,11 +2,13 @@
 import BackButton from '@/components/back-button';
 import React from 'react';
 import WalletBalance from "@/reuseable/cards/WalletBalance";
+import { useRouter } from 'next/navigation';
 
 const Wallet = () => {
+    const router = useRouter()
 
     const hah = () => {
-
+        router.push('/payment')
     }
     return (
         <div

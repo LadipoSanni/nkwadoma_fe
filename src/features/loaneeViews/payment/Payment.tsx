@@ -120,7 +120,7 @@ const router = useRouter()
     textColor={'meedlBlue'}
     text={'View'} 
     iconBeforeLetters={false}
-    handleClick={()=>{}}
+    handleClick={() => {router.push('/wallet')}}
     className='font-medium text-[16px] mr-2'
     sx='text-[20px]'
    />
