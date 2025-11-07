@@ -12,7 +12,7 @@ const Wallet = () => {
 
     const router = useRouter()
     const hah = () => {
-
+        router.push('/payment')
     }
     const bankAccount = {
         bankName: "Access Bank Nigeria Limited",

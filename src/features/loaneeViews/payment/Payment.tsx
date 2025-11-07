@@ -91,6 +91,7 @@ const router = useRouter()
              className='h-[37px] font-bold w-[141px] text-[14px]'
              id='makePayment'
              data-testid={"makePaymentTextId"}
+             onClick={() => {router.push("/payment/make-payment")}}
              >
                 Make payment
              </Button>
@@ -120,7 +121,7 @@ const router = useRouter()
     textColor={'meedlBlue'}
     text={'View'} 
     iconBeforeLetters={false}
-    handleClick={()=>{}}
+    handleClick={() => {router.push('/wallet')}}
     className='font-medium text-[16px] mr-2'
     sx='text-[20px]'
    />
@@ -144,7 +145,7 @@ const router = useRouter()
        currentPage={0}
        totalPages={1}
        onPageChange={()=>{}}
-       handleViewAll={()=>{}}
+       handleViewAll={()=>{router.push("/payment/payment-history")}}
       />
     </div>
   </section>

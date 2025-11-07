@@ -98,7 +98,7 @@ const LoaneeDetails = ({isViewingOrganizationLoaneeLoansThrowCohortFlow}: IndexP
     const tab:  {name: string; displayValue: React.ReactNode}[] = [
         {name: 'Details',  displayValue: <LoaneeLoanDetails isViewingOrganizationLoaneeLoans={isViewingOrganizationLoaneeLoansThrowCohortFlow}  data={isViewingOrganizationLoaneeLoansThrowCohortFlow ?  data?.data : userRole === 'LOANEE' ? loanLoanProgressDetails?.data : viewLoaneeDisbursedLoanDetails?.data } isLoading={isViewingOrganizationLoaneeLoansThrowCohortFlow ? isLoading || isFetching :isFetchingLoaneeLoanDetails || isLoadingLoaneeLoanDetails } />},
         {name: 'Repayment',  displayValue:<ViewRepayment loanId={ viewRepaymentId } />},
-        {name: 'Repayment schedule',  displayValue:<ViewRepaymentSchedule loanId={isViewingOrganizationLoaneeLoansThrowCohortFlow ? data?.data?.loanId : userRole === 'LOANEE' ? loanLoanProgressDetails?.data?.loanOfferId  : viewLoaneeDisbursedLoanDetails?.data?.id }/>},
+        {name: 'Repayment schedule',  displayValue:<ViewRepaymentSchedule loanId={isViewingOrganizationLoaneeLoansThrowCohortFlow ? data?.data?.loanId : userRole === 'LOANEE' ? loanLoanProgressDetails?.data?.loanOfferId  : viewLoaneeDisbursedLoanDetails?.data?.loanOfferId }/>},
         ...(userRole !== "LOANEE" ? [loaneeBioDataTab] : []),
 
 
