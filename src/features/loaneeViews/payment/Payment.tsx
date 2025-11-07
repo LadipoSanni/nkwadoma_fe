@@ -1,3 +1,4 @@
+
 'use client'
 import React, { useMemo } from 'react'
 import { inter } from '@/app/fonts'
@@ -91,6 +92,7 @@ const router = useRouter()
              className='h-[37px] font-bold w-[141px] text-[14px]'
              id='makePayment'
              data-testid={"makePaymentTextId"}
+             onClick={() => {router.push("/payment/make-payment")}}
              >
                 Make payment
              </Button>
@@ -144,7 +146,7 @@ const router = useRouter()
        currentPage={0}
        totalPages={1}
        onPageChange={()=>{}}
-       handleViewAll={()=>{}}
+       handleViewAll={()=>{router.push("/payment/payment-history")}}
       />
     </div>
   </section>
@@ -154,3 +156,4 @@ const router = useRouter()
 }
 
 export default Payment
+

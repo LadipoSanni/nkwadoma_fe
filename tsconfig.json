@@ -33,8 +33,9 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts"
-, "src/app/(Authenticated)/(Admin)/vehicle/edit/visibility", "src/app/(Authenticated)/(Admin)/vehicle/edit/status", "src/redux/slice/loan-product"  ],
+, "src/app/(Authenticated)/(Admin)/vehicle/edit/visibility", "src/app/(Authenticated)/(Admin)/vehicle/edit/status", "src/redux/slice/loan-product", "src/app/(Authenticated)/(loanee)/payment/payment-history"  ],
   "exclude": [
     "node_modules"
   ]
 }
+
