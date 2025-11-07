@@ -7,12 +7,8 @@ import Modal from "@/reuseable/modals/TableModal";
 import { Cross2Icon } from "@radix-ui/react-icons";
 import React, { useEffect, useRef, useState } from "react";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
+import { useAddUserImageMutation } from "@/service/users/api";
 import { useUploadImageToCloudinary } from "@/utils/UploadToCloudinary";
-import {
-  useAddOrganizationImageLogoMutation,
-  useAddUserImageMutation,
-  useGetUserDetailsQuery
-} from "@/service/users/api";
 
 interface Props {
   whose: "company" | "user";
@@ -20,32 +16,19 @@ interface Props {
   onUploadSuccess?: () => void;
 }
 
-const LoaneeUploadButton = ({ whose, url, onUploadSuccess }: Props) => {
+const LoaneeUploadButton = ({ url, onUploadSuccess }: Props) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [isBusy, setIsBusy] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
-  const { data: userDatas } = useGetUserDetailsQuery({});
-  const uploadedImage = userDatas?.data?.image;
-
-  const [updateUserData, { isLoading: isSavingUser }] =
-    useAddUserImageMutation();
-  const [updateOrg, { isLoading: isSavingOrg }] =
-    useAddOrganizationImageLogoMutation();
-  const supportedFileTypes = [
-    "image/svg+xml",
-    "image/png",
-    "image/jpg",
-    "image/jpeg",
-    "image/webp"
-  ];
+  const [updateUserData, { isLoading: isSavingUser }] = useAddUserImageMutation();
+  const supportedFileTypes = [ "image/svg+xml", "image/png", "image/jpg", "image/jpeg", "image/webp" ];
   const [modalIsOpen, setModalIsOpen] = useState(false);
-
   const { upload } = useUploadImageToCloudinary();
   const { toast } = useToast();
 
   useEffect(() => {
-    setIsBusy(isSavingUser || isSavingOrg);
-  }, [isSavingUser, isSavingOrg]);
+    setIsBusy(isSavingUser);
+  }, [isSavingUser]);
 
   const validateFile = (file: File): boolean => {
     if (!supportedFileTypes.includes(file.type)) {
@@ -54,7 +37,7 @@ const LoaneeUploadButton = ({ whose, url, onUploadSuccess }: Props) => {
       return false;
     }
     if (file.size / (1024 * 1024) > 2) {
-      setError(`File size exceeds 2 MB limit`);
+      setError(`File size exceeds 2 MB limit`); 
       setModalIsOpen(true);
       return false;
     }
@@ -77,10 +60,7 @@ const LoaneeUploadButton = ({ whose, url, onUploadSuccess }: Props) => {
       const uploadedFileUrl = await upload(selectedFile, "user_image");
 
       const props = { imageUrl: uploadedFileUrl };
-      const response =
-        whose === "company"
-          ? await updateOrg(props)
-          : await updateUserData(props);
+      const response = await updateUserData(props);
 
       if (response.data) {
         toast({ description: response.data.message, status: "success" });
@@ -106,7 +86,8 @@ const LoaneeUploadButton = ({ whose, url, onUploadSuccess }: Props) => {
       fileInputRef.current.click();
     }
   };
-  const image = whose === "company" ? url : uploadedImage;
+
+  const image = url;
 
   return (
     <div className={` md:grid gap-2  `}>
@@ -114,7 +95,7 @@ const LoaneeUploadButton = ({ whose, url, onUploadSuccess }: Props) => {
         onClick={onClick}
         className={`relative ${
           !isBusy ? "cursor-pointer" : "cursor-wait"
-        } rounded-full group md:w-20 w-12 md:h-20 h-12`}
+        } rounded-full group md:w-[68px] w-[42px] md:h-[68px] h-[42px]`}
         role='button'
         tabIndex={!isBusy ? 0 : -1}
         aria-label='Upload profile image'
@@ -123,16 +104,16 @@ const LoaneeUploadButton = ({ whose, url, onUploadSuccess }: Props) => {
         }
       >
         {image ? (
-          <Avatar className='md:w-20 w-12 md:h-20 h-12'>
+          <Avatar className='md:w-[68px] w-[42px] md:h-[68px] h-[42px]'>
             <AvatarImage
-              className={`md:w-20 w-12 md:h-20 h-12 ${isBusy ? "opacity-50" : ""}`}
+              className={`md:w-[69px] w-[42px] md:h-[68px] h-[42px] ${isBusy ? "opacity-50" : ""}`}
               src={image}
               alt='userImage'
             />
           </Avatar>
         ) : (
           <FaCircleUser
-            className={`md:w-20 w-12 md:h-20 h-12 text-[#ececec] ${isBusy ? "opacity-50" : ""}`}
+            className={`md:w-[68px] w-[42px] md:h-[68px] h-[42px] text-[#ececec] ${isBusy ? "opacity-50" : ""}`}
           />
         )}
         {!isBusy ? (
@@ -147,7 +128,7 @@ const LoaneeUploadButton = ({ whose, url, onUploadSuccess }: Props) => {
       </div>
 
       <input
-        id='fileInput'
+        id='uploadButton'
         type='file'
         accept={supportedFileTypes.join(",")}
         style={{ display: "none" }}
@@ -171,13 +152,11 @@ const LoaneeUploadButton = ({ whose, url, onUploadSuccess }: Props) => {
           <div className={`${inter.className}`}>
             <div>
               <Image
-                // src={modalType === "update"? "/Icon - Warning.svg" : "/Inner circle (1).png"}
                 src={`/Icon - Warning.svg`}
                 alt='image'
                 width={30}
                 height={30}
                 className={`w-14`}
-                // className={` ${modalType === "update"? "w-14" : "w-11"} `}
               />
             </div>
             <p className='mt-4 mb-5 text-[14px] text-[#475467]'>{error}</p>

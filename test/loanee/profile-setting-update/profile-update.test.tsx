@@ -21,51 +21,40 @@ jest.mock("next/navigation", () => ({
   redirect: jest.fn()
 }));
 
-jest.mock("@/reuseable/buttons/loaneeUpdateButton", () => {
-  const UploadButton = () => <div data-testid='upload-button'></div>;
-  UploadButton.displayName = "UploadButton";
-  return UploadButton;
-});
-
-jest.mock( "@/features/portfolio-manager/settings/loanee-profile-settings/update-profile-modal/updateProfile", () => {
+jest.mock( "@/features/portfolio-manager/settings/loanee-profile-settings/update-profile-modal/update-profile", () => {
     const UpdateProfile = ({ isOpen }: { isOpen: boolean }) => {
       if (!isOpen) {
         return null;
       }
-      return <div data-testid='update-profile-modal'></div>;
+      return <div data-testid='update-profile'></div>;
     };
     UpdateProfile.displayName = "Update profile";
     return UpdateProfile;
   }
 );
 
-jest.mock("@/service/users/Loanee_query", () => ({
+jest.mock("@/service/users/api", () => ({
   loaneeApi: {
-    reducerPath: 'loaneeApi',
+    reducerPath: 'userApi',
     reducer: (state = {}) => state,
     middleware: jest.fn(() => (next: (action: AnyAction) => AnyAction) => (action: AnyAction)=> next(action))
   },
-  useViewUserDetailQuery: jest.fn(() => ({
+  useGetUserDetailsQuery: jest.fn(() => ({
     data: {
-      userIdentity: {
         dateOfBirth: "1990-01-01",
         gender: "Male",
         stateOfOrigin: "Lagos",
-        stateOfResidence: "Lagos",
+        stateOfResidence: "Abuja",
         email: "test@example.com",
         phoneNumber: "1234567890",
         residentialAddress: "123 Test St",
-        avatar: "test-avatar.jpg"
-      },
-      highestLevelOfEducation: "Bachelor's Degree",
-      institutionName: "Test University",
-      nextOfKin: {
-        firstName: "John",
-        lastName: "Doe",
-        email: "john@example.com",
+        image: "test-avatar.jpg",
+        levelOfEducation: "Bsc",
+        nextOfKinFirstName: "John",
+        nextOfKinLastName: "Doe",
+        nextOfKinEmail: "john@example.com",
         nextOfKinRelationship: "Brother",
-        contactAddress: "456 Test Ave"
-      }
+        nextOfKinContactAddress: "456 Test Ave"
     },
     isLoading: false,
     error: null
@@ -102,10 +91,8 @@ describe("LoaneeProfileComponent", () => {
 
   test('should opens the modal when "Update profile" is clicked', () => {
     expect(screen.queryByTestId("update-profile-modal")).not.toBeInTheDocument();
-
     const updateButton = screen.getByRole("button", { name: /Update profile/i });
     fireEvent.click(updateButton);
-
-    expect(screen.getByTestId("update-profile-modal")).toBeInTheDocument();
+    expect(screen.getByTestId("update-profile")).toBeInTheDocument();
   });
 });
