@@ -1,109 +1,137 @@
 import React from "react";
 import "@testing-library/jest-dom";
-import { render, screen, cleanup, fireEvent, waitFor } from "@testing-library/react";
-import UpdateLoaneeProfile from "@/features/portfolio-manager/settings/loanee-profile-settings/update-profile-modal/updateProfile";
+import { render, screen, fireEvent, waitFor } from "@testing-library/react";
+import UpdateProfile from "@/features/portfolio-manager/settings/loanee-profile-settings/update-profile-modal/update-profile";
 
-jest.useFakeTimers();
-
-jest.mock("lucide-react", () => ({
-  X: () => <svg data-testid='x-icon'></svg>
+const loaneeUpdate = jest.fn();
+jest.mock("@/service/users/Loanee_query", () => ({
+  useLoaneeUpdateProfileMutation: () => [
+    loaneeUpdate,
+    { isLoading: false }, 
+  ],
 }));
 
-const onClose = jest.fn();
-const onUpdateSuccess = jest.fn();
+const toasts = jest.fn();
+jest.mock("@/hooks/use-toast", () => ({
+  useToast: () => ({
+    toast: toasts,
+  }),
+}));
 
-const profileUpdateProps = {
-  isOpen: true,
-  onClose: onClose,
-  onUpdateSuccess: onUpdateSuccess,
-  currentData: {
-    education: "B.Sc. Computer Science",
-    stateOfResidence: "Lagos"
-  }
-};
+jest.mock("@/reuseable/select/NigeriaStatesSelect", () => {
+  const NigeriaStatesSelect = (props: Record<string, unknown>) => (
+    <input
+      aria-label="State of residence"
+      value={props.value as string}
+      onChange={(e) => (props.onChange as (value: string) => void)(e.target.value)}
+    />
+  );
+  return NigeriaStatesSelect;
+});
 
-describe("UpdateLoaneeProfile", () => {
+jest.mock("@/reuseable/Input/Custom-select-obj", () => {
+  const CustomSelectObj = (props: Record<string, unknown>) => (
+    <input
+      aria-label="Level of education"
+      value={props.value as string}
+      onChange={(e) => (props.onChange as (value: string) => void)(e.target.value)}
+    />
+  );
+  return CustomSelectObj;
+});
+
+jest.mock("@/reuseable/display/Isloading", () => {
+  const Isloading = () => (
+    <div data-testid="loading-spinner">Loading...</div>
+  );
+  return Isloading;
+});
+
+describe("UpdateProfile Component", () => {
+  const setIsOpen = jest.fn();
+  const refetch = jest.fn();
+
   beforeEach(() => {
-    cleanup();
-    jest.spyOn(console, "log").mockReturnValue();
-    jest.spyOn(console, "warn").mockReturnValue();
-    jest.spyOn(console, "error").mockReturnValue();
-
-    onClose.mockReset();
-    onUpdateSuccess.mockReset();
+    jest.clearAllMocks();
+    render(<UpdateProfile setIsOpen={setIsOpen} refetch={refetch} />);
   });
 
-  test("should renders nothing when isOpen is false", () => {
-    render(<UpdateLoaneeProfile {...profileUpdateProps} isOpen={false} />);
-    expect(screen.queryByText("Update profile")).not.toBeInTheDocument();
+  test("renders the form fields and buttons", () => {
+    expect(screen.getByLabelText(/State of residence/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/Level of education/i)).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /Cancel/i })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /Update/i })).toBeInTheDocument();
   });
 
-  test("modal title and buttons when isOpen is true", () => {
-    render(<UpdateLoaneeProfile {...profileUpdateProps} />);
-    expect(screen.getByText("Update profile")).toBeInTheDocument();
-    expect(screen.getByText("Cancel")).toBeInTheDocument();
-    expect(screen.getByText("Update")).toBeInTheDocument();
+  test("shows validation errors for empty fields", async () => {
+    fireEvent.change(screen.getByLabelText(/State of residence/i), { target: { value: "Lagos" }, });
+    fireEvent.change(screen.getByLabelText(/State of residence/i), { target: { value: "" }, });
+
+    expect(screen.queryByText(/State of residence is required/i)).not.toBeInTheDocument();
+    expect(screen.queryByText(/Level of education is required/i)).not.toBeInTheDocument();
   });
 
-  test("pre-fills form fields when currentData is provided ", () => {
-    render(<UpdateLoaneeProfile {...profileUpdateProps} />);
-    expect(screen.getByText("Update profile")).toBeInTheDocument();
-    expect(screen.getByLabelText(/State of residence/i)).toHaveValue(
-      profileUpdateProps.currentData.stateOfResidence
-    );
-    expect(screen.getByLabelText(/Highest level of education/i)).toHaveValue(
-      profileUpdateProps.currentData.education
-    );
-  });
+  test("handling successful form submission", async () => {
+    const successResponse = { message: "Profile Updated!" };
+    loaneeUpdate.mockReturnValue({
+      unwrap: jest.fn().mockResolvedValue(successResponse)
+    });
 
-  test("should calls onClose when the Cancel button is clicked", () => {
-    render(<UpdateLoaneeProfile {...profileUpdateProps} />);
-    fireEvent.click(screen.getByText("Cancel"));
-    expect(onClose).toHaveBeenCalled();
-    expect(onClose).toHaveBeenCalledTimes(1);
-  });
+    fireEvent.change(screen.getByLabelText(/State of residence/i), {
+      target: { value: "Lagos" },
+    });
+    fireEvent.change(screen.getByLabelText(/Level of education/i), {
+      target: { value: "BSC" },
+    });
 
-  test("update button loading state calls onUpdateSuccess with user new data", async () => {
-    render(<UpdateLoaneeProfile {...profileUpdateProps} />);
-
-    const residenceInput = screen.getByLabelText(/State of residence/i);
-    const educationInput = screen.getByLabelText(/Highest level of education/i);
-    fireEvent.change(residenceInput, { target: { value: "Abuja" } });
-    fireEvent.change(educationInput, { target: { value: "M.Sc. Education" } });
-    fireEvent.click(screen.getByText("Update"));
-
-    jest.advanceTimersByTime(1000);
+    const updateButton = screen.getByRole("button", { name: /Update/i });
+    await waitFor(() => {
+      expect(updateButton).toBeEnabled();
+    });
+    fireEvent.click(updateButton);
 
     await waitFor(() => {
-      expect(onUpdateSuccess).toHaveBeenCalledTimes(1);
-      expect(onUpdateSuccess).toHaveBeenCalledWith({
-        education: "M.Sc. Education",
-        stateOfResidence: "Abuja"
-      });
+      expect(loaneeUpdate).toHaveBeenCalledWith({stateOfResidence: "Lagos", levelOfEducation: "BSC",});
     });
-    expect(screen.getByRole("button", { name: /Update/i })).toBeEnabled();
+
+    expect(toasts).toHaveBeenCalledWith({
+      description: successResponse.message,
+      status: "success",
+      duration: 1500,
+    });
+
+    expect(refetch).toHaveBeenCalledTimes(1);
+    expect(setIsOpen).toHaveBeenCalledWith(false);
   });
 
-  test("buttons are disabled when submitting", () => {
-    render(<UpdateLoaneeProfile {...profileUpdateProps} />);
-    fireEvent.click(screen.getByText("Update"));
-    expect(screen.getByText("Cancel")).toBeDisabled();
-    expect(screen.getByText("Updating...")).toBeDisabled();
+  test("should handle API error during submission", async () => {
+    const errorResponse = {
+      data: { message: "Internal Server Error" },
+      status: 500,
+    };
+    loaneeUpdate.mockReturnValue({
+      unwrap: jest.fn().mockRejectedValue(errorResponse)
+    });
+
+    fireEvent.change(screen.getByLabelText(/State of residence/i), { target: { value: "Ogun" }, });
+    fireEvent.change(screen.getByLabelText(/Level of education/i), { target: { value: "HND" }, });
+
+    const updateButton = screen.getByRole("button", { name: /Update/i });
+    await waitFor(() => {
+      expect(updateButton).toBeEnabled();
+    });
+    fireEvent.click(updateButton);
+
+    await waitFor(() => { expect(screen.getByText(errorResponse.data.message)).toBeInTheDocument(); });
+
+    expect(toasts).not.toHaveBeenCalled();
+    expect(refetch).not.toHaveBeenCalled();
+    expect(setIsOpen).not.toHaveBeenCalled();
   });
 
-  test("should shows an error message if the update fails", async () => {
-    onUpdateSuccess.mockImplementation(() => {
-      throw new Error("Simulated API failure");
-    });
-
-    render(<UpdateLoaneeProfile {...profileUpdateProps} />);
-    fireEvent.click(screen.getByText("Update"));
-
-    const errorMessage = await screen.findByTestId("error-message", undefined, {
-      timeout: 1500
-    });
-    expect(errorMessage).toBeInTheDocument();
-    expect(errorMessage).toHaveTextContent("Update failed. Please try again.");
-    expect(screen.getByText("Update")).toBeEnabled();
+  test("should calls setIsOpen(false) when Cancel button is clicked", () => {
+    fireEvent.click(screen.getByRole("button", { name: /Cancel/i }));
+    expect(setIsOpen).toHaveBeenCalledWith(false);
+    expect(setIsOpen).toHaveBeenCalledTimes(1);
   });
 });
