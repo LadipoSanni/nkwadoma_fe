@@ -11,7 +11,7 @@ import { useRouter } from 'next/navigation';
 const Wallet = () => {
 
     const router = useRouter()
-    const hah = () => {
+    const backToPayment = () => {
         router.push('/payment')
     }
     const bankAccount = {
@@ -32,7 +32,7 @@ const Wallet = () => {
             <BackButton
                 id={'backButton'}
                 iconBeforeLetters={true}
-                handleClick={hah}
+                handleClick={backToPayment}
                 text={'Back'}
                 textColor={'meedlBlue'}
             />
