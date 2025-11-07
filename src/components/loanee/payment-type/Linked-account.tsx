@@ -37,7 +37,7 @@ function LinkedAccount() {
     const paymentData = {
         referenceNumber: "000085752257",
         dateTime: "22, Feb 2024, 07:80 AM",
-        paymentMethod: "Wallet",
+        paymentMethod: "Linked account",
         amount: currentInitialState?.repaymentAmount || ""
       };
 

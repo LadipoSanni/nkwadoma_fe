@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, fireEvent, cleanup } from '@testing-library/react';
 import { TransactionHistory,Transaction } from '@/reuseable/transactions/Transaction-history';
 import '@testing-library/jest-dom';
 
@@ -64,6 +64,13 @@ jest.mock('@/reuseable/transactions/Transaction-items', () => ({
   ];
 
   describe('TransactionHistory Component', () => {
+
+     beforeEach(() => {
+            cleanup()
+            jest.spyOn(console,'log').mockReturnValue();
+            jest.spyOn(console,'warn').mockReturnValue();
+            jest.spyOn(console,'error').mockReturnValue();
+        })
    
     it('should render skeleton loader when isLoading is true', () => {
         render(

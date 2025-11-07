@@ -82,6 +82,7 @@ export const BankAccountItem: React.FC<BankAccountItemProps> = ({
               height={20}
               width={20}
               className={`${logoSize} rounded-full object-cover`}
+              unoptimized={true}
             />
           ) : (
             <div className={`${logoSize} text-[12px] flex items-center justify-center rounded-full bg-[#F3F8FF]`}>

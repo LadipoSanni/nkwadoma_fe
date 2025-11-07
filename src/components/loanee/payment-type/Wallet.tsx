@@ -32,6 +32,8 @@ function Wallet() {
     const initialFormValue = {
         repaymentAmount : repaymentAmount ||  ""
     }
+
+    const walletBalance = 3000000
     
     const validationSchema = Yup.object().shape({
         repaymentAmount: Yup.string()
@@ -41,7 +43,13 @@ function Wallet() {
                 if (!value) return false;
                 const numericValue = parseFloat(value.replace(/,/g, ''));
                 return numericValue > 0;
+            })
+            .test('not-exceed-balance', 'Amount cannot exceed your wallet balance', (value) => {
+                if (!value) return false;
+                const numericValue = parseFloat(value.replace(/,/g, ''));
+                return numericValue <= walletBalance;
             }),
+            
     })
 
     function handleSubmit(values: typeof initialFormValue, { setSubmitting }: FormikHelpers<typeof initialFormValue>) {
@@ -52,7 +60,6 @@ function Wallet() {
         setSubmitting(false);
     }
 
-    const walletBalance = 3000000
 
     const handleContinue = () => {
         setShowErrors(true);
