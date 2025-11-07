@@ -493,6 +493,7 @@ function StepTwo() {
                                  {values.vendor.length > 1 && (
                                     <div className="border-solid border-b-[1px] mb-8 pb-3 flex justify-end">
                                         <Button
+                                           id="deleteId"
                                             type="button"
                                             variant="ghost"
                                             onClick={() => remove(index)}
@@ -508,6 +509,7 @@ function StepTwo() {
  }
                               <div className="relative bottom-5">
                                  <Button
+                                 id="addAnotherProviderId"
                                       type="button"
                                       variant="ghost"
                                       className={`text-[#142854] border-none shadow-none hover:bg-white px-0 ${!areCurrentProvidersValid(values.vendor) ? 'opacity-50 cursor-not-allowed' : ''}`}
@@ -561,6 +563,7 @@ function StepTwo() {
                             <div className={`md:flex justify-between pt-5 gap-3 pb-5 lg:pr-12 mt-4 md:mt-0 `}>
                                   <div>
                                   <Button
+                                       id="backIdForSecondStep"
                                         className={`text-meedlBlue border border-meedlBlue h-12 md:w-32 w-full`}
                                         variant={"outline"}
                                         type={"button"}
@@ -574,6 +577,7 @@ function StepTwo() {
                                   </div >
                                   <div className="mt-3 md:mt-0">
                                     <Button
+                                    id="createOrUpdateId"
                                         className={`h-12 md:w-32 w-full ${!isFormValid(values) ? 'bg-[#D7D7D7] hover:bg-[#D7D7D7] text-meedlWhite cursor-not-allowed ' : 'bg-meedlBlue text-meedlWhite cursor-pointer'}`}
                                         variant={"secondary"}
                                         type={"submit"}

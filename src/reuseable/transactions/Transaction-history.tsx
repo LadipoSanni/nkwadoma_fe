@@ -21,7 +21,9 @@ interface TransactionHistoryProps {
   onPageChange: React.Dispatch<React.SetStateAction<number>>;
   hasNextPage?: boolean;
   isLoading?: boolean;
-  handleViewAll?:() => void
+  handleViewAll?:() => void;
+  className?: string;
+  style?: React.CSSProperties; 
 }
 
 export const TransactionHistory: React.FC<TransactionHistoryProps> = ({ 
@@ -31,7 +33,9 @@ export const TransactionHistory: React.FC<TransactionHistoryProps> = ({
   onPageChange,
   hasNextPage,
   isLoading,
-  handleViewAll
+  handleViewAll,
+  className,
+  style
 }) => {
   
   const groupedTransactions = transactions.reduce((acc, transaction) => {
@@ -54,22 +58,22 @@ export const TransactionHistory: React.FC<TransactionHistoryProps> = ({
   };
 
   const handlePreviousPage = () => {
-    if (currentPage > 1) {
+    if (currentPage > 0) {
       onPageChange((prevPage) => prevPage - 1);
     }
   };
 
   return (
-    <div className="w-full">
-     
+    <div className={`w-full `}>
+     <div className={`flex flex-col ${className}`} style={style}>
       { isLoading? <SkeletonForTransaction/> : transactions.length === 0? 
       <div>
      <GeneralEmptyState
       icon={MdOutlineAccountBalanceWallet}
       iconSize='1.7rem'
-      iconContainerClass='bg-[#EDF0F3]'
+      iconContainerClass='bg-[#F9FAFB]'
       color='#A8A8A8'
-      message={<div className='relative bottom-2 text-[#101828] font-medium'>
+      message={<div className='relative bottom-2 text-[#4D4E4D] font-medium'>
           Payment history will appear hear
       </div>}
      />
@@ -104,9 +108,10 @@ export const TransactionHistory: React.FC<TransactionHistoryProps> = ({
           </div>
         </div>
       ))}
+      </div>
 
       {totalPages > 1 && (
-        <div className="mt-6 ">
+        <div className="mt-auto">
           <Paginations
             page={currentPage + 1}
             totalPage={totalPages}
