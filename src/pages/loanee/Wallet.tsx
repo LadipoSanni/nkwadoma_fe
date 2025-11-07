@@ -22,6 +22,7 @@ const Wallet = () => {
 
     const handkeViewAllTransactions = () => {
         router.push("/transactions");
+        router.push('/payment')
     }
     return (
         <div
