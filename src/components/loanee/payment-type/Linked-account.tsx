@@ -177,7 +177,7 @@ function LinkedAccount() {
              }}
              placeholder='Select account'
              defaultValue={values.account}
-             selectAllcondition={true}
+            //  selectAllcondition={true}
             /> 
             <div className='flex items-center gap-1 mt-2'>
                 <MdInfoOutline className='h-[20px] w-[20px] text-[#06792D]'/>

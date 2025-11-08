@@ -28,7 +28,7 @@ interface MultiSelectContentProps {
 //   onClear: () => void;
 //   onClose: () => void;
 //   onToggleAll: () => void;
-  selectAllcondition?: boolean;
+  // selectAllcondition?: boolean;
   id?: string;
   restrictedItems?: string[];
   infinityScroll?: InfiniteScrollProps;
@@ -45,7 +45,7 @@ export const AccountMultiSelectContent = ({
 //   onClear,
 //   onClose,
 //   onToggleAll,
-  selectAllcondition = false,
+  // selectAllcondition = false,
   id,
   restrictedItems = [],
   infinityScroll,
