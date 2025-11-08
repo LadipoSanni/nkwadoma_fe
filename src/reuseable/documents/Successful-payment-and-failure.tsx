@@ -2,8 +2,6 @@ import React, { useState } from 'react';
 import { formatAmount } from '@/utils/Format';
 import { Button } from '@/components/ui/button';
 import { FiDownload } from 'react-icons/fi';
-import { store} from '@/redux/store';
-import { setWalletTab,setRepaymentAmount  } from '@/redux/slice/make-payment/payment';
 import { Cross2Icon } from "@radix-ui/react-icons";
 import { useRouter } from 'next/navigation';
 
