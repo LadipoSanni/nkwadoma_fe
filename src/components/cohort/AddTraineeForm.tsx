@@ -611,7 +611,7 @@ function AddTraineeForm({setIsOpen, tuitionFee,cohortId, isEdit,loaneeBasicDetai
                                                 >
                                                     <div key={'item'+ index}  className={` text-[14px] ${inter.className}   mt-auto mb-auto  w-full md:w-fit   h-full text-black  `}>
                                                         <StringDropdown
-                                                            height={' h-[3.2rem]  '}
+                                                            dropDownStyles={' h-[3.2rem]  '}
                                                             label={detail?.itemName}
                                                             items={names}
                                                             onSelect={ (value) => changeSelectedItem(index, detail?.itemName, value)

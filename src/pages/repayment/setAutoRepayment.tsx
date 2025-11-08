@@ -7,22 +7,24 @@ import {formatAmount} from "@/utils/Format";
 import {Button} from "@/components/ui/button";
 import {clsx} from "clsx";
 import {NumericFormat} from "react-number-format";
-import DatePickerInput from "@/reuseable/Input/DatePickerInput";
 import StringDropdown from "@/reuseable/Dropdown/DropdownSelect";
+import SearchableDropdown ,{DropdownItem} from "@/reuseable/Dropdown/SearchableDropDown";
+import Image from "next/image";
+import { GoCheckCircle } from "react-icons/go";
 
 const SetAutoRepayment = () => {
     const router = useRouter()
     const [amount, setAmount] = useState('')
     const [selectedTimePreference, setSelectedTimePreference] = useState('')
     const [selectedAccountType, setSelectedAccountType] = useState('')
-    const [isSelectOpen, setIsSelectOpen] = useState(false);
+    // const [isSelectOpen, setIsSelectOpen] = useState(false);
     const [seletedDay, setSelectedDay] = useState('Monday');
-    const [selectedTime, setSelectedTime] = useState('12:00AM');
+    const [selectedTime, setSelectedTime] = useState('12:00am');
 
     const handleBackClick = () => {
         router.push(`/my-loan-profile`)
     }
-    const [startDate, setDate] = useState<Date>();
+    // const [startDate, setDate] = useState<Date>();
 
 
     const  repaymentTimeButton = (text: string, isChecked: boolean, onClick: ()=> void,size:string) => {
@@ -31,9 +33,10 @@ const SetAutoRepayment = () => {
                 onClick={onClick}
                 id={'ButtonFor' + text?.replace(' ', '')}
                 data-testid={'ButtonFor' + text?.replace(' ', '')}
-                className={clsx(` ${size} lg:px-8  md:px-8 h-fit py-2 text-[14px] `, isChecked ? `   border-2 border-[#FDE2D2]  text-white ${inter700.className}  bg-meedlBlue  flex justify-center items-center  ` : `border border-[#C9C9D4] bg-[#F6F6F6]  ${inter.className} text-black flex justify-center items-center` )}
+                className={clsx(` ${size} lg:px-8  md:px-8 h-fit py-2 text-[14px] `, isChecked ? `   border-2 border-[#FDE2D2]  text-white ${inter700.className}  bg-meedlBlue  flex   ` : `border border-[#C9C9D4] bg-[#F6F6F6]  ${inter.className} text-black flex ` )}
             >
-                {text}
+                <span className={` flex justify-center items-center `}>{text}</span>
+                {isChecked && <span className={` mt-0 mr-0 bg-white rounded-full w-fit h-fit  `}><GoCheckCircle className={` text-meedlBlue  `}/></span>}
             </Button>
         )
 
@@ -69,13 +72,28 @@ const SetAutoRepayment = () => {
                 hour12: true,
             });
 
-            intervals.push(formatted);
+            intervals.push(formatted?.toLowerCase());
         }
 
         return intervals;
     }
 
     const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+
+    const items: DropdownItem[] = [
+        {
+            id: 1,
+            label: "Access Bank Nigeria Limited",
+            subLabel: "4145358587",
+            icon: <Image src="/accessbanglogo.png" alt="Access Bank" width={24} height={24} />,
+        },
+        {
+            id: 2,
+            label: "Guaranty Trust Holding Company Plc",
+            subLabel: "4145358587",
+            icon: <Image src="/gtbanklogo.png" alt="GTBank" width={24} height={24} />,
+        },
+    ];
 
 
     const monthlyRepaymentField = ( ) => {
@@ -88,19 +106,23 @@ const SetAutoRepayment = () => {
                             id="amount"
                             name="amount"
                             // type="number"
+                            prefix={'₦'}
                             type="text"
                             inputMode="numeric"
                             thousandSeparator=","
                             decimalScale={2}
-                            fixedDecimalScale={true}
+                            // fixedDecimalScale={true}
                             placeholder="Enter amount"
                             value={amount}
-                            // component={CustomInputField}
+                            fixedDecimalScale
                             className={`w-full p-3 h-[3rem] text-[#4D4E4D] text-[14px] ${inter.className}  mt-auto mb-auto border rounded focus:outline-none`}
-                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                                // let value = e.target.value;
-                                // value = value.replace(/\D/g, "");
-                                setAmount(e.target.value)
+                            // onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                            //     setAmount(e.target.value)
+                            // }}
+                            onValueChange={(values) => {
+                                // values.value is the raw numeric string (without commas or ₦)
+                                const rounded = Math.round(parseFloat(values.value || "0") * 100) / 100;
+                                setAmount(rounded.toString());
                             }}
                         />
                     </div>
@@ -112,23 +134,40 @@ const SetAutoRepayment = () => {
                         {radioButton(selectedAccountType === 'Linked accounts', 'Linked accounts', () => {setSelectedAccountType('Linked accounts')})}
                     </div>
                 </div>
-                <div className={` grid grid-cols-2 gap-4  md:flex lg:flex md:w-fit lg:w-fit w-full   `}>
-                    <div>
+                {selectedAccountType === 'Linked accounts' &&
+                    <div className={` grid gap-1 w-full`}>
+                        <p className={` text-[12px] lg:text-[14px]  md:text-[14px] text-[#101828] ${inter500.className} `}>Select account  to pay from</p>
+                        <SearchableDropdown
+                            items={items}
+                            widthClass={` w-full  `}
+                            placeholderStyle={` ${inter.className} text-sm text-[#4D4E4D]  `}
+                            onSelect={(item) => console.log("Selected:", item)}
+                            placeholder="Select account"
+                            footerNote="You can pay from one or more linked accounts."
+                        />
+                    </div>
+                }
+                <div className={` grid grid-cols-2 gap-4  md:flex lg:flex  w-full   `}>
+                    <div className={` grid gap-1 md:w-[65%] w-full`}>
                         <p className={` text-[12px] lg:text-[14px]  md:text-[14px] text-[#101828] ${inter500.className} `}>Day of the month</p>
                         <StringDropdown
-                            height={' h-[3rem]  '}
+                            dropDownStyles={' w-full w-full  h-[2.5rem]  '}
                             label={seletedDay}
                             items={days}
                             onSelect={(value) => {setSelectedDay(value)}}
+                            dropdownMenuContentStyles={` md:w-[14rem] md:!w-[14rem] w-[40vw] !w-[40vw] `}
+                            dropDownItemsStyles={` w-full text-[#4D4E4D] h-fit py-4  border-b border-[#ECECEC]  `}
                         />
                     </div>
-                    <div  className={` grid gap-0 `}>
+                    <div  className={` grid gap-1 w-full  md:w-[35%]  `}>
                         <p className={` text-[12px] lg:text-[14px]  md:text-[14px] text-[#101828] ${inter500.className} `}>Preferred time</p>
                         <StringDropdown
-                            height={' h-[3rem]  '}
+                            dropDownStyles={' h-[2.5rem] w-full !w-full   '}
                             label={selectedTime}
                             items={getHalfHourIntervals()}
                             onSelect={(value) => {setSelectedTime(value)}}
+                            dropdownMenuContentStyles={` md:w-[14rem] md:!w-[14rem] w-[20vw] !w-[20vw] `}
+                            dropDownItemsStyles={` w-full text-[#4D4E4D] h-fit py-4  border-b border-[#ECECEC]  `}
                         />
                     </div>
                 </div>
@@ -152,13 +191,13 @@ const SetAutoRepayment = () => {
                         <p id={'walletBalanceAmount'} data-testid={'walletBalanceAmount'} className={` md:text-[20px] text-meedlBlue ${inter500.className} `}>{formatAmount(300000000000)}</p>
                     </section>
                 </header>
-                <section className={` bg-red-300 max-h-[40vh] h-[40vh] grid md:flex `}>
-                    <section className={` grid gap-3 w-full justify-items-center  `}>
-                        <div className={` w-fit mr-auto ml-auto `}>
-                            <p className={`  mr-auto ml-auto text-[#212221] md:text-[20px] ${inter500.className}  `}>Set auto repayment</p>
-                            <p className={` mr-auto ml-auto text-[#4D4E4D] md:text-[12px] ${inter.className} `}>Automatically deduct repayments from your account</p>
+                <section className={`  w-full max-h-[70vh] h-[70vh] grid md:flex `}>
+                    <section className={` grid gap-3 h-fit   w-full justify-items-center  `}>
+                        <div className={` w-fit grid justify-items-center `}>
+                            <p className={`   text-[#212221] md:text-[20px] ${inter500.className}  `}>Set auto repayment</p>
+                            <p className={`  text-[#4D4E4D] md:text-[12px] ${inter.className} `}>Automatically deduct repayments from your account</p>
                         </div>
-                        <div className={` w-full md:w-fit grid md:justify-items-center gap-3  `}>
+                        <div className={` w-full md:w-[30vw] md:max-w-[30vw] lg:w-[30vw] lg:max-w-[30vw]  grid md:justify-items-center gap-3  `}>
                             <div className={` grid gap-4 md:items-center   w-full md:grid md:gap-2 lg:grid lg:gap-2  `}>
                                 <p className={`   md:flex md:items-center text-[#212221] md:text-[14px] ${inter500.className}  `}>How will you prefer to repay?</p>
                                 <div className={` grid grid-cols-2 gap-2 md:gap-3 lg:gap-3 md:flex lg:flex `}>
@@ -166,7 +205,7 @@ const SetAutoRepayment = () => {
                                     {repaymentTimeButton('Monthly', selectedTimePreference === 'Monthly', () => {setSelectedTimePreference('Monthly')}, ` w-full  `)}
                                 </div>
                             </div>
-                            {selectedTimePreference === 'Monthly' &&<div>
+                            {selectedTimePreference === 'Monthly' &&<div className={` w-full  `}>
                                 {monthlyRepaymentField()}
                             </div>}
                         </div>
