@@ -1,12 +1,12 @@
 'use client'
-import React, { useState, useMemo } from 'react'
+import React, { useState } from 'react'
 import BackButton from "@/components/back-button";
 import { useRouter } from 'next/navigation';
 import { inter } from '@/app/fonts';
 import DropdownFilter from "@/reuseable/Dropdown/DropdownFilter";
 import {months} from "@/utils/LoanProductMockData";
 import { transactionsHistory } from '@/utils/LoanRequestMockData/cohortProduct';
-import { getPaginatedData } from '@/utils/Mock-paginated-data';
+// import { getPaginatedData } from '@/utils/Mock-paginated-data';
 import { TransactionHistory } from '@/reuseable/transactions/Transaction-history';
 import styles from "./index.module.css"
 
@@ -25,17 +25,17 @@ const handle =() => {
   }
 }
 
-const [pageNumber, setPageNumber] = useState(0);
-  const pageSize = 20;
+// const [pageNumber, setPageNumber] = useState(0);
+//   const pageSize = 20;
 
-  const pagination = useMemo(() => {
-    return getPaginatedData(
-      pageNumber,
-      pageSize,
-      transactionsHistory,
-      setPageNumber
-    );
-  }, [pageNumber, transactionsHistory]);
+//   const pagination = useMemo(() => {
+//     return getPaginatedData(
+//       pageNumber,
+//       pageSize,
+//       transactionsHistory,
+//       setPageNumber
+//     );
+//   }, [pageNumber, transactionsHistory]);
 
 
 
@@ -44,10 +44,6 @@ const setMonthItem = (value: string | number) => {
         setSelectedMonth('')
     }else {
         setSelectedMonth(value)
-    }
-
-    if(displayedMonth && selectedIndex && year && displayedYear) {
-       return ""
     }
 
 }
@@ -127,12 +123,13 @@ const clearMonthFilter = () => {
 
    <div className='mt-10'>
    <TransactionHistory
-    transactions={pagination.currentPageItems}
-    currentPage={pagination.pageNumber}
-    totalPages={pagination.totalPages}
-    onPageChange={setPageNumber}
-    hasNextPage={pagination.hasNextPage}
-    className={`h-[52vh] ${styles.container}`}
+    transactions={transactionsHistory}
+    // currentPage={pagination.pageNumber}
+    // totalPages={pagination.totalPages}
+    // onPageChange={setPageNumber}
+    // hasNextPage={pagination.hasNextPage}
+    className={`h-[61vh] ${styles.container}`}
+
     />
    </div>
    <div className='hidden' onClick={handle}>

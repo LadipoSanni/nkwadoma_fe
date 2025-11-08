@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import Border from './Border'
 import { formatAmount } from '@/utils/Format';
-import { Formik, Form,FormikHelpers } from "formik";
+import { Formik, Form,FormikHelpers} from "formik";
 import * as Yup from "yup";
 import {NumericFormat} from 'react-number-format';
 import { Label } from '@/components/ui/label';
@@ -9,7 +9,9 @@ import { Button } from '@/components/ui/button';
 import { setWalletTab,setRepaymentAmount } from '@/redux/slice/make-payment/payment';
 import { store,useAppSelector } from '@/redux/store';
 import Modal from '@/reuseable/modals/TableModal';
-import SuccessfulPayment from '@/reuseable/documents/Successful-payment';
+import SuccessfulPaymentAndFailure from '@/reuseable/documents/Successful-payment-and-failure';
+import { inter } from '@/app/fonts';
+
 
 function Wallet() {
     const [showErrors, setShowErrors] = useState(false);
@@ -19,6 +21,8 @@ function Wallet() {
     const repaymentAmount = useAppSelector(state => state?.payment?.repaymentAmount)
     const [isOpen, setIsopen] = useState(false)
     const [formKey, setFormKey] = useState(0); 
+    const [isSuccessful, setIsSuccessful] = useState(false)
+
 
      const paymentData = {
         referenceNumber: "000085752257",
@@ -30,6 +34,10 @@ function Wallet() {
     const initialFormValue = {
         repaymentAmount : repaymentAmount ||  ""
     }
+
+
+    const walletBalance = 3000000
+
     
     const validationSchema = Yup.object().shape({
         repaymentAmount: Yup.string()
@@ -39,15 +47,25 @@ function Wallet() {
                 if (!value) return false;
                 const numericValue = parseFloat(value.replace(/,/g, ''));
                 return numericValue > 0;
+            })
+            .test('not-exceed-balance', 'Amount cannot exceed your wallet balance', (value) => {
+                if (!value) return false;
+                const numericValue = parseFloat(value.replace(/,/g, ''));
+                return numericValue <= walletBalance;
             }),
+            
     })
 
-    function handleSubmit(values: typeof initialFormValue, { setSubmitting }:  FormikHelpers<typeof initialFormValue>) {
+    function handleSubmit(values: typeof initialFormValue, { setSubmitting }: FormikHelpers<typeof initialFormValue>) {
         setSubmitted(true);
+        setIsSuccessful(true)
+
         console.log('Submitting:', values);
         setIsopen(true)
         setSubmitting(false);
     }
+
+
 
     const handleContinue = () => {
         setShowErrors(true);
@@ -68,17 +86,23 @@ function Wallet() {
     }
 
     return (
-        <Border className={`${currentState === 1 && "border-[#D7D7D7]"}`}>
+        <Border className={`${inter.className}  ${currentState === 1 && "border-[#D7D7D7]"}`}>
+            <div>
+                
+
             <div className=''>
                { currentState === 0 && <div className='py-3 bg-[#F0F0F0] px-7 rounded-md'>
                     <p className='text-[#4D4E4D] text-[14px] font-medium'>Your wallet balance</p>
                     <p className='text-[#212221] text-[18px] font-medium mt-2'>
-                        {formatAmount("1000000")}
+
+                        {formatAmount(walletBalance)}
+
                     </p>
                 </div>}
 
                 <div className='md:mt-8 mt-5'>
-                    <Formik
+
+                   { walletBalance > 0? <Formik
                        key={formKey}
                         initialValues={initialFormValue}
                         onSubmit={handleSubmit}
@@ -88,7 +112,9 @@ function Wallet() {
                         validateOnBlur={true} 
                      
                     >
-                        {({errors, isValid, setFieldValue, values}) => {
+
+                        {({errors, isValid,setFieldValue, values}) => {
+
                             const shouldShowError = showErrors || hasTyped || (submitted && errors.repaymentAmount);
                             
                             return (
@@ -187,9 +213,23 @@ function Wallet() {
                                 </Form>
                             )
                         }}
-                    </Formik>
+
+                    </Formik>  :
+                    <div className='flex flex-col items-center justify-center py-20 gap-y-5'>
+                       <p className='text-[14px] text-[#101828] font-medium'>Your wallet balance is empty</p> 
+                       <Button
+                        type='button'
+                        variant={"outline"}
+                        className=' text-[#142854] w-[90px] h-[26px] rounded-2xl text-[12px] border-[#142854] border-[1px]'
+                       >
+                        Fund wallet 
+                       </Button>
+                    </div>
+                    }
                 </div>
             </div>
+            </div>
+
             <div>
              <Modal
               isOpen={isOpen}
@@ -197,9 +237,12 @@ function Wallet() {
               closeOnOverlayClick={true}
                 styeleType='styleBodyThree'
              >
-            <SuccessfulPayment
+
+            <SuccessfulPaymentAndFailure
             paymentObj={paymentData}
             handleCloseModal={handleModalClose}
+            isSuccessful={isSuccessful}
+
             />
              </Modal>
             </div>

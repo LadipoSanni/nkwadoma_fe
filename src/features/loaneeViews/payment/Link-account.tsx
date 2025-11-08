@@ -23,7 +23,7 @@ function LinkAccount({numberOfAccounts,bankAccount,handleRouteClick}: Props ) {
   const initials = getInitial(bankAccount?.bankName)
 
   return (
-    <div className='md:flex  justify-between items-center bg-[#E8EAEE] rounded-2xl md:px-5 px-4 pb-4 md:pb-0'>
+    <div className='md:flex  justify-between items-center bg-[#E8EAEE] md:h-[98px] rounded-2xl md:px-5 px-4 pb-4 md:pb-0'>
     <section id='sectionOne' className=' py-4 md:flex items-center gap-x-8'>
       <section className='flex items-center gap-3 relative md:right-0 right-2'>
       <LinkIcon className="w-14 h-14 text-[#142854]  transform scale-y-[1]" />

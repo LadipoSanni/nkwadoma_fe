@@ -1,10 +1,12 @@
 import React from 'react';
 import { TransactionItem } from './Transaction-items';
-import Paginations from '../table/Pagination'; 
+// import Paginations from '../table/Pagination'; 
 import GeneralEmptyState from '../emptyStates/General-emptystate';
 import SkeletonForTransaction from '../Skeleton-loading-state/Skeleton-for-transaction';
 import { MdOutlineAccountBalanceWallet } from 'react-icons/md';
 import BackButton from "@/components/back-button";
+import { InfiniteScrollProps } from '@/types/Component.type';
+import InfiniteScroll from "react-infinite-scroll-component";
 
 export interface Transaction {
   date: string;
@@ -16,26 +18,32 @@ export interface Transaction {
 
 interface TransactionHistoryProps {
   transactions: Transaction[];
-  currentPage: number;
-  totalPages: number;
-  onPageChange: React.Dispatch<React.SetStateAction<number>>;
-  hasNextPage?: boolean;
+  // currentPage?: number;
+  // totalPages: number;
+  // onPageChange?: React.Dispatch<React.SetStateAction<number>>;
+  // hasNextPage?: boolean;
   isLoading?: boolean;
   handleViewAll?:() => void;
   className?: string;
   style?: React.CSSProperties; 
+  infinityScroll?: InfiniteScrollProps;
+  infinityScrollHeight?: string
+
 }
 
 export const TransactionHistory: React.FC<TransactionHistoryProps> = ({ 
   transactions, 
-  currentPage,
-  totalPages,
-  onPageChange,
-  hasNextPage,
+  // currentPage,
+  // totalPages,
+  // onPageChange,
+  // hasNextPage,
   isLoading,
   handleViewAll,
   className,
-  style
+  infinityScroll,
+  style,
+  infinityScrollHeight
+
 }) => {
   
   const groupedTransactions = transactions.reduce((acc, transaction) => {
@@ -47,70 +55,99 @@ export const TransactionHistory: React.FC<TransactionHistoryProps> = ({
     return acc;
   }, {} as Record<string, Transaction[]>);
 
-  const handlePageChange = (event: React.ChangeEvent<unknown>, newPage: number) => {
-    onPageChange(newPage-1);
-  };
+  // const handlePageChange = (event: React.ChangeEvent<unknown>, newPage: number) => {
+  //   onPageChange(newPage-1);
+  // };
 
-  const handleNextPage = () => {
-    if (hasNextPage) {
-      onPageChange((prevPage) => prevPage + 1);
-    }
-  };
+  // const handleNextPage = () => {
+  //   if (hasNextPage) {
+  //     onPageChange((prevPage) => prevPage + 1);
+  //   }
+  // };
 
-  const handlePreviousPage = () => {
-    if (currentPage > 0) {
-      onPageChange((prevPage) => prevPage - 1);
-    }
+  // const handlePreviousPage = () => {
+  //   if (currentPage > 0) {
+  //     onPageChange((prevPage) => prevPage - 1);
+  //   }
+  // };
+
+  const renderTransactionContent = () => {
+    const groupedEntries = Object.entries(groupedTransactions);
+    
+    return groupedEntries.map(([date, dateTransactions]) => (
+      <div key={date} className="mb-8">
+        <div className="mb-3 flex justify-between items-center ">
+          <h3 className="text-[#212221] ">{date}</h3>
+          {handleViewAll && (
+            <div className='underline text-meedlBlue underline-offset-[3px]'>
+              <BackButton 
+                id='transactionRouteButton'
+                textColor={'meedlBlue'}
+                text={'View all'} 
+                iconBeforeLetters={false}
+                handleClick={handleViewAll}
+                className='font-medium text-[16px] mr-2 '
+                sx='text-[20px]'
+                isShow={false}
+              />
+            </div>
+          )}
+        </div>
+        
+        <div className="rounded-lg bg-[#F9F9F9] px-8">
+          {dateTransactions.map((transaction, index) => (
+            <TransactionItem 
+              key={`${date}-${index}`} 
+              transaction={transaction} 
+              isLast={index === dateTransactions.length - 1}
+            />
+          ))}
+        </div>
+      </div>
+    ));
+
   };
 
   return (
     <div className={`w-full `}>
-     <div className={`flex flex-col ${className}`} style={style}>
-      { isLoading? <SkeletonForTransaction/> : transactions.length === 0? 
-      <div>
-     <GeneralEmptyState
-      icon={MdOutlineAccountBalanceWallet}
-      iconSize='1.7rem'
-      iconContainerClass='bg-[#F9FAFB]'
-      color='#A8A8A8'
-      message={<div className='relative bottom-2 text-[#4D4E4D] font-medium'>
-          Payment history will appear hear
-      </div>}
-     />
-      </div> :
-      Object.entries(groupedTransactions).map(([date, dateTransactions]) => (
-        <div key={date} className="mb-8">
-          
-          <div className="mb-3 flex justify-between items-center">
-            <h3 className="text-[#212221] ">{date}</h3>
-         { handleViewAll &&  <div className='underline text-meedlBlue underline-offset-[3px]'>
-            <BackButton 
-            id='transactionRouteButton'
-            textColor={'meedlBlue'}
-            text={'View all'} 
-            iconBeforeLetters={false}
-            handleClick={handleViewAll}
-            className='font-medium text-[16px] mr-2 '
-            sx='text-[20px]'
-            isShow={false}
-        />
-            </div>}
+      <div className={`flex flex-col ${className}`} style={style}>
+        {isLoading ? (
+          <SkeletonForTransaction/>
+        ) : transactions.length === 0 ? (
+          <div>
+            <GeneralEmptyState
+              icon={MdOutlineAccountBalanceWallet}
+              iconSize='1.7rem'
+              iconContainerClass='bg-[#F9FAFB]'
+              color='#A8A8A8'
+              message={<div className='relative bottom-2 text-[#4D4E4D] font-medium'>
+                Payment history will appear here
+              </div>}
+            />
+
           </div>
-          
-          <div className="rounded-lg bg-[#F9F9F9] px-8">
-            {dateTransactions.map((transaction, index) => (
-              <TransactionItem 
-                key={`${date}-${index}`} 
-                transaction={transaction} 
-                isLast={index === dateTransactions.length - 1}
-              />
-            ))}
+        ) : (
+          <div>
+            {infinityScroll ? (
+              <InfiniteScroll
+                dataLength={transactions.length}
+                next={infinityScroll.loadMore}
+                hasMore={infinityScroll.hasMore}
+                loader={infinityScroll.loader ? <SkeletonForTransaction /> : null}
+                height={infinityScrollHeight || "60vh"}
+                className="w-full"
+              >
+                {renderTransactionContent()}
+              </InfiniteScroll>
+            ) : (
+              renderTransactionContent()
+            )}
           </div>
-        </div>
-      ))}
+        )}
       </div>
 
-      {totalPages > 1 && (
+      {/* {totalPages > 1 && (
+
         <div className="mt-auto">
           <Paginations
             page={currentPage + 1}
@@ -120,7 +157,7 @@ export const TransactionHistory: React.FC<TransactionHistoryProps> = ({
             handlePreviousPage={handlePreviousPage}
           />
         </div>
-      )}
+      )} */}
     </div>
   );
 
