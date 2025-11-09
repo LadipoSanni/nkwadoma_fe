@@ -11,7 +11,7 @@ import { useRouter } from 'next/navigation';
 const Wallet = () => {
 
     const router = useRouter()
-    const hah = () => {
+    const backToPayment = () => {
         router.push('/payment')
     }
     const bankAccount = {
@@ -32,12 +32,12 @@ const Wallet = () => {
             <BackButton
                 id={'backButton'}
                 iconBeforeLetters={true}
-                handleClick={hah}
+                handleClick={backToPayment}
                 text={'Back'}
                 textColor={'meedlBlue'}
             />
             <WalletBalance balance={21000000}/>
-            <LinkAccount bankAccount={bankAccount} numberOfAccounts={bankAccounts?.length} handleRouteClick={hah}/>
+            <LinkAccount bankAccount={bankAccount} numberOfAccounts={bankAccounts?.length} handleRouteClick={()=> {router.push("/payment/link-account")}}/>
             <div className={` max-h-[36vh] overflow-y-hidden  px-2 `}>
                 <Transaction onViewAllClick={handkeViewAllTransactions} viewLittle={true} data={generateMockData(4)}/>
             </div>

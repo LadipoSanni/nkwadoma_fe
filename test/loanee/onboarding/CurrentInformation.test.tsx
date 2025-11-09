@@ -1,18 +1,15 @@
 
-
 import React from 'react';
-import { render, screen,cleanup } from '@testing-library/react';
+import { render, screen, cleanup } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
 import CurrentInformation from '@/features/onboarding/stepContent/currentInformation/Index';
 import loanReferralReducer from '@/service/users/loanRerralSlice';
 import type { LoanReferralState } from '@/service/users/loanRerralSlice';
 
-
 interface MockLoaneeCurrentInfoProps {
   handleSubmit: (data: unknown) => void;
 }
-
 
 jest.mock('@/components/loanee/Loanee-current-information', () => {
   const MockLoaneeCurrentInfo = (props: MockLoaneeCurrentInfoProps) => (
@@ -55,12 +52,16 @@ const initialState: LoanReferralState = {
     alternateEmail: "",
     alternatePhoneNumber: "",
     alternateContactAddress: "",
+    stateOfResidence: "",
+    levelOfEducation: "",
+    others: ""
   }
 };
 
 describe('CurrentInformation Component', () => {
   const mockSetCurrentStep = jest.fn();
   
+  // Fixed: Added the missing required properties
   const initialReduxState = {
     loanReferral: {
       loaneeCurrentInfo: {
@@ -72,18 +73,21 @@ describe('CurrentInformation Component', () => {
         contactAddress: '123 Main St',
         alternateEmail: 'john.alt@example.com',
         alternatePhoneNumber: '0987654321',
-        alternateContactAddress: '456 Second St'
+        alternateContactAddress: '456 Second St',
+        stateOfResidence: '', 
+        levelOfEducation: '', 
+        others: '' 
       },
       isFormSubmitting: false
     }
   };
 
-    beforeEach(() => {
-          cleanup()
-            jest.spyOn(console,'log').mockReturnValue()
-            jest.spyOn(console,'warn').mockReturnValue()
-            jest.spyOn(console,'error').mockReturnValue()
-        });
+  beforeEach(() => {
+    cleanup();
+    jest.spyOn(console,'log').mockReturnValue();
+    jest.spyOn(console,'warn').mockReturnValue();
+    jest.spyOn(console,'error').mockReturnValue();
+  });
 
   it('renders the form when isFormSubmitted is false', () => {
     const store = createMockStore(initialReduxState);
@@ -115,10 +119,6 @@ describe('CurrentInformation Component', () => {
     expect(screen.getByText('john.alt@example.com')).toBeInTheDocument();
   });
 
- 
-  
-
-
   it('disables Continue button when form is not submitted', () => {
     const store = createMockStore(initialReduxState);
     
@@ -131,4 +131,4 @@ describe('CurrentInformation Component', () => {
     const continueButton = screen.queryByText('Continue');
     expect(continueButton).not.toBeInTheDocument();
   });
-});
+})

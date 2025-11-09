@@ -80,4 +80,3 @@ function ViewLinkedAccount() {
 }
 
 export default ViewLinkedAccount
-

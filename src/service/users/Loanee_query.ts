@@ -127,6 +127,13 @@ export const loaneeApi = createApi({
                 method: 'GET'
             }),
         }),
+        loaneeUpdateProfile: builder.mutation({
+            query: (data) => ({
+                url: `/loanee/update/profile`,
+                method: 'POST',
+                body: data
+            })
+        })
     })
 })
 
@@ -134,7 +141,7 @@ export const loaneeApi = createApi({
 
 export const {
     useSearchLoaneeLoansByAdminQuery,
-    // useIsIdentityVerifiedQuery,
+    useLoaneeUpdateProfileMutation,
     useSearchLoaneeByAdminsQuery,
     useViewLoaneeLoansByAdminQuery,
     useViewAllLoansTotalCountsByAdminsQuery,
@@ -153,4 +160,3 @@ export const {
     useGetLoaneeIdentityVerificationDetailsQuery,
     useViewAllLoanRefferalsQuery
 } = loaneeApi;
-
