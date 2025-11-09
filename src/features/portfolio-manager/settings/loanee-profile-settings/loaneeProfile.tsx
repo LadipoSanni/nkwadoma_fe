@@ -136,7 +136,7 @@ const LoaneeProfileSetting = ({ whoseProfile, companyUrl }: ProfileProps) => {
                   Full name
                 </p>
                 <p className='text-sm sm:text-base font-medium text-[#4D4E4D] px-2 py-1'>
-                  {profileData?.data?.nextOfKinFirstName} {profileData?.data?.nextOfKinLastName}
+                  {profileData?.data?.nextOfKinResponse?.firstName} {profileData?.data?.nextOfKinResponse?.lastName}
                 </p>
               </div>
               <div>
@@ -144,7 +144,7 @@ const LoaneeProfileSetting = ({ whoseProfile, companyUrl }: ProfileProps) => {
                   Relationship
                 </p>
                 <p className='text-sm sm:text-base font-medium text-[#4D4E4D] px-2 py-1'>
-                  {profileData?.data?.nextOfKinRelationship}
+                  {profileData?.data?.nextOfKinResponse?.nextOfKinRelationship}
                 </p>
               </div>
               <div>
@@ -152,7 +152,7 @@ const LoaneeProfileSetting = ({ whoseProfile, companyUrl }: ProfileProps) => {
                   Email
                 </p>
                 <p className='text-sm sm:text-base font-medium text-[#4D4E4D] px-2 py-1'>
-                  {profileData?.data?.nextOfKinEmail}
+                  {profileData?.data?.nextOfKinResponse?.email}
                 </p>
               </div>
               <div>
@@ -160,7 +160,7 @@ const LoaneeProfileSetting = ({ whoseProfile, companyUrl }: ProfileProps) => {
                   Address
                 </p>
                 <p className='text-sm sm:text-base font-medium text-[#4D4E4D] px-2 py-1'>
-                  {profileData?.data?.nextOfKinContactAddress}
+                  {profileData?.data?.nextOfKinResponse?.contactAddress}
                 </p>
               </div>
             </div>
