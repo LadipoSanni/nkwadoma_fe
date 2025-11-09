@@ -93,7 +93,7 @@ const SearchableDropdown = <T,>({
                     </div>
                 )}
 
-                <div className="flex flex-col max-h-[48vh] overflow-y-auto gap-1">
+                <div className="flex flex-col max-h-[48vh] max-w-[80vw] overflow-y-auto gap-1">
                     {filteredItems.length > 0 ? (
                         filteredItems.map((item) => (
                             <DropdownMenuItem

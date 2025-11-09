@@ -48,9 +48,9 @@ const SetAutoRepayment = () => {
 
     const radioButton = (isChecked: boolean, text: string, onClick: ()=> void) => {
         return (
-            <button onClick={onClick} id={`RadioButton` + text?.replace(' ', '')} data-testid={`RadioButton` + text?.replace(' ', '')} className={` h-fit  flex gap-1  md:gap-4  text-[#4D4E4D] text-[14px] ${inter500.className} `}>
-                <div className={clsx(`  aspect-square rounded-full `,  isChecked ?  `  border-2 border-[#e6effb]` : `border-2 border-white `)}>
-                    <div className={clsx(` px-2 py-2 rounded-full aspect-square `, isChecked ? ` border border-meedlBlue bg-[#e8eaee]   ` :  ` bg-white border border-[#CFCFCF] `)}>
+            <button onClick={onClick} id={`RadioButton` + text?.replace(' ', '')} data-testid={`RadioButton` + text?.replace(' ', '')} className={` h-fit w-fit   flex gap-1  md:gap-4  text-[#4D4E4D] text-[14px] ${inter500.className} `}>
+                <div className={clsx(` h-fit aspect-square rounded-full `,  isChecked ?  `  border-2 border-[#e6effb]` : `border-2 border-white `)}>
+                    <div className={clsx(` px-2 py-2 rounded-full aspect-square `, isChecked ? ` border h-fit border-meedlBlue bg-[#e8eaee]   ` :  ` bg-white border border-[#CFCFCF] `)}>
                         <div className={clsx(`  h-2 w-2 aspect-square  ` , isChecked ? "rounded-full bg-meedlBlue h-2 w-2 aspect-square " : 'bg-white rounded-full  h-2 w-2 aspect-square ')}></div>
                     </div>
                 </div>
@@ -174,7 +174,7 @@ const SetAutoRepayment = () => {
                         <p className={` text-[12px] lg:text-[14px]  md:text-[14px] text-[#101828] ${inter500.className} `}>Select account  to pay from</p>
                         <SearchableDropdown
                             items={items}
-                            widthClass={` w-[40vw] !w-[40vw] !max-w-[40vw] md:w-[30rem] md:!w-[30rem] md:!max-w-[30vw]   `}
+                            widthClass={` w-[100%] !w-[100%] !max-w-[100%] md:w-[30rem] md:!w-[30rem] md:!max-w-[30vw]   `}
                             placeholderStyle={` ${inter.className} text-sm text-[#4D4E4D]  `}
                             onSelect={(item) => setSelectedAccount(item?.label || '')}
                             placeholder="Select account"
@@ -247,7 +247,7 @@ const SetAutoRepayment = () => {
                             </div>}
                         </div>
                     </section>
-                    <button className={clsx(` w-full self-end md:self-end lg:self-end md:w-fit lg:w-fit  px-4 py-2 h-fit rounded-md  ${inter700.className} text-[14px]  `, isDisable ? `bg-[#D7D7D7] hover:bg-[#D7D7D7] text-white ` : ` bg-meedlBlue text-white `)}>
+                    <button className={clsx(` mt-4 md:mt-0 lg:mt-0 w-full self-end md:self-end lg:self-end md:w-fit lg:w-fit  px-4 py-2 h-fit rounded-md  ${inter700.className} text-[14px]  `, isDisable ? `bg-[#D7D7D7] hover:bg-[#D7D7D7] text-white ` : ` bg-meedlBlue text-white `)}>
                         Save
                     </button>
                 </section>
