@@ -67,24 +67,25 @@ const SearchableDropdown = <T,>({
                         widthClass
                     )}
                 >
-          <span className={` ${placeholderStyle} `}>
-            {selected ? selected.label : placeholder}
-          </span>
+                     <span data-testid={`placeHolder` + placeholder?.replace(' ', '' )} id={`placeHolder` + placeholder?.replace(' ', '' )} className={` ${placeholderStyle} `}>
+                       {selected ? selected.label : placeholder}
+                     </span>
                     <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${open ? "rotate-180" : "rotate-0"} ${placeholderStyle} text-gray-500 `} />
                 </button>
             </DropdownMenuTrigger>
-
             <DropdownMenuContent
                 align="start"
                 className={clsx(
-                    "p-2 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg max-h-[60vh] overflow-y-auto",
+                    "p-2 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg max-h-[60vh] ",
                     widthClass
                 )}
             >
                 {showSearch && (
                     <div className="sticky top-0 bg-white pb-2">
                         <Input
-                            placeholder="Search"
+                            id={`searchBar`}
+                            data-testid={`searchBar`}
+                            placeholder={ searchPlaceholder || `Search`}
                             value={search}
                             onChange={(e) => setSearch(e.target.value)}
                             className="w-full text-sm"
@@ -92,7 +93,7 @@ const SearchableDropdown = <T,>({
                     </div>
                 )}
 
-                <div className="flex flex-col gap-1">
+                <div className="flex flex-col max-h-[48vh] overflow-y-auto gap-1">
                     {filteredItems.length > 0 ? (
                         filteredItems.map((item) => (
                             <DropdownMenuItem
@@ -103,12 +104,12 @@ const SearchableDropdown = <T,>({
                                 {renderItem ? (
                                     renderItem(item)
                                 ) : (
-                                    <div className={` hover:bg-[#F2F2F2] flex gap- w-full   `}>
-                                        {item.icon && <span>{item.icon}</span>}
-                                        <div className="flex flex-col">
-                                            <span className={` ${inter500.className} text-sm`}>{item.label}</span>
+                                    <div className={` hover:bg-[#F2F2F2] hover:rounded-md px-2 py-1 max-w-full flex h-fit gap-2 w-full   `}>
+                                        {item.icon && <span className={` mt-auto mb-auto `}>{item.icon}</span>}
+                                        <div className="flex gap-2  flex-col">
+                                            <span className={` ${inter500.className} break-normal text-sm`}>{item.label}</span>
                                             {item.subLabel && (
-                                                <span className="text-xs text-gray-500">{item.subLabel}</span>
+                                                <span className="text-xs break-normal text-gray-500">{item.subLabel}</span>
                                             )}
                                         </div>
                                     </div>

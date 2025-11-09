@@ -11,15 +11,19 @@ import StringDropdown from "@/reuseable/Dropdown/DropdownSelect";
 import SearchableDropdown ,{DropdownItem} from "@/reuseable/Dropdown/SearchableDropDown";
 import Image from "next/image";
 import { GoCheckCircle } from "react-icons/go";
+import Calender from "@/components/icons/Calender";
 
 const SetAutoRepayment = () => {
     const router = useRouter()
     const [amount, setAmount] = useState('')
-    const [selectedTimePreference, setSelectedTimePreference] = useState('')
+    const [selectedTimePreference, setSelectedTimePreference] = useState('Weekly')
     const [selectedAccountType, setSelectedAccountType] = useState('')
     // const [isSelectOpen, setIsSelectOpen] = useState(false);
     const [seletedDay, setSelectedDay] = useState('Monday');
     const [selectedTime, setSelectedTime] = useState('12:00am');
+    const [selectedAccount, setSelectedAccount] = useState('')
+    const isAccountSelected = selectedAccountType === 'Wallet' ? false : selectedAccount?.length < 1
+    const isDisable = selectedTimePreference === 'Weekly' ? (!amount || !selectedTime || !seletedDay || !selectedAccountType || isAccountSelected ) : false;
 
     const handleBackClick = () => {
         router.push(`/my-loan-profile`)
@@ -33,10 +37,10 @@ const SetAutoRepayment = () => {
                 onClick={onClick}
                 id={'ButtonFor' + text?.replace(' ', '')}
                 data-testid={'ButtonFor' + text?.replace(' ', '')}
-                className={clsx(` ${size} lg:px-8  md:px-8 h-fit py-2 text-[14px] `, isChecked ? `   border-2 border-[#FDE2D2]  text-white ${inter700.className}  bg-meedlBlue  flex   ` : `border border-[#C9C9D4] bg-[#F6F6F6]  ${inter.className} text-black flex ` )}
+                className={clsx(` ${size} rounded-md h-fit px-2 py-1.5  text-[14px] `, isChecked ? ` rounded-md  border-4 border-[#FDE2D2]  text-white ${inter700.className}  bg-meedlBlue  flex   ` : `border border-[#C9C9D4] bg-[#F6F6F6] mt-auto mb-auto  ${inter.className} text-black flex ` )}
             >
-                <span className={` flex justify-center items-center `}>{text}</span>
-                {isChecked && <span className={` mt-0 mr-0 bg-white rounded-full w-fit h-fit  `}><GoCheckCircle className={` text-meedlBlue  `}/></span>}
+                <span className={` flex justify-center items-center py-2 w-full  `}>{text}</span>
+                {isChecked && <span className={` self-start bg-white rounded-full w-fit h-fit  `}><GoCheckCircle className={` text-meedlBlue  `}/></span>}
             </Button>
         )
 
@@ -80,6 +84,9 @@ const SetAutoRepayment = () => {
 
     const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 
+
+    //eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-expect-error
     const items: DropdownItem[] = [
         {
             id: 1,
@@ -89,14 +96,42 @@ const SetAutoRepayment = () => {
         },
         {
             id: 2,
-            label: "Guaranty Trust Holding Company Plc",
+            label: "Guaranty Trust Holding Company Plc,Guaranty Trust Guaranty Trust ",
             subLabel: "4145358587",
             icon: <Image src="/gtbanklogo.png" alt="GTBank" width={24} height={24} />,
         },
+        // {
+        //     id:3,
+        //     label: "Guaranty Trust Holding Company Plc,Guaranty Trust Guaranty Trust ",
+        //     subLabel: "4145358587",
+        //     icon: <Image src="/gtbanklogo.png" alt="GTBank" width={24} height={24} />,
+        //
+        // },
+        // {
+        //     id:4,
+        //     label: "Guaranty Trust Holding Company Plc,Guaranty Trust Guaranty Trust ",
+        //     subLabel: "4145358587",
+        //     icon: <Image src="/gtbanklogo.png" alt="GTBank" width={24} height={24} />,
+        //
+        // },
+        // {
+        //     id:5,
+        //     label: "Guaranty Trust Holding Company Plc,Guaranty Trust Guaranty Trust ",
+        //     subLabel: "4145358587",
+        //     icon: <Image src="/gtbanklogo.png" alt="GTBank" width={24} height={24} />,
+        //
+        // },
+        // {
+        //     id:6,
+        //     label: "Guaranty Trust Holding Company Plc,Guaranty Trust Guaranty Trust ",
+        //     subLabel: "4145358587",
+        //     icon: <Image src="/gtbanklogo.png" alt="GTBank" width={24} height={24} />,
+        //
+        // },
     ];
 
 
-    const monthlyRepaymentField = ( ) => {
+    const repaymentField = ( ) => {
         return(
             <div className={` grid md:gap-4 gap-2 w-full mr-auto ml-auto `}>
                 <div>
@@ -111,7 +146,7 @@ const SetAutoRepayment = () => {
                             inputMode="numeric"
                             thousandSeparator=","
                             decimalScale={2}
-                            // fixedDecimalScale={true}
+                            allowNegative={false}
                             placeholder="Enter amount"
                             value={amount}
                             fixedDecimalScale
@@ -139,9 +174,9 @@ const SetAutoRepayment = () => {
                         <p className={` text-[12px] lg:text-[14px]  md:text-[14px] text-[#101828] ${inter500.className} `}>Select account  to pay from</p>
                         <SearchableDropdown
                             items={items}
-                            widthClass={` w-full  `}
+                            widthClass={` w-[40vw] !w-[40vw] !max-w-[40vw] md:w-[30rem] md:!w-[30rem] md:!max-w-[30vw]   `}
                             placeholderStyle={` ${inter.className} text-sm text-[#4D4E4D]  `}
-                            onSelect={(item) => console.log("Selected:", item)}
+                            onSelect={(item) => setSelectedAccount(item?.label || '')}
                             placeholder="Select account"
                             footerNote="You can pay from one or more linked accounts."
                         />
@@ -178,20 +213,22 @@ const SetAutoRepayment = () => {
 
     return (
         <div
-            className={` w-full px-2 py-2 `}
+            className={` w-full px-2 py-2 grid gap-4 `}
         >
             <BackButton id={'backtoMyLoanDetails'}  text={'Back'} handleClick={handleBackClick} textColor={'meedlBlue'} iconBeforeLetters={true}/>
             <main className={` w-full px-2  md:px-8 grid gap-8   `}>
                 <header
                     className={` w-full py-2 h-fit border-b border-[#D7D7D7] md:flex md:justify-between `}
                 >
-                    <div></div>
+                    <Calender
+                        // height={'20'} width={'20'}
+                    />
                     <section className={` `}>
                         <p className={` md:text-[14px] mr-0  text-meedlBlue ${inter.className} `}>Wallet balance</p>
                         <p id={'walletBalanceAmount'} data-testid={'walletBalanceAmount'} className={` md:text-[20px] text-meedlBlue ${inter500.className} `}>{formatAmount(300000000000)}</p>
                     </section>
                 </header>
-                <section className={`  w-full max-h-[70vh] h-[70vh] grid md:flex `}>
+                <section className={`  w-full max-h-[60vh] h-[60vh] grid md:flex `}>
                     <section className={` grid gap-3 h-fit   w-full justify-items-center  `}>
                         <div className={` w-fit grid justify-items-center `}>
                             <p className={`   text-[#212221] md:text-[20px] ${inter500.className}  `}>Set auto repayment</p>
@@ -205,12 +242,12 @@ const SetAutoRepayment = () => {
                                     {repaymentTimeButton('Monthly', selectedTimePreference === 'Monthly', () => {setSelectedTimePreference('Monthly')}, ` w-full  `)}
                                 </div>
                             </div>
-                            {selectedTimePreference === 'Monthly' &&<div className={` w-full  `}>
-                                {monthlyRepaymentField()}
+                            {<div className={` w-full  `}>
+                                {repaymentField()}
                             </div>}
                         </div>
                     </section>
-                    <button className={clsx(` w-full self-end md:self-end lg:self-end md:w-fit lg:w-fit  px-4 py-2 h-fit rounded-md  ${inter700.className} text-[14px]  `, 2 !== 2 ? ` text ` : ` bg-meedlBlue text-white `)}>
+                    <button className={clsx(` w-full self-end md:self-end lg:self-end md:w-fit lg:w-fit  px-4 py-2 h-fit rounded-md  ${inter700.className} text-[14px]  `, isDisable ? `bg-[#D7D7D7] hover:bg-[#D7D7D7] text-white ` : ` bg-meedlBlue text-white `)}>
                         Save
                     </button>
                 </section>
