@@ -25,21 +25,11 @@ const LoaneeUploadButton = ({ whose, url, onUploadSuccess }: Props) => {
   const [isBusy, setIsBusy] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const { data: userDatas } = useGetUserDetailsQuery({});
-  const uploadedImage = userDatas?.data?.image;
-
-  const [updateUserData, { isLoading: isSavingUser }] =
-    useAddUserImageMutation();
-  const [updateOrg, { isLoading: isSavingOrg }] =
-    useAddOrganizationImageLogoMutation();
-  const supportedFileTypes = [
-    "image/svg+xml",
-    "image/png",
-    "image/jpg",
-    "image/jpeg",
-    "image/webp"
-  ];
   const [modalIsOpen, setModalIsOpen] = useState(false);
-
+  const uploadedImage = userDatas?.data?.image;
+  const [updateUserData, { isLoading: isSavingUser }] = useAddUserImageMutation();
+  const [updateOrg, { isLoading: isSavingOrg }] = useAddOrganizationImageLogoMutation();
+  const supportedFileTypes = [ "image/svg+xml", "image/png", "image/jpg", "image/jpeg", "image/webp" ];
   const { upload } = useUploadImageToCloudinary();
   const { toast } = useToast();
 
@@ -114,7 +104,7 @@ const LoaneeUploadButton = ({ whose, url, onUploadSuccess }: Props) => {
         onClick={onClick}
         className={`relative ${
           !isBusy ? "cursor-pointer" : "cursor-wait"
-        } rounded-full group w-20 h-20`}
+        } rounded-full group md:w-[68px] w-[42px] md:h-[68px] h-[42px`}
         role='button'
         tabIndex={!isBusy ? 0 : -1}
         aria-label='Upload profile image'
@@ -123,21 +113,21 @@ const LoaneeUploadButton = ({ whose, url, onUploadSuccess }: Props) => {
         }
       >
         {image ? (
-          <Avatar className='w-20 h-20'>
+          <Avatar className='md:w-[68px] w-[42px] md:h-[68px] h-[42px]'>
             <AvatarImage
-              className={`w-20 h-20 ${isBusy ? "opacity-50" : ""}`}
+              className={`md:w-[68px] w-[42px] md:h-[68px] h-[42px ${isBusy ? "opacity-50" : ""}`}
               src={image}
               alt='userImage'
             />
           </Avatar>
         ) : (
           <FaCircleUser
-            className={`w-20 h-20 text-[#ececec] ${isBusy ? "opacity-50" : ""}`}
+            className={`md:w-[68px] w-[42px] md:h-[68px] h-[42px text-[#ececec] ${isBusy ? "opacity-50" : ""}`}
           />
         )}
         {!isBusy ? (
           <div className='absolute -bottom-1 -right-1 bg-white rounded-full p-1 shadow-md border group-hover:bg-gray-100'>
-            <Edit2 size={16} className='text-gray-600' />
+            <Edit2 size={10} className='text-gray-600' />
           </div>
         ) : (
           <div className='absolute inset-0 flex items-center justify-center bg-black bg-opacity-40 rounded-full'>
@@ -171,13 +161,11 @@ const LoaneeUploadButton = ({ whose, url, onUploadSuccess }: Props) => {
           <div className={`${inter.className}`}>
             <div>
               <Image
-                // src={modalType === "update"? "/Icon - Warning.svg" : "/Inner circle (1).png"}
                 src={`/Icon - Warning.svg`}
                 alt='image'
                 width={30}
                 height={30}
                 className={`w-14`}
-                // className={` ${modalType === "update"? "w-14" : "w-11"} `}
               />
             </div>
             <p className='mt-4 mb-5 text-[14px] text-[#475467]'>{error}</p>
