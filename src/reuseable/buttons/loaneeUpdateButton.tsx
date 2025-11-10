@@ -7,8 +7,8 @@ import Modal from "@/reuseable/modals/TableModal";
 import { Cross2Icon } from "@radix-ui/react-icons";
 import React, { useEffect, useRef, useState } from "react";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
-import { useAddUserImageMutation } from "@/service/users/api";
 import { useUploadImageToCloudinary } from "@/utils/UploadToCloudinary";
+import { useAddOrganizationImageLogoMutation, useAddUserImageMutation, useGetUserDetailsQuery } from "@/service/users/api";
 
 interface Props {
   whose: "company" | "user";
@@ -23,12 +23,17 @@ const LoaneeUploadButton = ({ url, onUploadSuccess }: Props) => {
   const [updateUserData, { isLoading: isSavingUser }] = useAddUserImageMutation();
   const supportedFileTypes = [ "image/svg+xml", "image/png", "image/jpg", "image/jpeg", "image/webp" ];
   const [modalIsOpen, setModalIsOpen] = useState(false);
+  const { data: userDatas } = useGetUserDetailsQuery({});
+  const uploadedImage = userDatas?.data?.image;
+  const [updateOrg, { isLoading: isSavingOrg }] =  useAddOrganizationImageLogoMutation();
   const { upload } = useUploadImageToCloudinary();
   const { toast } = useToast();
 
   useEffect(() => {
     setIsBusy(isSavingUser);
   }, [isSavingUser]);
+    setIsBusy(isSavingUser || isSavingOrg);
+  }, [isSavingUser, isSavingOrg]);
 
   const validateFile = (file: File): boolean => {
     if (!supportedFileTypes.includes(file.type)) {
@@ -37,7 +42,7 @@ const LoaneeUploadButton = ({ url, onUploadSuccess }: Props) => {
       return false;
     }
     if (file.size / (1024 * 1024) > 2) {
-      setError(`File size exceeds 2 MB limit`); 
+      setError(`File size exceeds 2 MB limit`);
       setModalIsOpen(true);
       return false;
     }
@@ -61,6 +66,10 @@ const LoaneeUploadButton = ({ url, onUploadSuccess }: Props) => {
 
       const props = { imageUrl: uploadedFileUrl };
       const response = await updateUserData(props);
+      const response =
+        whose === "company"
+          ? await updateOrg(props)
+          : await updateUserData(props);
 
       if (response.data) {
         toast({ description: response.data.message, status: "success" });
@@ -86,11 +95,10 @@ const LoaneeUploadButton = ({ url, onUploadSuccess }: Props) => {
       fileInputRef.current.click();
     }
   };
-
-  const image = url;
+  const image = whose === "company" ? url : uploadedImage;
 
   return (
-    <div className={` md:grid gap-2  `}>
+    <div className={` grid gap-2 `}>
       <div
         onClick={onClick}
         className={`relative ${
@@ -107,6 +115,10 @@ const LoaneeUploadButton = ({ url, onUploadSuccess }: Props) => {
           <Avatar className='md:w-[68px] w-[42px] md:h-[68px] h-[42px]'>
             <AvatarImage
               className={`md:w-[69px] w-[42px] md:h-[68px] h-[42px] ${isBusy ? "opacity-50" : ""}`}
+
+          <Avatar className='w-20 h-20'>
+            <AvatarImage
+              className={`w-20 h-20 ${isBusy ? "opacity-50" : ""}`}
               src={image}
               alt='userImage'
             />
@@ -114,6 +126,7 @@ const LoaneeUploadButton = ({ url, onUploadSuccess }: Props) => {
         ) : (
           <FaCircleUser
             className={`md:w-[68px] w-[42px] md:h-[68px] h-[42px] text-[#ececec] ${isBusy ? "opacity-50" : ""}`}
+            className={`w-20 h-20 text-[#ececec] ${isBusy ? "opacity-50" : ""}`}
           />
         )}
         {!isBusy ? (

@@ -20,4 +20,4 @@ const layout: React.FC<props> = ({ children }) => {
   )
 }
 
-export default layout
+export default layout;
