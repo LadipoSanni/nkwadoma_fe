@@ -262,7 +262,7 @@ const AddCohortInAnOrganization: React.FC<createCohortProps> = ({ setIsOpen,orga
                       loadMore: loadMorePrograms ,
                       loader: isFetching
                     }}
-                       />
+                 />
                 {/* <DatePicker date={startDate} setDate={setDate} /> */}
                 <DatePickerInput  
                     selectedDate={startDate}

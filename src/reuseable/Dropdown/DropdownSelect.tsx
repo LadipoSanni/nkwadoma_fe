@@ -9,20 +9,24 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { MdKeyboardArrowDown } from "react-icons/md";
 import {inter} from "@/app/fonts";
+import {clsx} from "clsx";
 interface StringDropdownProps {
     label?: string;
     items: string[];
     onSelect?: (value: string) => void;
-    height?: string;
+    dropDownStyles?: string;
+    dropdownMenuContentStyles?:string;
+    dropDownItemsStyles?:string;
+
 }
 
-const StringDropdown: React.FC<StringDropdownProps> = ({ label = "Select Item", items, onSelect }) => {
+const StringDropdown: React.FC<StringDropdownProps> = ({ label = "Select Item", items,dropDownStyles,dropDownItemsStyles,dropdownMenuContentStyles, onSelect }) => {
     const [open, setOpen] = React.useState(false);
 
     return (
         <DropdownMenu open={open} onOpenChange={setOpen}>
             <DropdownMenuTrigger asChild>
-                <div  className={`flex justify-between  min-h-[3.1rem] max-h-fit w-full   md:w-[13em] border break-normal px-2  ${inter.className} rounded-md  text-[#6A6B6A] border-[#D7D7D7]    gap-1`}>
+                <div  className={clsx(`flex justify-between border break-normal px-2  ${inter.className} rounded-md  text-[#6A6B6A] border-[#D7D7D7]    gap-1`, dropDownStyles ? ` ${dropDownStyles} ` : `w-full  md:w-[13em] min-h-[3.1rem] max-h-fit ` )}>
                     <p className={`mt-auto mb-auto `}>{label}</p>
                     {items?.length > 0 &&
                         <MdKeyboardArrowDown
@@ -32,11 +36,11 @@ const StringDropdown: React.FC<StringDropdownProps> = ({ label = "Select Item", 
                 </div>
             </DropdownMenuTrigger>
             {items?.length > 0 &&
-                <DropdownMenuContent className={` max-h-[30vh] overflow-y-auto `}>
+                <DropdownMenuContent className={clsx(` max-h-[30vh] overflow-y-scroll  `, dropdownMenuContentStyles ? `${dropdownMenuContentStyles}` :  ``)}>
                     {items.map((item, idx) => (
                         <DropdownMenuItem
                             key={idx}
-                            className={` hover:bg-[#D7D7D7]  `}
+                            className={clsx(` hover:bg-[#D7D7D7] `, dropDownItemsStyles ? `${dropDownItemsStyles}` : ``)}
                             onClick={() => onSelect?.(item)}
                         >
                             {item}

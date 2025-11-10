@@ -22,7 +22,7 @@ describe("WalletBalance Component", () => {
         render(<WalletBalance balance={mockBalance} />);
         const eyeIcon = screen.getByTestId("upEyeIcon");
         fireEvent.click(eyeIcon);
-        expect(screen.getByTestId("balance")).toHaveTextContent("₦25,000.00"); // depends on formatAmount
+        expect(screen.getByTestId("balance")).toHaveTextContent("₦25,000.00");
         expect(screen.getByTestId("closeEyeIcon")).toBeInTheDocument();
     });
 

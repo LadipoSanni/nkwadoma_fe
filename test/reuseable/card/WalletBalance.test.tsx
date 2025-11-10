@@ -2,25 +2,7 @@ import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
 import WalletBalance from "@/reuseable/cards/WalletBalance";
 
-jest.mock("@/app/fonts", () => ({
-    inter: { className: "mock-inter" },
-    inter600: { className: "mock-inter600" },
-}));
 
-
-
-// eslint-disable-next-line react/display-name
-jest.mock("@/components/icons/FundWallet", () => () =>
-    React.createElement("div", { "data-testid": "fund-wallet" })
-);
-// eslint-disable-next-line react/display-name
-jest.mock("@/components/icons/Withdraw", () => () =>
-    React.createElement("div", { "data-testid": "withdraw" })
-);
-// eslint-disable-next-line react/display-name
-jest.mock("@/components/icons/WalletConnect", () => () =>
-    React.createElement("div", { "data-testid": "wallet-connect" })
-);
 
 describe("WalletBalance Component", () => {
     // beforeEach(() => {
@@ -62,14 +44,14 @@ describe("WalletBalance Component", () => {
 
     // it("renders three WalletButton components with correct labels", () => {
     //     render(<WalletBalance balance={20000000} />);
-    //     expect(screen.getByTestId("fund-wallet")).toBeInTheDocument();
+    //     // expect(screen.getByTestId("fundWallet")).toBeInTheDocument();
     //     expect(screen.getByTestId("withdraw")).toBeInTheDocument();
-    //     expect(screen.getByTestId("wallet-connect")).toBeInTheDocument();
+    //     expect(screen.getByTestId("walletConnect")).toBeInTheDocument();
     // });
     //
     // it("renders WalletConnect component", () => {
     //     render(<WalletBalance balance={20000000} />);
-    //     expect(screen.getByTestId("wallet-connect")).toBeInTheDocument();
+    //     expect(screen.getByTestId("walletConnect")).toBeInTheDocument();
     // });
 });
 
