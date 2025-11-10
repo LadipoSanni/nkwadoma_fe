@@ -46,7 +46,7 @@ export const Generals = () => {
 
     return (
         <div className={` w-full  bg-00 py-4 px-2 grid md:gap-[10vw]  md:flex md:justify-between md:px-16 md:py-12 gap-6 `}>
-            { userRole === 'LOANEE' ? <LoaneeSettingTabs width={` md:w-[30%] lg:w-[30%] `} tabCurrentTabIndex={currentTab} setTabCurrentTabIndex={setCurrentTab} id={'settingTab1'} tabElement={data}/>
+            { userRole === 'LOANEE' ? <LoaneeSettingTabs width={` md:w-[30%] lg:w-[30%] `} tabCurrentTabIndex={currentTab} setTabCurrentTabIndex={setCurrentTab} id={'settingTab1'} tabElement={data}/> :
                 <SettingTabs width={` md:w-[30%] lg:w-[30%] `} tabCurrentTabIndex={currentTab} setTabCurrentTabIndex={setCurrentTab} id={'settingTab1'} tabElement={data}/>
             }
             <div
