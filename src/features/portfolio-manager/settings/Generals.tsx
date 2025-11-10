@@ -8,8 +8,8 @@ import {store, useAppSelector} from '@/redux/store';
 import {getItemSessionStorage} from "@/utils/storage";
 import styles from './index.module.css'
 import LoaneeSettingTabs from '@/reuseable/tabs/loaneeSettingTabs';
-import LoaneeProfile from './loanee-profile-settings/LoaneeProfile';
 import Profile from './profile';
+import LoaneeProfile from './loanee-profile-settings/LoaneeProfile';
 
 
 
