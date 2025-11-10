@@ -20,18 +20,16 @@ const LoaneeUploadButton = ({ url, onUploadSuccess }: Props) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [isBusy, setIsBusy] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
-  const [updateUserData, { isLoading: isSavingUser }] = useAddUserImageMutation();
-  const supportedFileTypes = [ "image/svg+xml", "image/png", "image/jpg", "image/jpeg", "image/webp" ];
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const { data: userDatas } = useGetUserDetailsQuery({});
   const uploadedImage = userDatas?.data?.image;
-  const [updateOrg, { isLoading: isSavingOrg }] =  useAddOrganizationImageLogoMutation();
+  const [updateUserData, { isLoading: isSavingUser }] = useAddUserImageMutation();
+  const [updateOrg, { isLoading: isSavingOrg }] = useAddOrganizationImageLogoMutation();
+  const supportedFileTypes = [ "image/svg+xml", "image/png", "image/jpg", "image/jpeg", "image/webp" ];
   const { upload } = useUploadImageToCloudinary();
   const { toast } = useToast();
 
   useEffect(() => {
-    setIsBusy(isSavingUser);
-  }, [isSavingUser]);
     setIsBusy(isSavingUser || isSavingOrg);
   }, [isSavingUser, isSavingOrg]);
 
@@ -65,7 +63,6 @@ const LoaneeUploadButton = ({ url, onUploadSuccess }: Props) => {
       const uploadedFileUrl = await upload(selectedFile, "user_image");
 
       const props = { imageUrl: uploadedFileUrl };
-      const response = await updateUserData(props);
       const response =
         whose === "company"
           ? await updateOrg(props)
@@ -103,7 +100,7 @@ const LoaneeUploadButton = ({ url, onUploadSuccess }: Props) => {
         onClick={onClick}
         className={`relative ${
           !isBusy ? "cursor-pointer" : "cursor-wait"
-        } rounded-full group md:w-[68px] w-[42px] md:h-[68px] h-[42px]`}
+        } rounded-full group w-20 h-20`}
         role='button'
         tabIndex={!isBusy ? 0 : -1}
         aria-label='Upload profile image'
@@ -113,19 +110,10 @@ const LoaneeUploadButton = ({ url, onUploadSuccess }: Props) => {
       >
         {image ? (
           <Avatar className='md:w-[68px] w-[42px] md:h-[68px] h-[42px]'>
-            <AvatarImage
-              className={`md:w-[69px] w-[42px] md:h-[68px] h-[42px] ${isBusy ? "opacity-50" : ""}`}
-
-          <Avatar className='w-20 h-20'>
-            <AvatarImage
-              className={`w-20 h-20 ${isBusy ? "opacity-50" : ""}`}
-              src={image}
-              alt='userImage'
-            />
+            <AvatarImage className={`md:w-[68px] w-[42px] md:h-[68px] h-[42px ${isBusy ? "opacity-50" : ""}`} src={image}  alt='userImage' />
           </Avatar>
         ) : (
           <FaCircleUser
-            className={`md:w-[68px] w-[42px] md:h-[68px] h-[42px] text-[#ececec] ${isBusy ? "opacity-50" : ""}`}
             className={`w-20 h-20 text-[#ececec] ${isBusy ? "opacity-50" : ""}`}
           />
         )}
@@ -148,6 +136,7 @@ const LoaneeUploadButton = ({ url, onUploadSuccess }: Props) => {
         ref={fileInputRef}
         onChange={onFileChange}
         disabled={isBusy}
+        aria-label='Upload profile image'
       />
 
       {error && (
