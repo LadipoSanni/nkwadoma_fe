@@ -176,7 +176,7 @@ const FundWallet = () => {
         <div
             className={` w-full px-2 py-2 grid gap-4 `}
         >
-            <BackButton id={'backtoMyLoanDetails'}  text={'Back'} handleClick={handleBackClick} textColor={'meedlBlue'} iconBeforeLetters={true}/>
+            <BackButton id={'backtoWallet'}  text={'Back'} handleClick={handleBackClick} textColor={'meedlBlue'} iconBeforeLetters={true}/>
             <main className={` w-full px-2  md:px-8 grid gap-8   `}>
                 <header
                     className={` w-full py-2 h-fit border-b border-[#D7D7D7] md:flex md:justify-between `}
