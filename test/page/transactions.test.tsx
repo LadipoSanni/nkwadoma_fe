@@ -15,6 +15,10 @@ const mockData: { date: string; details: Trans[] }[] = [
     },
 ];
 
+jest.mock('next/navigation', () => ({
+    useRouter: jest.fn(),
+}));
+
 describe("Transaction Component", () => {
     it("renders recent transactions with viewLittle = true", () => {
         const onViewAllClick = jest.fn();
@@ -45,8 +49,8 @@ describe("Transaction Component", () => {
 
     it("applies correct color styles for transaction statuses", () => {
         render(<Transaction viewLittle={true} data={mockData} />);
-        expect(screen.getByText("successful").className).toContain("bg-[#E6F2EA]");
-        expect(screen.getByText("pending").className).toContain("bg-[#FEF6E8]");
-        expect(screen.getByText("failed").className).toContain("bg-[#FBE9E9]");
+        expect(screen.getByText("Successful").className).toContain("bg-[#E6F2EA]");
+        expect(screen.getByText("Pending").className).toContain("bg-[#FEF6E8]");
+        expect(screen.getByText("Failed").className).toContain("bg-[#FBE9E9]");
     });
 });
