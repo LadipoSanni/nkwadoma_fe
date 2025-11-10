@@ -14,7 +14,7 @@ interface ProfileProps {
   companyUrl?: string;
 }
 
-const LoaneeProfileSetting = ({ whoseProfile, companyUrl }: ProfileProps) => {
+const LoaneeProfile = ({ whoseProfile, companyUrl }: ProfileProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { data: profileData, refetch } = useGetUserDetailsQuery({});
 
@@ -198,4 +198,4 @@ const LoaneeProfileSetting = ({ whoseProfile, companyUrl }: ProfileProps) => {
   );
 };
 
-export default LoaneeProfileSetting;
+export default LoaneeProfile;
