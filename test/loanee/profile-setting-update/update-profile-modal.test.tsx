@@ -135,3 +135,4 @@ describe("UpdateProfile Component", () => {
     expect(setIsOpen).toHaveBeenCalledTimes(1);
   });
 });
+
