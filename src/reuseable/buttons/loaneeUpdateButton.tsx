@@ -16,7 +16,7 @@ interface Props {
   onUploadSuccess?: () => void;
 }
 
-const LoaneeUploadButton = ({ url, onUploadSuccess }: Props) => {
+const LoaneeUploadButton = ({ whose, url, onUploadSuccess }: Props) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [isBusy, setIsBusy] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);

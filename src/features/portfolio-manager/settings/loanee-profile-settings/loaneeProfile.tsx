@@ -2,7 +2,7 @@ import { inter } from "@/app/fonts";
 import React, { useState } from "react";
 import Modal from "@/reuseable/modals/TableModal";
 import { Cross2Icon } from "@radix-ui/react-icons";
-import { formatMonthInDate } from "@/utils/Format";
+import { calculateAge } from "@/utils/GlobalMethods";
 import { toSentenceCase } from "@/utils/GlobalMethods";
 import { useGetUserDetailsQuery } from "@/service/users/api";
 import UpdateProfile from "./update-profile-modal/update-profile";
@@ -46,7 +46,8 @@ const LoaneeProfileSetting = ({ whoseProfile, companyUrl }: ProfileProps) => {
             </p>
           </div>
 
-          <LoaneeUploadButton         whose={whoseProfile}
+          <LoaneeUploadButton         
+            whose={whoseProfile}
             url={avatarUrl}
             onUploadSuccess={refetch}
           />
@@ -60,7 +61,7 @@ const LoaneeProfileSetting = ({ whoseProfile, companyUrl }: ProfileProps) => {
                   Age
                 </p>
                 <p className='text-sm sm:text-base font-medium text-[#4D4E4D] px-2 py-1'>
-                  {formatMonthInDate(profileData?.data?.dateOfBirth)}
+                  {calculateAge(profileData?.data?.dateOfBirth)}
                 </p>
               </div>
               <div>
