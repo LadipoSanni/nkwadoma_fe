@@ -63,10 +63,20 @@ function LinkedAccount() {
             repaymentAmount: Yup.string()
                 .trim()
                 .required("Required")
+                .test('valid-format', 'Invalid amount format', (value) => {
+                    if (!value) return false;
+                    if (value.startsWith('.')) return false;
+                    return true;
+                  })
                 .test('is-positive', 'Amount must be greater than 0', (value) => {
                     if (!value) return false;
                     const numericValue = parseFloat(value.replace(/,/g, ''));
                     return numericValue > 0;
+                })
+                .test('min-amount', 'Amount must be greater than 0', (value) => {  
+                    if (!value) return false;
+                    const numericValue = parseFloat(value.replace(/,/g, ''));
+                    return numericValue >= 1; 
                 }),
             account: Yup.array()
                 .of(
@@ -128,37 +138,65 @@ function LinkedAccount() {
             <Label htmlFor="repaymentAmount" className='text-[#212221] text-[12px] font-medium'>
                 How much would you like to repay?
             </Label>
-            <NumericFormat
-                id="repaymentAmount"
-                name="repaymentAmount"
-                type="text"
-                inputMode="numeric"
-                thousandSeparator=","
-                decimalScale={2}
-                fixedDecimalScale={true}
-                placeholder="Enter repayment amount"
-                value={values.repaymentAmount}
-                className={`w-full p-3 h-[3rem] mt-2 border focus:outline-none rounded-md text-[14px] placeholder:text-[#4D4E4D]`}
-                onValueChange={(values) => {
-                    const { value } = values;
-                    setHasTyped(true); 
-                    
-                    if (value === '' || value === '0.00') {
-                        setFieldValue("repaymentAmount", "");
-                        handleFormChange("repaymentAmount","")
-                        return;
-                    }
-                    
-                    const numericValue = value.replace(/[^\d.]/g, '');
-                    setFieldValue("repaymentAmount", numericValue);
-                    handleFormChange("repaymentAmount",numericValue) 
-                }}
-                onBlur={() => {
-                    if (hasTyped) { 
-                        setShowErrors(true);
-                    }
-                }}
-            />
+             <NumericFormat
+                        id="repaymentAmount"
+                        name="repaymentAmount"
+                        type="text"
+                        inputMode="decimal"
+                        thousandSeparator=","
+                        decimalScale={2}
+                        fixedDecimalScale={false}
+                        allowNegative={false}
+                        placeholder="Enter repayment amount"
+                        value={values.repaymentAmount}
+                        className={`w-full p-3 h-[3rem] mt-2 border focus:outline-none rounded-md `}
+                        onValueChange={(values, sourceInfo) => {
+                            const { value, formattedValue } = values;
+                            const { source } = sourceInfo;
+                            setHasTyped(true);
+                            
+                            if (source === 'event' && formattedValue === '.') {
+                            setFieldValue("repaymentAmount", "");
+                            handleFormChange("repaymentAmount", "");
+                            return;
+                            }
+                            
+            
+                            if (value === '') {
+                            setFieldValue("repaymentAmount", "");
+                            handleFormChange("repaymentAmount", "");
+                            return;
+                            }
+                            
+                            let cleanValue = formattedValue.replace(/[^\d.]/g, '');
+            
+                            const decimalParts = cleanValue.split('.');
+                            if (decimalParts.length > 2) {
+                            cleanValue = decimalParts[0] + '.' + decimalParts.slice(1).join('');
+                            }
+                            
+                            if (cleanValue === '0') {
+                            setFieldValue("repaymentAmount", cleanValue);
+                            handleFormChange("repaymentAmount", cleanValue);
+                            return;
+                            } else if (cleanValue.startsWith('0') && cleanValue.length > 1 && !cleanValue.startsWith('0.')) {
+                            cleanValue = cleanValue.replace(/^0+/, '');
+                            }
+                            
+                            setFieldValue("repaymentAmount", cleanValue);
+                            handleFormChange("repaymentAmount", cleanValue);
+                        }}
+                        onBlur={() => {
+                            if (hasTyped) {
+                            setShowErrors(true);
+                            }
+                        }}
+                        isAllowed={(values) => {
+                            const { floatValue } = values;
+                            if (floatValue === undefined) return true;
+                            return floatValue >= 0;
+                        }}
+                        />
             {(shouldShowError && errors.repaymentAmount) && (
                 <div className="text-red-500 text-sm mt-1">
                     {errors.repaymentAmount}
