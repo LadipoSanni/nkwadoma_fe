@@ -37,7 +37,7 @@ export const TransactionItem: React.FC<TransactionItemProps> = ({ transaction,is
       case 'failed':
         return 'text-[#D42620]';
       case 'pending':
-        return 'text-[#045620]';
+        return 'text-[#AD7311]';
       default:
         return '';
     }
