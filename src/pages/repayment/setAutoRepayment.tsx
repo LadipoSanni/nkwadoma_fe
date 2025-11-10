@@ -12,6 +12,8 @@ import SearchableDropdown ,{DropdownItem} from "@/reuseable/Dropdown/SearchableD
 import Image from "next/image";
 import { GoCheckCircle } from "react-icons/go";
 import Calender from "@/components/icons/Calender";
+import { MdHomeRepairService ,MdOutlineSource,MdMoney,MdOutlineToday} from "react-icons/md";
+import { RiTimerLine } from "react-icons/ri";
 
 const SetAutoRepayment = () => {
     const router = useRouter()
@@ -24,7 +26,7 @@ const SetAutoRepayment = () => {
     const [selectedAccount, setSelectedAccount] = useState('')
     const isAccountSelected = selectedAccountType === 'Wallet' ? false : selectedAccount?.length < 1
     const isDisable = selectedTimePreference === 'Weekly' ? (!amount || !selectedTime || !seletedDay || !selectedAccountType || isAccountSelected ) : false;
-
+    const [showView, setShowView] = useState(false);
     const handleBackClick = () => {
         router.push(`/my-loan-profile`)
     }
@@ -130,6 +132,15 @@ const SetAutoRepayment = () => {
         // },
     ];
 
+    const repaymentDetails = [
+        {id: 0,icon: <MdHomeRepairService color={`#667085`} /> , label: 'Repayment type' , value: `${selectedTimePreference}`},
+        {id: 1,icon: <MdMoney color={`#667085`} />, label: 'Amount' , value: `${formatAmount(amount)}`},
+        {id: 2,icon: <MdOutlineSource color={`#667085`} /> , label: 'Source of payment' , value: `${selectedAccountType === 'Wallet' ? selectedAccountType : selectedAccount}`},
+        {id: 3,icon: <MdOutlineToday color={`#667085`}  /> , label: 'Day of the week' , value: `${seletedDay}`},
+        {id: 4,icon: <RiTimerLine color={`#667085`}  /> , label: 'Preferred time' , value: `${selectedTime}`},
+
+    ]
+
 
     const repaymentField = ( ) => {
         return(
@@ -228,18 +239,50 @@ const SetAutoRepayment = () => {
                         <p id={'walletBalanceAmount'} data-testid={'walletBalanceAmount'} className={` md:text-[20px] text-meedlBlue ${inter500.className} `}>{formatAmount(300000000000)}</p>
                     </section>
                 </header>
-                <section className={`  w-full max-h-[60vh] h-[60vh] grid md:flex `}>
+                {showView ?
+                    <section className={` grid md:px-10 justify-items-center w-full justify-self-center  md:w-[40vw] md:py-8 lg:py-8 py-2  lg:w-[40vw]   max-h-[60vh] h-[60vh] md:border md:border-[#D7D7D7] rounded-md `}>
+                       <div className={` h-full  w-full grid  `}>
+                           <div className={` h-fit w-full grid gap-4  `}>
+                               <p className={` text-[#4D4E4D] ${inter500.className} md:text-[16px] lg:text-[16px] text-[18px] justify-self-center `}>Schedule repayment details</p>
+                               <div className={` w-full bg-full grid gap-4  `}>
+                                   {repaymentDetails?.map((item, index) => (
+                                       <div key={ `item` +index} className={` w-full  flex justify-between  lg:flex lg:justify-between md:flex md:justify-between `}>
+                                           <div className={` flex gap-2 `}>
+                                               {item?.icon}
+                                               <p className={` ${inter.className} text-[#4D4E4D] text-sm  `}>{item?.label}</p>
+                                           </div>
+                                           <p className={` ${inter500.className} max-w-[40%] text-ellipsistext-[#212221] text-sm `}>{item?.value}</p>
+                                       </div>
+                                   ))}
+                               </div>
+                           </div>
+                           <div className={` w-full md:h-full lg:h-full h-fit grid gap-2  lg:flex md:flex md:gap-4 lg:justify-end   md:justify-end `}>
+                               <button className={` ${inter500.className} text-sm text-[#C1231D] md:mt-auto w-full  lg:w-fit md:w-fit h-fit py-2 px-2   `}>Cancel</button>
+                               <button className={` text-white ${inter700.className} md:mt-auto  rounded-md lg:w-fit md:w-fit w-full bg-meedlBlue  h-fit py-2 px-3 text-sm  `}>Edit details</button>
+                           </div>
+                       </div>
+                    </section>
+                    :
+                 <section className={`  w-full max-h-[60vh] h-[60vh] grid md:flex `}>
                     <section className={` grid gap-3 h-fit   w-full justify-items-center  `}>
                         <div className={` w-fit grid justify-items-center `}>
-                            <p className={`   text-[#212221] md:text-[20px] ${inter500.className}  `}>Set auto repayment</p>
-                            <p className={`  text-[#4D4E4D] md:text-[12px] ${inter.className} `}>Automatically deduct repayments from your account</p>
+                            <p className={`   text-[#212221] md:text-[20px] ${inter500.className}  `}>Set auto
+                                repayment</p>
+                            <p className={`  text-[#4D4E4D] md:text-[12px] ${inter.className} `}>Automatically deduct
+                                repayments from your account</p>
                         </div>
-                        <div className={` w-full md:w-[30vw] md:max-w-[30vw] lg:w-[30vw] lg:max-w-[30vw]  grid md:justify-items-center gap-3  `}>
+                        <div
+                            className={` w-full md:w-[30vw] md:max-w-[30vw] lg:w-[30vw] lg:max-w-[30vw]  grid md:justify-items-center gap-3  `}>
                             <div className={` grid gap-4 md:items-center   w-full md:grid md:gap-2 lg:grid lg:gap-2  `}>
-                                <p className={`   md:flex md:items-center text-[#212221] md:text-[14px] ${inter500.className}  `}>How will you prefer to repay?</p>
+                                <p className={`   md:flex md:items-center text-[#212221] md:text-[14px] ${inter500.className}  `}>How
+                                    will you prefer to repay?</p>
                                 <div className={` grid grid-cols-2 gap-2 md:gap-3 lg:gap-3 md:flex lg:flex `}>
-                                    {repaymentTimeButton('Weekly', selectedTimePreference === 'Weekly', () => {setSelectedTimePreference('Weekly')}, ` w-full  `)}
-                                    {repaymentTimeButton('Monthly', selectedTimePreference === 'Monthly', () => {setSelectedTimePreference('Monthly')}, ` w-full  `)}
+                                    {repaymentTimeButton('Weekly', selectedTimePreference === 'Weekly', () => {
+                                        setSelectedTimePreference('Weekly')
+                                    }, ` w-full  `)}
+                                    {repaymentTimeButton('Monthly', selectedTimePreference === 'Monthly', () => {
+                                        setSelectedTimePreference('Monthly')
+                                    }, ` w-full  `)}
                                 </div>
                             </div>
                             {<div className={` w-full  `}>
@@ -247,10 +290,14 @@ const SetAutoRepayment = () => {
                             </div>}
                         </div>
                     </section>
-                    <button className={clsx(` mt-4 md:mt-0 lg:mt-0 w-full self-end md:self-end lg:self-end md:w-fit lg:w-fit  px-4 py-2 h-fit rounded-md  ${inter700.className} text-[14px]  `, isDisable ? `bg-[#D7D7D7] hover:bg-[#D7D7D7] text-white ` : ` bg-meedlBlue text-white `)}>
+                    <button onClick={() => {
+                        setShowView(true)
+                    }} id={`save`} data-testid={`save`} disabled={isDisable}
+                            className={clsx(` mt-4 md:mt-0 lg:mt-0 w-full self-end md:self-end lg:self-end md:w-fit lg:w-fit  px-4 py-2 h-fit rounded-md  ${inter700.className} text-[14px]  `, isDisable ? `bg-[#D7D7D7] hover:bg-[#D7D7D7] text-white ` : ` bg-meedlBlue text-white `)}>
                         Save
                     </button>
                 </section>
+                }
             </main>
         </div>
     );
