@@ -34,14 +34,10 @@ const LoaneeProfile = ({ whoseProfile, companyUrl }: ProfileProps) => {
       <div className='w-full border border-[#ECECEC] rounded-lg py-1 md:py-5'>
         <div className=' w-full flex justify-between md:px-6 px-1 py-4'>
           <div>
-            <h2
-              className={` text-md md:text-[18px] md:font-semibold py-1 ${inter.className} font-bold text-[#212221] md:px-1 px-1 `}
-            >
+            <h2 className={` text-md md:text-[18px] md:font-semibold py-1 ${inter.className} font-bold text-[#212221] md:px-1 px-1 `} >
               Profile
             </h2>
-            <p
-              className={` text-xs md:text-sm font-normal ${inter.className} text-gray-500 md:px-1 px-1 `}
-            >
+            <p className={` text-xs md:text-sm font-normal ${inter.className} text-gray-500 md:px-1 px-1 `} >
               Manage and update your personal details
             </p>
           </div>
