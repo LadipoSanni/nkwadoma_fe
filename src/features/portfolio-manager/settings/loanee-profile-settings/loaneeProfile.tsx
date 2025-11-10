@@ -5,7 +5,7 @@ import { Cross2Icon } from "@radix-ui/react-icons";
 import { calculateAge } from "@/utils/GlobalMethods";
 import { toSentenceCase } from "@/utils/GlobalMethods";
 import { useGetUserDetailsQuery } from "@/service/users/api";
-import UpdateProfile from "./update-profile-modal/update-profile";
+import UpdateProfile from "./update-profile-modal/Update-profile";
 import ProfileSection from "@/reuseable/profile/LoaneeProfileSection";
 import LoaneeUploadButton from "@/reuseable/buttons/loaneeUpdateButton";
 
