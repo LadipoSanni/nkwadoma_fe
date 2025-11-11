@@ -11,8 +11,9 @@ import LinkAccount from './Link-account'
 import { TransactionHistory } from '@/reuseable/transactions/Transaction-history'
 import { transactionsHistory } from '@/utils/LoanRequestMockData/cohortProduct';
 import { useRouter } from 'next/navigation'
-import {setFundWalletFrom} from "@/redux/slice/wallet";
 import { store } from '@/redux/store'
+import {setFundWalletFrom,setMakePaymentFrom} from "@/redux/slice/wallet";
+
 // import ButtonAndSearch from '@/reuseable/action-bars/Button-and-search'
 
 export const bankAccounts = [
@@ -102,7 +103,10 @@ const router = useRouter()
              className='h-[37px] font-bold w-[141px] text-[14px]'
              id='makePayment'
              data-testid={"makePaymentTextId"}
-             onClick={() => {router.push("/payment/make-payment")}}
+             onClick={() => {
+                 store.dispatch(setMakePaymentFrom('payment'))
+                 router.push("/payment/make-payment")
+             }}
              >
                 Make payment
              </Button>

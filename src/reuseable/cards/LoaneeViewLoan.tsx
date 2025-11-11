@@ -6,13 +6,15 @@ import { formatAmount } from '@/utils/Format';
 
 interface Props {
     isLoading?: boolean,
-    handleClick: () => void,
+    viewLoanDetails: () => void,
+    makePayment?: () => void,
     data: LoanType
 }
 
 const LoaneeViewLoan: React.FC<Props> = ({
-    handleClick,
-    data
+    viewLoanDetails,
+    data,
+                                             makePayment,
                                          }) => {
 
 
@@ -99,12 +101,12 @@ const LoaneeViewLoan: React.FC<Props> = ({
                 className={` grid gap-4 px-4  md:flex md:justify-between md:gap-8  `}
             >
                 <button id={'viewLoanDetails' +data?.loanProgressId}
-                        onClick={handleClick}
+                        onClick={viewLoanDetails}
                         className={` hover:bg-[#E8EAEE]   flex items-center  justify-center w-full  h-[37px] text-sm ${inter700.className} rounded-md border border-meedlBlue text-meedlBlue  `}>View details</button>
 
                 {getWordAfterLoan(data?.loanType) === 'DISBURSED' &&
                     <button id={'makePayment' + data?.loanProgressId}
-                    // onClick={handleClick}
+                    onClick={makePayment}
                          className={` hover:bg-[#626F8C]   flex items-center justify-center w-full h-[37px]  text-sm ${inter700.className} rounded-md  bg-meedlBlue text-white  `}>Make
                            payment
                     </button>
