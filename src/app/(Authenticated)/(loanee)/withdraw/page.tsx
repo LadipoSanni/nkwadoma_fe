@@ -1,10 +1,9 @@
 import React from 'react';
+import Withdraw from "@/pages/wallet/Withdraw";
 
 const Page = () => {
     return (
-        <div>
-            
-        </div>
+        <Withdraw/>
     );
 };
 

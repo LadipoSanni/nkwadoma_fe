@@ -42,6 +42,7 @@ const WalletBalance = ({balance}:Props) => {
                 <WalletButton
                     text={'Withdraw'}
                     icon={<Withdraw height={'20'} width={'20'}/>}
+                    handleClick={() =>  {handleRouter(`/withdraw`)}}
                 />
             </div>
         )

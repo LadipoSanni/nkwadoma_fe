@@ -5,7 +5,7 @@ import {clsx} from "clsx";
 interface Props {
     isChecked: boolean,
     text: string,
-    onClick: ()=> void
+    onClick?: ()=> void
 }
 
 const RadioCheckButton = ({text,isChecked,onClick}:Props) => {
