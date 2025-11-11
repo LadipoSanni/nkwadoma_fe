@@ -1,7 +1,7 @@
 import React from "react";
 import "@testing-library/jest-dom";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
-import UpdateProfile from "@/features/portfolio-manager/settings/loanee-profile-settings/update-profile-modal/Update-profile";
+import UpdateProfile from "@/features/portfolio-manager/settings/loanee-profile-settings/update-profile-modal/UpdateProfile";
 
 const loaneeUpdate = jest.fn();
 jest.mock("@/service/users/Loanee_query", () => ({

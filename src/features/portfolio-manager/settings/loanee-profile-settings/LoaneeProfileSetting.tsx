@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import Modal from "@/reuseable/modals/TableModal";
 import { Cross2Icon } from "@radix-ui/react-icons";
 import { useGetUserDetailsQuery } from "@/service/users/api";
-import UpdateProfile from "./update-profile-modal/Update-profile";
+import UpdateProfile from "./update-profile-modal/UpdateProfile";
 import { calculateAge, toSentenceCase } from "@/utils/GlobalMethods";
 import ProfileSection from "@/reuseable/profile/LoaneeProfileSection";
 import LoaneeUploadButton from "@/reuseable/buttons/loaneeUpdateButton";
@@ -13,7 +13,7 @@ interface ProfileProps {
   companyUrl?: string;
 }
 
-const LoaneeProfile = ({ whoseProfile, companyUrl }: ProfileProps) => {
+const LoaneeProfileSetting = ({ whoseProfile, companyUrl }: ProfileProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { data: profileData, refetch } = useGetUserDetailsQuery({});
 
@@ -193,4 +193,4 @@ const LoaneeProfile = ({ whoseProfile, companyUrl }: ProfileProps) => {
   );
 };
 
-export default LoaneeProfile;
+export default LoaneeProfileSetting;

@@ -9,7 +9,7 @@ import {getItemSessionStorage} from "@/utils/storage";
 import styles from './index.module.css'
 import LoaneeSettingTabs from '@/reuseable/tabs/loaneeSettingTabs';
 import Profile from './profile';
-import LoaneeProfile from './loanee-profile-settings/LoaneeProfile';
+import LoaneeProfileSetting from './loanee-profile-settings/LoaneeProfileSetting';
 
 
 
@@ -32,7 +32,7 @@ export const Generals = () => {
     const getCurrentDataList = () => {
         switch (currentTab) {
             case 0:
-                return userRole === 'LOANEE' ? <LoaneeProfile whoseProfile={'user'} /> :
+                return userRole === 'LOANEE' ? <LoaneeProfileSetting whoseProfile={'user'} /> :
                     <Profile  whoseProfile={'user'} userEmail={userEmail} userName={userFullName}/>;
             case 1:
                 return <ChangePassword/>;
