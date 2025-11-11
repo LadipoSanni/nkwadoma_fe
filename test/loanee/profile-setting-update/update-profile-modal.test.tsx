@@ -1,7 +1,7 @@
 import React from "react";
 import "@testing-library/jest-dom";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
-import UpdateProfile from "@/features/portfolio-manager/settings/loanee-profile-settings/update-profile-modal/update-profile";
+import UpdateProfile from "@/features/portfolio-manager/settings/loanee-profile-settings/update-profile-modal/UpdateProfile";
 
 const loaneeUpdate = jest.fn();
 jest.mock("@/service/users/Loanee_query", () => ({
@@ -129,9 +129,10 @@ describe("UpdateProfile Component", () => {
     expect(setIsOpen).not.toHaveBeenCalled();
   });
 
-  test("should calls setIsOpen(false) when Cancel button is clicked", () => {
+  test("should call setIsOpen(false) when Cancel button is clicked", () => {
     fireEvent.click(screen.getByRole("button", { name: /Cancel/i }));
     expect(setIsOpen).toHaveBeenCalledWith(false);
     expect(setIsOpen).toHaveBeenCalledTimes(1);
   });
 });
+
