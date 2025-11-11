@@ -1,11 +1,13 @@
 
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
-import FundWallet from '@/pages/wallet/fundWallet';
+import  FundWallet from '@/pages/wallet/fundWallet';
 import { useRouter } from 'next/navigation';
+import {Providers} from "@/app/provider";
 
 jest.mock('next/navigation', () => ({
     useRouter: jest.fn(),
+    usePathname: jest.fn(),
 }));
 
 
@@ -16,23 +18,36 @@ describe('FundWallet Component', () => {
     beforeEach(() => {
         (useRouter as jest.Mock).mockReturnValue({ push: pushMock });
         jest.clearAllMocks();
+        render(
+            <Providers>
+                <FundWallet />
+            </Providers>
+        );
+
     });
 
     it('renders correctly', () => {
-        render(<FundWallet />);
         expect(screen.getByText('Fund wallet')).toBeInTheDocument();
         expect(screen.getByTestId('backtoWallet')).toBeInTheDocument();
         expect(screen.getByTestId('walletBalanceAmount')).toBeInTheDocument();
     });
 
     it('allows selecting "Linked accounts" as funding method', () => {
-        render(<FundWallet />);
-
         const linkedRadio = screen.getByTestId('RadioButtonLinkedaccounts');
         fireEvent.click(linkedRadio);
 
         expect(linkedRadio).toBeInTheDocument();
         expect(screen.getByText('Select account to pay from')).toBeInTheDocument();
+    });
+    it('should allow selecting paystack as funding method', () => {
+
+        const fundViaPaystackButton = screen.getByTestId('RadioButtonPaystack');
+        expect(fundViaPaystackButton).toBeInTheDocument();
+
+        fireEvent.click(fundViaPaystackButton);
+        expect(screen.getByText('Amount')).toBeInTheDocument();
+
+
     });
 
     // it('disables Continue button until amount and account are selected', async () => {

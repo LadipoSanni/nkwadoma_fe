@@ -10,19 +10,31 @@ import {NumericFormat} from "react-number-format";
 import SearchableDropdown, {DropdownItem} from "@/reuseable/Dropdown/SearchableDropDown";
 import Image from "next/image";
 import RadioCheckButton from "@/reuseable/buttons/RadioCheckButton";
+import {useAppSelector} from "@/redux/store";
+import dynamic from "next/dynamic";
 
-const FundWallet = () => {
+
+const FundWallet = dynamic(
+    () => Promise.resolve(FundWalletContent),
+    {ssr: false}
+)
+
+const FundWalletContent = () => {
     const router = useRouter()
     const [amount, setAmount] = useState('')
+    const [fundWalletVia, setFundWalletVia] = React.useState<string>('Paystack');
     const [selectedAccount, setSelectedAccount] = useState<{id: string | number, accountName: string, accountNumber: string, bankImage: React.ReactNode}>()
-    const isDisable = !selectedAccount || !amount;
+    const isDisable = fundWalletVia === 'Linked accounts' ? !selectedAccount || !amount : !amount;
     const [previewPayment, setPreviewPayment] = useState(false);
-
+    const fromWhere = useAppSelector(state => state.walletFlow.fundWalletFrom);
     const handleBackClick = () => {
-        router.push(`/wallet`)
+        if (fromWhere === 'payment') {
+            router.push('/payment')
+        }else {
+            router.push(`/wallet`)
+        }
     }
 
-    const [fundWalletVia, setFundWalletVia] = React.useState<string>('Linked accounts');
 
 
 
@@ -42,36 +54,50 @@ const FundWallet = () => {
             subLabel: "4145358587",
             icon: <Image src="/gtbanklogo.png" alt="GTBank" width={24} height={24} />,
         },
-        // {
-        //     id:3,
-        //     label: "Guaranty Trust Holding Company Plc,Guaranty Trust Guaranty Trust ",
-        //     subLabel: "4145358587",
-        //     icon: <Image src="/gtbanklogo.png" alt="GTBank" width={24} height={24} />,
-        //
-        // },
-        // {
-        //     id:4,
-        //     label: "Guaranty Trust Holding Company Plc,Guaranty Trust Guaranty Trust ",
-        //     subLabel: "4145358587",
-        //     icon: <Image src="/gtbanklogo.png" alt="GTBank" width={24} height={24} />,
-        //
-        // },
-        // {
-        //     id:5,
-        //     label: "Guaranty Trust Holding Company Plc,Guaranty Trust Guaranty Trust ",
-        //     subLabel: "4145358587",
-        //     icon: <Image src="/gtbanklogo.png" alt="GTBank" width={24} height={24} />,
-        //
-        // },
-        // {
-        //     id:6,
-        //     label: "Guaranty Trust Holding Company Plc,Guaranty Trust Guaranty Trust ",
-        //     subLabel: "4145358587",
-        //     icon: <Image src="/gtbanklogo.png" alt="GTBank" width={24} height={24} />,
-        //
-        // },
+
     ];
 
+    const fundViaPaystack = () => {
+        return(
+            <main  className={` h-full grid  `}>
+                    <div>
+                        <p className={`  mr-auto ml-auto text-[#212221] md:text-[14px] ${inter500.className}  `}>Amount</p>
+                        <div className='w-full h-fit mt-auto  mb-auto  '>
+                            <NumericFormat
+                                id="amount"
+                                name="amount"
+                                prefix={'₦'}
+                                type="text"
+                                inputMode="numeric"
+                                thousandSeparator=","
+                                decimalScale={2}
+                                allowNegative={false}
+                                placeholder="Enter amount"
+                                value={amount}
+                                fixedDecimalScale
+                                className={`w-full p-3 h-[3rem] text-[#4D4E4D] text-[14px] ${inter.className}  mt-auto mb-auto border rounded focus:outline-none`}
+                                onValueChange={(values) => {
+                                    // values.value is the raw numeric string (without commas or ₦)
+                                    const rounded = Math.round(parseFloat(values.value || "0") * 100) / 100;
+                                    setAmount(rounded.toString());
+                                }}
+                            />
+                        </div>
+                    </div>
+
+                    <div className={`  w-full self-end flex items-end mt-auto      `}>
+                        <button
+                            id={`continue`}
+                            data-testid={`continue`}
+                            onClick={() => {setPreviewPayment(true)}}
+                            disabled={isDisable}
+                            className={clsx(` lg:ml-auto lg:mt-auto  md:mr-0 md:mb-0 w-full  md:w-fit lg:w-fit  md:px-6 py-2 h-fit rounded-md  ${inter700.className} text-[14px]  `, isDisable ? `bg-[#D7D7D7] hover:bg-[#D7D7D7] text-white ` : ` bg-meedlBlue text-white `)}>
+                            Continue
+                        </button>
+                    </div>
+            </main>
+        )
+    }
     const renderForLinkedAccount = () => {
         return(
             <main className={` h-full  `}>
@@ -185,10 +211,17 @@ const FundWallet = () => {
                     <div className={` grid gap-2 h-fit `}>
                         <p className={` text-[#4D4E4D] text-[14px] ${inter.className} `}>Fund via</p>
                         <RadioCheckButton isChecked={fundWalletVia === 'Paystack'}  text={'Paystack'} onClick={() => {setFundWalletVia('Paystack')}} />
-                        <RadioCheckButton isChecked={fundWalletVia === 'Linked accounts'} text={'Linked accounts' } onClick={() => {setFundWalletVia('Linked accounts')}} />
+                        <RadioCheckButton isChecked={fundWalletVia === 'Linked accounts'} text={'Linked accounts' } onClick={() => {
+                            setPreviewPayment(false)
+                            setFundWalletVia('Linked accounts')
+                        }} />
                     </div>
                     <div className={` grid  md:w-[70%] lg:w-[70%] md:px-8 lg:px-8 md:py-8 lg:py-8  h-[50vh]  border max-h-[60vh] md:border md:border-[#D7D7D7] rounded-md  `}>
-                        {fundWalletVia === 'Linked accounts' && renderForLinkedAccount()}
+                        {fundWalletVia === 'Linked accounts' ?
+                            renderForLinkedAccount()
+                            :
+                            fundViaPaystack()
+                        }
                     </div>
 
                 </section>
