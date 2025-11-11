@@ -23,6 +23,7 @@ function MakePayment() {
 
     const selectPaymentTab = useAppSelector(state => state?.payment?.paymentTab)
      const currentState = useAppSelector(state => state?.payment?.walletTab)
+    const makePaymentFrom = useAppSelector(state => state.walletFlow.makePaymentFrom);
 
      const linkedAccountCurrentState = useAppSelector(state => state?.payment?.linkedAccountTab)
     const [currentTab, setCurrentTab] = useState(selectPaymentTab)
@@ -45,12 +46,16 @@ function MakePayment() {
         }
 
         const handleBackRoute = () => {
-            if(currentTab === 0 && currentState === 1){
-               store.dispatch(setWalletTab(0))
-            }else if(currentTab === 2 &&  linkedAccountCurrentState === 1){
-                store.dispatch(setLinkedAccountTab(0))
+            if(makePaymentFrom === 'payment'){
+                if(currentTab === 0 && currentState === 1){
+                    store.dispatch(setWalletTab(0))
+                }else if(currentTab === 2 &&  linkedAccountCurrentState === 1){
+                    store.dispatch(setLinkedAccountTab(0))
+                }else {
+                    router.push("/payment")
+                }
             }else {
-              router.push("/payment")
+                router.push(`/${makePaymentFrom}`)
             }
         }
 

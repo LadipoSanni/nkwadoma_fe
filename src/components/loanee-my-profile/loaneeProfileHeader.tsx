@@ -16,6 +16,7 @@ import {
     AvatarImage,
 } from "@/components/ui/avatar"
 import {setUnderlineTabCurrentTab} from "@/redux/slice/layout/adminLayout";
+import {setMakePaymentFrom} from "@/redux/slice/wallet";
 
 
 interface Props {
@@ -76,6 +77,11 @@ const LoaneeProfileHeader = ({cohort ,userName,institutionName,loanStatus, progr
     }
     const routerToSetAutoRepayment = () => {
         router.push(`/set-auto-repayment`)
+    }
+
+    const makePayment = () => {
+        store.dispatch(setMakePaymentFrom('my-loan-profile'))
+        router.push('/payment/make-payment')
     }
 
     const providedInstitutionName = institutionName ? getFirstLetterOfWord(institutionName) ? getFirstLetterOfWord(institutionName) : institutionName?.at(0)?.toUpperCase() : ''
@@ -144,7 +150,7 @@ const LoaneeProfileHeader = ({cohort ,userName,institutionName,loanStatus, progr
                            Set auto repayment
                        </button>
                        <button id={'makePayment'} data-tesid={'makePayment'}
-                           // onClick={handleClick}
+                           onClick={makePayment}
                                className={` hover:bg-[#E8EAEE]   flex items-center justify-center  w-full md:w-fit md:px-4   h-fit py-2  text-sm ${inter700.className} rounded-md  bg-meedlBlue text-white  `}>Make
                            payment
                        </button>
