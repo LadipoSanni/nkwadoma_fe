@@ -26,7 +26,7 @@ const LoaneeSettingTabs = ({id,tabElement,tabCurrentTabIndex,setTabCurrentTabInd
                     key={'tabItem' + i}
                     onClick={() => {setTabCurrentTabIndex(i)}}
                 >
-                    {item.name } <ChevronRight/>
+                    {item.name } <ChevronRight className="hidden md:block"/>
                 </div>
             ))}
         </div>
