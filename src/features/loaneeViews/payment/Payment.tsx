@@ -11,6 +11,8 @@ import LinkAccount from './Link-account'
 import { TransactionHistory } from '@/reuseable/transactions/Transaction-history'
 import { transactionsHistory } from '@/utils/LoanRequestMockData/cohortProduct';
 import { useRouter } from 'next/navigation'
+import { useAppSelector,store } from '@/redux/store'
+import { setShowWalletBalance } from '@/redux/slice/make-payment/payment'
 // import ButtonAndSearch from '@/reuseable/action-bars/Button-and-search'
 
 export const bankAccounts = [
@@ -48,14 +50,14 @@ export const bankAccounts = [
 
 function Payment() {
 
+  const showWalletBalance =  useAppSelector(state => state?.payment?.showWalletBalance)
+
     const bankAccount = {
             bankName: "Access Bank Nigeria Limited",
             logo: "https://www.processmaker.com/wp-content/uploads/2019/10/Access_Bank_Logo.png",
             accountNumber: "0701234567",
     }
-    const [showWalletBalance, setShowWalletBalance] = React.useState(false);
-
-        
+ 
 
   const latestTransactions = useMemo(() => {
     if (transactionsHistory.length === 0) return [];
@@ -108,10 +110,32 @@ const router = useRouter()
         <div className='border-solid border-[#ECECEC] border-[1px] rounded-lg flex flex-col mt-4 md:mt-0'>
   <div className='mt-3 text-[#142854] py-3 px-5 flex-1'>
     <p className='text-[12px] font-medium'>Wallet balance</p>
-    <div className='flex h-fit items-center gap-2'>
-        {showWalletBalance ? <span className='font-semibold text-[30px]'>{formatAmount(0)}</span> : <p className='font-semibold  h-fit   mt-auto text-[30px]'>....</p> }
-        {showWalletBalance ? <FiEyeOff  onClick={() => [setShowWalletBalance(!showWalletBalance)]} color='black'/> : <FiEye className={`  mb-1  mt-auto `}  onClick={() => [setShowWalletBalance(!showWalletBalance)]} color='black'/>}
-    </div>
+    <div className='flex items-center gap-2 text-[#142854]'>
+  {showWalletBalance ? (
+    <span className='font-semibold text-[30px]'>{formatAmount(0)}</span>
+  ) : (
+    <span 
+      className='font-semibold text-[30px] tracking-widest'
+      aria-label="Wallet balance hidden"
+      role="text"
+    >
+      ••••
+    </span>
+  )}
+  {showWalletBalance ? (
+    <FiEyeOff 
+      className='cursor-pointer' 
+      onClick={() => store.dispatch(setShowWalletBalance(false))} 
+      aria-label="Hide wallet balance"
+    />
+  ) : (
+    <FiEye 
+      className='cursor-pointer mt-[2px]'
+      onClick={() => store.dispatch(setShowWalletBalance(true))}
+      aria-label="Show wallet balance"
+    />
+  )}
+</div>
     <div className='mt-4'>
       <Button
           onClick={() => {router.push('/fund-wallet')}}
