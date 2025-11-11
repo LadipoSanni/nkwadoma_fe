@@ -49,6 +49,7 @@ function AddAccount({ setIsOpen}:Props) {
         <p className='text-[#4D4E4D] text-[14px] mt-1 '>
           Select an account to add
         </p>
+        <p className='w-80 md:w-full'/>
       </div>
       
       <div className={`w-full mt-7 space-y-4 h-[30vh] ${styles.container}`}>
