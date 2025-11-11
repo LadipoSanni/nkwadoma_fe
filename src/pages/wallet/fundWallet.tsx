@@ -11,8 +11,15 @@ import SearchableDropdown, {DropdownItem} from "@/reuseable/Dropdown/SearchableD
 import Image from "next/image";
 import RadioCheckButton from "@/reuseable/buttons/RadioCheckButton";
 import {useAppSelector} from "@/redux/store";
+import dynamic from "next/dynamic";
 
-const FundWallet = () => {
+
+const FundWallet = dynamic(
+    () => Promise.resolve(FundWalletContent),
+    {ssr: false}
+)
+
+const FundWalletContent = () => {
     const router = useRouter()
     const [amount, setAmount] = useState('')
     const [fundWalletVia, setFundWalletVia] = React.useState<string>('Paystack');
