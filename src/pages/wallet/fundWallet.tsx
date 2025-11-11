@@ -21,7 +21,7 @@ const FundWallet = () => {
         router.push(`/wallet`)
     }
 
-    const [fundWalletVia, setFundWalletVia] = React.useState<string>('');
+    const [fundWalletVia, setFundWalletVia] = React.useState<string>('Linked accounts');
 
 
     const radioButton = (isChecked: boolean, text: string, onClick: ()=> void) => {
