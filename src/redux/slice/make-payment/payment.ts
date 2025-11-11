@@ -14,8 +14,7 @@ interface paymentState {
     repaymentAmount: string,
     linkedAccountTab: number,
     payStackAmount: string,
-    initialLinkedAcctFormValue: InitialLinkedAcctFormValue | null,
-    showWalletBalance: boolean
+    initialLinkedAcctFormValue: InitialLinkedAcctFormValue | null
 
 }
 
@@ -25,8 +24,7 @@ const initialState:paymentState = {
     repaymentAmount: "",
     linkedAccountTab: 0,
     initialLinkedAcctFormValue: null,
-    payStackAmount: "",
-    showWalletBalance: false
+    payStackAmount: ""
 
 }
 
@@ -56,14 +54,10 @@ export const paymentSlice = createSlice({
         setPaystackAmount: (state, action: PayloadAction<string>) => {
             state.payStackAmount = action.payload;
         }, 
-        setShowWalletBalance: (state, action: PayloadAction<boolean>) => {
-            state.showWalletBalance = action.payload;
-        }, 
-
     }
 })
 
-export const {setCurrentPaymentTypeTab,setWalletTab,setRepaymentAmount,setLinkedAccountTab,setInitialLinkedAccountValue,resetInitialLinkedAccountValue,setPaystackAmount,setShowWalletBalance} = paymentSlice.actions;
+export const {setCurrentPaymentTypeTab,setWalletTab,setRepaymentAmount,setLinkedAccountTab,setInitialLinkedAccountValue,resetInitialLinkedAccountValue,setPaystackAmount} = paymentSlice.actions;
 
 
 export default paymentSlice.reducer;

@@ -11,8 +11,6 @@ import LinkAccount from './Link-account'
 import { TransactionHistory } from '@/reuseable/transactions/Transaction-history'
 import { transactionsHistory } from '@/utils/LoanRequestMockData/cohortProduct';
 import { useRouter } from 'next/navigation'
-import { useAppSelector,store } from '@/redux/store'
-import { setShowWalletBalance } from '@/redux/slice/make-payment/payment'
 // import ButtonAndSearch from '@/reuseable/action-bars/Button-and-search'
 
 export const bankAccounts = [
@@ -48,9 +46,11 @@ export const bankAccounts = [
   }
 ]
 
+   
+
 function Payment() {
 
-  const showWalletBalance =  useAppSelector(state => state?.payment?.showWalletBalance)
+  const [showWalletBalance, setShowWalletBalance] = React.useState(false);
 
     const bankAccount = {
             bankName: "Access Bank Nigeria Limited",
@@ -125,13 +125,13 @@ const router = useRouter()
   {showWalletBalance ? (
     <FiEyeOff 
       className='cursor-pointer' 
-      onClick={() => store.dispatch(setShowWalletBalance(false))} 
+      onClick={() => setShowWalletBalance(false)} 
       aria-label="Hide wallet balance"
     />
   ) : (
     <FiEye 
       className='cursor-pointer mt-[2px]'
-      onClick={() => store.dispatch(setShowWalletBalance(true))}
+      onClick={() => setShowWalletBalance(true)}
       aria-label="Show wallet balance"
     />
   )}
