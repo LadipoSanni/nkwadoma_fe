@@ -3,7 +3,8 @@ import React, { useState } from "react";
 import Modal from "@/reuseable/modals/TableModal";
 import { Cross2Icon } from "@radix-ui/react-icons";
 import { useGetUserDetailsQuery } from "@/service/users/api";
-import UpdateProfile from "./update-profile-modal/update-profile";
+import UpdateProfile from "./update-profile-modal/UpdateProfile";
+import { calculateAge, toSentenceCase } from "@/utils/GlobalMethods";
 import ProfileSection from "@/reuseable/profile/LoaneeProfileSection";
 import LoaneeUploadButton from "@/reuseable/buttons/loaneeUpdateButton";
 
@@ -15,6 +16,7 @@ interface ProfileProps {
 const LoaneeProfileSetting = ({ whoseProfile, companyUrl }: ProfileProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { data: profileData, refetch } = useGetUserDetailsQuery({});
+
 
   if (!profileData) {
     return (
@@ -31,19 +33,16 @@ const LoaneeProfileSetting = ({ whoseProfile, companyUrl }: ProfileProps) => {
       <div className='w-full border border-[#ECECEC] rounded-lg py-1 md:py-5'>
         <div className=' w-full flex justify-between md:px-6 px-1 py-4'>
           <div>
-            <h2
-              className={` text-md md:text-[18px] md:font-semibold py-1 ${inter.className} font-bold text-[#212221] md:px-1 px-1 `}
-            >
+            <h2 className={` text-md md:text-[18px] md:font-semibold py-1 ${inter.className} font-bold text-[#212221] md:px-1 px-1 `} >
               Profile
             </h2>
-            <p
-              className={` text-xs md:text-sm font-normal ${inter.className} text-gray-500 md:px-1 px-1 `}
-            >
+            <p className={` text-xs md:text-sm font-normal ${inter.className} text-gray-500 md:px-1 px-1 `} >
               Manage and update your personal details
             </p>
           </div>
 
-          <LoaneeUploadButton         whose={whoseProfile}
+          <LoaneeUploadButton         
+            whose={whoseProfile}
             url={avatarUrl}
             onUploadSuccess={refetch}
           />
@@ -57,7 +56,7 @@ const LoaneeProfileSetting = ({ whoseProfile, companyUrl }: ProfileProps) => {
                   Age
                 </p>
                 <p className='text-sm sm:text-base font-medium text-[#4D4E4D] px-2 py-1'>
-                  {profileData?.data?.dateOfBirth}
+                  {calculateAge(profileData?.data?.dateOfBirth)}
                 </p>
               </div>
               <div>
@@ -65,7 +64,7 @@ const LoaneeProfileSetting = ({ whoseProfile, companyUrl }: ProfileProps) => {
                   Gender
                 </p>
                 <p className='text-sm sm:text-base font-medium text-[#4D4E4D] px-2 py-1'>
-                  {profileData?.data?.gender}
+                  {toSentenceCase(profileData?.data?.gender)}
                 </p>
               </div>
               <div>
@@ -73,7 +72,7 @@ const LoaneeProfileSetting = ({ whoseProfile, companyUrl }: ProfileProps) => {
                   State of origin
                 </p>
                 <p className='text-sm sm:text-base font-medium text-[#4D4E4D] px-2 py-1'>
-                  {profileData?.data?.stateOfOrigin}
+                  {toSentenceCase(profileData?.data?.stateOfOrigin)}
                 </p>
               </div>
               <div>
@@ -81,7 +80,7 @@ const LoaneeProfileSetting = ({ whoseProfile, companyUrl }: ProfileProps) => {
                   State of residence
                 </p>
                 <p className='text-sm sm:text-base font-medium text-[#4D4E4D] px-2 py-1'>
-                  {profileData?.data?.stateOfResidence}
+                  {toSentenceCase(profileData?.data?.stateOfResidence)}
                 </p>
               </div>
             </div>
@@ -94,7 +93,7 @@ const LoaneeProfileSetting = ({ whoseProfile, companyUrl }: ProfileProps) => {
                   Email
                 </p>
                 <p className='text-sm sm:text-base font-medium text-[#4D4E4D] px-2 py-1'>
-                  {profileData?.data?.email}
+                  {toSentenceCase(profileData?.data?.email)}
                 </p>
               </div>
               <div>
@@ -110,7 +109,7 @@ const LoaneeProfileSetting = ({ whoseProfile, companyUrl }: ProfileProps) => {
                   Address
                 </p>
                 <p className='text-sm sm:text-base font-medium text-[#4D4E4D] px-2 py-1'>
-                  {profileData?.data?.residentialAddress}
+                  {toSentenceCase(profileData?.data?.residentialAddress)}
                 </p>
               </div>
             </div>
@@ -123,7 +122,7 @@ const LoaneeProfileSetting = ({ whoseProfile, companyUrl }: ProfileProps) => {
                   Level of education
                 </p>
                 <p className='text-sm sm:text-base font-medium text-[#4D4E4D] px-2 py-1'>
-                  {profileData?.data?.levelOfEducation}
+                  {toSentenceCase(profileData?.data?.levelOfEduction)}
                 </p>
               </div>
             </div>
@@ -136,7 +135,8 @@ const LoaneeProfileSetting = ({ whoseProfile, companyUrl }: ProfileProps) => {
                   Full name
                 </p>
                 <p className='text-sm sm:text-base font-medium text-[#4D4E4D] px-2 py-1'>
-                  {profileData?.data?.nextOfKinFirstName} {profileData?.data?.nextOfKinLastName}
+                  {toSentenceCase(profileData?.data?.nextOfKinResponse?.firstName)} 
+                  {toSentenceCase(profileData?.data?.nextOfKinResponse?.lastName)}
                 </p>
               </div>
               <div>
@@ -144,7 +144,7 @@ const LoaneeProfileSetting = ({ whoseProfile, companyUrl }: ProfileProps) => {
                   Relationship
                 </p>
                 <p className='text-sm sm:text-base font-medium text-[#4D4E4D] px-2 py-1'>
-                  {profileData?.data?.nextOfKinRelationship}
+                  {toSentenceCase(profileData?.data?.nextOfKinResponse?.nextOfKinRelationship)}
                 </p>
               </div>
               <div>
@@ -152,7 +152,7 @@ const LoaneeProfileSetting = ({ whoseProfile, companyUrl }: ProfileProps) => {
                   Email
                 </p>
                 <p className='text-sm sm:text-base font-medium text-[#4D4E4D] px-2 py-1'>
-                  {profileData?.data?.nextOfKinEmail}
+                  {toSentenceCase(profileData?.data?.nextOfKinResponse?.email)}
                 </p>
               </div>
               <div>
@@ -160,7 +160,7 @@ const LoaneeProfileSetting = ({ whoseProfile, companyUrl }: ProfileProps) => {
                   Address
                 </p>
                 <p className='text-sm sm:text-base font-medium text-[#4D4E4D] px-2 py-1'>
-                  {profileData?.data?.nextOfKinContactAddress}
+                  {toSentenceCase(profileData?.data?.nextOfKinResponse?.contactAddress)}
                 </p>
               </div>
             </div>
@@ -184,12 +184,12 @@ const LoaneeProfileSetting = ({ whoseProfile, companyUrl }: ProfileProps) => {
           headerTitle='Update profile'
           closeOnOverlayClick={true}
           icon={Cross2Icon}
-          styeleType='StyleBodyTwo'
+          styeleType='styleBodyThree'
           width='36%'
         >
           <UpdateProfile setIsOpen={setIsModalOpen} refetch={refetch} />
         </Modal>
-      </div>
+      </div>  
     </div>
   );
 };

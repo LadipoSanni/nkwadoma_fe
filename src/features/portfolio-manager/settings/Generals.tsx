@@ -8,8 +8,8 @@ import {store, useAppSelector} from '@/redux/store';
 import {getItemSessionStorage} from "@/utils/storage";
 import styles from './index.module.css'
 import LoaneeSettingTabs from '@/reuseable/tabs/loaneeSettingTabs';
-import LoaneeProfile from './loanee-profile-settings/loaneeProfile';
 import Profile from './profile';
+import LoaneeProfileSetting from './loanee-profile-settings/LoaneeProfileSetting';
 
 
 
@@ -32,7 +32,7 @@ export const Generals = () => {
     const getCurrentDataList = () => {
         switch (currentTab) {
             case 0:
-                return userRole === 'LOANEE' ? <LoaneeProfile whoseProfile={'user'} /> :
+                return userRole === 'LOANEE' ? <LoaneeProfileSetting whoseProfile={'user'} /> :
                     <Profile  whoseProfile={'user'} userEmail={userEmail} userName={userFullName}/>;
             case 1:
                 return <ChangePassword/>;
@@ -45,10 +45,9 @@ export const Generals = () => {
     };
 
     return (
-        <div className={` w-full  bg-00 py-4 px-2 grid md:gap-[10vw]  md:flex md:justify-between  gap-6 `}>
+        <div className={` w-full  bg-00 py-4 px-2 grid md:gap-[10vw]  md:flex md:justify-between md:px-16 md:py-12 gap-6 `}>
             { userRole === 'LOANEE' ? <LoaneeSettingTabs width={` md:w-[30%] lg:w-[30%] `} tabCurrentTabIndex={currentTab} setTabCurrentTabIndex={setCurrentTab} id={'settingTab1'} tabElement={data}/> :
-
-                <SettingTabs width={` md:w-[30%] lg:w-[30%] `} tabCurrentTabIndex={currentTab} setTabCurrentTabIndex={setCurrentTab} id={'settingTab1'} tabElement={data}  />
+                <SettingTabs width={` md:w-[30%] lg:w-[30%] `} tabCurrentTabIndex={currentTab} setTabCurrentTabIndex={setCurrentTab} id={'settingTab1'} tabElement={data}/>
             }
             <div
                 className={` w-full h-full ${styles.scrollab} max-h-[70vh]  overflow-y-scroll   `}
