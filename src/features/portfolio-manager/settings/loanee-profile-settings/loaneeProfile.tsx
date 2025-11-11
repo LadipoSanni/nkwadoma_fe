@@ -2,10 +2,9 @@ import { inter } from "@/app/fonts";
 import React, { useState } from "react";
 import Modal from "@/reuseable/modals/TableModal";
 import { Cross2Icon } from "@radix-ui/react-icons";
-import { calculateAge } from "@/utils/GlobalMethods";
-import { toSentenceCase } from "@/utils/GlobalMethods";
 import { useGetUserDetailsQuery } from "@/service/users/api";
 import UpdateProfile from "./update-profile-modal/Update-profile";
+import { calculateAge, toSentenceCase } from "@/utils/GlobalMethods";
 import ProfileSection from "@/reuseable/profile/LoaneeProfileSection";
 import LoaneeUploadButton from "@/reuseable/buttons/loaneeUpdateButton";
 
