@@ -4,7 +4,7 @@ import { inter } from '@/app/fonts'
 import { Button } from '@/components/ui/button'
 import styles from "./index.module.css"
 import { formatAmount } from '@/utils/Format';
-import { FiEye } from "react-icons/fi";
+import {FiEye, FiEyeOff} from "react-icons/fi";
 import { WalletAddIcon } from '@/reuseable/svg-icons/Icons';
 import BackButton from "@/components/back-button";
 import LinkAccount from './Link-account'
@@ -52,7 +52,9 @@ function Payment() {
             bankName: "Access Bank Nigeria Limited",
             logo: "https://www.processmaker.com/wp-content/uploads/2019/10/Access_Bank_Logo.png",
             accountNumber: "0701234567",
-          }
+    }
+    const [showWalletBalance, setShowWalletBalance] = React.useState(false);
+
         
 
   const latestTransactions = useMemo(() => {
@@ -106,12 +108,13 @@ const router = useRouter()
         <div className='border-solid border-[#ECECEC] border-[1px] rounded-lg flex flex-col mt-4 md:mt-0'>
   <div className='mt-3 text-[#142854] py-3 px-5 flex-1'>
     <p className='text-[12px] font-medium'>Wallet balance</p>
-    <div className='flex items-center gap-2'>
-      <span className='font-semibold text-[30px]'>{formatAmount(0)}</span>
-      <FiEye color='black' />
+    <div className='flex h-fit items-center gap-2'>
+        {showWalletBalance ? <span className='font-semibold text-[30px]'>{formatAmount(0)}</span> : <p className='font-semibold  h-fit   mt-auto text-[30px]'>....</p> }
+        {showWalletBalance ? <FiEyeOff  onClick={() => [setShowWalletBalance(!showWalletBalance)]} color='black'/> : <FiEye className={`  mb-1  mt-auto `}  onClick={() => [setShowWalletBalance(!showWalletBalance)]} color='black'/>}
     </div>
     <div className='mt-4'>
       <Button
+          onClick={() => {router.push('/fund-wallet')}}
         variant={"outline"}
         className='w-full md:w-[289px] rounded-full h-[40px] bg-[#F3F8FF] hover:bg-[#E8F2FF] text-[#142854] font-normal flex items-center justify-center'
       >
