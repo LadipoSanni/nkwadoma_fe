@@ -11,6 +11,7 @@ import LinkAccount from './Link-account'
 import { TransactionHistory } from '@/reuseable/transactions/Transaction-history'
 import { transactionsHistory } from '@/utils/LoanRequestMockData/cohortProduct';
 import { useRouter } from 'next/navigation'
+import {setFundWalletFrom} from "@/redux/slice/wallet";
 import { useAppSelector,store } from '@/redux/store'
 import { setShowWalletBalance } from '@/redux/slice/make-payment/payment'
 // import ButtonAndSearch from '@/reuseable/action-bars/Button-and-search'
@@ -57,7 +58,7 @@ function Payment() {
             logo: "https://www.processmaker.com/wp-content/uploads/2019/10/Access_Bank_Logo.png",
             accountNumber: "0701234567",
     }
- 
+
 
   const latestTransactions = useMemo(() => {
     if (transactionsHistory.length === 0) return [];
@@ -114,7 +115,7 @@ const router = useRouter()
   {showWalletBalance ? (
     <span className='font-semibold text-[30px]'>{formatAmount(0)}</span>
   ) : (
-    <span 
+    <span
       className='font-semibold text-[30px] tracking-widest'
       aria-label="Wallet balance hidden"
       role="text"
@@ -123,13 +124,13 @@ const router = useRouter()
     </span>
   )}
   {showWalletBalance ? (
-    <FiEyeOff 
-      className='cursor-pointer' 
-      onClick={() => store.dispatch(setShowWalletBalance(false))} 
+    <FiEyeOff
+      className='cursor-pointer'
+      onClick={() => store.dispatch(setShowWalletBalance(false))}
       aria-label="Hide wallet balance"
     />
   ) : (
-    <FiEye 
+    <FiEye
       className='cursor-pointer mt-[2px]'
       onClick={() => store.dispatch(setShowWalletBalance(true))}
       aria-label="Show wallet balance"
@@ -138,7 +139,10 @@ const router = useRouter()
 </div>
     <div className='mt-4'>
       <Button
-          onClick={() => {router.push('/fund-wallet')}}
+          onClick={() => {
+              store.dispatch(setFundWalletFrom('payment'))
+              router.push('/fund-wallet')
+          }}
         variant={"outline"}
         className='w-full md:w-[289px] rounded-full h-[40px] bg-[#F3F8FF] hover:bg-[#E8F2FF] text-[#142854] font-normal flex items-center justify-center'
       >
