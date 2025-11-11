@@ -11,6 +11,8 @@ import LinkAccount from './Link-account'
 import { TransactionHistory } from '@/reuseable/transactions/Transaction-history'
 import { transactionsHistory } from '@/utils/LoanRequestMockData/cohortProduct';
 import { useRouter } from 'next/navigation'
+import { store } from '@/redux/store'
+import {setFundWalletFrom} from "@/redux/slice/wallet";
 // import ButtonAndSearch from '@/reuseable/action-bars/Button-and-search'
 
 export const bankAccounts = [
@@ -114,7 +116,10 @@ const router = useRouter()
     </div>
     <div className='mt-4'>
       <Button
-          onClick={() => {router.push('/fund-wallet')}}
+          onClick={() => {
+              store.dispatch(setFundWalletFrom('payment'))
+              router.push('/fund-wallet')
+          }}
         variant={"outline"}
         className='w-full md:w-[289px] rounded-full h-[40px] bg-[#F3F8FF] hover:bg-[#E8F2FF] text-[#142854] font-normal flex items-center justify-center'
       >
