@@ -9,6 +9,8 @@ import FundWallet from "@/components/icons/FundWallet";
 import Withdraw from "@/components/icons/Withdraw";
 import WalletConnect from "@/components/icons/WalletConnect";
 import {useRouter} from "next/navigation";
+import {store} from "@/redux/store";
+import {setFundWalletFrom} from "@/redux/slice/wallet";
 
 interface Props {
     balance: number;
@@ -37,7 +39,10 @@ const WalletBalance = ({balance}:Props) => {
                 <WalletButton
                     text={'Fund wallet'}
                     icon={<FundWallet height={'20'} width={'20'}/>}
-                    handleClick={() =>  {handleRouter(`/fund-wallet`)}}
+                    handleClick={() =>  {
+                        store.dispatch(setFundWalletFrom('wallet'))
+                        handleRouter(`/fund-wallet`)
+                    }}
                 />
                 <WalletButton
                     text={'Withdraw'}

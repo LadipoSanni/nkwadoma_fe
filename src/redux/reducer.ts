@@ -44,7 +44,8 @@ import idsReducer from './slice/id/slice-ids';
 import loanProductReducer from "./slice/loan-product/Loan-product"
 import createLoanOfferReducer from './slice/create/createLoanOfferSlice'
 import { vendorApi } from '@/service/admin/vendor/vendor_query';
-import PaymentReducer from "./slice/make-payment/payment"
+import PaymentReducer from "./slice/make-payment/payment";
+import walletFlowReducer from './slice/wallet/index';
 
 
 const appReducer = combineReducers({
@@ -73,6 +74,7 @@ const appReducer = combineReducers({
     loanProduct: loanProductReducer,
     createLoanOffer: createLoanOfferReducer,
     payment:PaymentReducer,
+    walletFlow:walletFlowReducer,
     [userApi.reducerPath]: userApi.reducer,
     [authApi.reducerPath]: authApi.reducer,
     [programApi.reducerPath]: programApi.reducer,
