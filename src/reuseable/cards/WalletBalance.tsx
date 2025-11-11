@@ -8,6 +8,7 @@ import CircleArrow from "@/components/icons/CircleArrow";
 import FundWallet from "@/components/icons/FundWallet";
 import Withdraw from "@/components/icons/Withdraw";
 import WalletConnect from "@/components/icons/WalletConnect";
+import {useRouter} from "next/navigation";
 
 interface Props {
     balance: number;
@@ -15,6 +16,11 @@ interface Props {
 
 const WalletBalance = ({balance}:Props) => {
     const [isEyeOpen,setIsEyeOpen] = React.useState(false);
+    const router = useRouter()
+
+    const handleRouter = (routes: string) => {
+        router.push(`${routes}`)
+    }
 
     const renderWalletButton = (style: string) => {
         return(
@@ -31,6 +37,7 @@ const WalletBalance = ({balance}:Props) => {
                 <WalletButton
                     text={'Fund wallet'}
                     icon={<FundWallet height={'20'} width={'20'}/>}
+                    handleClick={() =>  {handleRouter(`/fund-wallet`)}}
                 />
                 <WalletButton
                     text={'Withdraw'}

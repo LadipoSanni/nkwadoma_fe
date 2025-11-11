@@ -1,9 +1,9 @@
 import React from 'react';
-import SetAutoRepayment from "@/pages/wallet/setAutoRepayment";
+import FundWallet from "@/pages/wallet/fundWallet";
 
 const Page = () => {
     return (
-        <SetAutoRepayment/>
+        <FundWallet/>
     );
 };
 
