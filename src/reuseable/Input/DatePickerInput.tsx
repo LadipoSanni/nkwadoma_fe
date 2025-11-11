@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button';
 import { MdOutlineDateRange } from 'react-icons/md';
 import { Select, SelectTrigger, SelectValue, SelectItem, SelectContent } from '@/components/ui/select';
 import {ChevronDownIcon,ChevronUpIcon} from "lucide-react"
+import dayjs from "dayjs";
 
 interface Props {
     selectedDate: Date | undefined;
@@ -19,6 +20,7 @@ interface Props {
     disabled?: boolean;
     startYear?: number;
     endYear?: number;
+    formatByLetter?:boolean,
 }
 
 function DatePickerInput({
@@ -31,6 +33,7 @@ function DatePickerInput({
     disabled = false,
     startYear = getYear(new Date()) - 50,
     endYear = getYear(new Date()) + 50,
+    formatByLetter,
 }: Props) {
     const [isOpen, setIsOpen] = useState(false);
     const [tempDate, setTempDate] = useState<Date | undefined>(selectedDate);
@@ -127,7 +130,7 @@ function DatePickerInput({
                     disabled={disabled}
                 > */}
                     {selectedDate && !isNaN(selectedDate.getTime()) ? (
-                       <span className='text-black'>{format(selectedDate, 'dd-MM-yyyy')}</span> 
+                       <span className='text-black'>{formatByLetter ? dayjs(selectedDate?.toString())?.format('D MMM YYYY'):format(selectedDate, 'dd-MM-yyyy')}</span>
                     ) : (
                         <span className="text-grey400">{placeholder}</span>
                     )}

@@ -81,7 +81,7 @@ const router = useRouter()
         <div className='relative md:right-7 right-1 grid grid-cols-1 gap-y-6'>
       <section id='sectionOne' className='grid md:grid-cols-2 grid-cols-1 gap-x-4 '> 
         <div className='bg-[#F0F0F0] py-3 px-5 rounded-lg border-solid border-[#F9F9F9] border-[1px]'>
-            <p className='font-bold mt-3'>Outstanding loan</p>
+            <p className='font-bold mt-3 text-[#212221]'>Outstanding loan</p>
             <div className='mt-6 grid grid-cols-1 gap-y-4'>
             <div className='flex  gap-2'>
             <p className='text-[#212221] text-[14px] font-normal w-28  lg:w-20'>Loan type:</p><p className=' text-[#212221] font-medium'>Student living allowance loan for learners</p>

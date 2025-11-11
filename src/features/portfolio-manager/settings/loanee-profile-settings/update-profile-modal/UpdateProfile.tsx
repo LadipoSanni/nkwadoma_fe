@@ -8,6 +8,7 @@ import Isloading from "@/reuseable/display/Isloading";
 import CustomSelectObj from "@/reuseable/Input/Custom-select-obj";
 import NigeriaStatesSelect from "@/reuseable/select/NigeriaStatesSelect";
 import { useLoaneeUpdateProfileMutation } from "@/service/users/Loanee_query";
+import { inter } from "@/app/fonts";
 
 interface Props {
   setIsOpen: (isOpen: boolean) => void;
@@ -113,8 +114,8 @@ function UpdateProfile({ setIsOpen, refetch }: Props) {
       >
         {({ errors, touched, values, setFieldValue, isValid }) => (
           <Form>
-            <div className='w-full grid grid-cols-1 gap-y-5'>
-              <div className='grid grid-cols-1 gap-y-3 w-full'>
+            <div className={`w-full grid grid-cols-1 gap-y-2 ${inter.className}`}>
+              <div className='grid grid-cols-1 gap-y-1 w-full'>
                 <Label htmlFor='state-residence' className='text-[14px] text-[#212221] font-medium'>
                   State of residence
                 </Label>
@@ -128,7 +129,7 @@ function UpdateProfile({ setIsOpen, refetch }: Props) {
                   }}
                   name='stateOfResidence'
                   placeHolder='Select state of residence'
-                  className='h-[3.5rem]'
+                  className='h-[3.5rem] md:px-3 px-10'
                 />
                 {errors.stateOfResidence && touched.stateOfResidence && (
                   <ErrorMessage
@@ -139,7 +140,7 @@ function UpdateProfile({ setIsOpen, refetch }: Props) {
                 )}
               </div>
 
-              <div className='grid grid-cols-1 gap-y-3 w-full'>
+              <div className='grid grid-cols-1 gap-y-1 w-full'>
                 <Label htmlFor='education-level' className='text-[14px] text-[#212221] font-medium'>
                   Level of education
                 </Label>
@@ -158,6 +159,7 @@ function UpdateProfile({ setIsOpen, refetch }: Props) {
                 />
               </div>
 
+
               <div className='md:flex justify-between item-center mt-4 mb-4'>
                 <div>
                   <Button
@@ -166,7 +168,7 @@ function UpdateProfile({ setIsOpen, refetch }: Props) {
                     type='button'
                     variant='outline'
                     onClick={closeModal}
-                    className='w-full md:w-[140px] h-[44px] border-solid border-[#142854] text-[#142854]'
+                    className='w-full md:w-[149px] h-[44px] border-solid border-[#142854] text-[#142854]'
                   >
                     Cancel
                   </Button>
@@ -178,7 +180,7 @@ function UpdateProfile({ setIsOpen, refetch }: Props) {
                     data-testid="button"
                     type='submit'
                     variant='secondary'
-                    className={`w-full md:w-[140px] h-[44px] border-solid  text-white  ${
+                    className={`w-full md:w-[149px] h-[44px] border-solid  text-white  ${
                       !isValid
                         ? "cursor-auto bg-[#D7D7D7] hover:bg-[#D7D7D7]"
                         : "cursor-pointer bg-meedlBlue"

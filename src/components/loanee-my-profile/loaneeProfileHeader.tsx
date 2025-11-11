@@ -1,16 +1,8 @@
 'use client'
-import {cabinetGroteskBold, inter} from '@/app/fonts';
+import {cabinetGroteskBold, inter, inter700} from '@/app/fonts';
 import React from 'react';
-import { MdMoreHoriz } from "react-icons/md";
-import {
-    Menubar,
-    MenubarContent,
-    MenubarItem,
-    MenubarMenu,
-    MenubarTrigger,
-} from "@/components/ui/menubar"
 import { Circle } from "lucide-react"
-import Modal from "@/reuseable/modals/Modal";
+// import Modal from "@/reuseable/modals/Modal";
 import {getItemSessionStorage} from "@/utils/storage";
 import {capitalizeFirstLetters, getFirstLetterOfWord} from "@/utils/GlobalMethods";
 // import { Badge } from "@/components/ui/badge"
@@ -32,28 +24,29 @@ interface Props {
     institutionName?: string,
     userName?: string,
     isLoading: boolean,
+    loanStatus?: string,
 }
 
-const LoaneeProfileHeader = ({cohort ,userName,institutionName, program, isLoading}: Props) => {
+const LoaneeProfileHeader = ({cohort ,userName,institutionName,loanStatus, program, isLoading}: Props) => {
 
-    const [openModal, setOpenModal] = React.useState(false);
-    const [modalId, setModalId] = React.useState('');
-    const [modalButtonText, setModalButtonText] = React.useState('');
-    const [modalTitle, setModalTitle] = React.useState('');
+    // const [openModal, setOpenModal] = React.useState(false);
+    // const [modalId, setModalId] = React.useState('');
+    // const [modalButtonText, setModalButtonText] = React.useState('');
+    // const [modalTitle, setModalTitle] = React.useState('');
     const userRole  = getItemSessionStorage("user_role")
-    const router = useRouter()
     const searchParams = useSearchParams()
      const organizationTabStatus = useAppSelector(store => store?.organization?.organizationDetailTabStatus)
     const organizationAdminView = useAppSelector(store => store?.adminLayout?.organizationFrom)
 
+    const router = useRouter()
      
 
-    const handleOpenModal = (id: string, title: string, buttonText: string) => {
-        setModalId(id);
-        setModalTitle(title);
-        setModalButtonText(buttonText);
-        setOpenModal(true);
-    }
+    // const handleOpenModal = (id: string, title: string, buttonText: string) => {
+    //     setModalId(id);
+    //     setModalTitle(title);
+    //     setModalButtonText(buttonText);
+    //     setOpenModal(true);
+    // }
     const handleBack = () => {
         if(['PORTFOLIO_MANAGER','MEEDL_SUPER_ADMIN','PORTFOLIO_MANAGER_ASSOCIATE'].includes(userRole || "")){
             if (searchParams){
@@ -81,6 +74,9 @@ const LoaneeProfileHeader = ({cohort ,userName,institutionName, program, isLoadi
             router.push("/my-loans");
         }
     }
+    const routerToSetAutoRepayment = () => {
+        router.push(`/set-auto-repayment`)
+    }
 
     const providedInstitutionName = institutionName ? getFirstLetterOfWord(institutionName) ? getFirstLetterOfWord(institutionName) : institutionName?.at(0)?.toUpperCase() : ''
     const providedLoaneeName = userName ? getFirstLetterOfWord(userName) : '';
@@ -92,7 +88,7 @@ const LoaneeProfileHeader = ({cohort ,userName,institutionName, program, isLoadi
 
            <div id={'loaneeProfileHeader'}
                 data-testid={'loaneeProfileHeader'}
-                className={`w-full h-fit md:h-fit     mt-auto mb-auto  flex justify-between `}
+                className={`w-full h-fit md:h-fit     mt-auto mb-auto grid gap-4  md:flex md:justify-between lg:flex lg:justify-between `}
            >
 
                {isLoading ?
@@ -140,41 +136,23 @@ const LoaneeProfileHeader = ({cohort ,userName,institutionName, program, isLoadi
 
                }
 
-               {userRole === 'LOANEE' &&
-                   <div className={`h-full hidden  grid content-center`}>
-                       <Menubar  className={'w-fit mt-auto mb-auto h-fit'}>
-                           <MenubarMenu >
-                               <MenubarTrigger disabled={true} className={` bg-[#F9F9F9] w-fit h-fit py-1.5  px-1.5 md:py-2 md:px-2 lg:py-2 lg:px-2 mt-auto mb-auto   rounded-full `} >
-                                   <MdMoreHoriz
-                                       // color={'#6A6B6A'}
-                                       color={'#d0d0d0'}
-                                                 className={` cursor-not-allowed h-4 w-4 md:h-5 md:w-5 lg:h-5 lg:w-5 `} />
-                               </MenubarTrigger>
-                               <MenubarContent  className={`hidden`}>
-                                   <MenubarItem
-                                       id={`dropOut`}
-                                       onClick={() => handleOpenModal('dropOut', 'Drop out', 'Drop out')}
-                                       className={` ${inter.className} text-[14px] text-[#212221] w-full hover:text-[#142854] hover:bg-[#D9EAFF] `}
-                                   >
-
-                                       Drop out
-                                   </MenubarItem>
-                                   <MenubarItem
-                                       id={`deferCohort`}
-                                       onClick={() => handleOpenModal('deferCohort', 'Defer cohort', 'Defer')}
-                                       className={`${inter.className} text-[14px] text-[#212221] w-full hover:text-[#142854] hover:bg-[#D9EAFF] `}
-                                   >
-
-                                       Defer cohort
-                                   </MenubarItem>
-                               </MenubarContent>
-                           </MenubarMenu>
-                       </Menubar>
+               {userRole === 'LOANEE' && loanStatus === 'LOAN_DISBURSAL' &&
+                   <div className={`h-full grid gap-2 mb-4  md:flex md:w-fit md:gap-2  `}>
+                       <button id={'setAutoRepayment'} data-testid={'setAutoRepayment'}
+                           onClick={routerToSetAutoRepayment}
+                               className={` hover:bg-[#E8EAEE]   flex items-center justify-center  w-full   md:w-fit md:px-4  h-fit py-2  text-sm ${inter700.className} rounded-md border border-meedlBlue bg-white text-meedlBlue  `}>
+                           Set auto repayment
+                       </button>
+                       <button id={'makePayment'} data-tesid={'makePayment'}
+                           // onClick={handleClick}
+                               className={` hover:bg-[#E8EAEE]   flex items-center justify-center  w-full md:w-fit md:px-4   h-fit py-2  text-sm ${inter700.className} rounded-md  bg-meedlBlue text-white  `}>Make
+                           payment
+                       </button>
                    </div>
                }
            </div>
 
-           <Modal modalId={modalId} title={modalTitle} isOpen={openModal} setIsOpen={setOpenModal}   buttonText={modalButtonText} />
+           {/*<Modal modalId={modalId} title={modalTitle} isOpen={openModal} setIsOpen={setOpenModal}   buttonText={modalButtonText} />*/}
        </div>
     );
 };

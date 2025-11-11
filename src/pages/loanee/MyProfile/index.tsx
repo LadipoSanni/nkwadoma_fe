@@ -112,6 +112,7 @@ const LoaneeDetails = ({isViewingOrganizationLoaneeLoansThrowCohortFlow}: IndexP
         >
           <LoaneeProfileHeader
               userName={ userRole !== 'LOANEE' ? userName : '' }
+              loanStatus={userRole === 'LOANEE' ? loanLoanProgressDetails?.data?.loanType : ''}
               institutionName={userRole === 'LOANEE' ?   loanLoanProgressDetails?.data?.organizationName :''}
               isLoading={isViewingOrganizationLoaneeLoansThrowCohortFlow ?  isLoading || isFetching : userRole === 'LOANEE' ? isFetchingLoaneeLoanProgressDetails || isLoadingLoaneeLoanProgressDetails :  isFetchingLoaneeLoanDetails || isLoadingLoaneeLoanDetails }
               cohort={isViewingOrganizationLoaneeLoansThrowCohortFlow ?  data?.data?.programName : userRole === 'LOANEE' ? loanLoanProgressDetails?.data?.cohortName : viewLoaneeDisbursedLoanDetails?.data?.cohortName }
