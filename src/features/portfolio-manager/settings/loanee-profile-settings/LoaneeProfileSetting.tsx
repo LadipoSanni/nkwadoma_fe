@@ -6,7 +6,7 @@ import { useGetUserDetailsQuery } from "@/service/users/api";
 import UpdateProfile from "./update-profile-modal/UpdateProfile";
 import { calculateAge, toSentenceCase } from "@/utils/GlobalMethods";
 import ProfileSection from "@/reuseable/profile/LoaneeProfileSection";
-import LoaneeUploadButton from "@/reuseable/buttons/loaneeUpdateButton";
+import LoaneeUploadButton from "@/reuseable/buttons/LoaneeUploadButton";
 
 interface ProfileProps {
   whoseProfile: "company" | "user";
@@ -29,7 +29,7 @@ const LoaneeProfileSetting = ({ whoseProfile, companyUrl }: ProfileProps) => {
     whoseProfile === "company" ? companyUrl : profileData?.data?.avatar;
 
   return (
-    <div className='py-1 px-1 md:py-4 md:px-14'>
+    <div className='py-1 px-1 md:py-4 md:px-14 w-auto'>
       <div className='w-full border border-[#ECECEC] rounded-lg py-1 md:py-5'>
         <div className=' w-full flex justify-between md:px-6 px-1 py-4'>
           <div>
@@ -87,7 +87,7 @@ const LoaneeProfileSetting = ({ whoseProfile, companyUrl }: ProfileProps) => {
           </ProfileSection>
 
           <ProfileSection title='Contact'>
-            <div className='grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6'>
+            <div className='w-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6'>
               <div>
                 <p className='text-xs sm:text-sm font-normal text-[#4D4E4D] px-2 py-1'>
                   Email
@@ -128,15 +128,14 @@ const LoaneeProfileSetting = ({ whoseProfile, companyUrl }: ProfileProps) => {
             </div>
           </ProfileSection>
 
-          <ProfileSection title='Next of Kin'>
-            <div className='grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6'>
+          <ProfileSection title='Next of kin'>
+            <div className='w-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6'>
               <div>
                 <p className='text-xs sm:text-sm font-normal text-[#4D4E4D] px-2 py-1'>
                   Full name
                 </p>
                 <p className='text-sm sm:text-base font-medium text-[#4D4E4D] px-2 py-1'>
-                  {toSentenceCase(profileData?.data?.nextOfKinResponse?.firstName)} 
-                  {toSentenceCase(profileData?.data?.nextOfKinResponse?.lastName)}
+                  {toSentenceCase(profileData?.data?.nextOfKinResponse?.firstName)}  {profileData?.data?.nextOfKinResponse?.lastName}
                 </p>
               </div>
               <div>
