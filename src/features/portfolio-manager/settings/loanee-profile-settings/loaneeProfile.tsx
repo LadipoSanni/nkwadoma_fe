@@ -184,7 +184,7 @@ const LoaneeProfileSetting = ({ whoseProfile, companyUrl }: ProfileProps) => {
           headerTitle='Update profile'
           closeOnOverlayClick={true}
           icon={Cross2Icon}
-          styeleType='StyleBodyTwo'
+          styeleType='styleBodyThree'
           width='36%'
         >
           <UpdateProfile setIsOpen={setIsModalOpen} refetch={refetch} />

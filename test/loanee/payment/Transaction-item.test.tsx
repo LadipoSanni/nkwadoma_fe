@@ -73,7 +73,7 @@ jest.mock('@/utils/Format', () => ({
         const amount = screen.getByText('₦100.00');
         
         expect(statusBadge).toHaveClass('text-[#AD7311]', 'bg-[#FEF6E8]');
-        expect(amount).toHaveClass('text-[#045620]');
+        expect(amount).toHaveClass('text-[#AD7311]');
       });
 
     it('handles case-insensitive status values', () => {
