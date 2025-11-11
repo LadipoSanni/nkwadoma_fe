@@ -10,7 +10,7 @@ import Withdraw from "@/components/icons/Withdraw";
 import WalletConnect from "@/components/icons/WalletConnect";
 import {useRouter} from "next/navigation";
 import {store} from "@/redux/store";
-import {setFundWalletFrom} from "@/redux/slice/wallet";
+import {setFundWalletFrom,setMakePaymentFrom} from "@/redux/slice/wallet";
 
 interface Props {
     balance: number;
@@ -35,6 +35,10 @@ const WalletBalance = ({balance}:Props) => {
                 <WalletButton
                     text={'Make payment'}
                     icon={<CircleArrow height={'20'} width={'20'}/>}
+                    handleClick={() => {
+                        store.dispatch(setMakePaymentFrom('wallet'))
+                        handleRouter(`/payment/make-payment`)
+                    }}
                 />
                 <WalletButton
                     text={'Fund wallet'}

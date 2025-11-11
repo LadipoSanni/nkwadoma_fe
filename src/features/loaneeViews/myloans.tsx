@@ -13,6 +13,7 @@ import SearchInput from "@/reuseable/Input/SearchInput";
 import {useDebounce} from "@/hooks/useDebounce";
 import LoaneeViewLoan from "@/reuseable/cards/LoaneeViewLoan";
 import {inter500} from "@/app/fonts";
+import {setMakePaymentFrom} from "@/redux/slice/wallet";
 
 interface LoanGridProps  {
     data: LoanType[];
@@ -137,7 +138,11 @@ const Myloans = () => {
                 <div key={ "key"+loan.loanProgressId + index} ref={lastCardObserver}>
                     <LoaneeViewLoan
                         isLoading={isLoading}
-                        handleClick={() => {handleClick(loan.loanProgressId)}}
+                        viewLoanDetails={() => {handleClick(loan.loanProgressId)}}
+                        makePayment={()=> {
+                            store.dispatch(setMakePaymentFrom('my-loans'))
+                            router.push('/payment/make-payment')
+                        }}
                         data={loan}
                     />
                 </div>
