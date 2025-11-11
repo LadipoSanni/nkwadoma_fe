@@ -135,7 +135,8 @@ const LoaneeProfileSetting = ({ whoseProfile, companyUrl }: ProfileProps) => {
                   Full name
                 </p>
                 <p className='text-sm sm:text-base font-medium text-[#4D4E4D] px-2 py-1'>
-                  {toSentenceCase(profileData?.data?.nextOfKinResponse?.firstName)} {toSentenceCase(profileData?.data?.nextOfKinResponse?.lastName)}
+                  {toSentenceCase(profileData?.data?.nextOfKinResponse?.firstName)} 
+                  {toSentenceCase(profileData?.data?.nextOfKinResponse?.lastName)}
                 </p>
               </div>
               <div>
@@ -188,7 +189,7 @@ const LoaneeProfileSetting = ({ whoseProfile, companyUrl }: ProfileProps) => {
         >
           <UpdateProfile setIsOpen={setIsModalOpen} refetch={refetch} />
         </Modal>
-      </div>
+      </div>  
     </div>
   );
 };
