@@ -9,6 +9,7 @@ import {clsx} from "clsx";
 import {NumericFormat} from "react-number-format";
 import SearchableDropdown, {DropdownItem} from "@/reuseable/Dropdown/SearchableDropDown";
 import Image from "next/image";
+import RadioCheckButton from "@/reuseable/buttons/RadioCheckButton";
 
 const FundWallet = () => {
     const router = useRouter()
@@ -24,18 +25,6 @@ const FundWallet = () => {
     const [fundWalletVia, setFundWalletVia] = React.useState<string>('Linked accounts');
 
 
-    const radioButton = (isChecked: boolean, text: string, onClick: ()=> void) => {
-        return (
-            <button onClick={onClick} id={`RadioButton` + text?.replace(' ', '')} data-testid={`RadioButton` + text?.replace(' ', '')} className={` h-fit w-fit   flex gap-1  md:gap-4  text-[#4D4E4D] text-[14px] ${inter500.className} `}>
-                <div className={clsx(` h-fit aspect-square rounded-full `,  isChecked ?  `  border-2 border-[#e6effb]` : `border-2 border-white `)}>
-                    <div className={clsx(` px-1 py-1 rounded-full aspect-square `, isChecked ? ` border h-fit border-meedlBlue bg-[#e8eaee]   ` :  ` bg-white border border-[#CFCFCF] `)}>
-                        <div className={clsx(`  h-2 w-2 aspect-square  ` , isChecked ? "rounded-full bg-meedlBlue h-1 w-1 aspect-square " : 'bg-white rounded-full  h-1 w-1 aspect-square ')}></div>
-                    </div>
-                </div>
-                <p className={` mt-auto mb-auto text-[#4D4E4D] text-[15px]  ${inter500.className}  `}>{text}</p>
-            </button>
-        )
-    }
 
 
     //eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -195,8 +184,8 @@ const FundWallet = () => {
                 >
                     <div className={` grid gap-2 h-fit `}>
                         <p className={` text-[#4D4E4D] text-[14px] ${inter.className} `}>Fund via</p>
-                        {radioButton(fundWalletVia === 'Paystack', 'Paystack', () => {setFundWalletVia('Paystack')})}
-                        {radioButton(fundWalletVia === 'Linked accounts', 'Linked accounts', () => {setFundWalletVia('Linked accounts')})}
+                        <RadioCheckButton isChecked={fundWalletVia === 'Paystack'}  text={'Paystack'} onClick={() => {setFundWalletVia('Paystack')}} />
+                        <RadioCheckButton isChecked={fundWalletVia === 'Linked accounts'} text={'Linked accounts' } onClick={() => {setFundWalletVia('Linked accounts')}} />
                     </div>
                     <div className={` grid  md:w-[70%] lg:w-[70%] md:px-8 lg:px-8 md:py-8 lg:py-8  h-[50vh]  border max-h-[60vh] md:border md:border-[#D7D7D7] rounded-md  `}>
                         {fundWalletVia === 'Linked accounts' && renderForLinkedAccount()}
