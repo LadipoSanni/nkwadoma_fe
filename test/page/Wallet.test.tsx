@@ -3,7 +3,9 @@ import { render, screen, fireEvent } from "@testing-library/react";
 import WalletBalance from "@/reuseable/cards/WalletBalance";
 
 
-
+jest.mock('next/navigation', () => ({
+    useRouter: jest.fn(),
+}));
 describe("WalletBalance Component", () => {
     const mockBalance = 25000;
 

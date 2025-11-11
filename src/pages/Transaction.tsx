@@ -7,6 +7,7 @@ import {inter, inter500 } from '@/app/fonts';
 import dayjs from "dayjs";
 import {formatAmount} from "@/utils/Format";
 import styles from '@/layout/meedl-layout/index.module.css'
+import {capitalizeFirstLetters} from "@/utils/GlobalMethods";
 interface Props {
     viewLittle?: boolean;
     data?: {date: string, details:Trans[]}[],
@@ -104,7 +105,7 @@ const Transaction = ({viewLittle,data,onViewAllClick}:Props) => {
             {viewLittle ?
             <div className={` md:w-full lg:w-full lg:flex  md:justify-between lg:justify-between md:flex flex w-full  justify-between    `}>
                 <p className={` text-black text-base ${inter500.className}  `}>Recent transactions</p>
-                <p onClick={onViewAllClick} className={` text-meedlBlue underline mt-auto mb-auto text-base ${inter500.className} `}>View all</p>
+                {/*<p onClick={onViewAllClick} className={` text-meedlBlue underline mt-auto mb-auto text-base ${inter500.className} `}>View all</p>*/}
             </div>
             :
             <div
@@ -144,17 +145,26 @@ const Transaction = ({viewLittle,data,onViewAllClick}:Props) => {
                               id={`transactions-${index}`}
                               data-testid={`transactions-${index}`}
                         >
-                            <p id={`transactionDate-${index}`} data-testid={`transactionDate-${index}`} className={` text-[16px] ${inter.className} text-black `}>{dayjs(item?.date?.toString()).format('D MMM, YYYY')}</p>
+                            {viewLittle ?
+                            <div className={` w-full lg:flex md:flex justify-between `}>
+                                <p id={`transactionDate-${index}`} data-testid={`transactionDate-${index}`} className={` text-[16px] ${inter.className} text-black `}>{dayjs(item?.date?.toString()).format('D MMM, YYYY')}</p>
+                                {index === 0 && <p onClick={onViewAllClick}
+                                    className={` text-meedlBlue cursor-pointer underline mt-auto mb-auto text-base ${inter500.className} `}>View
+                                    all</p>
+                                }                            </div>
+                            :
+                                <p id={`transactionDate-${index}`} data-testid={`transactionDate-${index}`} className={` text-[16px] ${inter.className} text-black `}>{dayjs(item?.date?.toString()).format('D MMM, YYYY')}</p>
+                            }
                             <div className={`   `}>
                                 <section id={`transactionsOn-${index}`} data-testid={`transactionsOn-${index}`}  className={` bg-[#F9F9F9] w-full grid gap-4 md:py-2  px-4 py-2  rounded-md md:px-4 `}>
                                     {item?.details?.map((detail,  detailsIndex) => (
                                         <div key={'ins' + detailsIndex} className={` grid gap-2  py-2  ' border-b border-b-[#D7D7D7]   `}>
                                     <span className={` flex justify-between `}>
                                         <p className={` text-[12px] max-w-[70%]  text-black ${inter.className} `}>{detail?.description}</p>
-                                        <p className={`text-[12px] text-black ${inter.className}  `}> paid via {detail?.paymentMode}</p>
+                                        <p className={`text-[12px] text-black ${inter.className}  `}> Paid via {detail?.paymentMode?.toLowerCase()}</p>
                                      </span>
                                             <div className={`  flex justify-between `}>
-                                                <div  className={` text-[12px]   w-fit h-fit py-1 px-2 rounded-full  ${inter.className} text-[${getTransactionColors(detail?.status)?.textColor}] bg-[${getTransactionColors(detail?.status)?.textBackgroundColor}] `}>{detail?.status}</div>
+                                                <div  className={` text-[12px]   w-fit h-fit py-1 px-2 rounded-full  ${inter.className} text-[${getTransactionColors(detail?.status)?.textColor}] bg-[${getTransactionColors(detail?.status)?.textBackgroundColor}] `}>{capitalizeFirstLetters(detail?.status)}</div>
                                                 <p  className={`md:text-[16px] lg:text-[16px] text-[12px]   ${inter.className} text-[${getTransactionColors(detail?.status)?.textColor}]  `}>{formatAmount(detail?.amount)}</p>
                                             </div>
                                         </div>

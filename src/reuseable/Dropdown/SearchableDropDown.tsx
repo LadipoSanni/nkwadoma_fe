@@ -60,7 +60,7 @@ const SearchableDropdown = <T,>({
 
     return (
         <DropdownMenu onOpenChange={setOpen} >
-            <DropdownMenuTrigger asChild>
+            <DropdownMenuTrigger id={`dropDown`+placeholder?.replace(' ', '') } data-testid={`dropDown`+placeholder?.replace(' ', '')} asChild>
                 <button
                     className={clsx(
                         "flex justify-between items-center border border-[#D7D7D7] rounded-md px-3 py-2 text-sm text-gray-700 bg-white",
@@ -95,8 +95,9 @@ const SearchableDropdown = <T,>({
 
                 <div className="flex flex-col max-h-[48vh] max-w-[80vw] overflow-y-auto gap-1">
                     {filteredItems.length > 0 ? (
-                        filteredItems.map((item) => (
+                        filteredItems.map((item, index) => (
                             <DropdownMenuItem
+                                id={'item' + index}
                                 key={item.id}
                                 onClick={() => handleSelect(item)}
                                 className="flex items-center gap-2 p-2 rounded-md hover:bg-gray-100 cursor-pointer"

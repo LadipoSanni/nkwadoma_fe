@@ -14,6 +14,7 @@ import { GoCheckCircle } from "react-icons/go";
 import Calender from "@/components/icons/Calender";
 import { MdHomeRepairService ,MdOutlineSource,MdMoney,MdOutlineToday} from "react-icons/md";
 import { RiTimerLine } from "react-icons/ri";
+import RadioCheckButton from "@/reuseable/buttons/RadioCheckButton";
 
 const SetAutoRepayment = () => {
     const router = useRouter()
@@ -48,18 +49,6 @@ const SetAutoRepayment = () => {
 
     }
 
-    const radioButton = (isChecked: boolean, text: string, onClick: ()=> void) => {
-        return (
-            <button onClick={onClick} id={`RadioButton` + text?.replace(' ', '')} data-testid={`RadioButton` + text?.replace(' ', '')} className={` h-fit w-fit   flex gap-1  md:gap-4  text-[#4D4E4D] text-[14px] ${inter500.className} `}>
-                <div className={clsx(` h-fit aspect-square rounded-full `,  isChecked ?  `  border-2 border-[#e6effb]` : `border-2 border-white `)}>
-                    <div className={clsx(` px-2 py-2 rounded-full aspect-square `, isChecked ? ` border h-fit border-meedlBlue bg-[#e8eaee]   ` :  ` bg-white border border-[#CFCFCF] `)}>
-                        <div className={clsx(`  h-2 w-2 aspect-square  ` , isChecked ? "rounded-full bg-meedlBlue h-2 w-2 aspect-square " : 'bg-white rounded-full  h-2 w-2 aspect-square ')}></div>
-                    </div>
-                </div>
-                <p className={` mt-auto mb-auto  `}>{text}</p>
-            </button>
-        )
-    }
 
     function getHalfHourIntervals(): string[] {
         const intervals: string[] = [];
@@ -176,8 +165,8 @@ const SetAutoRepayment = () => {
                 <div>
                     <p className={` md:text-[14px]  text-[#4D4E4D] ${inter.className}  `}>Set primary source of payment</p>
                     <div className={` md:flex lg:flex grid  grid-cols-2 gap-3   `}>
-                        {radioButton(selectedAccountType === 'Wallet', 'Wallet', () => {setSelectedAccountType('Wallet')})}
-                        {radioButton(selectedAccountType === 'Linked accounts', 'Linked accounts', () => {setSelectedAccountType('Linked accounts')})}
+                        <RadioCheckButton isChecked={selectedAccountType === 'Wallet'} text={`Wallet`} onClick={() => {setSelectedAccountType('Wallet')}} />
+                        <RadioCheckButton isChecked={selectedAccountType === 'Linked accounts'} text={`Linked accounts`} onClick={() => {setSelectedAccountType('Linked accounts')}} />
                     </div>
                 </div>
                 {selectedAccountType === 'Linked accounts' &&

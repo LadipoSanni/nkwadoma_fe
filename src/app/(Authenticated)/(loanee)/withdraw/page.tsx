@@ -1,9 +1,9 @@
 import React from 'react';
-import SetAutoRepayment from "@/pages/wallet/setAutoRepayment";
+import Withdraw from "@/pages/wallet/Withdraw";
 
 const Page = () => {
     return (
-        <SetAutoRepayment/>
+        <Withdraw/>
     );
 };
 
