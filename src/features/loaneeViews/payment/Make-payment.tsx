@@ -24,7 +24,7 @@ function MakePayment() {
     const selectPaymentTab = useAppSelector(state => state?.payment?.paymentTab)
      const currentState = useAppSelector(state => state?.payment?.walletTab)
     const makePaymentFrom = useAppSelector(state => state.walletFlow.makePaymentFrom);
-
+    const outstandingLoan = useAppSelector(state => state?.payment?.loanAmount)
      const linkedAccountCurrentState = useAppSelector(state => state?.payment?.linkedAccountTab)
     const [currentTab, setCurrentTab] = useState(selectPaymentTab)
 
@@ -79,8 +79,8 @@ function MakePayment() {
         <div className='grid grid-cols-1 gap-y-2'>
          <p className='text-[#4D4E4D] text-[14px] font-normal md:flex justify-end'>Outstanding loan</p>
          <div>
-            <p className='text-[#142854] text-[14px] font-normal md:flex justify-end'>Student living allowance loan for software engineering</p>
-            <p className='text-[#142854] font-medium text-[20px] md:flex justify-end'>{formatAmount("3500000")}</p>
+            <p className='text-[#142854] text-[14px] font-normal md:flex justify-end'>Student loan</p>
+            <p className='text-[#142854] font-medium text-[20px] md:flex justify-end'>{formatAmount(outstandingLoan)}</p>
          </div>
         </div>
         </div>

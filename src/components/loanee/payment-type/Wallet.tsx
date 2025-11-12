@@ -6,11 +6,12 @@ import * as Yup from "yup";
 import {NumericFormat} from 'react-number-format';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
-import { setWalletTab,setRepaymentAmount } from '@/redux/slice/make-payment/payment';
+import { setWalletTab,setRepaymentAmount, setPart } from '@/redux/slice/make-payment/payment';
 import { store,useAppSelector } from '@/redux/store';
 import Modal from '@/reuseable/modals/TableModal';
 import SuccessfulPaymentAndFailure from '@/reuseable/documents/Successful-payment-and-failure';
 import { inter } from '@/app/fonts';
+import { useRouter } from 'next/navigation';
 
 
 function Wallet() {
@@ -22,7 +23,8 @@ function Wallet() {
     const [isOpen, setIsopen] = useState(false)
     const [formKey, setFormKey] = useState(0); 
     const [isSuccessful, setIsSuccessful] = useState(false)
-
+   const walletDetails = useAppSelector(state => state?.payment?.walletDetails)
+   const router = useRouter()
 
      const paymentData = {
         referenceNumber: "000085752257",
@@ -35,8 +37,7 @@ function Wallet() {
         repaymentAmount : repaymentAmount ||  ""
     }
 
-
-    const walletBalance = 3000000
+    const walletBalance = Number(walletDetails?.walletBalance)
 
     
     const validationSchema = Yup.object().shape({
@@ -112,7 +113,7 @@ function Wallet() {
 
                 <div className='md:mt-8 mt-5'>
 
-                   { walletBalance > 0? <Formik
+                   {  walletBalance > 0? <Formik
                        key={formKey}
                         initialValues={initialFormValue}
                         onSubmit={handleSubmit}
@@ -259,6 +260,10 @@ function Wallet() {
                         type='button'
                         variant={"outline"}
                         className=' text-[#142854] w-[90px] h-[26px] rounded-2xl text-[12px] border-[#142854] border-[1px]'
+                        onClick={()=> {
+                            store.dispatch(setPart("wallet"))
+                            router.push("/wallet")
+                        } }
                        >
                         Fund wallet 
                        </Button>
