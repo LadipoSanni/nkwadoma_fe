@@ -16,13 +16,13 @@ const LoaneeSettingTabs = ({id,tabElement,tabCurrentTabIndex,setTabCurrentTabInd
         <div
             id={id}
             data-testid={id}
-            className={` w-full md:min-w-fit  md:w-[25%] flex md:grid gap-2 py-4 h-fit  border-b-2 border-[#D7D7D7] rounded-lg `}
+            className={` w-full md:min-w-fit  md:w-[25%] flex md:grid gap-2 md:mt-4 h-fit border-b-2 border-[#D7D7D7] rounded-lg `}
         >
             {tabElement?.map((item, i) => (
                 <div
                     id={'tabItem' + item.id}
                     data-testid={'tabItem' + item.id}
-                    className={`justify-between items-center flex cursor-pointer hover:text-black  hover:bg-[#F6F6F6] rounded-md w-full px-2 md:py-5 py-2  ${tabCurrentTabIndex === i ? ` text-black border-l-4 border-[#142854] rounded-l-lg ${inter600.className} bg-[#E8EAEE]  ` : `   ${inter.className} text-[#6A6B6A] md:text-[14px] text-[12px] `} `}
+                    className={`justify-between items-center flex cursor-pointer hover:text-black rounded-md w-full px-2 md:py-5 py-2  ${tabCurrentTabIndex === i ? ` text-[#142854] border-l-4 border-[#142854] rounded-l-lg ${inter600.className} bg-[#E8EAEE]  ` : `   ${inter.className} text-[#475467] md:text-[14px] text-[12px] `} `}
                     key={'tabItem' + i}
                     onClick={() => {setTabCurrentTabIndex(i)}}
                 >

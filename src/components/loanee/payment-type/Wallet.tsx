@@ -261,8 +261,8 @@ function Wallet() {
                         variant={"outline"}
                         className=' text-[#142854] w-[90px] h-[26px] rounded-2xl text-[12px] border-[#142854] border-[1px]'
                         onClick={()=> {
-                            store.dispatch(setPart("wallet"))
-                            router.push("/wallet")
+                            store.dispatch(setPart("fund-wallet"))
+                            router.push("/fund-wallet")
                         } }
                        >
                         Fund wallet 
