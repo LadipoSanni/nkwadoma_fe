@@ -12,8 +12,27 @@ export const walletApi = createApi({
                 method: 'POST',
                 body: data
             })
+        }),
+        viewWalletDetail : builder.query({
+            query : () => ({
+                url : `/wallet/view`,
+                method: 'GET',
+            })
+        }),
+       linkBankAccount :  builder.mutation({
+        query : (data: {
+            id: string,
+            bankName : string ,
+            bankNumber: string,
+            activationStatus: string
+            }) => ({
+            url : `/wallet/link/bank/detail`,
+            method: 'POST',
+            body: data
         })
+    }),
+       
     })
 })
 
-export const  { useAddBankDetailsMutation } = walletApi
+export const  { useAddBankDetailsMutation,useViewWalletDetailQuery,useLinkBankAccountMutation } = walletApi

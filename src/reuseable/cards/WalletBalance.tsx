@@ -1,3 +1,4 @@
+'use client'
 import React from 'react';
 import {inter, inter600} from '@/app/fonts';
 import {formatAmount} from "@/utils/Format";
@@ -79,9 +80,9 @@ const WalletBalance = ({balance}:Props) => {
                             </div>
                         }
                         {isEyeOpen ?
-                            <FiEyeOff id={'closeEyeIcon'} data-testid={'closeEyeIcon'} className={` mt-auto mb-auto `} onClick={ () => {setIsEyeOpen(!isEyeOpen)}} />
+                            <FiEyeOff id={'closeEyeIcon'} data-testid={'closeEyeIcon'} className={` mt-auto mb-auto cursor-pointer `} onClick={ () => {setIsEyeOpen(!isEyeOpen)}} />
                             :
-                            <FiEye  id={'upEyeIcon'} data-testid={'upEyeIcon'} className={` mt-auto mb-auto `} onClick={ () => {setIsEyeOpen(!isEyeOpen)}} />
+                            <FiEye  id={'upEyeIcon'} data-testid={'upEyeIcon'} className={` mt-auto mb-auto cursor-pointer`} onClick={ () => {setIsEyeOpen(!isEyeOpen)}} />
                         }
 
                     </div>

@@ -110,8 +110,8 @@ export const loaneeApi = createApi({
            })
         }),
         viewLoaneeLoansByAdmin : builder.query({
-            query: (data:{loaneeId: string,pageNumber: number, pageSize: number }) => ({
-                url: `/loan/view-all-disbursal?loaneeId=${data.loaneeId}&pageSize=${data.pageSize}&pageNumber=${data.pageNumber}`,
+            query: (data:{loaneeId?: string,pageNumber: number, pageSize: number }) => ({
+                url: `/loan/view-all-disbursal${data?.loaneeId ? `?loaneeId=${data.loaneeId}&pageSize=${data.pageSize}&pageNumber=${data.pageNumber}` : `?pageSize=${data?.pageSize}&pageNumber=${data?.pageNumber}`}`,
                 method: 'GET'
             })
         }),

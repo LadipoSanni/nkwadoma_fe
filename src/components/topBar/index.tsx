@@ -23,6 +23,8 @@ import { useViewFinancierDashboardQuery } from '@/service/financier/api';
 import { getItemFromLocalStorage, setItemToLocalStorage } from '@/utils/storage';
 import { convertRole } from '@/utils/GlobalMethods';
 import styles from "./index.module.css"
+import { useViewLoaneeLoansByAdminQuery } from '@/service/users/Loanee_query'
+import { setHasLoan } from '@/redux/slice/make-payment/payment';
 
 const TopBar = () => {
     const [arrowToggled, setArrowToggled] = useState(false);
@@ -32,8 +34,13 @@ const TopBar = () => {
     const currentTab = useAppSelector(state => state.adminLayout.currentNavbarItem);
     const user_role = getUserDetailsFromStorage('user_role');
     const user_name = getUserDetailsFromStorage("user_name");
+    const hasLoan = useAppSelector(state => state?.payment?.hasLoan)
      const router = useRouter();
      const pathname = usePathname();
+     const dataProps = {
+        pageNumber: 0,
+        pageSize:10
+         }
 
     const storedOrgName = getItemFromLocalStorage('organization_name');
     const { data: financierData, isSuccess } = useViewFinancierDashboardQuery({}, {
@@ -43,6 +50,18 @@ const TopBar = () => {
     const [userRole] = useState(user_role ? user_role : '');
 
     const { data,refetch} = useNumberOfNotificationQuery({});
+
+    const {data:loans} = useViewLoaneeLoansByAdminQuery(dataProps,{skip: user_role !== "LOANEE" &&  hasLoan})
+
+    
+    useEffect(() => {
+     const numberOfLoans = loans?.data?.body?.length
+      if(numberOfLoans > 0) {
+        store.dispatch(setHasLoan(true))
+      }else {
+        store.dispatch(setHasLoan(false))
+      }
+    },[loans])
 
     useEffect(() => {
         if (user_role === "FINANCIER" && isSuccess && financierData?.data) {

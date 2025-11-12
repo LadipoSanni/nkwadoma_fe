@@ -11,7 +11,7 @@ import {useSelector} from "react-redux";
 import {
     getFinancierSideBarItems,
     getInstituteAdminSideBarItems,
-    getLoaneeSideBarItems, getLogoutItem,
+    useGetLoaneeSideBarItems, getLogoutItem,
     usePortfolioManagerSideBarItems,
     getSettingItem,
     getSuperAdminSideBarItems, getMeedlAdminSideBarItems,
@@ -119,7 +119,7 @@ const SideBar = () => {
     const sideBarContent = [
         {name: "PORTFOLIO_MANAGER", value: usePortfolioManagerSideBarItems(current)},
         {name: "ORGANIZATION_ADMIN", value: getInstituteAdminSideBarItems(current)},
-        {name: 'LOANEE', value: getLoaneeSideBarItems(current, isLoaneeIdentityVerified)},
+        {name: 'LOANEE', value: useGetLoaneeSideBarItems(current, isLoaneeIdentityVerified)},
         {name: 'FINANCIER', value: getFinancierSideBarItems(current)},
         {name: "MEEDL_SUPER_ADMIN", value: getSuperAdminSideBarItems(current,currentTabRoute)},
         {name: 'MEEDL_ADMIN', value: getMeedlAdminSideBarItems(current)},

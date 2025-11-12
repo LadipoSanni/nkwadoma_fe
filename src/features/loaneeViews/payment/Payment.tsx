@@ -1,5 +1,5 @@
 'use client'
-import React, { useMemo } from 'react'
+import React, { useMemo, useState} from 'react'
 import { inter } from '@/app/fonts'
 import { Button } from '@/components/ui/button'
 import styles from "./index.module.css"
@@ -13,6 +13,10 @@ import { transactionsHistory } from '@/utils/LoanRequestMockData/cohortProduct';
 import { useRouter } from 'next/navigation'
 import { store } from '@/redux/store'
 import {setFundWalletFrom,setMakePaymentFrom} from "@/redux/slice/wallet";
+import { useViewLoaneeLoansByAdminQuery } from '@/service/users/Loanee_query'
+import { Skeleton } from '@/components/ui/skeleton'
+import { useViewWalletDetailQuery } from '@/service/users/wallet'
+import { setWalletDetails,setLoanAmount,setPart } from '@/redux/slice/make-payment/payment'
 
 // import ButtonAndSearch from '@/reuseable/action-bars/Button-and-search'
 
@@ -53,7 +57,30 @@ export const bankAccounts = [
 
 function Payment() {
 
-  const [showWalletBalance, setShowWalletBalance] = React.useState(false);
+  const [showWalletBalance, setShowWalletBalance] = useState(false);
+
+
+  const dataProps = {
+    pageNumber: 0,
+    pageSize:10
+     }
+
+   const {data,isLoading} = useViewLoaneeLoansByAdminQuery(dataProps,{refetchOnMountOrArgChange: true})
+   const {data:walletBalance,isLoading:isBalanceLoading} = useViewWalletDetailQuery({},{refetchOnMountOrArgChange: true})
+
+   const firstLoanAmount = data?.data?.body[0]?.loanAmountOutstanding
+   const walletBalanceDetail = walletBalance?.data?.balance
+
+   const detail = {
+    id: walletBalance?.data?.walletId,
+    walletBalance: walletBalance?.data?.balance 
+  }
+
+   console.log(firstLoanAmount)
+
+  
+
+    
 
     const bankAccount = {
             bankName: "Access Bank Nigeria Limited",
@@ -87,14 +114,14 @@ const router = useRouter()
     <div className={`pt-5 px-2   md:px-16 h-[81vh] ${inter.className} ${styles.container} mb-80`}>
         <div className='relative md:right-7 right-1 grid grid-cols-1 gap-y-6'>
       <section id='sectionOne' className='grid md:grid-cols-2 grid-cols-1 gap-x-4 '> 
-        <div className='bg-[#F0F0F0] py-3 px-5 rounded-lg border-solid border-[#F9F9F9] border-[1px]'>
+        { isLoading? <Skeleton className='bg-[#F0F0F0] py-3 px-5 rounded-lg border-solid border-[#F9F9F9] border-[1px]'/> : <div className='bg-[#F0F0F0] py-3 px-5 rounded-lg border-solid border-[#F9F9F9] border-[1px]'>
             <p className='font-bold mt-3 text-[#212221]'>Outstanding loan</p>
             <div className='mt-6 grid grid-cols-1 gap-y-4'>
             <div className='flex  gap-2'>
-            <p className='text-[#212221] text-[14px] font-normal w-28  lg:w-20'>Loan type:</p><p className=' text-[#212221] font-medium'>Student living allowance loan for learners</p>
+            <p className='text-[#212221] text-[14px] font-normal w-28  lg:w-20'>Loan type:</p><p className=' text-[#212221] font-medium'>Student loan</p>
             </div>
             <div className='flex  gap-2'>
-            <p className='text-[#212221] text-[14px] font-normal w-13 '>Amount:</p><p className='ml-6 text-[#212221] font-medium'>₦5,000,000.00 </p>
+            <p className='text-[#212221] text-[14px] font-normal w-13 '>Amount:</p><p className='ml-6 text-[#212221] font-medium'>{formatAmount(firstLoanAmount)} </p>
             </div>
             </div>
             <div className='mt-8 mb-2'>
@@ -105,20 +132,23 @@ const router = useRouter()
              data-testid={"makePaymentTextId"}
              onClick={() => {
                  store.dispatch(setMakePaymentFrom('payment'))
+                 store.dispatch(setLoanAmount(firstLoanAmount))
                  router.push("/payment/make-payment")
              }}
              >
                 Make payment
              </Button>
             </div>
-        </div>
+        </div>}
 
-        <div className='border-solid border-[#ECECEC] border-[1px] rounded-lg flex flex-col mt-4 md:mt-0'>
+       { isBalanceLoading? 
+        <Skeleton className='bg-[#F0F0F0] py-3 px-5 rounded-lg border-solid border-[#F9F9F9] border-[1px]'/>  
+       : <div className='border-solid border-[#ECECEC] border-[1px] rounded-lg flex flex-col mt-4 md:mt-0'>
   <div className='mt-3 text-[#142854] py-3 px-5 flex-1'>
     <p className='text-[12px] font-medium'>Wallet balance</p>
     <div className='flex items-center gap-2 text-[#142854]'>
   {showWalletBalance ? (
-    <span className='font-semibold text-[30px]'>{formatAmount(0)}</span>
+    <span className='font-semibold text-[30px]'>{formatAmount(walletBalanceDetail)}</span>
   ) : (
     <span
       className='font-semibold text-[30px] tracking-widest'
@@ -146,6 +176,7 @@ const router = useRouter()
       <Button
           onClick={() => {
               store.dispatch(setFundWalletFrom('payment'))
+              store.dispatch(setWalletDetails(detail))
               router.push('/fund-wallet')
           }}
         variant={"outline"}
@@ -162,12 +193,15 @@ const router = useRouter()
     textColor={'meedlBlue'}
     text={'View'} 
     iconBeforeLetters={false}
-    handleClick={() => {router.push('/wallet')}}
+    handleClick={() => {
+      store.dispatch(setPart(""))
+      router.push('/wallet')
+    }}
     className='font-medium text-[16px] mr-2'
     sx='text-[20px]'
    />
   </div>
-</div>    
+</div>   } 
       </section>
     
   <section id='sectionTwo'>

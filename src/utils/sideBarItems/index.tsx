@@ -72,13 +72,13 @@ export const getMeedlAdminSideBarItems = (currentItem: string) => {
 
 
 
-export const getLoaneeSideBarItems = (currentItem: string, isLoaneeIdentityVerified: boolean) => {
-
+export const useGetLoaneeSideBarItems = (currentItem: string, isLoaneeIdentityVerified: boolean) => {
+    const hasLoan = useAppSelector(state => state?.payment?.hasLoan)
     const items : navbarRouterItemsProps[] = [
         {icon: <MdOutlineHome className={` h-[1.2rem] w-[1.2rem]  ${isLoaneeIdentityVerified ? `${currentItem === 'Overview' ? 'text-meedlBlue md:text-meedlBlue' : 'text-[#626F8C] md:text-[#626F8C]'} ` : 'text-[#d7d7d7] md:text-[#d7d7d7]'} `} color={currentItem === "Overview" ? '#142854' : '#939CB0'}/>, id: 'overview', isActive: true, name: "Overview", route: '/Overview'},
         // {icon: <Icon icon='iconoir:hand-cash' color={'#d7d7d7'} height={"1.2rem"} width={"1.3rem"}/>, id: 'repayment', isActive: true, name: "My profile", route: '/repayment'}, className={` h-[1.2rem] w-[1.2rem]  ${isLoaneeIdentityVerified ? `${currentItem === 'My profile' ? currentTextLiterals : textLiterals} ` : 'text-navbarIconColor md:text-navbarIconColor'} `}
         {icon: <Icon icon="material-symbols:money-bag-outline" height={"1.2rem"} width={"1.2rem"} color={currentItem === "My loans" ? '#142854' : '#939CB0'}></Icon>, id: 'myLoan', isActive: true, name: "My loans", route: '/my-loans'},
-        {icon: <MdOutlineAccountBalanceWallet className={` h-[1.2rem] w-[1.2rem] text-[#d7d7d7] md:text-[#d7d7d7`}  color={currentItem === "Payment" ? '#142854' : '#939CB0'} />, id: 'payment', name: "Payment", isActive: true, route: '/payment'},
+        {icon: <MdOutlineAccountBalanceWallet className={` h-[1.2rem] w-[1.2rem] text-[#d7d7d7] md:text-[#d7d7d7`}  color={currentItem === "Payment" ? '#142854' : '#939CB0'} />, id: 'payment', name: "Payment", isActive: hasLoan? true : false, route: '/payment'},
     ]
     return items;
 }
