@@ -27,17 +27,15 @@
     .authBgMainContainer{
         grid-template-columns: 35% 65%;
     }
-    .authBgMainContainer{
-
-    }
+   
 }
 
 
-@media  screen and(min-width: 765px) and (max-width: 1020px){
+/* @media  screen and(min-width: 765px) and (max-width: 1020px){
     /*.whiteBackground{*/
     /*    visibility: hidden;*/
     /*}*/
-}
+/* }  */
 
 @media only screen  and (min-width: 960px){
     .authLayoutChildrenDiv{

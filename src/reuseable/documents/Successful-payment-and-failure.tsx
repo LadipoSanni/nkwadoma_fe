@@ -158,22 +158,22 @@ Thank you for your payment!
                     </div>
                 </div>
 
-                <p className='mt-3 text-[#121212] text-[18px] font-medium'>Payment Successful!</p>
+                <p className='mt-3 text-[#121212] text-[18px] font-medium'>Payment successful!</p>
             </section>
 
             <section className='grid grid-cols-1 gap-y-3 mt-9' >
                 <div className='flex items-center justify-between'>
-                    <p className='text-[#707070] text-[14px] font-normal'>Reference Number</p>
+                    <p className='text-[#707070] text-[14px] font-normal'>Reference number</p>
                     <p className='text-[#121212] text-[14px] font-medium'>{paymentObj?.referenceNumber}</p>
                 </div>
 
                 <div className='flex items-center justify-between'>
-                    <p className='text-[#707070] text-[14px] font-normal'>Date & Time</p>
+                    <p className='text-[#707070] text-[14px] font-normal'>Date & time</p>
                     <p className='text-[#121212] text-[14px] font-medium pl-2 md:pl-0'>{paymentObj?.dateTime}</p>
                 </div>
 
                 <div className='flex items-center justify-between border-b border-dashed pb-3 border-[#667085] w-full'>
-                    <p className='text-[#707070] text-[14px] font-normal'>Payment Method</p>
+                    <p className='text-[#707070] text-[14px] font-normal'>Payment method</p>
                     <p className='text-[#121212] text-[14px] font-medium'>{paymentObj?.paymentMethod}</p>
                 </div>
                 

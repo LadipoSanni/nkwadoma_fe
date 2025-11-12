@@ -31,7 +31,7 @@ function ViewLinkedAccount() {
    />
      <div className='flex flex-col items-center justify-center mt-16 gap-y-2' >
         <p className='text-[#212221] font-medium'>Linked accounts</p>
-        <p className='text-[14px] font-normal text-[#212221] px-[50px] md:px-[200px] lg:px-[350px] text-center'>Link another account for smooother and faster payments. Easily switch between accounts to stay in control of how you pay.</p>
+        <p className='text-[12px] font-normal text-[#212221]  md:px-[200px] lg:px-[370px] text-center'>Link another account for smooother and faster payments. Easily switch between accounts to stay in control of how you pay.</p>
         <div className=' w-full px-[10px] md:px-[200px] lg:px-[335px] mt-2'>
         <div className='bg-[#F9F9F9] py-2 rounded-lg '>
         <section className={`md:h-[40vh] ${styles.container}`}>
