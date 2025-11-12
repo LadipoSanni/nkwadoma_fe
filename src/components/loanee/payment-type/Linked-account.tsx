@@ -7,7 +7,7 @@ import * as Yup from "yup";
 import { Button } from '@/components/ui/button'
 import { AccountMultiSelect } from '@/reuseable/mult-select/account-multiselect/Account-multiselect';
 import { bankAccounts } from '@/features/loaneeViews/payment/Payment';
-import { MdInfoOutline } from 'react-icons/md';
+// import { MdInfoOutline } from 'react-icons/md';
 import { inter } from '@/app/fonts';
 import { setLinkedAccountTab, setInitialLinkedAccountValue,resetInitialLinkedAccountValue } from '@/redux/slice/make-payment/payment';
 import { store,useAppSelector } from '@/redux/store';
@@ -217,10 +217,10 @@ function LinkedAccount() {
              defaultValue={values.account}
             //  selectAllcondition={true}
             /> 
-            <div className='flex items-center gap-1 mt-2'>
+            {/* <div className='flex items-center gap-1 mt-2'>
                 <MdInfoOutline className='h-[20px] w-[20px] text-[#06792D]'/>
                 <span className='text-[#142854] text-[14px]'>You can pay from one or more linked accounts</span>
-            </div>
+            </div> */}
             </div> 
         </div>
         </div>
