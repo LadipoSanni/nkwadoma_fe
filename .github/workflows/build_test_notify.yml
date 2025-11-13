@@ -60,6 +60,8 @@ jobs:
           echo "NEXT_PUBLIC_API_BASE_URL=${{ env.NEXT_PUBLIC_API_BASE_URL }}" >> .env
           echo "APP_DEV_AUTH_URL=${{ env.APP_DEV_AUTH_URL }}" >> .env
           echo "NEXT_PUBLIC_APP_DEV_AUTH_URL=${{ env.NEXT_PUBLIC_APP_DEV_AUTH_URL }}" >> .env
+          echo "GOOGLE_ANALYTICS_ID=${{ secrets.GOOGLE_ANALYTICS_ID }}" >> .env
+          echo "MICROSOFT_CLARITY_ID=${{ secrets.GOOGLE_ANALYTICS_ID }}" >> .env
 
       - name: Install and build the app
         run: |
