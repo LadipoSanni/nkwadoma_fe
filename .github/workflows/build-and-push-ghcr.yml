@@ -10,8 +10,8 @@ permissions:
   packages: write
 
 env:
-  REGISTRY: ghcr.io/ladiposanni
-  IMAGE_NAME: ${{ github.repository }}
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ladiposanni
 
 jobs:
   build:
