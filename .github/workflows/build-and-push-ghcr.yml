@@ -1,5 +1,4 @@
-# .github/workflows/build-and-push-ghcr.yml
-name: Build and Push Next.js Image to GHCR
+name: Build and Push nkwadoma_fe Image to GHCR
 
 on:
   push:
@@ -11,7 +10,7 @@ permissions:
   packages: write
 
 env:
-  REGISTRY: ghcr.io
+  REGISTRY: ghcr.io/ladiposanni
   IMAGE_NAME: ${{ github.repository }}
 
 jobs:
